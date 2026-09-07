@@ -1,0 +1,70 @@
+---
+/* ============================================================
+   Capabilities — white band, four numbered cards
+   ------------------------------------------------------------
+   A 4-column grid with NO GAP. The dividers between cards are the
+   cards' own 1px right borders, and cards 1–3 carry one while the last
+   does not. A gap here would put daylight on both sides of every line
+   and the row would stop reading as one ruled block.
+
+   Each card: 2px ink top border, 32px padding, and then numeral →
+   title → body → a 32×1px mint rule at the foot. See DESIGN-SYSTEM.md
+   §4.2 for what this card is FOR — an enumerated set where the order
+   means something. It is not interchangeable with the differentiator
+   card, which looks similar and says something different.
+
+   The mint rule and the mint numeral are both on white here, at about
+   1.2:1. Built to spec; see OPEN-QUESTIONS.md #1.
+   ============================================================ */
+import { home } from "../data/home";
+import Kicker from "./Kicker.astro";
+
+const { capabilities } = home;
+---
+
+<section class="bg-white py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={capabilities.kicker} editKey="home.capabilities.kicker" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16"
+      data-edit="home.capabilities.heading"
+    >
+      {capabilities.heading}
+    </h2>
+
+    <ol class="grid grid-cols-4 mt-56">
+      {
+        capabilities.cards.map((card, i) => (
+          <li
+            class:list={[
+              "flex flex-col border-t-2 border-t-kd-ink p-32",
+              i < capabilities.cards.length - 1 &&
+                "border-r border-r-kd-card-border-light",
+            ]}
+          >
+            <span
+              class="text-num text-kd-mint"
+              data-edit={`home.capabilities.cards.${i}.num`}
+            >
+              {card.num}
+            </span>
+            <h3
+              class="font-display text-d8 text-kd-ink mt-16"
+              data-edit={`home.capabilities.cards.${i}.title`}
+            >
+              {card.title}
+            </h3>
+            <p
+              class="text-body-sm text-kd-slate-2 mt-12"
+              data-edit={`home.capabilities.cards.${i}.body`}
+            >
+              {card.body}
+            </p>
+            <span class="block w-32 h-1 bg-kd-mint mt-32" aria-hidden="true" />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
