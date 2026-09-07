@@ -1,0 +1,37 @@
+---
+/* ============================================================
+   Closing CTA — ink band, centred
+   ------------------------------------------------------------
+   The one band that uses the centred kicker: a 32×1px mint rule on EACH
+   side of the label. See DESIGN-SYSTEM.md §3.
+
+   Centred with flow layout. The export put this block at
+   `left: 480.72px`, which is not a design decision — it is what
+   centring compiled to at one frame width, and reproducing it would
+   pin the block to the left edge on every other width.
+   ============================================================ */
+import { home } from "../data/home";
+import Kicker from "./Kicker.astro";
+
+const { cta } = home;
+---
+
+<section class="bg-kd-ink py-96">
+  <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+    <Kicker label={cta.kicker} editKey="home.cta.kicker" variant="centred" />
+
+    <h2
+      class="font-display text-d2 text-kd-mist mt-16"
+      data-edit="home.cta.headline"
+    >
+      {cta.headline}
+    </h2>
+
+    <a
+      href={cta.button.href}
+      class="inline-flex items-center text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+    >
+      <span data-edit="home.cta.button.label">{cta.button.label}</span>
+    </a>
+  </div>
+</section>
