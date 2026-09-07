@@ -1,0 +1,359 @@
+---
+/* ============================================================
+   BaseLayout
+   ------------------------------------------------------------
+   The document shell: head, fonts, and the two script tags that mount
+   the in-page editor. Everything visible on a page comes through the
+   <slot />.
+
+   The editor half of this file is PORTED FROM NESTING TREE and frozen —
+   see the long note above the head script.
+   ============================================================ */
+import "../styles/global.css";
+import { CACHE_PREFIX } from "../lib/editable";
+
+/* The two font files each family actually needs, imported so Vite
+   fingerprints them and hands back the built URL. Preloading them is
+   what keeps the type from swapping in after first paint and shoving
+   the layout down — the hero H1 is 72px Fraunces and is the largest
+   thing on the page, so a late swap there is the whole viewport moving.
+
+   latin-ext is preloaded as well as latin, and it is not optional: the
+   rupee sign U+20B9 lives in the latin-ext subset of BOTH families, and
+   it is in the hero stats (Fraunces) and every project meta line
+   (Inter). Preload latin alone and the one glyph that carries the
+   money reflows a beat after everything else. */
+import frauncesLatin from "@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url";
+import frauncesLatinExt from "@fontsource-variable/fraunces/files/fraunces-latin-ext-wght-normal.woff2?url";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import interLatinExt from "@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Keep this page out of the search index. */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+/* ---------- In-page text editing ----------
+   PORTED FROM NESTING TREE (src/layouts/BaseLayout.astro). The feature
+   is injected here and only here, as two script tags.
+
+   1. An inline head script. It has to be inline, in the head, ahead of
+      everything: it starts the fetch for this page's saved text while
+      the rest of the document is still being parsed, and it paints the
+      copy already cached in localStorage the moment the DOM exists —
+      which is before the deferred editor runs, so returning visitors do
+      not watch the built-in text flip to the edited text.
+
+      It also owns the two things both halves have to agree on: how an
+      element's edit_key is read, and how text is normalised before
+      comparing. The editor imports neither — it calls back into
+      window.__ntEdit, so there is exactly one implementation of each.
+
+   2. A bundled module script at the end of the body: the gestures, the
+      toolbar and saving, none of which the first paint needs.
+
+   THE TWO HALVES ARE NOT GATED THE SAME WAY, and that asymmetry is the
+   whole design.
+
+   Part 1 is the READ path and runs for everybody, always. It is what
+   paints the edited copy, so gating it would show the public the text
+   the site was built with rather than the text it now says. On Nesting
+   Tree this was gated by mistake for a while, and the result was that
+   an edit was visible to the person who made it and to nobody else.
+
+   Part 2 is the editor, and it is downloaded only by a browser holding
+   the `kd_edit_ui=1` hint cookie that /api/edit-session sets at
+   sign-in. Written as a dynamic import so the editor becomes a chunk of
+   its own: an ordinary visitor does not fetch a byte of it, sees no
+   button, and has nothing on the page to suggest one exists.
+
+   That cookie is a HINT and nothing more. It is not HttpOnly, anybody
+   can set it by hand, and all that earns them is a downloaded script
+   whose every save is refused — the write routes check the signed
+   `kd_edit` cookie instead, which is the real gate (src/lib/edit-auth.ts).
+   Never make a server-side decision from `kd_edit_ui`.
+
+   WHAT CHANGED FROM NESTING TREE. One thing, and it is the reason the
+   port happened now rather than later:
+
+     keyFor() no longer WALKS the DOM to spell a positional
+     `tag:nth-of-type(n)` path. It reads the `data-edit` attribute the
+     author wrote. elFor() looks an element up by that attribute rather
+     than by querySelector on a path.
+
+   Three things fall out of that, and all three are deletions:
+
+     · ensureWrapped() and the <nt-t> wrapper machinery are gone. They
+       existed so that a run of copy sharing its parent with a <br> or a
+       <strong> could be given an element of its own for a positional
+       path to land on. With declared slots the author gives it one by
+       putting data-edit on it, so there is nothing to infer and nothing
+       to inject. The function survives as a no-op because the frozen
+       editor script calls it.
+     · applyOne()'s fallback scan is gone. It hunted the document for
+       an element still holding the text an edit replaced, because a
+       positional key stops pointing at the right node the moment the
+       markup moves. A named key does not move, so the hunt has nothing
+       to add and could only ever write an edit onto the wrong element.
+     · applyOne() no longer refuses to paint when the element's current
+       text differs from the row's `original_text`. That guard is what
+       made a copy rewrite orphan every edit under a key. The key is the
+       identity now; `original_text` is an audit note about what the
+       page said at the time, not a latch.
+
+   The prose lives up here rather than beside the tags because an inline
+   script followed by a MULTI-LINE HTML comment does not survive the
+   Astro compiler — it reports "Unexpected token" and fails the build.
+   Keep any comment down there to a single line. */
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="K.D. Constructions" />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" as="font" type="font/woff2" href={frauncesLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={frauncesLatinExt} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={interLatinExt} crossorigin />
+
+    <link rel="stylesheet" href="/editor-ui.css" />
+
+    <!-- In-page text editing, part 1 of 2 — see the note in the frontmatter. -->
+    <script is:inline define:vars={{ NT_CACHE_PREFIX: CACHE_PREFIX }}>
+      window.__ntEdit = (function () {
+        /* Written as escapes rather than literals: these characters are
+           invisible in an editor, and a mangled one fails silently. */
+        var RE_NBSP = new RegExp("\u00a0", "g");
+        var RE_ZERO_WIDTH = new RegExp("[\u200b-\u200d\ufeff]", "g");
+
+        /* Same shape the server stores: lower case, no trailing slash. */
+        var path = location.pathname.split("?")[0].split("#")[0].toLowerCase();
+        if (path.length > 1) path = path.replace(/\/+$/, "");
+        if (!path) path = "/";
+
+        var cacheKey = NT_CACHE_PREFIX + path;
+
+        /* Mirrors normalizeText() in src/lib/editable.ts. Markup wraps
+           copy across source lines, so this is what makes "does this
+           element still hold the text we think it does?" answerable. */
+        function normalize(s) {
+          return String(s == null ? "" : s)
+            .replace(RE_NBSP, " ")
+            .replace(RE_ZERO_WIDTH, "")
+            .replace(/[\r\n\t]+/g, " ")
+            .replace(/\s{2,}/g, " ")
+            .trim();
+        }
+
+        function textOf(el) {
+          return normalize(el.textContent);
+        }
+
+        /* Editable means one text node and nothing else: a leaf holding
+           a single run of words. Anything richer would lose its children
+           the moment we assigned textContent. */
+        function isTextLeaf(el) {
+          return (
+            el.childNodes.length === 1 &&
+            el.firstChild.nodeType === 3 &&
+            normalize(el.firstChild.nodeValue) !== ""
+          );
+        }
+
+        function setText(el, t) {
+          el.textContent = t;
+        }
+
+        /* Tags whose text is not copy, and the blocks the markup has
+           opted out by hand. Kept because the frozen editor calls both. */
+        var SKIP_TAGS =
+          " SCRIPT STYLE SVG INPUT TEXTAREA SELECT OPTION IFRAME " +
+          "NOSCRIPT CANVAS VIDEO AUDIO IMG BR HR TEMPLATE ";
+        var OPT_OUT = "svg, [data-nt-ui], [data-no-edit], [aria-hidden='true']";
+
+        function skipTag(el) {
+          return SKIP_TAGS.indexOf(" " + el.tagName + " ") !== -1;
+        }
+
+        /* A no-op. Nesting Tree wrapped loose runs of copy in <nt-t> so a
+           positional key had an element to land on; a declared slot is
+           already on an element. Kept because inline-edit.js calls it. */
+        function ensureWrapped() {}
+
+        /* THE KEY IS DECLARED, NOT COMPUTED. */
+        function keyFor(el) {
+          return (el && el.getAttribute && el.getAttribute("data-edit")) || "";
+        }
+
+        function elFor(key) {
+          if (!key) return null;
+          try {
+            var safe =
+              window.CSS && CSS.escape ? CSS.escape(key) : key.replace(/"/g, "");
+            return document.body.querySelector('[data-edit="' + safe + '"]');
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function place(el, key, text, original) {
+          /* The anchor is what the page said when the edit was made. It
+             is recorded, not matched on — see the frontmatter note. */
+          if (!el.dataset.ntOriginal) el.dataset.ntOriginal = original;
+          el.dataset.ntKey = key;
+          el.dataset.ntApplied = text;
+          el.setAttribute("data-nt-edited", "");
+          setText(el, text);
+          return el;
+        }
+
+        /* Find the slot; write to it. There is no second guess and no
+           fallback scan: a named key either names an element on this
+           page or it names one that has been retired, and writing a
+           retired key's text onto some other element that happens to
+           match a string is exactly the accident this design removes. */
+        function applyOne(key, text, original) {
+          if (!text) return null;
+          var el = elFor(key);
+          if (!el || !isTextLeaf(el)) return null;
+          return place(el, key, text, original);
+        }
+
+        function applyAll(map) {
+          var n = 0;
+          if (!map) return n;
+          for (var key in map) {
+            if (!Object.prototype.hasOwnProperty.call(map, key)) continue;
+            var e = map[key];
+            if (e && applyOne(key, e.text, e.original)) n++;
+          }
+          return n;
+        }
+
+        function readCache() {
+          try {
+            return JSON.parse(localStorage.getItem(cacheKey) || "{}") || {};
+          } catch (e) {
+            return {};
+          }
+        }
+
+        function writeCache(map) {
+          try {
+            localStorage.setItem(cacheKey, JSON.stringify(map || {}));
+          } catch (e) {
+            /* private mode, or the quota is full: the page still works */
+          }
+        }
+
+        /* Off before the parser has even reached the body. Never cached. */
+        var ready = fetch("/api/content?path=" + encodeURIComponent(path), {
+          credentials: "same-origin",
+          headers: { Accept: "application/json" },
+        })
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .catch(function () {
+            return null;
+          });
+
+        /* readystatechange -> "interactive" fires once the document is
+           parsed and BEFORE deferred scripts run, so the cached copy is
+           on screen by the time the editor boots. */
+        function whenParsed(fn) {
+          if (document.readyState !== "loading") return fn();
+          document.addEventListener("readystatechange", function onState() {
+            if (document.readyState === "loading") return;
+            document.removeEventListener("readystatechange", onState);
+            fn();
+          });
+        }
+
+        function applyCache() {
+          applyAll(readCache());
+        }
+        whenParsed(applyCache);
+
+        /* THE READ PATH. This is what puts the saved text on the page for
+           every visitor, and it must stay in this ungated head script.
+
+           The cache pass above is only a head start for a browser that
+           has been here before; localStorage is per-origin and empty for
+           everybody else. A null answer means offline or a database that
+           is down: leave the cached copy alone rather than snapping the
+           page back to the built-in text. */
+        function applyServer(data) {
+          if (!data || !data.edits) return;
+          applyAll(data.edits);
+          writeCache(data.edits);
+        }
+
+        /* Resolves once the server's answer is ON the page, which needs
+           both the fetch and a parsed document — whichever lands second
+           does the work. The editor awaits this rather than `ready` so
+           the text is applied in exactly one place. */
+        var applied = ready.then(function (data) {
+          return new Promise(function (resolve) {
+            whenParsed(function () {
+              applyServer(data);
+              resolve(data);
+            });
+          });
+        });
+
+        return {
+          path: path,
+          cacheKey: cacheKey,
+          normalize: normalize,
+          textOf: textOf,
+          isTextLeaf: isTextLeaf,
+          setText: setText,
+          skipTag: skipTag,
+          optOut: OPT_OUT,
+          ensureWrapped: ensureWrapped,
+          keyFor: keyFor,
+          elFor: elFor,
+          applyOne: applyOne,
+          applyAll: applyAll,
+          readCache: readCache,
+          writeCache: writeCache,
+          ready: ready,
+          applied: applied,
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+
+    <!-- In-page text editing, part 2 of 2: the editor, for signed-in browsers only. See the frontmatter. -->
+    <script>
+      if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+        import("../scripts/inline-edit.js");
+      }
+    </script>
+  </body>
+</html>

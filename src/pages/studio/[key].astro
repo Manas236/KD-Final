@@ -1,0 +1,257 @@
+---
+/* ============================================================
+   GET /studio/<slug> — the editor sign-in page
+   ------------------------------------------------------------
+   PORTED FROM NESTING TREE. The frontmatter and the inline script are
+   the original and are frozen. THE MARKUP IS NOT: Nesting Tree's page
+   was written in that site's Tailwind vocabulary — bg-stone, text-olive,
+   btn-primary-light, rounded-[2px] — none of which exists here, and one
+   of which is a rounded corner this repo's build gate refuses. Only the
+   classes were rewritten, against K.D.'s tokens. Nothing that decides
+   anything was touched.
+
+   The only page on the site that is not linked from anywhere, and the
+   only one whose own URL is a secret. Reaching it gets you a passphrase
+   box and nothing else: the slug controls who FINDS this page, the
+   passphrase is what actually opens anything. See the note at the top
+   of src/lib/edit-auth.ts.
+
+   A WRONG SLUG IS A 404, and not a 404-flavoured "unauthorised". The
+   response is the same bytes the site serves for a path that was never
+   a route at all: same status, same body, same headers. There is
+   nothing to tell a scanner it has found the right prefix and only the
+   wrong segment, and the slug comparison itself is constant-time. A
+   dictionary run against /studio/ learns nothing from any answer it
+   gets.
+
+   HOW THAT 404 IS PRODUCED, because the obvious way does not work.
+   `Astro.rewrite("/404")` throws when /404 is prerendered — its
+   component is not in the server manifest and the rewrite fails with
+   "Unexpectedly unable to find a component instance for route /404",
+   which is a 500. A 500 where every other bad path gives a 404 is
+   itself the tell this page must not have.
+
+   So the response below is the one Astro's own router emits for an
+   unmatched route: a bodyless 404 carrying `X-Astro-Error`. The App
+   sees that header, strips it, and serves the 404 through the adapter —
+   the identical code path that answers /nonsense.
+
+   That header is Astro internal (core/constants.js), not public API, so
+   it is the thing to re-check on an Astro major. If it ever stops being
+   honoured the failure is safe and visible: the page answers a bare 404
+   with an empty body rather than leaking anything.
+
+   Kept to one dynamic segment under /studio/ so the rest of the site's
+   routing is untouched. /studio, /studio/, and /studio/a/b all miss
+   this route entirely and get the ordinary 404.
+   ============================================================ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { checkSlug, isAuthed } from "../../lib/edit-auth";
+
+export const prerender = false;
+
+if (!checkSlug(Astro.params.key ?? "")) {
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
+}
+
+/* Set only after the slug has passed, so the 404 above carries none of
+   them and stays byte-identical to every other 404.
+
+   Referrer-Policy is the one worth explaining: a same-origin request
+   still sends the FULL URL in Referer — and this page's full URL is the
+   secret. The sign-in POST below would put the slug in a Referer header
+   and from there into the server's access log. no-referrer stops that. */
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Referrer-Policy", "no-referrer");
+Astro.response.headers.set("Cache-Control", "no-store");
+
+const authed = isAuthed(Astro.request);
+
+const field =
+  "w-full bg-kd-ink-deep border border-kd-ghost-outline px-16 py-12 " +
+  "text-kd-mist text-body placeholder:text-kd-slate focus:outline-none " +
+  "focus:border-kd-mint transition";
+
+const button = "inline-flex items-center text-ui px-24 py-12 transition";
+---
+
+<BaseLayout
+  title="Sign in — K.D. Constructions"
+  description="Editor sign-in."
+  noindex
+>
+  <main class="bg-kd-ink min-h-screen flex items-center justify-center px-24 py-96">
+    <div class="w-full max-w-md">
+      <span class="text-kicker uppercase text-kd-mint">K.D. Constructions</span>
+      <h1 class="font-display text-d4 text-kd-mist mt-16">
+        {authed ? "You are signed in to edit." : "Sign in to edit."}
+      </h1>
+
+      {
+        authed ? (
+          <div class="mt-32">
+            <p class="text-body text-kd-mist">
+              Editing is on for this browser. Open any page and the
+              <strong class="text-kd-mint"> Edit text</strong> button is in the
+              corner.
+            </p>
+            <div class="mt-32 flex flex-wrap items-center gap-16">
+              <a href="/" class={`${button} bg-kd-mint text-kd-ink-deep`}>
+                Go to the site
+              </a>
+              <button
+                id="out"
+                type="button"
+                class={`${button} border border-kd-ghost-outline text-kd-mist`}
+              >
+                Sign out
+              </button>
+            </div>
+            <p id="err" class="mt-20 text-body-sm text-kd-mint hidden" role="alert" />
+          </div>
+        ) : (
+          <div class="mt-32">
+            <p class="text-body text-kd-mist">
+              Enter the shared passphrase to turn on in-page editing for this
+              browser. It lasts seven days.
+            </p>
+
+            <label
+              for="pass"
+              class="block text-kicker uppercase text-kd-slate mt-32 mb-8"
+            >
+              Passphrase
+            </label>
+            <input
+              id="pass"
+              type="password"
+              autocomplete="current-password"
+              autofocus
+              placeholder="••••••••••••"
+              class={field}
+            />
+
+            <p id="err" class="mt-16 text-body-sm text-kd-mint hidden" role="alert" />
+
+            <button
+              id="go"
+              type="button"
+              class={`${button} bg-kd-mint text-kd-ink-deep mt-24`}
+            >
+              Sign in
+            </button>
+          </div>
+        )
+      }
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var err = document.getElementById("err");
+
+      function fail(message) {
+        if (!err) return;
+        err.textContent = message;
+        err.classList.remove("hidden");
+      }
+
+      function post(method, body) {
+        return fetch("/api/edit-session", {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: body ? JSON.stringify(body) : undefined,
+        });
+      }
+
+      /* Where both halves end up: signing in and signing out each leave
+         this page for the site.
+
+         replace, not assign: the secret URL must not be left in the
+         address bar or sitting one Back press away in the history of a
+         browser somebody else may pick up. That matters MORE on the way
+         out than on the way in — signing out is what you do on a shared
+         or borrowed machine, and it is the moment the slug is most
+         likely to be left behind for the next person. */
+      function goHome() {
+        window.location.replace("/");
+      }
+
+      var out = document.getElementById("out");
+      if (out) {
+        out.addEventListener("click", function () {
+          out.disabled = true;
+          post("DELETE").then(
+            function (res) {
+              /* fetch only rejects on a network failure, so a 500 from
+                 the server arrives here as a fulfilled promise. Without
+                 this check the button would send you to the home page
+                 looking signed out while the cookie was still set —
+                 the one lie a sign-out button must never tell. */
+              if (res.ok) {
+                goHome();
+                return;
+              }
+              out.disabled = false;
+              fail("Could not sign out. Try again.");
+            },
+            function () {
+              out.disabled = false;
+              fail("Could not reach the server. Try again.");
+            }
+          );
+        });
+        return;
+      }
+
+      var pass = document.getElementById("pass");
+      var go = document.getElementById("go");
+      if (!pass || !go) return;
+
+      var busy = false;
+
+      function submit() {
+        if (busy) return;
+        if (err) err.classList.add("hidden");
+
+        var value = pass.value;
+        if (!value) {
+          fail("Enter the passphrase.");
+          return;
+        }
+
+        busy = true;
+        go.disabled = true;
+
+        post("POST", { passphrase: value }).then(
+          function (res) {
+            if (res.ok) {
+              goHome();
+              return;
+            }
+            busy = false;
+            go.disabled = false;
+            pass.value = "";
+            pass.focus();
+            fail(
+              res.status === 429
+                ? "Too many attempts. Wait a minute and try again."
+                : "That passphrase is not right."
+            );
+          },
+          function () {
+            busy = false;
+            go.disabled = false;
+            fail("Could not reach the server. Try again.");
+          }
+        );
+      }
+
+      go.addEventListener("click", submit);
+      pass.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") submit();
+      });
+    })();
+  </script>
+</BaseLayout>

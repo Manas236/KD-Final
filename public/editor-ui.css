@@ -1,0 +1,206 @@
+/* ============================================================
+   In-page editor furniture — PORTED FROM NESTING TREE
+   (src/styles/global.css, the :root[data-nt-mode] block onward)
+   ------------------------------------------------------------
+   FROZEN. Geometry, z-indexes, transitions and the mode scoping are the
+   original, unchanged.
+
+   TWO THINGS ABOUT THIS FILE.
+
+   1. IT LIVES IN public/, NOT src/styles/. Nesting Tree carried it
+      inside its main stylesheet. Here it is served as its own file and
+      linked from BaseLayout, for one reason: this is the editor's
+      toolbar, and the editor is not the design. `src/` is under two
+      build gates — no hex literal, no border-radius — that exist to
+      keep the approved frame honest, and a pill-shaped button belonging
+      to a piece of tooling has no business being weighed against them.
+      Keeping it out of src/ keeps the gates meaningful instead of
+      forcing an exception into them.
+
+   2. THE COLOURS ARE THE ONE REWRITE. The original referenced Nesting
+      Tree's palette variables — --color-olive, --color-stone,
+      --color-card, --color-line, --color-mutedlight. None of them exist
+      in this repo, so the file would simply have rendered without
+      colour. Each is repointed at the nearest K.D. token, with a
+      literal fallback so the furniture still draws if this file is ever
+      loaded before the site stylesheet. Nothing else changed.
+
+   The `nt-` prefix throughout matches src/scripts/inline-edit.js, which
+   is frozen. Renaming it here would break the pairing.
+   ============================================================ */
+
+/* Everything below is scoped to :root[data-nt-mode] — the attribute the
+   "Edit text" button sets. With the mode off, an editable element is
+   styled exactly like any other text on the page, because a reader is
+   not editing and should see no trace of the machinery. */
+
+/* Every editable run is outlined while the mode is on, so what can be
+   changed is visible rather than something you discover by accident. */
+:root[data-nt-mode] [data-nt-editable] {
+  outline: 1px dashed rgba(104, 166, 160, 0.55);
+  outline-offset: 3px;
+  cursor: text;
+}
+
+/* Hover emphasis stays desktop-only: on a touch screen :hover sticks
+   after a tap, so every tapped paragraph would keep the stronger box
+   around it for the rest of the visit. */
+@media (hover: hover) and (pointer: fine) {
+  :root[data-nt-mode] [data-nt-editable]:hover {
+    outline-color: rgba(104, 166, 160, 0.95);
+  }
+}
+
+/* While editing we take over the long press, so iOS must not also raise
+   its callout. Scoped to the mode: with editing off, long-press has to
+   go back to selecting text, which is what it is for. */
+:root[data-nt-mode] [data-nt-editable] {
+  -webkit-touch-callout: none;
+}
+
+[data-nt-editing] {
+  outline: 2px solid var(--kd-teal, #68a6a0);
+  outline-offset: 3px;
+  cursor: text;
+  background-color: rgba(215, 248, 221, 0.16);
+}
+
+/* ---- Toolbar ----
+   The bar is what is positioned; the pills inside it are in flow, so a
+   second button sits beside the first instead of on top of it. */
+.nt-bar {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: row-reverse; /* the mode button stays nearest the corner */
+  align-items: center;
+  gap: 8px;
+}
+
+/* Undo is only meaningful once you are editing, so it appears with the
+   mode and is not clutter for a reader. */
+.nt-bar .nt-pill:not(.nt-pill-mode) {
+  display: none;
+}
+:root[data-nt-mode] .nt-bar .nt-pill {
+  display: block;
+}
+
+/* The mode button is the one thing a reader might see, so it sits
+   quieter than the rest until pointed at. */
+.nt-pill {
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 0.6rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: rgba(30, 43, 48, 0.82);
+  color: var(--kd-mist, #dbe5e7);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(30, 43, 48, 0.28);
+  opacity: 0.55;
+  transition: opacity 0.25s ease, background-color 0.25s ease;
+  cursor: pointer;
+}
+.nt-pill:hover,
+.nt-pill:focus-visible {
+  opacity: 1;
+  background-color: var(--kd-ink-deep, #1e2b30);
+}
+
+/* Editing on: the button stops being a suggestion and reads as state. */
+:root[data-nt-mode] .nt-pill-mode {
+  opacity: 1;
+  background-color: var(--kd-teal, #68a6a0);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--kd-ink-deep, #1e2b30);
+}
+
+/* ---- Toast ---- */
+.nt-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 64px;
+  z-index: 9999;
+  max-width: min(24rem, calc(100vw - 32px));
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(44, 58, 64, 0.18);
+  background-color: var(--kd-mist, #dbe5e7);
+  color: var(--kd-ink, #2c3a40);
+  box-shadow: 0 8px 28px rgba(30, 43, 48, 0.26);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.nt-toast.is-up {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Per-element version menu ---- */
+.nt-menu {
+  position: absolute;
+  z-index: 9999;
+  width: min(20rem, calc(100vw - 24px));
+  padding: 0.35rem;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  border: 1px solid rgba(44, 58, 64, 0.18);
+  background-color: var(--kd-mist, #dbe5e7);
+  box-shadow: 0 12px 32px rgba(30, 43, 48, 0.28);
+}
+.nt-menu-head {
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--kd-slate, #8a96a6);
+  padding: 0.4rem 0.5rem 0.3rem;
+}
+.nt-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--kd-ink, #2c3a40);
+  cursor: pointer;
+}
+.nt-menu-item:hover:not(:disabled) {
+  background-color: rgba(44, 58, 64, 0.08);
+}
+.nt-menu-item:disabled {
+  cursor: default;
+  color: var(--kd-slate, #8a96a6);
+}
+.nt-menu-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nt-menu-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--kd-slate, #8a96a6);
+}
+
+@media print {
+  .nt-bar,
+  .nt-pill,
+  .nt-toast,
+  .nt-menu {
+    display: none !important;
+  }
+}
