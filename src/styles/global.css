@@ -1,1 +1,46 @@
-@import "tailwindcss";
+/* ============================================================
+   Global stylesheet
+   ------------------------------------------------------------
+   Thin on purpose. Everything that is a design decision lives in
+   tokens.css; what is left here is the handful of element defaults
+   that would otherwise have to be repeated on every node.
+
+   Nothing in this file may introduce a colour or a font size. If you
+   are reaching for one, it belongs in tokens.css or it does not belong.
+   ============================================================ */
+@import "./tokens.css";
+
+@layer base {
+  /* The page's own ground. The document begins on ink (nav) and ends on
+     ink-deep (footer), so an overscroll past either end should meet the
+     dark rather than the browser's white. */
+  html {
+    background-color: var(--kd-ink);
+  }
+
+  /* Inter is the default voice of the page; Fraunces is opted into, node
+     by node, with `font-display`. Setting it the other way round would
+     make every paragraph carry a class to undo a heading's font. */
+  body {
+    background-color: var(--kd-ink);
+    color: var(--kd-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Every image in the design fills its box and is cropped to fit —
+     there is no letterboxing anywhere in the frame. The box is set by
+     the layout; this is the default that keeps a stray <img> honest. */
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* The design underlines exactly one thing — the active nav link — and
+     it does it with a border, not a text-decoration. */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

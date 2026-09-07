@@ -1,0 +1,326 @@
+/* ============================================================
+   K.D. Constructions — design tokens
+   ------------------------------------------------------------
+   Transcribed from the designer's CSS export of the client-approved
+   homepage frame. THESE VALUES ARE THE DESIGN. They are not a starting
+   point, not a scale to tidy, and not a palette to extend.
+
+     · Some numbers are ugly — 77.76px, 22.75px, 55.2px, 16.5px. They
+       are ugly in the approved frame too. Rounding them is a defect.
+     · Nothing here is "harmonised". The line heights do not sit on a
+       grid, the tracking values are not multiples of anything, and two
+       of the greys are nearly the same colour. That is the design.
+     · Do not add a token. A value that is not below did not come from
+       the approved frame, and inventing one is how a locked design
+       stops being locked.
+
+   THIS FILE IS THE ONLY PLACE A HEX LITERAL OR A RAW px FONT-SIZE MAY
+   APPEAR. Everywhere else in src/, use the token or the Tailwind
+   utility built from it. `grep -rniE "#[0-9a-f]{6}" src/` is a build
+   gate, not a suggestion.
+
+   Two layers, on purpose:
+
+     1. `:root` below holds the tokens under the names the designer
+        uses — --kd-ink, --kd-mint. That is the vocabulary the design
+        conversation happens in, and it stays readable in plain CSS.
+
+     2. `@theme` maps those onto Tailwind v4's namespaces so the same
+        values arrive as utilities — bg-kd-ink, text-d1, px-48. The
+        colour block is `@theme inline`, which substitutes the value
+        into the utility rather than minting a second variable that
+        would have to be kept in step with the first.
+
+   THE SPACING SCALE IS ONE PIXEL. `--spacing: 1px` makes every numeric
+   spacing utility read as its own pixel value: py-96 is 96px, gap-16 is
+   16px, p-40 is 40px, w-704 is 704px. The design's numbers go into the
+   markup unchanged, with nothing to convert and no invented t-shirt
+   scale in between. Read `p-32` as "32 pixels".
+   ============================================================ */
+@import "tailwindcss";
+
+/* Self-hosted, OFL, no CDN. `wght.css` is the weight axis alone —
+   Fraunces' optical-size and softness axes are not used by the design,
+   and Inter is wanted at four fixed weights, not on a slider. */
+@import "@fontsource-variable/fraunces/wght.css";
+@import "@fontsource-variable/inter/wght.css";
+
+:root {
+  /* ---------- Colour ----------
+     Eight. There is no ninth, and no tint or shade of any of them. */
+
+  /* Primary dark surface; primary text on light. */
+  --kd-ink: #2C3A40;
+  /* Footer surface; text on mint buttons. */
+  --kd-ink-deep: #1E2B30;
+  /* Light band surface; body text on dark. */
+  --kd-mist: #DBE5E7;
+  /* Accent: kickers, rules, buttons, stat numerals. */
+  --kd-mint: #D7F8DD;
+  /* Project badge chips ONLY. Not a general-purpose accent. */
+  --kd-teal: #68A6A0;
+  /* Muted labels and card body. */
+  --kd-slate: #8A96A6;
+  /* Secondary body copy on light. */
+  --kd-slate-2: #4A5F67;
+  /* Meta text on dark. */
+  --kd-fog: #ABB5B6;
+
+  /* ---------- Colour at alpha ----------
+     Written out as rgba() rather than derived from the tokens above:
+     these are the exact channel values in the export, and the point of
+     this file is that what it says is what the designer sent. The
+     comment names the one thing each is for. */
+
+  /* Stat tile on dark: 6% fill, 10% border. */
+  --kd-stat-fill: rgba(219, 229, 231, 0.06);
+  --kd-stat-border: rgba(219, 229, 231, 0.10);
+  /* Ghost button outline on dark. */
+  --kd-ghost-outline: rgba(219, 229, 231, 0.35);
+
+  /* Divider on a light band. */
+  --kd-divider-light: rgba(44, 58, 64, 0.18);
+  /* Card border on a light band. */
+  --kd-card-border-light: rgba(44, 58, 64, 0.15);
+
+  /* Footer divider. */
+  --kd-footer-divider: rgba(139, 150, 166, 0.15);
+  /* Nav bottom border. */
+  --kd-nav-border: rgba(139, 150, 166, 0.18);
+
+  /* Project badge chip: fill and border. */
+  --kd-badge-fill: rgba(104, 166, 160, 0.22);
+  --kd-badge-border: rgba(104, 166, 160, 0.40);
+
+  /* ---------- Gradients ----------
+     The hero image sits UNDER the overlay at 20% opacity, and the
+     overlay is opaque ink across the left 45%, so nothing in that band
+     survives. Both project scrims run bottom-up so the caption at the
+     foot of the card has something solid to sit on. */
+  --kd-hero-overlay: linear-gradient(90deg, #2C3A40 45%, rgba(44, 58, 64, 0.55) 100%);
+  --kd-hero-image-opacity: 0.20;
+  --kd-scrim-lg: linear-gradient(
+    0deg,
+    rgba(44, 58, 64, 0.90) 0%,
+    rgba(44, 58, 64, 0.20) 60%,
+    rgba(44, 58, 64, 0) 100%
+  );
+  --kd-scrim-sm: linear-gradient(
+    0deg,
+    rgba(44, 58, 64, 0.90) 0%,
+    rgba(44, 58, 64, 0.15) 70%,
+    rgba(44, 58, 64, 0) 100%
+  );
+
+  /* ---------- Space ----------
+     Named here because the design names them. The same numbers reach
+     the markup as utilities through `--spacing: 1px` below — py-96,
+     px-48, gap-16 — so these are for hand-written CSS and for reading. */
+  --kd-container: 1280px;
+  --kd-gutter: 48px;
+
+  --kd-section-y: 96px;
+  --kd-footer-y: 64px;
+  --kd-hero-top: 144px;
+  --kd-hero-bottom: 80px;
+
+  --kd-nav-h: 88px;
+  --kd-hairline: 1px;
+
+  /* Card padding, by card type. They are not interchangeable — see
+     "Card grammar" in DESIGN-SYSTEM.md. */
+  --kd-pad-stat: 24px;
+  --kd-pad-capability: 32px;
+  --kd-pad-differentiator: 40px;
+
+  /* The gap scale actually used in the frame. Nine values, no others. */
+  --kd-gap-6: 6px;
+  --kd-gap-8: 8px;
+  --kd-gap-12: 12px;
+  --kd-gap-16: 16px;
+  --kd-gap-20: 20px;
+  --kd-gap-24: 24px;
+  --kd-gap-32: 32px;
+  --kd-gap-40: 40px;
+  --kd-gap-56: 56px;
+
+  /* ---------- Shape ----------
+     The accent rule: a mint hairline, in two lengths. 32 beside every
+     kicker and at the foot of every capability card; 48 under the about
+     pull-quote.
+
+     There is no corner-rounding token, and its absence is deliberate:
+     the approved frame has not one rounded corner anywhere, so the
+     property is simply never written. */
+  --kd-rule: 32px;
+  --kd-rule-lg: 48px;
+}
+
+/* ============================================================
+   Tailwind v4 wiring
+   ============================================================ */
+
+/* `inline`, so a utility compiles to `color: var(--kd-mint)` and there
+   is exactly one definition of mint in the stylesheet. */
+@theme inline {
+  --color-kd-ink: var(--kd-ink);
+  --color-kd-ink-deep: var(--kd-ink-deep);
+  --color-kd-mist: var(--kd-mist);
+  --color-kd-mint: var(--kd-mint);
+  --color-kd-teal: var(--kd-teal);
+  --color-kd-slate: var(--kd-slate);
+  --color-kd-slate-2: var(--kd-slate-2);
+  --color-kd-fog: var(--kd-fog);
+
+  --color-kd-stat-fill: var(--kd-stat-fill);
+  --color-kd-stat-border: var(--kd-stat-border);
+  --color-kd-ghost-outline: var(--kd-ghost-outline);
+  --color-kd-divider-light: var(--kd-divider-light);
+  --color-kd-card-border-light: var(--kd-card-border-light);
+  --color-kd-footer-divider: var(--kd-footer-divider);
+  --color-kd-nav-border: var(--kd-nav-border);
+  --color-kd-badge-fill: var(--kd-badge-fill);
+  --color-kd-badge-border: var(--kd-badge-border);
+}
+
+@theme {
+  /* ---------- Families ----------
+     Two, and only two. Fraunces carries every display size (d1-d9) at
+     700 and nothing else; Inter carries everything else at
+     400/500/600/700. The fallbacks are named rather than left to
+     `serif` / `sans-serif` so the metrics a browser substitutes before
+     the woff2 lands are at least predictable. */
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* ---------- Type ----------
+     Each token carries its own size, line height, weight and tracking,
+     so `class="text-d1"` is the whole type decision for that node and
+     there is no second class to forget. Family is the one thing left
+     out: it is `font-display` for d1-d9 and inherited Inter for the
+     rest.
+
+     Line heights are px, exactly as exported. Several of them — 77.76,
+     55.2, 29.25, 22.75, 16.5, 13.5 — are not round and are not meant to
+     be. Tracking is px too: the export's 2.2 on an 11px kicker is
+     0.2em, which is what a designer dials, so px and em agree here and
+     px is what was sent. */
+
+  /* Display — Fraunces 700 */
+  --text-d1: 72px;              /* hero H1 */
+  --text-d1--line-height: 77.76px;
+  --text-d1--font-weight: 700;
+
+  --text-d2: 60px;              /* closing CTA headline */
+  --text-d2--line-height: 75px;
+  --text-d2--font-weight: 700;
+
+  --text-d3: 48px;              /* about pull-quote */
+  --text-d3--line-height: 55.2px;
+  --text-d3--font-weight: 700;
+
+  --text-d4: 36px;              /* section H2 */
+  --text-d4--line-height: 40px;
+  --text-d4--font-weight: 700;
+
+  --text-d5: 30px;              /* hero stat numeral */
+  --text-d5--line-height: 36px;
+  --text-d5--font-weight: 700;
+
+  --text-d6: 24px;              /* featured project title; about stat */
+  --text-d6--line-height: 32px;
+  --text-d6--font-weight: 700;
+
+  --text-d7: 20px;              /* differentiator title */
+  --text-d7--line-height: 28px;
+  --text-d7--font-weight: 700;
+
+  --text-d8: 18px;              /* capability card title */
+  --text-d8--line-height: 28px;
+  --text-d8--font-weight: 700;
+
+  --text-d9: 16px;              /* small project card title */
+  --text-d9--line-height: 24px;
+  --text-d9--font-weight: 700;
+
+  /* Body — Inter 400 */
+  --text-body-lg: 18px;         /* hero sub-paragraph */
+  --text-body-lg--line-height: 29.25px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body: 16px;            /* about lead paragraph */
+  --text-body--line-height: 26px;
+  --text-body--font-weight: 400;
+
+  --text-body-sm: 14px;         /* card body, secondary paragraphs */
+  --text-body-sm--line-height: 22.75px;
+  --text-body-sm--font-weight: 400;
+
+  /* Interface — Inter 500/600 */
+  --text-ui: 14px;              /* buttons */
+  --text-ui--line-height: 20px;
+  --text-ui--font-weight: 600;
+
+  --text-nav: 14px;             /* nav links */
+  --text-nav--line-height: 20px;
+  --text-nav--letter-spacing: 0.28px;
+  --text-nav--font-weight: 500;
+
+  --text-ui-lg: 15px;           /* large CTA button */
+  --text-ui-lg--line-height: 20px;
+  --text-ui-lg--letter-spacing: 0.56px;
+  --text-ui-lg--font-weight: 600;
+
+  /* Meta and labels — Inter 400, except `num` at 700 */
+  --text-meta: 14px;            /* project meta on dark */
+  --text-meta--line-height: 20px;
+  --text-meta--font-weight: 400;
+
+  --text-meta-sm: 12px;         /* small project meta; footer legal */
+  --text-meta-sm--line-height: 16px;
+  --text-meta-sm--font-weight: 400;
+
+  --text-label: 12px;           /* stat card labels — set uppercase */
+  --text-label--line-height: 16px;
+  --text-label--letter-spacing: 1.8px;
+  --text-label--font-weight: 400;
+
+  --text-label-sm: 12px;        /* about stat captions */
+  --text-label-sm--line-height: 16.5px;
+  --text-label-sm--font-weight: 400;
+
+  --text-num: 12px;             /* capability numerals 01-04 */
+  --text-num--line-height: 16px;
+  --text-num--letter-spacing: 1.8px;
+  --text-num--font-weight: 700;
+
+  --text-kicker: 11px;          /* section eyebrows — set uppercase */
+  --text-kicker--line-height: 16.5px;
+  --text-kicker--letter-spacing: 2.2px;
+  --text-kicker--font-weight: 600;
+
+  --text-kicker-sm: 11px;       /* footer column heads — set uppercase */
+  --text-kicker-sm--line-height: 16.5px;
+  --text-kicker-sm--letter-spacing: 1.98px;
+  --text-kicker-sm--font-weight: 600;
+
+  --text-badge: 10px;           /* featured project badge — set uppercase */
+  --text-badge--line-height: 15px;
+  --text-badge--letter-spacing: 1.2px;
+  --text-badge--font-weight: 400;
+
+  --text-badge-sm: 9px;         /* small project badge — set uppercase */
+  --text-badge-sm--line-height: 13.5px;
+  --text-badge-sm--letter-spacing: 1.08px;
+  --text-badge-sm--font-weight: 400;
+
+  /* ---------- Space ----------
+     One pixel. See the note at the top of this file: every numeric
+     spacing utility now reads as its own pixel value, so the design's
+     numbers reach the markup unconverted. */
+  --spacing: 1px;
+
+  /* The content column. `max-w-kd` on the inner div of every band. */
+  --container-kd: 1280px;
+}
