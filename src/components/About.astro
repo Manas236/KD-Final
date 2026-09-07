@@ -1,0 +1,76 @@
+---
+/* ============================================================
+   About — mist band
+   ------------------------------------------------------------
+   A single measured column, built in the order the spec gives:
+
+     kicker
+     pull-quote                       capped 560
+     48×1px mint rule
+     block with a 1px mint LEFT border and 40px left padding,
+       its text capped at 519
+     the two stats, stacked, each with a 1px divider-light top border
+       and 16px of top padding
+
+   The two width caps are different because they are different measures,
+   not because one of them is a mistake to reconcile with the other.
+
+   NOTE FOR THE DESIGNER: read literally — "below it" — this leaves the
+   right half of a 1184px band empty. That may well be the intent for an
+   editorial band, but it is the one place on the page where a
+   two-column reading of the spec would also have fitted the numbers
+   (560 + 56 + 40 + 519 = 1175). Logged in OPEN-QUESTIONS.md #8 rather
+   than decided here.
+   ============================================================ */
+import { home } from "../data/home";
+import Kicker from "./Kicker.astro";
+
+const { about } = home;
+---
+
+<section class="bg-kd-mist py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={about.kicker} editKey="home.about.kicker" />
+
+    <blockquote class="mt-16 max-w-560">
+      <p class="font-display text-d3 text-kd-ink" data-edit="home.about.quote">
+        {about.quote}
+      </p>
+    </blockquote>
+
+    <span class="block w-48 h-1 bg-kd-mint mt-24" aria-hidden="true"></span>
+
+    <div class="mt-40 border-l border-l-kd-mint pl-40">
+      <p class="text-body text-kd-slate-2 max-w-519" data-edit="home.about.body1">
+        {about.body1}
+      </p>
+      <p
+        class="text-body text-kd-slate-2 max-w-519 mt-24"
+        data-edit="home.about.body2"
+      >
+        {about.body2}
+      </p>
+    </div>
+
+    <dl class="mt-40 flex flex-col gap-24 max-w-560">
+      {
+        about.stats.map((stat, i) => (
+          <div class="border-t border-t-kd-divider-light pt-16">
+            <dd
+              class="font-display text-d6 text-kd-ink"
+              data-edit={`home.about.stats.${i}.value`}
+            >
+              {stat.value}
+            </dd>
+            <dt
+              class="text-label-sm text-kd-slate mt-6"
+              data-edit={`home.about.stats.${i}.label`}
+            >
+              {stat.label}
+            </dt>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
