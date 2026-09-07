@@ -1,4 +1,11 @@
 /* ============================================================
+   PORTED FROM NESTING TREE — src/lib/db.ts
+   ------------------------------------------------------------
+   FROZEN. Do not refactor, rename or tidy. One thing changed on the way
+   across: the DB_NAME fallback, "nesting_tree" -> "kd_construction".
+   ============================================================ */
+
+/* ============================================================
    MySQL connection pool
    ------------------------------------------------------------
    A single shared pool for the whole app. A "pool" keeps a small

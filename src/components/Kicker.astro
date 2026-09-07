@@ -1,0 +1,42 @@
+---
+/* ============================================================
+   The section eyebrow
+   ------------------------------------------------------------
+   Every band opens with one. Two variants and no third — see
+   DESIGN-SYSTEM.md §3.
+
+     left    a 32×1px mint rule, 12px gap, then the label.
+     centred a rule on BOTH sides of the label, the row centred. Used
+             by the closing CTA and nothing else on this page.
+
+   The rule is a <span>, not an <hr>: it is a graphic mark beside a
+   label, not a thematic break between two passages of content, and an
+   <hr> here would announce a section change to a screen reader that is
+   in the middle of one.
+   ============================================================ */
+interface Props {
+  /** The eyebrow text. */
+  label: string;
+  /** Its declared slot key, e.g. "home.about.kicker". */
+  editKey: string;
+  /** `centred` puts a rule on each side. */
+  variant?: "left" | "centred";
+}
+
+const { label, editKey, variant = "left" } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex items-center gap-12",
+    variant === "centred" && "justify-center",
+  ]}
+>
+  <span class="block w-32 h-1 bg-kd-mint shrink-0" aria-hidden="true"></span>
+  <span class="text-kicker uppercase text-kd-mint" data-edit={editKey}>{label}</span>
+  {
+    variant === "centred" && (
+      <span class="block w-32 h-1 bg-kd-mint shrink-0" aria-hidden="true" />
+    )
+  }
+</div>

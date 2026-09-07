@@ -1,0 +1,22 @@
+---
+/* The only vector in the design. It follows a button or link label and
+   is decorative: the label already says where the link goes, so the
+   arrow is hidden from assistive technology rather than announced as a
+   second, wordless thing.
+
+   Sized in `em` so it tracks whatever type token the label carries —
+   the same component sits beside 14px `ui` and 15px `ui-lg` without
+   either one being told about the other. */
+---
+
+<svg
+  class="w-[1em] h-[1em] shrink-0"
+  viewBox="0 0 16 16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="square" />
+</svg>
