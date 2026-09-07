@@ -1,0 +1,133 @@
+---
+/* ============================================================
+   Footer — ink-deep band, four columns
+   ------------------------------------------------------------
+   A 260px brand block, then three equal columns. A bottom bar under a
+   1px footer-divider top border with 24px of top padding: legal left,
+   founding line right.
+
+   THE HEADQUARTERS COLUMN CARRIES id="contact". The nav's primary CTA
+   points at it. Nothing was designed behind "Get in Touch" — no contact
+   page, no form, no phone or email anywhere in the frame — so the CTA
+   lands on the only address the design contains rather than on a 404.
+   That is a holding position, not an answer: OPEN-QUESTIONS.md #4.
+
+   The year in the bottom bar is generated. The design shows 2025, which
+   was already stale when it was approved; it sits in its own
+   `data-no-edit` span so that editing that line through the in-page
+   editor cannot freeze a year back into the copy.
+   ============================================================ */
+import { Image } from "astro:assets";
+import logo from "../assets/kd-logo-white.png";
+import { home } from "../data/home";
+
+const { footer } = home;
+const { navigation, headquarters, disciplines } = footer.columns;
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-kd-ink-deep py-64">
+  <div class="max-w-kd mx-auto px-48">
+    <div class="grid grid-cols-[260px_1fr_1fr_1fr] gap-56">
+      <div>
+        <Image
+          src={logo}
+          alt={footer.logoAlt}
+          width={120}
+          height={80}
+          loading="lazy"
+          class="w-120 h-80 object-contain object-left"
+        />
+        <p class="text-body-sm text-kd-mist mt-24" data-edit="home.footer.tagline">
+          {footer.tagline}
+        </p>
+        <p
+          class="text-meta-sm text-kd-slate mt-16"
+          data-edit="home.footer.legalName"
+        >
+          {footer.legalName}
+        </p>
+      </div>
+
+      <nav aria-labelledby="footer-navigation">
+        <h2
+          id="footer-navigation"
+          class="text-kicker-sm uppercase text-kd-mist"
+          data-edit="home.footer.columns.navigation.head"
+        >
+          {navigation.head}
+        </h2>
+        <ul class="mt-20 flex flex-col gap-12">
+          {
+            navigation.links.map((link, i) => (
+              <li>
+                <a href={link.href} class="block text-body-sm text-kd-slate">
+                  <span data-edit={`home.footer.columns.navigation.links.${i}.label`}>
+                    {link.label}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div id="contact">
+        <h2
+          class="text-kicker-sm uppercase text-kd-mist"
+          data-edit="home.footer.columns.headquarters.head"
+        >
+          {headquarters.head}
+        </h2>
+        <address class="mt-20 flex flex-col gap-12 not-italic">
+          {
+            headquarters.lines.map((line, i) => (
+              <span
+                class="block text-body-sm text-kd-slate"
+                data-edit={`home.footer.columns.headquarters.lines.${i}`}
+              >
+                {line}
+              </span>
+            ))
+          }
+        </address>
+      </div>
+
+      <div>
+        <h2
+          class="text-kicker-sm uppercase text-kd-mist"
+          data-edit="home.footer.columns.disciplines.head"
+        >
+          {disciplines.head}
+        </h2>
+        <ul class="mt-20 flex flex-col gap-12">
+          {
+            disciplines.items.map((item, i) => (
+              <li
+                class="text-body-sm text-kd-slate"
+                data-edit={`home.footer.columns.disciplines.items.${i}`}
+              >
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-56 pt-24 border-t border-t-kd-footer-divider flex items-baseline justify-between gap-40"
+    >
+      <p class="text-meta-sm text-kd-slate">
+        <span data-no-edit>© {year}</span>
+        <span data-edit="home.footer.bottom.legal">{footer.bottom.legal}</span>
+      </p>
+      <p
+        class="text-meta-sm text-kd-slate shrink-0"
+        data-edit="home.footer.bottom.founding"
+      >
+        {footer.bottom.founding}
+      </p>
+    </div>
+  </div>
+</footer>

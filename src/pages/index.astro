@@ -1,17 +1,41 @@
 ---
+/* ============================================================
+   Homepage
+   ------------------------------------------------------------
+   The band stack, in the approved order. The alternation is the design
+   — nav (ink) → hero (ink + image) → about (mist) → capabilities
+   (white) → projects (ink) → differentiators (mist) → closing CTA (ink)
+   → footer (ink-deep) — and no two adjacent bands share a surface
+   except the nav and the hero, which read as one dark opening.
 
+   Each band paints its own surface and holds its own 1280px container,
+   so this file is a list and nothing else. Nothing here decides
+   anything; if you are adding layout to this page, it belongs in the
+   section component.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import Capabilities from "../components/Capabilities.astro";
+import Projects from "../components/Projects.astro";
+import Differentiators from "../components/Differentiators.astro";
+import ClosingCta from "../components/ClosingCta.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { home } from "../data/home";
+
+export const prerender = false;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={home.meta.title} description={home.meta.description}>
+  <Nav />
+  <main>
+    <Hero />
+    <About />
+    <Capabilities />
+    <Projects />
+    <Differentiators />
+    <ClosingCta />
+  </main>
+  <SiteFooter />
+</BaseLayout>
