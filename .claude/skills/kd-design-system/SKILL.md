@@ -9,10 +9,9 @@ The homepage design is client-approved and **locked**; every other page is
 derived from it. Fidelity is the requirement. Deviation is a defect, including
 deviation you believe is an improvement. Do not exercise aesthetic judgement.
 
-## Read first, every time
-
-`src/styles/tokens.css` (the design as values) and `DESIGN-SYSTEM.md` (the
-design as rules — §2 bands, §3 kicker, §4 card grammar, §5 media, §10 mobile).
+**Read first, every time:** `src/styles/tokens.css` (the design as values) and
+`DESIGN-SYSTEM.md` (the design as rules — §2 bands, §3 kicker, §4 card grammar,
+§5 media, §10 mobile).
 
 ## Hard rules
 
@@ -30,14 +29,11 @@ design as rules — §2 bands, §3 kicker, §4 card grammar, §5 media, §10 mob
   the approved frame.
 - Spacing utilities are literal pixels (`--spacing: 1px`): `py-96` is 96px.
 
-## Frozen
-
+**Frozen** — ported from a working system, do not refactor, rename or tidy;
+fix only what is broken and say what you changed:
 `src/lib/{edit-auth,db,editable}.ts`, `src/scripts/inline-edit.js`,
-`src/pages/api/content*`, `src/pages/api/edit-session.ts` and BaseLayout's
-editor script tags are ported from a working system. Do not refactor, rename or
-tidy them; fix only what is broken and say what you changed.
+`src/pages/api/content*`, `src/pages/api/edit-session.ts`, BaseLayout's editor
+script tags.
 
-## Before reporting done
-
-`npm run build` clean · both greps above return nothing · every rendered
-`data-edit` key unique · the editor still saves and repaints.
+**Before reporting done:** `npm run build` clean · both greps above return
+nothing · every rendered `data-edit` key unique · the editor saves and repaints.
