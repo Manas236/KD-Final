@@ -24,6 +24,25 @@ Deviation is a defect — including deviation you believe is an improvement.
 3. **Every text node carries a `data-edit` key, written as you write the node —
    not added afterwards.** See §9.
 
+### Two build settings that hold rules 1–3 up
+
+Both are in `astro.config.mjs` / `src/styles/tokens.css`, both look like
+performance settings, and both break something silently if reverted.
+
+- **`compressHTML: false`.** Astro's compressor strips whitespace between tags.
+  The hero H1 is one sentence split across two spans so the second can be mint,
+  and the footer copyright puts a generated year beside an editable legal name —
+  in both, that whitespace is a **word gap**. Compressed, they render
+  `Infrastructure,Brick by Brick.` and `© 2026Kailashchandra…`. Do not turn it
+  back on without checking both.
+- **`@import "tailwindcss" source(none)` + `@source "../**/*.{astro,ts,…}"`.**
+  Tailwind's automatic content detection walks the whole project and treats any
+  bare word as a possible utility — including the words in *this document*,
+  which was compiling a corner-radius utility into the shipped stylesheet.
+  Scanning is scoped to `src/` so that a document describing the design system
+  cannot add to it. If a template ever moves outside `src/`, add it to `@source`
+  or its classes will silently not exist.
+
 ---
 
 ## 1. Reading the spacing scale
