@@ -1,0 +1,69 @@
+---
+/* ============================================================
+   Differentiators — mist band, three cards
+   ------------------------------------------------------------
+   A 3-column grid with NO GAP, like the capabilities row, and for the
+   same reason: the lines between the cards are borders, not gutters.
+
+   The border pattern is not symmetrical and that is deliberate:
+
+     card 1   3px MINT top border, no left border
+     card 2   3px card-border-light top border, 1px left border
+     card 3   the same as card 2
+
+   So the mint marks the start of the row rather than decorating all
+   three, and the left borders divide 1|2 and 2|3 without drawing a line
+   down the outside of the block.
+
+   NO NUMERAL. That is the one thing that tells this card apart from the
+   capability card at a glance — see DESIGN-SYSTEM.md §4.3. This one is
+   for unordered, rhetorical claims; that one is for an ordered set.
+
+   The 3px mint top border sits on mist at about 1.2:1 and will read as
+   absent. Built to spec; OPEN-QUESTIONS.md #1.
+   ============================================================ */
+import { home } from "../data/home";
+import Kicker from "./Kicker.astro";
+
+const { differentiators } = home;
+---
+
+<section class="bg-kd-mist py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={differentiators.kicker} editKey="home.differentiators.kicker" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16"
+      data-edit="home.differentiators.heading"
+    >
+      {differentiators.heading}
+    </h2>
+
+    <ul class="grid grid-cols-3 mt-56">
+      {
+        differentiators.cards.map((card, i) => (
+          <li
+            class:list={[
+              "border-t-[3px] p-40",
+              i === 0 ? "border-t-kd-mint" : "border-t-kd-card-border-light",
+              i > 0 && "border-l border-l-kd-card-border-light",
+            ]}
+          >
+            <h3
+              class="font-display text-d7 text-kd-ink"
+              data-edit={`home.differentiators.cards.${i}.title`}
+            >
+              {card.title}
+            </h3>
+            <p
+              class="text-body-sm text-kd-slate-2 mt-12"
+              data-edit={`home.differentiators.cards.${i}.body`}
+            >
+              {card.body}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
