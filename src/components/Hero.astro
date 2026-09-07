@@ -43,8 +43,21 @@ const { hero } = home;
     <div class="w-568 max-w-full">
       <Kicker label={hero.kicker} editKey="home.hero.kicker" />
 
+      {/* THE SPACE BETWEEN THESE TWO SPANS IS A WORD GAP, not formatting.
+          The halves are stored without a joining space, because the
+          editor trims every value it reads off the page and a trailing
+          space inside a slot would not survive its first edit. So the
+          gap has to live in the markup.
+
+          It only survives because `compressHTML` is off in
+          astro.config.mjs — with Astro's compressor on, inter-tag
+          whitespace is removed and even an explicit {" "} expression is
+          swallowed, giving "Infrastructure,Brick by Brick." The {" "}
+          below is kept as a marker that the whitespace is deliberate;
+          the config is what makes it work. Turn the compressor back on
+          and this heading breaks. */}
       <h1 class="font-display text-d1 text-kd-mist mt-16">
-        <span data-edit="home.hero.headline.lead">{hero.headline.lead}</span>
+        <span data-edit="home.hero.headline.lead">{hero.headline.lead}</span>{" "}
         <span class="text-kd-mint" data-edit="home.hero.headline.accent"
           >{hero.headline.accent}</span
         >

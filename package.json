@@ -9,7 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "start": "node dist/server/entry.mjs",
+    "check:keys": "node scripts/check-edit-keys.mjs",
+    "check:cls": "node scripts/check-layout-shift.mjs",
+    "check:editor": "node scripts/probe-editor.mjs",
+    "check:shift-cause": "node scripts/diagnose-shift.mjs",
+    "fonts:measure": "node scripts/measure-font-fallbacks.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.5",

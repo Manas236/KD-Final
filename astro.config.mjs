@@ -31,6 +31,22 @@ export default defineConfig({
      /api/content on every view, and the API routes are request-scoped. */
   output: 'server',
 
+  /* OFF, deliberately, and this is not a performance oversight.
+     Astro's HTML compressor removes whitespace BETWEEN tags, and this
+     page has two places where that whitespace is a word gap rather than
+     formatting: the hero H1, which is one sentence split across two
+     spans so the second half can be mint, and the footer's copyright
+     line, where a generated year sits beside an editable legal name.
+     Compressed, those render "Infrastructure,Brick by Brick." and
+     "© 2026Kailashchandra…".
+
+     The usual dodges are worse. A literal space inside the accent span
+     does not survive the in-page editor, which trims every value it
+     reads off the page. A &nbsp; survives but stops the H1 wrapping
+     where the design wraps it. So the compressor goes, and the markup
+     means what it says. The cost is a few hundred bytes before gzip. */
+  compressHTML: false,
+
   adapter: node({
     mode: 'standalone'
   }),

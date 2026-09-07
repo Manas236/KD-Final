@@ -37,13 +37,71 @@
    markup unchanged, with nothing to convert and no invented t-shirt
    scale in between. Read `p-32` as "32 pixels".
    ============================================================ */
-@import "tailwindcss";
+/* `source(none)` turns OFF Tailwind's automatic content detection, and
+   the `@source` below turns it back on for src/ alone.
+
+   This is not tidiness. Automatic detection walks the whole project and
+   treats any bare word it finds as a possible utility — so
+   DESIGN-SYSTEM.md §0, whose entire job is to forbid soft corners, was
+   naming the utility often enough that Tailwind compiled that utility
+   into the shipped stylesheet. The one document written to ban the
+   property was the reason it shipped. The same trap swallows any prose
+   that names a class: a document about the design system must not be
+   able to add to it.
+
+   It is also why the two build-gate greps in DESIGN-SYSTEM.md §0 are
+   worth keeping literal. They look like they only catch prose. The
+   prose was the bug.
+
+   Everything the page is built from lives under src/. If a template
+   ever moves outside it, add it here or its classes will silently not
+   exist. */
+@import "tailwindcss" source(none);
+@source "../**/*.{astro,ts,tsx,js,jsx,mjs}";
 
 /* Self-hosted, OFL, no CDN. `wght.css` is the weight axis alone —
    Fraunces' optical-size and softness axes are not used by the design,
    and Inter is wanted at four fixed weights, not on a slider. */
 @import "@fontsource-variable/fraunces/wght.css";
 @import "@fontsource-variable/inter/wght.css";
+
+/* ---------- Metric-matched fallbacks ----------
+   NOT design tokens, and not a third and fourth typeface. These are the
+   SAME Georgia and Arial the stacks below already fall back to, scaled
+   so that a line of text set in them occupies the width a line of
+   Fraunces or Inter would.
+
+   The reason is measured, not theoretical. Preloading the woff2 gets
+   the real font there early but cannot guarantee it lands before first
+   paint on a slow connection; when it does not, the browser lays the
+   page out in the substitute and then lays it out again in the real
+   face. Georgia is 3% wider than Fraunces and Arial is 6% narrower than
+   Inter, so a run of copy takes a different NUMBER OF LINES in the two
+   passes and everything below it moves. On throttled 3G that measured
+   as 0.0175 CLS, all of it under the hero H1.
+
+   size-adjust removes the cause: the fallback wraps identically, so the
+   swap changes the letterforms and nothing else. The percentages come
+   from scripts/measure-font-fallbacks.mjs, which measures the real
+   faces against the real fallbacks in a real browser — re-run it if
+   either family is ever changed. */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  size-adjust: 96.83%;
+  ascent-override: 98.00%;
+  descent-override: 26.00%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  size-adjust: 106.23%;
+  ascent-override: 97.00%;
+  descent-override: 24.00%;
+  line-gap-override: 0%;
+}
 
 :root {
   /* ---------- Colour ----------
@@ -149,9 +207,9 @@
      kicker and at the foot of every capability card; 48 under the about
      pull-quote.
 
-     There is no corner-rounding token, and its absence is deliberate:
-     the approved frame has not one rounded corner anywhere, so the
-     property is simply never written. */
+     There is no corner-radius token, and its absence is deliberate: the
+     approved frame has not one soft corner anywhere, so the property is
+     simply never written. */
   --kd-rule: 32px;
   --kd-rule-lg: 48px;
 }
@@ -190,9 +248,10 @@
      400/500/600/700. The fallbacks are named rather than left to
      `serif` / `sans-serif` so the metrics a browser substitutes before
      the woff2 lands are at least predictable. */
-  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Fraunces Variable", "Fraunces Fallback", Georgia,
+    "Times New Roman", serif;
+  --font-sans: "Inter Variable", "Inter Fallback", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* ---------- Type ----------
      Each token carries its own size, line height, weight and tracking,

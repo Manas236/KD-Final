@@ -61,7 +61,15 @@ const { capabilities } = home;
             >
               {card.body}
             </p>
-            <span class="block w-32 h-1 bg-kd-mint mt-32" aria-hidden="true" />
+            {/* At the FOOT of the card, not 32px under whatever the body
+                happens to end at. Card 4's copy runs to four lines where
+                1-3 run to three, so a plain margin left its rule sitting
+                22px below the others and the row read as ragged. mt-auto
+                inside the flex column bottom-aligns all four; the pt-32
+                keeps the design's 32px of clearance as a minimum. */}
+            <span class="block mt-auto pt-32">
+              <span class="block w-32 h-1 bg-kd-mint" aria-hidden="true" />
+            </span>
           </li>
         ))
       }
