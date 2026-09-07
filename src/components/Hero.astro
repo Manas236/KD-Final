@@ -1,0 +1,99 @@
+---
+/* ============================================================
+   Hero — ink band, full-bleed image, 568px text column
+   ------------------------------------------------------------
+   THE EXPORT LIED ABOUT TWO THINGS HERE and both are ignored:
+
+     · the stats came through as a vertical flex column. They are a 2×2
+       grid, 16px gap, INSIDE the 568px text column — not full width.
+     · the image and its overlay came through absolutely positioned at
+       pixel offsets. They are a stacked backdrop behind normal flow.
+
+   The backdrop is three layers, bottom to top: the photograph at 20%
+   opacity, the 90° ink gradient over it, then the content. The gradient
+   is opaque ink across the left 45%, which is exactly where the text
+   sits — so the photograph is chosen for what is in its RIGHT half.
+   ============================================================ */
+import { Image } from "astro:assets";
+import backdrop from "../assets/hero-nhava-sheva-station.jpg";
+import { home } from "../data/home";
+import Arrow from "./Arrow.astro";
+import Kicker from "./Kicker.astro";
+
+const { hero } = home;
+---
+
+<section class="relative bg-kd-ink overflow-hidden">
+  <div class="absolute inset-0" aria-hidden="true">
+    <Image
+      src={backdrop}
+      alt={hero.backdropAlt}
+      width={1551}
+      height={813}
+      loading="eager"
+      fetchpriority="high"
+      class="w-full h-full object-cover object-center"
+      style="opacity: var(--kd-hero-image-opacity)"
+    />
+    <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)">
+    </div>
+  </div>
+
+  <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+    <div class="w-568 max-w-full">
+      <Kicker label={hero.kicker} editKey="home.hero.kicker" />
+
+      <h1 class="font-display text-d1 text-kd-mist mt-16">
+        <span data-edit="home.hero.headline.lead">{hero.headline.lead}</span>
+        <span class="text-kd-mint" data-edit="home.hero.headline.accent"
+          >{hero.headline.accent}</span
+        >
+      </h1>
+
+      <p class="text-body-lg text-kd-mist mt-24" data-edit="home.hero.sub">
+        {hero.sub}
+      </p>
+
+      <div class="flex flex-wrap items-center gap-16 mt-32">
+        <a
+          href={hero.buttons.primary.href}
+          class="inline-flex items-center gap-8 text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
+        >
+          <span data-edit="home.hero.buttons.primary.label"
+            >{hero.buttons.primary.label}</span
+          >
+          <Arrow />
+        </a>
+        <a
+          href={hero.buttons.secondary.href}
+          class="inline-flex items-center text-ui text-kd-mist border border-kd-ghost-outline px-24 py-12"
+        >
+          <span data-edit="home.hero.buttons.secondary.label"
+            >{hero.buttons.secondary.label}</span
+          >
+        </a>
+      </div>
+
+      <dl class="grid grid-cols-2 gap-16 mt-56">
+        {
+          hero.stats.map((stat, i) => (
+            <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+              <dd
+                class="font-display text-d5 text-kd-mint"
+                data-edit={`home.hero.stats.${i}.value`}
+              >
+                {stat.value}
+              </dd>
+              <dt
+                class="text-label uppercase text-kd-slate mt-8"
+                data-edit={`home.hero.stats.${i}.label`}
+              >
+                {stat.label}
+              </dt>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
