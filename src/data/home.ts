@@ -93,6 +93,8 @@ export const home = {
          `<page>.nav.links.i.label` on every page and a stored edit on
          index 6 must keep meaning "Contact". */
       { label: "CSR", href: "/csr" },
+      /* Appended 2026-09-28 for the same reason (OPEN-QUESTIONS.md #39). */
+      { label: "Gallery", href: "/gallery" },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },
@@ -267,6 +269,7 @@ export const home = {
           { label: "Clients", href: "/clients" },
           { label: "Contact", href: "/contact" },
           { label: "CSR", href: "/csr" },
+          { label: "Gallery", href: "/gallery" },
         ] as readonly NavLink[],
       },
       headquarters: {

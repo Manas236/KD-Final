@@ -57,10 +57,10 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
     </a>
 
     <nav
-      class="hidden min-[1080px]:flex items-center gap-40"
+      class="hidden min-[1080px]:flex items-center gap-32 min-[1200px]:gap-40"
       aria-label="Primary"
     >
-      <ul class="flex items-center gap-32">
+      <ul class="flex items-center gap-24 min-[1200px]:gap-32">
         {
           nav.links.map((link, i) => {
             const active = here === link.href;
@@ -86,7 +86,7 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
 
       <a
         href={nav.cta.href}
-        class="inline-flex items-center text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
+        class="inline-flex items-center whitespace-nowrap text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
       >
         <span data-edit={`${page}.nav.cta.label`}>{nav.cta.label}</span>
       </a>
