@@ -2462,3 +2462,41 @@ maps straight onto a new page — one question closes it.
 `/projects` (235) · `/projects/matunga-workshop-fob` renders the new hero and
 gallery · no horizontal overflow at 390 px on the RMC page · `check-placeholders`
 35 (the RMC photographs row closed).
+## 39. A /gallery page, and the plants in the /projects Gallery tab
+
+**Asked 2026-09-28:** not every photograph was in the /projects Gallery tab,
+and there was no gallery page.
+
+**Done.**
+- **The tab now has the plants.** The Vindhane (12) and Karjat RMC (9)
+  photographs were only on their own pages. Their captions moved into
+  `src/data/gallery.ts` (`vindhanePlantPhotos`, `rmcPlantPhotos`,
+  `plantGalleries`) — `plant.ts` and `rmc-plant.ts` take their galleries
+  from there, so there is still one definition site per caption — and the
+  tab's groups are `allGalleries`, the projects then the plants, appended so
+  no existing group key moves. `ProjectGallery.href` lets a plant group
+  link to `/resources/...` instead of `/projects/<slug>` (`galleryHref()`).
+- **`/gallery`** (`src/data/gallery-page.ts`, `src/pages/gallery.astro`):
+  ink hero with jump links → white band, three sections (Railway Projects ·
+  Beyond the Railway · Our Plants), each group a linked heading over
+  GalleryGrid → ink CTA to `/projects`. 22 groups, 85 photographs, every one
+  opening in the lightbox. Keys `gallery.*`; registered in `editable.ts` and
+  both check scripts.
+- **Nav and footer** gain "Gallery", appended after CSR so every stored
+  `nav.links.i` edit keeps its meaning. A ninth link overflowed the bar at
+  1080 px ("Get in Touch" wrapped), so below 1200 px the link gap is 24 px
+  (was 32) and the nav gap 32 (was 40); the CTA is `whitespace-nowrap`.
+  Measured flush at 1080, 1199 and 1280.
+- **Sitemap:** `/gallery` is a new `<url>` with all 85 photographs as
+  `<image:image>` entries — 30 URLs, 188 images in all.
+
+**The raw library is still mostly unused, by design.** Matunga Images has 97
+stills and 12 are on the site; Safety Department 51/3; Sanpada 42/6. PHOTOS.md
+explains why: ~60 near-identical office interiors, 45 certificate handshakes at
+one wall, 38 WhatsApp shots of one building. A top-up pass for the smaller
+folders (Kharghar 8/3, Uran 6/3, Bonkode 10/4, Lush Meadows 3/1) is open.
+
+**Verification.** `npm run build` clean · `check-edit-keys` passes on
+`/gallery` (165 keys), `/projects` (260), `/`, `/resources/vindhane-plant`,
+`/resources/rmc-plant-karjat` · no horizontal overflow at 390 px ·
+lightbox opens on `/gallery`.
