@@ -2,10 +2,16 @@
 
 **Read this and `src/styles/tokens.css` before writing any markup.**
 
-The Figma covers the **homepage only**. `/about` and `/projects` have no design
-and will be derived from this file. So this file is written as **rules you
-follow**, not as a description of what the homepage happens to look like. Where
-a rule was inferred rather than designed, it says so.
+The Figma covers the **homepage** and **`/about`**. `/projects` has no design and
+will be derived from this file. So this file is written as **rules you follow**,
+not as a description of what the homepage happens to look like. Where a rule was
+inferred rather than designed, it says so.
+
+`/about` arrived after the homepage shipped, as a generated export that had been
+snapped to Tailwind's *default* spacing scale rather than this project's. Where
+it disagreed with a rule below, the rule won and the export's value was recorded
+in `OPEN-QUESTIONS.md` #15. Where it introduced something this file says does not
+exist, that is #16. Read both before treating `/about` as a precedent.
 
 The design is client-approved and **locked**. Fidelity is the requirement.
 Deviation is a defect — including deviation you believe is an improvement.
@@ -85,6 +91,98 @@ The homepage order is:
 | 6 | Differentiators | mist | `bg-kd-mist` |
 | 7 | Closing CTA | ink | `bg-kd-ink` |
 | 8 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+`/about` is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero | ink + image | `bg-kd-ink` + backdrop |
+| 3 | Our Story | white | `bg-white` |
+| 4 | Our Journey | mist | `bg-kd-mist` |
+| 5 | Board of Directors | white | `bg-white` |
+| 6 | Health, Safety & Environment | ink | `bg-kd-ink` |
+| 7 | Vision 2030 | ink | `bg-kd-ink` |
+| 8 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> ⚠️ **`/about` breaks the alternation twice** — 4→5 is light on light and
+> 6→7 is ink on ink. That is what its export draws and it is built as drawn.
+> **It is not a precedent.** `OPEN-QUESTIONS.md` #17 has the reasoning and the
+> one-word fix for each. Derive `/projects` from the rules below, not from
+> `/about`'s band table.
+
+`/projects` arrived after this was written, as its own export, and is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero | ink + image | `bg-kd-ink` + backdrop |
+| 3 | Filters | mist | `bg-kd-mist` |
+| 4 | Listing | ink | `bg-kd-ink` |
+| 5 | Beyond the railway | mist | `bg-kd-mist` |
+| 6 | Closing CTA | ink | `bg-kd-ink` |
+| 7 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> Band 5 is not in the export — added 2026-09-17 at the user's request
+> (`OPEN-QUESTIONS.md` #30) and, being light, sits where the alternation puts
+> it. Before it, `/projects` broke the alternation once, the same shape as
+> `/about`'s 6→7: Listing → Closing CTA was ink on ink, built as drawn
+> (`OPEN-QUESTIONS.md` #18). The Gallery tab swaps Listing for the ink Gallery
+> band and hides band 5, and the Live tab hides band 5 too — on those two
+> views the ink-on-ink boundary is still what the page shows, as drawn.
+> Neither state is a precedent for whatever comes after `/projects`.
+
+`/resources/vindhane-plant` (2026-09-18, `OPEN-QUESTIONS.md` #33 — no export;
+derived from the rules below) is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero | ink + image | `bg-kd-ink` + backdrop |
+| 3 | The Plant (overview, lists, gallery) | white | `bg-white` |
+| 4 | Fabrication & Erection (ledger + button) | ink | `bg-kd-ink` |
+| 5 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> Four bands, no repeat. The page's button sits inside band 4 rather than in
+> a centred CTA band of its own, because a fifth band after an ink band would
+> be ink on ink — the same reason `/projects` keeps its steel ledger inside
+> the Listing band (#31). The centred kicker (§3) is therefore not used here.
+
+`/projects/<slug>` — both kinds: the railway project pages
+(`ProjectDetailPage.astro`, `OPEN-QUESTIONS.md` #21) and, since 2026-09-19,
+the "Beyond the railway" project pages (`SocialProjectPage.astro`, #36) — is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero (back link, kicker, H1, client or location, tiles) | ink + image | `bg-kd-ink` + backdrop |
+| 3 | Overview (paragraphs, then the gallery block) | white | `bg-white` |
+| 4 | Closing CTA (centred) | ink | `bg-kd-ink` |
+| 5 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> A Beyond the railway project with no photograph has no backdrop: band 2 is
+> plain ink, and the gallery block in band 3 holds a placeholder tile the size
+> of a gallery tile. Its four hero tiles follow the plant page's grid — a figure
+> or a dashed placeholder (§9) — always Client · size · Scope of works · Year
+> completed, in that order.
+
+`/404` (2026-09-18, `OPEN-QUESTIONS.md` #35 — no export; derived from the
+rules below) is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero (kicker, H1, one sentence, one button) | ink | `bg-kd-ink` |
+| 3 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> The shortest page on the site. The button sits inside the hero for the
+> plant page's reason — a CTA band after it would be ink on ink — and the
+> kicker is left-aligned because the band is not centred end to end. The
+> hero is `min-h-screen` with its content centred vertically, which is
+> `/studio/[key]`'s treatment and no other page's: with only four lines in
+> it, a flow-height hero leaves the document's ink ground showing below the
+> footer as a third, empty band. Its padding is still `pt-144 pb-80`. **Not
+> a precedent** for a content page, which has sections to fill the height.
 
 ### The rules a new page follows
 
@@ -299,7 +397,12 @@ Rules:
 - **One key, one element, one run of text.** Put `data-edit` on the element that
   holds exactly one text node. A heading split across two coloured spans is two
   keys, on the two spans — not one on the heading.
-- **Keys are unique per page** and never reused across pages.
+- **Keys are unique per page** and never reused across pages. That includes the
+  shared chrome: `Nav` and `SiteFooter` render on every page, so they take a
+  `page` prop that supplies the first segment of every key they write —
+  `home.nav.links.0.label` on `/`, `about.nav.links.0.label` on `/about`. The
+  *copy* is still one object (`about.ts` re-exports `home.ts`'s `nav` and
+  `footer`), so a label has one definition site and per-page keys.
 - **Never renumber, never reuse a retired key.** A key is a database identity:
   rows in `content_edits` are filed under it. Changing `home.about.body1` to
   `home.about.lead` orphans every edit made to it.
@@ -308,13 +411,32 @@ Rules:
 - Copy lives in `src/data/<page>.ts` as a typed object. **No hardcoded strings
   in markup.**
 
+### Placeholders — review only, never a design element
+
+An item with `pending: "<label>"` in its copy module is content K.D. has not
+supplied. It renders as the ordinary card or tile with two marks a client
+cannot miss: a **dashed** border and the project cards' teal badge chip
+carrying the label (ink text on a light band, mist on ink). Nothing else
+changes: no new colour, no new type step, no new token. The label is its own
+slot (`…items.3.pending`), so the copy gate is unchanged. Every pending
+element carries `data-pending`; `npm run check:placeholders` lists them and
+fails while any exists, and `PRE-LAUNCH.md` says what closes each. None may
+exist at go-live. The dashed border is not in the approved design and is
+there precisely so it gets removed. OPEN-QUESTIONS.md #32.
+
 ---
 
 ## 10. Mobile — **INFERRED, NOT DESIGNED**
 
 > ⚠️ **No mobile frame exists.** Everything in this section is my inference from
-> the desktop frame, not a designer's decision. It needs sign-off before inner
-> pages are built on it. It is listed in `OPEN-QUESTIONS.md` for that reason.
+> the desktop frame, not a designer's decision. It is listed in
+> `OPEN-QUESTIONS.md` #3 for that reason.
+>
+> **Built, on this inference, for the homepage and the shared chrome** (`Nav`,
+> `SiteFooter`) — at the user's direction, after the homepage shipped visibly
+> broken on a phone. `/about`'s own sections (`Story`, `Journey`, `Board`,
+> `Hse`, `Cta`) are **not** built to this spec yet and remain fixed-desktop;
+> when they are, the rules below are what to build them against.
 
 ### Breakpoints
 
@@ -328,10 +450,18 @@ Tailwind defaults: `sm 640` · `md 768` · `lg 1024`.
 | 3-up grid (differentiators) | 3 cols | 1 col at `md` (768) |
 | Hero stats | 2×2 | stays 2×2; 1 col below 640 |
 | Project grid 704/464 | 2 cols | full-width stack at 900 |
+| `/projects` listing | 2 cols (featured, pipeline, odd one out span both) | 1 col at 900 |
+| About band 624/560 | 2 cols (pull-quote / bordered block) | full-width stack at 1120 |
 | Footer | 4 cols | 2 cols at `md` → 1 col at `sm` |
 
 The 900px project-grid step is not a Tailwind default — it is the width at which
 a 704px column stops fitting. Use an arbitrary variant: `min-[900px]:grid-cols-…`.
+
+The 1120px About step is not a default either. The band's right block is a fixed
+560 (1px border + 40px padding + 519 of text) and the container keeps 48px
+gutters, so below 1120 the pull-quote column is under 464 and a 48px quote has
+nowhere left to go: `min-[1120px]:flex-row`. `OPEN-QUESTIONS.md` #8 has the
+band's arithmetic.
 
 ### Type steps
 
