@@ -30,8 +30,9 @@
        of that project's four locations.
      · Mumbai Harbour Line Station Redevelopment is the Mankhurd safety
        event of January 2026 — Mankhurd is one of its four stations.
-   Matunga Workshop FOB, Solapur and Lower Parel have no photographs of
-   their own at all, so they have no group; their pages show no gallery.
+   Solapur and Lower Parel have no photographs of their own at all, so
+   they have no group; their pages show no gallery. (Matunga Workshop
+   FOB was in that list until 2026-09-28.)
    Nor do Kharghar Football Stadium and Kharghar Centre of Excellence,
    whose pages show a "Photograph to be added" placeholder instead.
    ============================================================ */
@@ -169,6 +170,23 @@ export const projectGalleries: readonly ProjectGallery[] = [
     project: "Lush Meadows",
     photos: [
       { file: "social-lush-meadows.jpg", caption: "The entrance porch, the name lettering above it" },
+    ],
+  },
+
+  /* The Matunga Z-Bridge — received 2026-09-28 in a folder named "Gati
+     Shakti", the first photographs of this structure the site has had
+     (OPEN-QUESTIONS.md #38). Appended, so no group above changes index. */
+  {
+    project: "Matunga Workshop FOB",
+    photos: [
+      { file: "matunga-workshop-fob-01.jpg", caption: "The western approach, granite-paved between steel railings" },
+      { file: "matunga-workshop-fob-02.jpg", caption: "The covered bridge running the length of the workshop yard, ventilators along its roof" },
+      { file: "matunga-workshop-fob-03.jpg", caption: "Granite flooring and toughened-glass side screens on the deck" },
+      { file: "matunga-workshop-fob-04.jpg", caption: "Steel girders set in place during erection" },
+      { file: "matunga-workshop-fob-05.jpg", caption: "Mobile crane lifting the arched roof members onto the bridge" },
+      { file: "matunga-workshop-fob-06.jpg", caption: "Arched roof members going up along the deck" },
+      { file: "matunga-workshop-fob-07.jpg", caption: "Roof sheeting erected above the running workshop" },
+      { file: "matunga-workshop-fob-08.jpg", caption: "Laser-cut steel screens dressing a support tower at ground level" },
     ],
   },
 ];

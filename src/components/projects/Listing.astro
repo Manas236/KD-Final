@@ -1,18 +1,18 @@
 ---
 /* ============================================================
-   Listing — ink band, two-up blocks, tallest tier first
+   Listing â€” ink band, two-up blocks, tallest tier first
    ------------------------------------------------------------
    OPEN-QUESTIONS.md #5 guessed this would be the homepage's 704/464
    grid, repeated and alternated. The export answered differently: one
    full-width row per project, `gap-16` between them, each row shorter
-   than the last — 560 (featured) → 400 (medium) → 265 (small, the same
+   than the last â€” 560 (featured) â†’ 400 (medium) â†’ 265 (small, the same
    height the homepage's own small cards use). See OPEN-QUESTIONS.md #18.
 
-   TWO COLUMNS FROM 900px, at the user's direction — ten full-width rows
+   TWO COLUMNS FROM 900px, at the user's direction â€” ten full-width rows
    read as one endless strip on a desktop. See OPEN-QUESTIONS.md #26.
    The tier heights are the export's; only the widths changed. The
    featured card and the pipeline panel span both columns. Below 900px
-   (the same step as the homepage grid, DESIGN-SYSTEM §10) it is the
+   (the same step as the homepage grid, DESIGN-SYSTEM Â§10) it is the
    export's single column again.
 
    ODD ONE OUT. A tier with an odd number of visible cards widens its
@@ -21,16 +21,16 @@
    that for the unfiltered list; Filters.astro recomputes it whenever a
    tab hides cards. `data-project-tier` is how it finds each tier.
 
-   Media rules are unchanged from DESIGN-SYSTEM §5 regardless of tier:
+   Media rules are unchanged from DESIGN-SYSTEM Â§5 regardless of tier:
    full-bleed, always scrimmed, square corners, no frame, caption at
    the foot of the box, 32px in on the two larger tiers and 20px on the
    small one.
 
    STATUS BADGE vs DISCIPLINE BADGE. Two different things share the
    corner of a card and must not be confused:
-     · discipline badges ("Civil", "Mechanical") are the existing teal
-       chip from DESIGN-SYSTEM §7, bottom-left, with the caption.
-     · a status badge ("Live", "Live — 85%+ Complete") is new — this
+     Â· discipline badges ("Civil", "Mechanical") are the existing teal
+       chip from DESIGN-SYSTEM Â§7, bottom-left, with the caption.
+     Â· a status badge ("Live", "Live â€” 85%+ Complete") is new â€” this
        design has no prior "is this still going" marker. Built solid
        `bg-kd-mint` / `text-kd-ink-deep`, top-left, away from the
        caption block, so the two badge kinds never compete for the same
@@ -40,9 +40,9 @@
    EVERY PHOTO CARD CARRIES `data-project-status`. Filters.astro reads
    it to decide what "Live" / "Completed" shows. The pipeline panel at
    the foot of the band is not a project and carries neither the
-   attribute nor a status badge — it is always visible.
+   attribute nor a status badge â€” it is always visible.
 
-   EVERY CARD LINKS TO ITS OWN PAGE — see OPEN-QUESTIONS.md #21. A
+   EVERY CARD LINKS TO ITS OWN PAGE â€” see OPEN-QUESTIONS.md #21. A
    plain `<a class="absolute inset-0">` as the last child of each
    `<article>` rather than wrapping the article in an `<a>`: nothing
    inside a card is itself interactive, so a single stretched link
@@ -58,10 +58,10 @@
    project the source doc gives structural steel for carries
    `data-project-steel`, which is all the "Steel Fabrication & Erection"
    tab reads. Two entries follow the small tier, both full width:
-     · the Vindhane plant — a medium-height photo card built exactly as
+     Â· the Vindhane plant â€” a medium-height photo card built exactly as
        the medium tier is, linking to its own page, /resources/vindhane-plant
        (OPEN-QUESTIONS.md #33);
-     · the steel ledger — the pipeline panel's stat-tile fill, one row
+     Â· the steel ledger â€” the pipeline panel's stat-tile fill, one row
        per project with its tonnage, each row linking to that project.
    Both carry `data-project-status="steel"`, so they show under All and
    the steel tab and hide under Live and Completed, where a plant and a
@@ -74,7 +74,7 @@ import nhavaShevaUranImg from "../../assets/project-nhava-sheva-uran.jpg";
 import harbourFobImg from "../../assets/project-fob-truss-span.jpg";
 import harbourRedevImg from "../../assets/project-harbour-redevelopment-progress.jpg";
 import sanpadaImg from "../../assets/project-sanpada-carshed.jpg";
-import matungaFobImg from "../../assets/project-matunga-workshop-fob.jpg";
+import matungaFobImg from "../../assets/gallery/matunga-workshop-fob-01.jpg";
 import solapurImg from "../../assets/project-solapur-vande-bharat.jpg";
 import lowerParelImg from "../../assets/project-lower-parel.jpg";
 import matungaLhbImg from "../../assets/project-matunga-lhb.jpg";
@@ -85,7 +85,7 @@ import Arrow from "../Arrow.astro";
 
 const { listing } = projects;
 const { plant, ledger } = listing.steel;
-/* Positionally paired with listing.medium / listing.small — see
+/* Positionally paired with listing.medium / listing.small â€” see
    OPEN-QUESTIONS.md #19b for what each image actually shows and why. */
 const mediumImages = [
   matungaImg,
@@ -95,7 +95,7 @@ const mediumImages = [
   matungaLhbImg,
 ];
 const smallImages = [sanpadaImg, matungaFobImg, solapurImg, lowerParelImg];
-/* Medium and small images are cut at 2× their one-column desktop box
+/* Medium and small images are cut at 2Ã— their one-column desktop box
    (584px wide), not as 1184px-wide strips that a 584px box would crop
    down to a sliver. */
 

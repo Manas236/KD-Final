@@ -253,10 +253,9 @@ export const projects = {
         steel: true,
         title: "Matunga Workshop FOB",
         /* Renamed from "Matunga Z-Bridge" — see OPEN-QUESTIONS.md #19b.
-           No dedicated photograph exists for this structure either;
-           stand-in image, honestly captioned rather than claimed. */
+           Its own photograph since 2026-09-28 (#38), no longer a stand-in. */
         meta: "Central Railway · 303m Span",
-        alt: "Canopied steel foot overbridge walkway, skyline behind",
+        alt: "The Matunga Z-Bridge's western approach, granite-paved between steel railings",
       },
       {
         live: true,

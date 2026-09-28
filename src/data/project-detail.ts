@@ -39,7 +39,9 @@ import nhavaShevaUranImg from "../assets/project-nhava-sheva-uran.jpg";
 import harbourFobImg from "../assets/project-fob-truss-span.jpg";
 import harbourRedevImg from "../assets/project-harbour-redevelopment-progress.jpg";
 import sanpadaImg from "../assets/project-sanpada-carshed.jpg";
-import matungaFobImg from "../assets/project-matunga-workshop-fob.jpg";
+/* The structure's own photograph since 2026-09-28 — it was a Bonkode FOB
+   stand-in before (OPEN-QUESTIONS.md #38). */
+import matungaFobImg from "../assets/gallery/matunga-workshop-fob-01.jpg";
 import matungaLhbImg from "../assets/project-matunga-lhb.jpg";
 import solapurImg from "../assets/project-solapur-vande-bharat.jpg";
 import lowerParelImg from "../assets/project-lower-parel.jpg";
@@ -339,7 +341,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "1,584 m³", label: "RCC" },
     ],
     image: matungaFobImg,
-    alt: "Canopied steel foot overbridge walkway, skyline behind",
+    alt: "The Matunga Z-Bridge's western approach, granite-paved between steel railings",
   },
   {
     title: "Solapur Vande Bharat Maintenance Depot",
