@@ -1,0 +1,84 @@
+---
+/* ============================================================
+   /404 — the page every unmatched address lands on
+   ------------------------------------------------------------
+   Added 2026-09-18 — see OPEN-QUESTIONS.md #35. Astro renders this
+   component, with a 404 status, for any request its router cannot
+   match — and for the bodyless 404 that /studio/[key] answers a
+   wrong slug with, which is what keeps that answer identical to any
+   other missing page. Every page on the site is server-rendered, so
+   this one is too: a prerendered /404 is not in the server manifest.
+
+   Direct visits to /404 answer 404 as well, set below, so the address
+   is never a 200 that search engines might keep.
+
+   TWO BANDS, and the reason there are not three. The page is a hero
+   and a footer: nav (ink) -> hero (ink) -> footer (ink-deep). A
+   centred CTA band for the button would be ink on ink, so the button
+   sits inside the hero the way the plant page keeps its button inside
+   its last band (DESIGN-SYSTEM §2) — kicker, H1, one sentence, one
+   primary button, exactly InfoPage's hero with the CTA button's own
+   classes. Left-aligned; the centred kicker is for a band centred end
+   to end, which this is not.
+
+   The hero is `min-h-screen` with its content centred vertically, the
+   treatment /studio/[key] uses for the site's other single-purpose
+   page. Without it a hero of four lines ends a third of the way down
+   a desktop viewport, the footer follows, and below the footer the
+   document's ink ground shows as a third, empty band. The padding is
+   still the hero's own (`pt-144 pb-80`), so the H1 clears the fixed
+   nav at every height and the band reads as flow on a short viewport.
+
+   KEYS are `not-found.*` — Nav and SiteFooter take page="not-found"
+   and write `not-found.nav.*` / `not-found.footer.*`. Registered in
+   scripts/check-edit-keys.mjs and scripts/check-placeholders.mjs; NOT
+   in src/lib/editable.ts, for the reason at the top of
+   src/data/not-found.ts. Excluded from the sitemap by name.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Kicker from "../components/Kicker.astro";
+import Arrow from "../components/Arrow.astro";
+import { notFound as copy } from "../data/not-found";
+
+export const prerender = false;
+
+Astro.response.status = 404;
+
+const page = "not-found";
+const { hero, button } = copy;
+---
+
+<BaseLayout title={copy.meta.title} description={copy.meta.description} noindex>
+  <Nav page={page} />
+  <main>
+    <section class="bg-kd-ink min-h-screen flex items-center">
+      <div class="w-full max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
+        <div class="w-896 max-w-full">
+          <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
+          <h1
+            class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16"
+            data-edit={`${page}.hero.title`}
+          >
+            {hero.title}
+          </h1>
+          <p
+            class="text-body-lg text-kd-fog mt-24 max-w-720"
+            data-edit={`${page}.hero.sub`}
+          >
+            {hero.sub}
+          </p>
+          <a
+            href={button.href}
+            class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+          >
+            <span data-edit={`${page}.button.label`}>{button.label}</span>
+            <Arrow />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter page={page} />
+</BaseLayout>
