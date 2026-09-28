@@ -25,7 +25,7 @@
    ============================================================ */
 import { home } from "./home.ts";
 import type { NavLink } from "./home.ts";
-import type { GalleryPhoto } from "./gallery.ts";
+import { rmcPlantPhotos } from "./gallery.ts";
 import type { PlantListItem, PlantStat } from "./plant.ts";
 
 export const rmcPlant = {
@@ -106,17 +106,7 @@ export const rmcPlant = {
     galleryKicker: "Plant Gallery",
     /* The company's labelled set, received 2026-09-28 — captions follow
        its file names (OPEN-QUESTIONS.md #38). */
-    gallery: [
-      { file: "rmc-plant-01.jpg", caption: "The batching plant under its red cladding, aggregate stockpiles in front" },
-      { file: "rmc-plant-02.jpg", caption: "The plant fully enclosed, seen across the yard" },
-      { file: "rmc-plant-03.jpg", caption: "Inside the covered shed: a transit mixer loading at left, a cement bulker at right" },
-      { file: "rmc-plant-04.jpg", caption: "A transit mixer loading under the batching plant" },
-      { file: "rmc-plant-05.jpg", caption: "A cement bulker unloading into the covered bay" },
-      { file: "rmc-plant-06.jpg", caption: "The cement silos lifted into place by mobile crane" },
-      { file: "rmc-plant-07.jpg", caption: "The twin cement silos during erection" },
-      { file: "rmc-plant-08.jpg", caption: "Cladding the plant enclosure, a mobile crane lifting steel" },
-      { file: "rmc-plant-09.jpg", caption: "The strip-curtained loading bay inside the shed" },
-    ] as readonly GalleryPhoto[],
+    gallery: rmcPlantPhotos,
     lightbox: {
       previous: "Previous",
       next: "Next",

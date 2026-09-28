@@ -8,7 +8,7 @@
    is Nav → Hero → Filters → Listing-or-Gallery → CTA either way.
 
    One group per project that has photographs (src/data/gallery.ts),
-   in the listing's own order. The group heading is the project title
+   in the listing's own order, then K.D.'s two plants. The group heading is the project title
    as a link to that project's page; the tiles are GalleryGrid, and
    projects.astro renders the Lightbox they open.
 
@@ -20,6 +20,7 @@ import Arrow from "../Arrow.astro";
 import GalleryGrid from "../GalleryGrid.astro";
 import { projects } from "../../data/projects";
 import { slugify } from "../../lib/slug";
+import { galleryHref } from "../../data/gallery";
 
 const { gallery } = projects;
 ---
@@ -36,7 +37,7 @@ const { gallery } = projects;
         gallery.groups.map((group, g) => (
           <div>
             <h3 class="font-display text-d6 text-kd-mist">
-              <a href={`/projects/${slugify(group.project)}`} class="inline-flex items-center gap-12">
+              <a href={galleryHref(group)} class="inline-flex items-center gap-12">
                 <span data-edit={`projects.gallery.groups.${g}.project`}>{group.project}</span>
                 <span class="inline-flex text-kd-mint" aria-hidden="true">
                   <Arrow />

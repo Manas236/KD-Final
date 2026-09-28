@@ -36,7 +36,7 @@
 import { home } from "./home.ts";
 import type { NavLink } from "./home.ts";
 import { projects } from "./projects.ts";
-import type { GalleryPhoto } from "./gallery.ts";
+import { vindhanePlantPhotos } from "./gallery.ts";
 
 /** A hero tile: either a figure and what it counts (DESIGN-SYSTEM
     §4.1), or a placeholder for one the company has not supplied. */
@@ -154,22 +154,9 @@ export const plant = {
        stays out; 04 and 05 now show the EOT crane in the company's own
        labelled frames anyway. */
     galleryKicker: "Plant Gallery",
-    gallery: [
-      { file: "vindhane-plant-01.jpg", caption: "Fabricated plate girders laid out in the yard, Hydra crane alongside" },
-      { file: "vindhane-plant-02.jpg", caption: "Welder at a wire-feed welding set inside the fabrication shed" },
-      /* The company's own labelled set, received 2026-09-28 — captions
-         follow its file names (OPEN-QUESTIONS.md #38). */
-      { file: "vindhane-plant-03.jpg", caption: "The fabrication shop, a fully clad steel shed" },
-      { file: "vindhane-plant-04.jpg", caption: "Installing the 20-tonne EOT crane girder inside the shed" },
-      { file: "vindhane-plant-05.jpg", caption: "Fabricated girders for the railways loaded out under the EOT crane" },
-      { file: "vindhane-plant-06.jpg", caption: "A painted girder lifted onto a trailer for dispatch" },
-      { file: "vindhane-plant-07.jpg", caption: "Fabricated members on a trailer, ready to leave the yard" },
-      { file: "vindhane-plant-08.jpg", caption: "Arched members fabricated and primed in the yard" },
-      { file: "vindhane-plant-09.jpg", caption: "The metalizing shop" },
-      { file: "vindhane-plant-10.jpg", caption: "The painting shop, its entry hung with strip curtains" },
-      { file: "vindhane-plant-11.jpg", caption: "The plant's diesel generator, keeping the shops running on their own power" },
-      { file: "vindhane-plant-12.jpg", caption: "Concreting the plant's approach road" },
-    ] as readonly GalleryPhoto[],
+    /* Captions live in gallery.ts, shared with /gallery and the /projects
+       Gallery tab. */
+    gallery: vindhanePlantPhotos,
     lightbox: {
       previous: "Previous",
       next: "Next",

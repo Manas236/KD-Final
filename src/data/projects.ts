@@ -56,7 +56,7 @@
    ============================================================ */
 import { home } from "./home.ts";
 import type { NavLink, Stat } from "./home.ts";
-import { projectGalleries } from "./gallery.ts";
+import { allGalleries } from "./gallery.ts";
 
 export interface ProjectEntry {
   readonly live: boolean;
@@ -349,11 +349,12 @@ export const projects = {
   /* The Gallery tab's view — see components/projects/Gallery.astro. Not
      in the export; added at the user's request. The groups are the same
      objects the project pages use (src/data/gallery.ts), so a caption
-     has one definition site. */
+     has one definition site. The two plants are appended after the
+     projects (2026-09-28), so no project group changes index. */
   gallery: {
     kicker: "Gallery",
     heading: "Our projects, on site.",
-    groups: projectGalleries,
+    groups: allGalleries,
     lightbox: {
       previous: "Previous",
       next: "Next",

@@ -37,6 +37,8 @@
    whose pages show a "Photograph to be added" placeholder instead.
    ============================================================ */
 
+import { slugify } from "../lib/slug.ts";
+
 export interface GalleryPhoto {
   readonly file: string;
   readonly caption: string;
@@ -44,10 +46,15 @@ export interface GalleryPhoto {
 
 export interface ProjectGallery {
   readonly project: string;
+  /** Where the group heading links. Omitted, it is /projects/<slug of
+      project> — only the plant groups, which live under /resources,
+      set it. An attribute, never rendered as text. */
+  readonly href?: string;
   readonly photos: readonly GalleryPhoto[];
 }
 
-export const projectGalleries: readonly ProjectGallery[] = [
+/* The railway projects, in the /projects listing's order. */
+const railwayFirst: readonly ProjectGallery[] = [
   {
     project: "Panvel–Karjat Railway Line",
     photos: [
@@ -122,14 +129,16 @@ export const projectGalleries: readonly ProjectGallery[] = [
       { file: "sanpada-carshed-06.jpg", caption: "Entrance porch, with the Navi Mumbai skyline behind" },
     ],
   },
+];
 
-  /* Beyond the railway — the six photographed projects of the band on
-     /projects (projects.social), in that band's order, appended so no
-     group above changes index. Each opens on its /projects tile's own
-     frame (the social-*.jpg files); the rest are that project's other
-     usable frames (scripts/build-gallery.mjs says which were left out,
-     and why). Four of them have no second frame in the library, so
-     their gallery is the one photograph. OPEN-QUESTIONS.md #36. */
+/* Beyond the railway — the six photographed projects of the band on
+   /projects (projects.social), in that band's order. Each opens on its
+   /projects tile's own frame (the social-*.jpg files); the rest are
+   that project's other usable frames (scripts/build-gallery.mjs says
+   which were left out, and why). Four of them have no second frame in
+   the library, so their gallery is the one photograph.
+   OPEN-QUESTIONS.md #36. */
+export const socialGalleries: readonly ProjectGallery[] = [
   {
     project: "Bonkode FOB",
     photos: [
@@ -172,10 +181,13 @@ export const projectGalleries: readonly ProjectGallery[] = [
       { file: "social-lush-meadows.jpg", caption: "The entrance porch, the name lettering above it" },
     ],
   },
+];
 
-  /* The Matunga Z-Bridge — received 2026-09-28 in a folder named "Gati
-     Shakti", the first photographs of this structure the site has had
-     (OPEN-QUESTIONS.md #38). Appended, so no group above changes index. */
+/* The Matunga Z-Bridge — received 2026-09-28 in a folder named "Gati
+   Shakti", the first photographs of this structure the site has had
+   (OPEN-QUESTIONS.md #38). Last in projectGalleries, so no group
+   above changes index. */
+const railwayLater: readonly ProjectGallery[] = [
   {
     project: "Matunga Workshop FOB",
     photos: [
@@ -190,6 +202,62 @@ export const projectGalleries: readonly ProjectGallery[] = [
     ],
   },
 ];
+
+/* Every railway project with photographs, in the /projects order. */
+export const railwayGalleries: readonly ProjectGallery[] = [...railwayFirst, ...railwayLater];
+
+/* The order the /projects Gallery tab has always used — a group's
+   index is part of its caption edit keys (projects.gallery.groups.N),
+   so a new group is only ever appended. */
+export const projectGalleries: readonly ProjectGallery[] = [...railwayFirst, ...socialGalleries, ...railwayLater];
+
+/* K.D.'s own plants. Defined here rather than in plant.ts / rmc-plant.ts
+   so the /projects Gallery tab and /gallery can list them without
+   importing those modules (plant.ts imports projects.ts, which imports
+   this file). Both plant pages take their gallery from these arrays. */
+export const vindhanePlantPhotos: readonly GalleryPhoto[] = [
+  /* PHOTOS.md B19 and B20 first — the two frames from the annual deck. */
+  { file: "vindhane-plant-01.jpg", caption: "Fabricated plate girders laid out in the yard, Hydra crane alongside" },
+  { file: "vindhane-plant-02.jpg", caption: "Welder at a wire-feed welding set inside the fabrication shed" },
+  /* The company's own labelled set, received 2026-09-28 — captions
+     follow its file names (OPEN-QUESTIONS.md #38). */
+  { file: "vindhane-plant-03.jpg", caption: "The fabrication shop, a fully clad steel shed" },
+  { file: "vindhane-plant-04.jpg", caption: "Installing the 20-tonne EOT crane girder inside the shed" },
+  { file: "vindhane-plant-05.jpg", caption: "Fabricated girders for the railways loaded out under the EOT crane" },
+  { file: "vindhane-plant-06.jpg", caption: "A painted girder lifted onto a trailer for dispatch" },
+  { file: "vindhane-plant-07.jpg", caption: "Fabricated members on a trailer, ready to leave the yard" },
+  { file: "vindhane-plant-08.jpg", caption: "Arched members fabricated and primed in the yard" },
+  { file: "vindhane-plant-09.jpg", caption: "The metalizing shop" },
+  { file: "vindhane-plant-10.jpg", caption: "The painting shop, its entry hung with strip curtains" },
+  { file: "vindhane-plant-11.jpg", caption: "The plant's diesel generator, keeping the shops running on their own power" },
+  { file: "vindhane-plant-12.jpg", caption: "Concreting the plant's approach road" },
+];
+
+export const rmcPlantPhotos: readonly GalleryPhoto[] = [
+  { file: "rmc-plant-01.jpg", caption: "The batching plant under its red cladding, aggregate stockpiles in front" },
+  { file: "rmc-plant-02.jpg", caption: "The plant fully enclosed, seen across the yard" },
+  { file: "rmc-plant-03.jpg", caption: "Inside the covered shed: a transit mixer loading at left, a cement bulker at right" },
+  { file: "rmc-plant-04.jpg", caption: "A transit mixer loading under the batching plant" },
+  { file: "rmc-plant-05.jpg", caption: "A cement bulker unloading into the covered bay" },
+  { file: "rmc-plant-06.jpg", caption: "The cement silos lifted into place by mobile crane" },
+  { file: "rmc-plant-07.jpg", caption: "The twin cement silos during erection" },
+  { file: "rmc-plant-08.jpg", caption: "Cladding the plant enclosure, a mobile crane lifting steel" },
+  { file: "rmc-plant-09.jpg", caption: "The strip-curtained loading bay inside the shed" },
+];
+
+/* Titles are the plant pages' own H1s. */
+export const plantGalleries: readonly ProjectGallery[] = [
+  { project: "Vindhane Steel Fabrication Plant", href: "/resources/vindhane-plant", photos: vindhanePlantPhotos },
+  { project: "RMC Plant — Karjat", href: "/resources/rmc-plant-karjat", photos: rmcPlantPhotos },
+];
+
+/* Every photograph group on the site — the /projects Gallery tab. */
+export const allGalleries: readonly ProjectGallery[] = [...projectGalleries, ...plantGalleries];
+
+/** Where a group's heading links. */
+export function galleryHref(group: ProjectGallery): string {
+  return group.href ?? `/projects/${slugify(group.project)}`;
+}
 
 export function getGallery(projectTitle: string): ProjectGallery | undefined {
   return projectGalleries.find((g) => g.project === projectTitle);
