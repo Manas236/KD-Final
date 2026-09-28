@@ -22,3 +22,26 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# raw client media: originals live on disk only (~3.5 GB, over GitHub limits).
+# The site uses the resized derivatives in src/assets/, which ARE committed.
+/Bonkode FOB/
+/Chowk/
+/HSE Department/
+/Karanjade Health Care/
+/Kharghar Golf Course/
+/Logo/
+/Lush Meadows/
+/Matunga Images/
+/Nave Sheva/
+/Safety Department/
+/Sanpada Carshed/
+/Ulwa CIDCO School/
+/Ulwa Hospital/
+/Uran Railway Station/
+/Vashi FOB/
+/Vindhane Plant/
+/Admin_Building(Matunga).png
+/kd_logo.jpg
+*.pptx
+*.docx
