@@ -1,0 +1,267 @@
+---
+/* ============================================================
+   /resources/vindhane-plant — the Vindhane steel fabrication plant
+   ------------------------------------------------------------
+   Added at the user's request — see OPEN-QUESTIONS.md #33. The plant
+   card on /projects (#31) linked to /resources, where the plant is one
+   card in a two-item list; the user asked why it had no page of its
+   own and, shown how peer contractors present an owned plant, chose a
+   standalone page. No design export covers it; every band is an
+   existing pattern:
+
+     nav (ink) -> hero (ink + image, /projects/[slug]'s three-layer
+     construction, back link, kicker, H1, stat tiles) -> overview
+     (white: Story.astro's kicker/paragraph shape, then two hairline
+     lists, then the gallery block exactly as [slug] draws it) ->
+     erection & proof (ink: the steel ledger's rows, each linking to
+     its project page, closing on a button) -> footer (ink-deep)
+
+   The last band is ink and carries the page's button, so there is no
+   separate CTA band: Overview (white) -> Erection (ink) -> Footer
+   (ink-deep) alternates, and a centred CTA band after Erection would
+   be ink on ink (DESIGN-SYSTEM §2). Same shape every page ends on —
+   the band before the footer is ink.
+
+   PENDING TILES (review only). The figures a facility page leads with
+   — capacity, area, year, machine counts — are not on record, so they
+   are placeholders: `pending` items in src/data/plant.ts, drawn here
+   the way projects/Social.astro draws them on ink (dashed ghost
+   outline, the badge chip carrying the label, the ask in the body)
+   and the way InfoPage.astro draws them on white (dashed card border,
+   the chip in ink). `data-pending` is for scripts/check-placeholders.mjs;
+   every one is filled or removed before go-live (OPEN-QUESTIONS.md #32,
+   PRE-LAUNCH.md).
+
+   KEYS are `resources.plant.*` — Nav and SiteFooter take page="resources"
+   and write `resources.nav.*` / `resources.footer.*`, so the whole page
+   sits under one prefix and the gate compares it against the `plant`
+   export of src/data/plant.ts. Registered in scripts/check-edit-keys.mjs,
+   scripts/check-placeholders.mjs and src/lib/editable.ts.
+   ============================================================ */
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import Kicker from "../../components/Kicker.astro";
+import Arrow from "../../components/Arrow.astro";
+import GalleryGrid from "../../components/GalleryGrid.astro";
+import Lightbox from "../../components/Lightbox.astro";
+import heroImg from "../../assets/project-vindhane-plant.jpg";
+import { plant as copy } from "../../data/plant";
+import { slugify } from "../../lib/slug";
+
+export const prerender = false;
+
+const { plant } = copy;
+const K = "resources.plant";
+
+/* Breadcrumb trail for search results — see BaseLayout's Props. */
+const breadcrumbs = [
+  { name: "Home", path: "/" },
+  { name: plant.backLabel, path: "/resources" },
+  { name: plant.title, path: "/resources/vindhane-plant" },
+];
+const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";
+---
+
+<BaseLayout
+  title={copy.meta.title}
+  description={copy.meta.description}
+  image={heroImg}
+  imageAlt={plant.alt}
+  breadcrumbs={breadcrumbs}
+>
+  <Nav page="resources" />
+  <main>
+    <section class="relative bg-kd-ink overflow-hidden">
+      <div class="absolute inset-0" aria-hidden="true">
+        <Image
+          src={heroImg}
+          alt={plant.alt}
+          width={1551}
+          height={700}
+          loading="eager"
+          fetchpriority="high"
+          class="w-full h-full object-cover object-center"
+          style="opacity: var(--kd-hero-image-opacity)"
+        />
+        <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)"></div>
+      </div>
+
+      <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
+        <div class="w-568 max-w-full">
+          <a href="/resources" class="inline-flex items-center gap-8 text-ui text-kd-fog">
+            <span aria-hidden="true">←</span>
+            <span data-edit={`${K}.backLabel`}>{plant.backLabel}</span>
+          </a>
+
+          <div class="mt-24">
+            <Kicker label={plant.eyebrow} editKey={`${K}.eyebrow`} />
+          </div>
+
+          <h1 class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16" data-edit={`${K}.title`}>
+            {plant.title}
+          </h1>
+
+          <p class="text-body-lg text-kd-mist mt-24" data-edit={`${K}.location`}>
+            {plant.location}
+          </p>
+
+          <div class="flex items-center gap-8 mt-16">
+            {plant.badges.map((badge, i) => (
+              <span class:list={[chip, "text-kd-mist"]} data-edit={`${K}.badges.${i}`}>
+                {badge}
+              </span>
+            ))}
+          </div>
+
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+            {plant.stats.map((stat, i) =>
+              stat.pending ? (
+                <div
+                  class="border border-dashed border-kd-ghost-outline p-24 flex flex-col"
+                  data-pending
+                >
+                  <span class:list={[chip, "self-start text-kd-mist"]} data-edit={`${K}.stats.${i}.pending`}>
+                    {stat.pending}
+                  </span>
+                  <dt class="font-display text-d8 text-kd-mist mt-16" data-edit={`${K}.stats.${i}.title`}>
+                    {stat.title}
+                  </dt>
+                  <dd class="text-body-sm text-kd-fog mt-8" data-edit={`${K}.stats.${i}.body`}>
+                    {stat.body}
+                  </dd>
+                </div>
+              ) : (
+                <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                  <dd class="font-display text-d5 text-kd-mint" data-edit={`${K}.stats.${i}.value`}>
+                    {stat.value}
+                  </dd>
+                  <dt class="text-label uppercase text-kd-slate mt-8" data-edit={`${K}.stats.${i}.label`}>
+                    {stat.label}
+                  </dt>
+                </div>
+              )
+            )}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48">
+        <Kicker label={plant.overviewKicker} editKey={`${K}.overviewKicker`} tone="light" />
+
+        <div class="mt-32 max-w-560 flex flex-col gap-20">
+          {plant.body.map((paragraph, i) => (
+            <p class="text-body-sm text-kd-slate-2" data-edit={`${K}.body.${i}`}>
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        {/* Two hairline lists, the steel ledger's row grammar on a light
+            band: one line per item on a divider, no bullets. */}
+        <div class="mt-56 pt-56 border-t border-kd-divider-light grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 gap-y-48">
+          {(["products", "machinery"] as const).map((list) => (
+            <div>
+              <h2 class="text-label uppercase text-kd-slate" data-edit={`${K}.${list}.head`}>
+                {plant[list].head}
+              </h2>
+              <ul class="mt-16">
+                {plant[list].items.map((item, i) =>
+                  item.pending ? (
+                    <li
+                      class="border border-dashed border-kd-card-border-light p-24 mt-16"
+                      data-pending
+                    >
+                      <span class:list={[chip, "text-kd-ink"]} data-edit={`${K}.${list}.items.${i}.pending`}>
+                        {item.pending}
+                      </span>
+                      <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.${list}.items.${i}.title`}>
+                        {item.title}
+                      </h3>
+                      <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.${list}.items.${i}.body`}>
+                        {item.body}
+                      </p>
+                    </li>
+                  ) : (
+                    <li
+                      class="border-t border-t-kd-divider-light py-16 text-body-sm text-kd-slate-2"
+                      data-edit={`${K}.${list}.items.${i}.text`}
+                    >
+                      {item.text}
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-56 pt-56 border-t border-kd-divider-light">
+          <Kicker label={plant.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
+          <div class="mt-32">
+            <GalleryGrid
+              project={plant.title}
+              photos={plant.gallery}
+              group="vindhane-plant"
+              keyPrefix={`${K}.gallery`}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-kd-ink py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48">
+        <Kicker label={plant.erection.kicker} editKey={`${K}.erection.kicker`} />
+        <h2 class="font-display text-d4 min-[900px]:text-d2 text-kd-mist mt-16" data-edit={`${K}.erection.heading`}>
+          {plant.erection.heading}
+        </h2>
+        <p class="text-body text-kd-fog mt-20 max-w-720" data-edit={`${K}.erection.body`}>
+          {plant.erection.body}
+        </p>
+
+        <div class="bg-kd-stat-fill border border-kd-stat-border p-32 mt-48">
+          <h3 class="text-label uppercase text-kd-slate" data-edit={`${K}.erection.ledgerHead`}>
+            {plant.erection.ledgerHead}
+          </h3>
+          <ul class="grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 mt-24">
+            {plant.erection.items.map((row, i) => (
+              <li class="border-t border-t-kd-stat-border">
+                <a
+                  href={`/projects/${slugify(row.title)}`}
+                  class="flex items-baseline justify-between gap-16 py-16"
+                >
+                  <span class="flex flex-col">
+                    <span class="text-ui text-kd-mist" data-edit={`${K}.erection.items.${i}.title`}>
+                      {row.title}
+                    </span>
+                    <span class="text-meta-sm text-kd-fog mt-6" data-edit={`${K}.erection.items.${i}.label`}>
+                      {row.label}
+                    </span>
+                  </span>
+                  <span class="font-display text-d8 text-kd-mint shrink-0" data-edit={`${K}.erection.items.${i}.figure`}>
+                    {row.figure}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <a
+          href={plant.erection.button.href}
+          class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+        >
+          <span data-edit={`${K}.erection.button.label`}>{plant.erection.button.label}</span>
+          <Arrow />
+        </a>
+      </div>
+    </section>
+
+    <Lightbox labels={plant.lightbox} keyPrefix={`${K}.lightbox`} />
+  </main>
+  <SiteFooter page="resources" />
+</BaseLayout>

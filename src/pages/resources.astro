@@ -1,0 +1,8 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { resources } from "../data/pages";
+
+export const prerender = false;
+---
+
+<InfoPage page="resources" copy={resources} />

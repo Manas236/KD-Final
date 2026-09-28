@@ -1,0 +1,8 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { csr } from "../data/pages";
+
+export const prerender = false;
+---
+
+<InfoPage page="csr" copy={csr} />

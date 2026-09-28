@@ -1,0 +1,210 @@
+---
+/* ============================================================
+   InfoPage — the shared template for the lighter pages
+   ------------------------------------------------------------
+     nav (ink) → hero (ink) → sections (white / mist, alternating)
+     → CTA (ink) → footer (ink-deep)
+
+   Sections alternate white and mist, so no two adjacent bands share a
+   surface whatever the section count (DESIGN-SYSTEM §2). Copy and its
+   shape live in src/data/pages.ts; slot keys follow the data path under
+   the page prefix, e.g. `hse.sections.0.items.2.title`.
+
+   LOGO WELLS (/clients). A section in which any item has a `logo` gives
+   EVERY card in it a well: a 176px band across the top of the card,
+   pulled out through the card's padding so its hairline runs edge to
+   edge, with the mark centred in it. Every card in the row keeps the
+   same height up to its title that way, logo or not.
+
+   A client mark is not a photograph, so DESIGN-SYSTEM §5 does not
+   apply to it: no cover-crop, no scrim. It is contained, centred, in
+   full colour, and sits straight on the band — the files are cut out
+   and trimmed to the mark by scripts/build-client-logos.mjs, so there
+   is no canvas to show as a pale box on mist. Sizing is in
+   src/lib/client-logos.ts. `alt` is empty because the card's title,
+   directly below, already names the client.
+
+   A card with no mark gets its title set in the well instead, hidden
+   from assistive tech because the real, editable title follows.
+
+   PENDING CARDS (review only). An item with `pending` is a placeholder
+   for content the company has not supplied — see the field's note in
+   src/data/pages.ts and OPEN-QUESTIONS.md #32. It is the same card with
+   two differences that make it unmistakable in a client review: the
+   border is dashed, and the badge chip from the project cards sits
+   above the title carrying the `pending` label. The chip is the one
+   the listing already draws (teal fill and border, DESIGN-SYSTEM §11:
+   "teal is for badges"), with ink text because this is a light band.
+   `data-pending` is for scripts/check-placeholders.mjs. Nothing here
+   is a design element: every pending card is filled or deleted before
+   go-live, and the gate fails while one remains.
+   ============================================================ */
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "./Nav.astro";
+import SiteFooter from "./SiteFooter.astro";
+import Kicker from "./Kicker.astro";
+import Arrow from "./Arrow.astro";
+import type { InfoPageCopy } from "../data/pages";
+import { clientLogo, logoSize } from "../lib/client-logos";
+
+interface Props {
+  /** First segment of every slot key, and the route name. */
+  page: string;
+  copy: InfoPageCopy;
+}
+
+const { page, copy } = Astro.props;
+const { hero, sections, cta } = copy;
+const withLogos = sections.map((section) => section.items.some((item) => item.logo));
+---
+
+<BaseLayout title={copy.meta.title} description={copy.meta.description}>
+  <Nav page={page} />
+  <main>
+    <section class="bg-kd-ink">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
+        <div class="w-896 max-w-full">
+          <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
+          <h1
+            class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16"
+            data-edit={`${page}.hero.title`}
+          >
+            {hero.title}
+          </h1>
+          <p
+            class="text-body-lg text-kd-fog mt-24 max-w-720"
+            data-edit={`${page}.hero.sub`}
+          >
+            {hero.sub}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {
+      sections.map((section, s) => (
+        <section class:list={["py-96", s % 2 === 0 ? "bg-white" : "bg-kd-mist"]}>
+          <div class="max-w-kd mx-auto px-24 sm:px-48">
+            <Kicker
+              label={section.kicker}
+              editKey={`${page}.sections.${s}.kicker`}
+              tone="light"
+            />
+            <h2
+              class="font-display text-d4 text-kd-ink mt-16"
+              data-edit={`${page}.sections.${s}.heading`}
+            >
+              {section.heading}
+            </h2>
+            {section.intro && (
+              <p
+                class="text-body text-kd-slate-2 mt-20 max-w-720"
+                data-edit={`${page}.sections.${s}.intro`}
+              >
+                {section.intro}
+              </p>
+            )}
+
+            <ul
+              class:list={[
+                "grid gap-24 mt-48 sm:grid-cols-2",
+                // Four cards sit 2×2; at three columns the fourth is orphaned on its own row.
+                section.items.length !== 4 && "lg:grid-cols-3",
+              ]}
+            >
+              {section.items.map((item, i) => (
+                <li
+                  class:list={[
+                    "border border-kd-card-border-light border-t-2 border-t-kd-mint-2 p-32",
+                    item.pending && "border-dashed",
+                  ]}
+                  data-pending={item.pending ? "" : undefined}
+                >
+                  {withLogos[s] && (
+                    <div class="-mx-32 -mt-32 mb-32 h-176 px-24 flex items-center justify-center border-b border-b-kd-card-border-light">
+                      {item.logo ? (
+                        <Image
+                          src={clientLogo(item.logo)}
+                          alt=""
+                          {...logoSize(item.logo)}
+                          densities={[1, 2]}
+                          loading="lazy"
+                          class="max-w-full object-contain"
+                        />
+                      ) : (
+                        <span class="font-display text-d6 text-kd-ink" aria-hidden="true">
+                          {item.title}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {item.pending && (
+                    <span
+                      class="inline-block text-badge uppercase text-kd-ink bg-kd-badge-fill border border-kd-badge-border px-8 py-6 mb-16"
+                      data-edit={`${page}.sections.${s}.items.${i}.pending`}
+                    >
+                      {item.pending}
+                    </span>
+                  )}
+                  <h3
+                    class="font-display text-d8 text-kd-ink"
+                    data-edit={`${page}.sections.${s}.items.${i}.title`}
+                  >
+                    {item.title}
+                  </h3>
+                  {item.body && (
+                    <p
+                      class="text-body-sm text-kd-slate-2 mt-12"
+                      data-edit={`${page}.sections.${s}.items.${i}.body`}
+                    >
+                      {item.body}
+                    </p>
+                  )}
+                  {item.links && (
+                    <ul class="flex flex-col items-start gap-8 mt-16">
+                      {item.links.map((link, l) => (
+                        <li>
+                          <a
+                            href={link.href}
+                            class="text-ui text-kd-mint-2 pb-2 border-b border-b-transparent hover:border-b-kd-mint-2"
+                            target={link.href.startsWith("http") ? "_blank" : undefined}
+                            rel={link.href.startsWith("http") ? "noopener" : undefined}
+                          >
+                            <span data-edit={`${page}.sections.${s}.items.${i}.links.${l}.label`}>
+                              {link.label}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="bg-kd-ink py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col items-center text-center">
+        <Kicker label={cta.kicker} editKey={`${page}.cta.kicker`} variant="centred" />
+        <h2
+          class="font-display text-d4 min-[900px]:text-d2 text-kd-mist mt-24"
+          data-edit={`${page}.cta.headline`}
+        >
+          {cta.headline}
+        </h2>
+        <a
+          href={cta.button.href}
+          class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+        >
+          <span data-edit={`${page}.cta.button.label`}>{cta.button.label}</span>
+          <Arrow />
+        </a>
+      </div>
+    </section>
+  </main>
+  <SiteFooter page={page} />
+</BaseLayout>

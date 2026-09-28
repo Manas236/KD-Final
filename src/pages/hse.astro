@@ -1,0 +1,8 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { hse } from "../data/pages";
+
+export const prerender = false;
+---
+
+<InfoPage page="hse" copy={hse} />

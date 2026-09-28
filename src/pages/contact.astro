@@ -1,0 +1,8 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { contact } from "../data/pages";
+
+export const prerender = false;
+---
+
+<InfoPage page="contact" copy={contact} />
