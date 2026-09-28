@@ -17,12 +17,21 @@
    against the featured card's 500. Both numbers are from the spec and
    they do not reconcile; see the defect list in OPEN-QUESTIONS.md #9.
    Built to the stated numbers rather than quietly stretched to match.
+
+   EVERY CARD LINKS TO ITS OWN PAGE, same stretched-link treatment as
+   projects/Listing.astro — see the note there and OPEN-QUESTIONS.md
+   #21.
+
+   MOBILE: stacks to one column below 900px — not a Tailwind default,
+   but the width at which the 704px column stops fitting. See
+   DESIGN-SYSTEM.md §10.
    ============================================================ */
 import { Image } from "astro:assets";
 import matunga from "../assets/project-matunga-workshop.jpg";
 import sanpada from "../assets/project-sanpada-carshed.jpg";
 import fobSpan from "../assets/project-fob-truss-span.jpg";
 import { home } from "../data/home";
+import { slugify } from "../lib/slug";
 import Arrow from "./Arrow.astro";
 import Kicker from "./Kicker.astro";
 
@@ -31,8 +40,8 @@ const smallImages = [sanpada, fobSpan];
 ---
 
 <section class="bg-kd-ink py-96">
-  <div class="max-w-kd mx-auto px-48">
-    <div class="flex items-end justify-between gap-40">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <div class="flex flex-wrap items-end justify-between gap-40">
       <div>
         <Kicker label={projects.kicker} editKey="home.projects.kicker" />
         <h2
@@ -52,7 +61,7 @@ const smallImages = [sanpada, fobSpan];
       </a>
     </div>
 
-    <div class="grid grid-cols-[704fr_464fr] gap-16 mt-56">
+    <div class="grid grid-cols-1 min-[900px]:grid-cols-[704fr_464fr] gap-16 mt-56">
       <article class="relative h-500 overflow-hidden">
         <Image
           src={matunga}
@@ -88,6 +97,12 @@ const smallImages = [sanpada, fobSpan];
             {projects.featured.meta}
           </p>
         </div>
+
+        <a
+          href={`/projects/${slugify(projects.featured.title)}`}
+          class="absolute inset-0"
+          aria-label={projects.featured.title}
+        />
       </article>
 
       <div class="flex flex-col gap-16">
@@ -127,6 +142,12 @@ const smallImages = [sanpada, fobSpan];
                   {card.meta}
                 </p>
               </div>
+
+              <a
+                href={`/projects/${slugify(card.title)}`}
+                class="absolute inset-0"
+                aria-label={card.title}
+              />
             </article>
           ))
         }

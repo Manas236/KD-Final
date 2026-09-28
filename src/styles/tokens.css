@@ -12,7 +12,9 @@
        of the greys are nearly the same colour. That is the design.
      · Do not add a token. A value that is not below did not come from
        the approved frame, and inventing one is how a locked design
-       stops being locked.
+       stops being locked. `--kd-mint-2` is the one deliberate exception —
+       see the note beside it: it resolves OPEN-QUESTIONS.md #1 rather
+       than decorating the design.
 
    THIS FILE IS THE ONLY PLACE A HEX LITERAL OR A RAW px FONT-SIZE MAY
    APPEAR. Everywhere else in src/, use the token or the Tailwind
@@ -105,7 +107,8 @@
 
 :root {
   /* ---------- Colour ----------
-     Eight. There is no ninth, and no tint or shade of any of them. */
+     Eight, plus one deliberate exception directly below. No other tint
+     or shade of any of them. */
 
   /* Primary dark surface; primary text on light. */
   --kd-ink: #2C3A40;
@@ -113,8 +116,14 @@
   --kd-ink-deep: #1E2B30;
   /* Light band surface; body text on dark. */
   --kd-mist: #DBE5E7;
-  /* Accent: kickers, rules, buttons, stat numerals. */
+  /* Accent: kickers, rules, buttons, stat numerals — on DARK bands only. */
   --kd-mint: #D7F8DD;
+  /* Same hue, resolved for legibility: text and rules on a MIST or WHITE
+     band, where --kd-mint sits at ~1.2:1 and is not visible (see
+     OPEN-QUESTIONS.md #1). 6.4:1 on white, 5.0:1 on mist — both clear
+     WCAG AA. Never used on a dark band; --kd-mint never used on a light
+     one. Kicker.astro's `tone` prop is what switches between the two. */
+  --kd-mint-2: #2E6B39;
   /* Project badge chips ONLY. Not a general-purpose accent. */
   --kd-teal: #68A6A0;
   /* Muted labels and card body. */
@@ -151,22 +160,26 @@
   --kd-badge-border: rgba(104, 166, 160, 0.40);
 
   /* ---------- Gradients ----------
-     The hero image sits UNDER the overlay at 20% opacity, and the
-     overlay is opaque ink across the left 45%, so nothing in that band
-     survives. Both project scrims run bottom-up so the caption at the
-     foot of the card has something solid to sit on. */
-  --kd-hero-overlay: linear-gradient(90deg, #2C3A40 45%, rgba(44, 58, 64, 0.55) 100%);
-  --kd-hero-image-opacity: 0.20;
+     The hero image sits UNDER the overlay at 35% opacity, and the
+     overlay runs 85% ink across the left 45% down to 40% ink at the
+     right edge — enough tint left for text legibility, but the photo
+     underneath is meant to read through it now. Lightened from the
+     original 20%/opaque-left/55% export per client request (photos were
+     reading as near-invisible). Both project scrims run bottom-up so the
+     caption at the foot of the card has something solid to sit on;
+     lightened the same way. */
+  --kd-hero-overlay: linear-gradient(90deg, rgba(44, 58, 64, 0.85) 45%, rgba(44, 58, 64, 0.40) 100%);
+  --kd-hero-image-opacity: 0.35;
   --kd-scrim-lg: linear-gradient(
     0deg,
-    rgba(44, 58, 64, 0.90) 0%,
-    rgba(44, 58, 64, 0.20) 60%,
+    rgba(44, 58, 64, 0.75) 0%,
+    rgba(44, 58, 64, 0.12) 60%,
     rgba(44, 58, 64, 0) 100%
   );
   --kd-scrim-sm: linear-gradient(
     0deg,
-    rgba(44, 58, 64, 0.90) 0%,
-    rgba(44, 58, 64, 0.15) 70%,
+    rgba(44, 58, 64, 0.75) 0%,
+    rgba(44, 58, 64, 0.10) 70%,
     rgba(44, 58, 64, 0) 100%
   );
 
@@ -225,6 +238,7 @@
   --color-kd-ink-deep: var(--kd-ink-deep);
   --color-kd-mist: var(--kd-mist);
   --color-kd-mint: var(--kd-mint);
+  --color-kd-mint-2: var(--kd-mint-2);
   --color-kd-teal: var(--kd-teal);
   --color-kd-slate: var(--kd-slate);
   --color-kd-slate-2: var(--kd-slate-2);

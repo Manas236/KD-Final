@@ -2,6 +2,12 @@
 /* ============================================================
    Hero — ink band, full-bleed image, 568px text column
    ------------------------------------------------------------
+   MOBILE, per DESIGN-SYSTEM.md §10: the H1 steps down through the
+   existing display scale rather than inventing a size — `d1` (72px) at
+   `lg` and up, `d3` (48px) from `sm`, `d4` (36px) below that. The stat
+   grid stays 2×2 from `sm` up and only goes to a single column below
+   640 — it never goes to four across.
+
    THE EXPORT LIED ABOUT TWO THINGS HERE and both are ignored:
 
      · the stats came through as a vertical flex column. They are a 2×2
@@ -39,7 +45,7 @@ const { hero } = home;
     </div>
   </div>
 
-  <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+  <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
     <div class="w-568 max-w-full">
       <Kicker label={hero.kicker} editKey="home.hero.kicker" />
 
@@ -56,7 +62,7 @@ const { hero } = home;
           below is kept as a marker that the whitespace is deliberate;
           the config is what makes it work. Turn the compressor back on
           and this heading breaks. */}
-      <h1 class="font-display text-d1 text-kd-mist mt-16">
+      <h1 class="font-display text-d4 sm:text-d3 lg:text-d1 text-kd-mist mt-16">
         <span data-edit="home.hero.headline.lead">{hero.headline.lead}</span>{" "}
         <span class="text-kd-mint" data-edit="home.hero.headline.accent"
           >{hero.headline.accent}</span
@@ -87,7 +93,7 @@ const { hero } = home;
         </a>
       </div>
 
-      <dl class="grid grid-cols-2 gap-16 mt-56">
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
         {
           hero.stats.map((stat, i) => (
             <div class="bg-kd-stat-fill border border-kd-stat-border p-24">

@@ -13,6 +13,12 @@
    label, not a thematic break between two passages of content, and an
    <hr> here would announce a section change to a screen reader that is
    in the middle of one.
+
+   TONE. `--kd-mint` on a mist or white band is ~1.2:1 — invisible, per
+   OPEN-QUESTIONS.md #1. `tone="light"` swaps both the rule and the
+   label to `--kd-mint-2`, the darker same-hue variant that clears WCAG
+   AA on those bands. Every caller already knows its own band from its
+   own header comment; it just has to say so.
    ============================================================ */
 interface Props {
   /** The eyebrow text. */
@@ -21,9 +27,13 @@ interface Props {
   editKey: string;
   /** `centred` puts a rule on each side. */
   variant?: "left" | "centred";
+  /** `light` on a mist/white band, where pure mint is invisible. */
+  tone?: "dark" | "light";
 }
 
-const { label, editKey, variant = "left" } = Astro.props;
+const { label, editKey, variant = "left", tone = "dark" } = Astro.props;
+const mintBg = tone === "light" ? "bg-kd-mint-2" : "bg-kd-mint";
+const mintText = tone === "light" ? "text-kd-mint-2" : "text-kd-mint";
 ---
 
 <div
@@ -32,11 +42,11 @@ const { label, editKey, variant = "left" } = Astro.props;
     variant === "centred" && "justify-center",
   ]}
 >
-  <span class="block w-32 h-1 bg-kd-mint shrink-0" aria-hidden="true"></span>
-  <span class="text-kicker uppercase text-kd-mint" data-edit={editKey}>{label}</span>
+  <span class:list={["block w-32 h-1 shrink-0", mintBg]} aria-hidden="true"></span>
+  <span class:list={["text-kicker uppercase", mintText]} data-edit={editKey}>{label}</span>
   {
     variant === "centred" && (
-      <span class="block w-32 h-1 bg-kd-mint shrink-0" aria-hidden="true" />
+      <span class:list={["block w-32 h-1 shrink-0", mintBg]} aria-hidden="true" />
     )
   }
 </div>

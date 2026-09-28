@@ -2,25 +2,47 @@
 /* ============================================================
    About — mist band
    ------------------------------------------------------------
-   A single measured column, built in the order the spec gives:
+   Two columns, and they hold two different kinds of thing:
 
-     kicker
-     pull-quote                       capped 560
-     48×1px mint rule
-     block with a 1px mint LEFT border and 40px left padding,
-       its text capped at 519
-     the two stats, stacked, each with a 1px divider-light top border
-       and 16px of top padding
+     left    the pull-quote, capped at 560, with the 48×1px mint rule
+             32px below it. Shorter than the right column, and centred
+             against it.
+     right   a 560px block with a 1px mint LEFT border and 40px of left
+             padding, so its text measures 519 exactly — 1 + 40 + 519 =
+             560, which is why nothing inside it needs its own cap.
+             It holds the kicker, both body paragraphs and the stats.
 
-   The two width caps are different because they are different measures,
-   not because one of them is a mistake to reconcile with the other.
+   624 + 560 = 1184, the container's inner width at 1280. There is no
+   grid gap to find: the left column takes what is left over, and the
+   quote's own 560 cap leaves 64px of air before the mint border. That
+   is why the arithmetic closes exactly.
 
-   NOTE FOR THE DESIGNER: read literally — "below it" — this leaves the
-   right half of a 1184px band empty. That may well be the intent for an
-   editorial band, but it is the one place on the page where a
-   two-column reading of the spec would also have fitted the numbers
-   (560 + 56 + 40 + 519 = 1175). Logged in OPEN-QUESTIONS.md #8 rather
-   than decided here.
+   This band shipped as a single stacked column first. The spec text
+   read "below it", built literally, and that left the right half of a
+   1184px band empty — logged as OPEN-QUESTIONS.md #8 with the
+   two-column reading recorded beside it. The design export settles it:
+   two columns, and the kicker sits at the top of the right block, not
+   above the quote. #8 is closed for the homepage.
+
+   The two paragraphs are deliberately different sizes — body1 is
+   `text-body` (16/26), body2 `text-body-sm` (14/22.75), the
+   "secondary paragraph" step. That is what the export draws, and it is
+   what makes the second paragraph read as a footnote to the first.
+
+   Below 1120 the columns stack. At that width the left column is
+   already down to 464 (1120 − 96 of padding − 560) and a 48px
+   pull-quote has nowhere left to go.
+
+   RESOLVED, for the stats: they are side by side (`grid grid-cols-2`)
+   at every viewport width, not stacked — a phone screenshot of the
+   stacked version was the complaint that reopened this. Their gap
+   stays 24, the figure `/about`'s Our Story band was aligned to;
+   the export measures closer to 16 and the difference is one step on
+   the scale. See OPEN-QUESTIONS.md #8.
+
+   Mint on this band is at ~1.2:1 (mist) — OPEN-QUESTIONS.md #1 — so the
+   rule and the block's left border use `--kd-mint-2`, and the Kicker is
+   called with `tone="light"`.
    ============================================================ */
 import { home } from "../data/home";
 import Kicker from "./Kicker.astro";
@@ -29,48 +51,54 @@ const { about } = home;
 ---
 
 <section class="bg-kd-mist py-96">
-  <div class="max-w-kd mx-auto px-48">
-    <Kicker label={about.kicker} editKey="home.about.kicker" />
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <div
+      class="flex flex-col gap-48 min-[1120px]:flex-row min-[1120px]:items-center min-[1120px]:gap-0"
+    >
+      <div class="min-[1120px]:flex-1 min-[1120px]:min-w-0">
+        <blockquote class="max-w-560">
+          <p class="font-display text-d3 text-kd-ink" data-edit="home.about.quote">
+            {about.quote}
+          </p>
+        </blockquote>
 
-    <blockquote class="mt-16 max-w-560">
-      <p class="font-display text-d3 text-kd-ink" data-edit="home.about.quote">
-        {about.quote}
-      </p>
-    </blockquote>
+        <span class="block w-48 h-1 bg-kd-mint-2 mt-32" aria-hidden="true"></span>
+      </div>
 
-    <span class="block w-48 h-1 bg-kd-mint mt-24" aria-hidden="true"></span>
+      <div class="w-560 max-w-full shrink-0 border-l border-l-kd-mint-2 pl-40">
+        <Kicker label={about.kicker} editKey="home.about.kicker" tone="light" />
 
-    <div class="mt-40 border-l border-l-kd-mint pl-40">
-      <p class="text-body text-kd-slate-2 max-w-519" data-edit="home.about.body1">
-        {about.body1}
-      </p>
-      <p
-        class="text-body text-kd-slate-2 max-w-519 mt-24"
-        data-edit="home.about.body2"
-      >
-        {about.body2}
-      </p>
+        <p class="text-body text-kd-slate-2 mt-16" data-edit="home.about.body1">
+          {about.body1}
+        </p>
+        <p
+          class="text-body-sm text-kd-slate-2 mt-24"
+          data-edit="home.about.body2"
+        >
+          {about.body2}
+        </p>
+
+        <dl class="mt-40 grid grid-cols-2 gap-24">
+          {
+            about.stats.map((stat, i) => (
+              <div class="border-t border-t-kd-divider-light pt-16">
+                <dd
+                  class="font-display text-d6 text-kd-ink"
+                  data-edit={`home.about.stats.${i}.value`}
+                >
+                  {stat.value}
+                </dd>
+                <dt
+                  class="text-label-sm text-kd-slate mt-6"
+                  data-edit={`home.about.stats.${i}.label`}
+                >
+                  {stat.label}
+                </dt>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
     </div>
-
-    <dl class="mt-40 flex flex-col gap-24 max-w-560">
-      {
-        about.stats.map((stat, i) => (
-          <div class="border-t border-t-kd-divider-light pt-16">
-            <dd
-              class="font-display text-d6 text-kd-ink"
-              data-edit={`home.about.stats.${i}.value`}
-            >
-              {stat.value}
-            </dd>
-            <dt
-              class="text-label-sm text-kd-slate mt-6"
-              data-edit={`home.about.stats.${i}.label`}
-            >
-              {stat.label}
-            </dt>
-          </div>
-        ))
-      }
-    </dl>
   </div>
 </section>

@@ -23,11 +23,14 @@ import Differentiators from "../components/Differentiators.astro";
 import ClosingCta from "../components/ClosingCta.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { home } from "../data/home";
+/* The hero's backdrop, doubling as the share card — the same file
+   components/Hero.astro draws. */
+import shareImage from "../assets/hero-nhava-sheva-station.jpg";
 
 export const prerender = false;
 ---
 
-<BaseLayout title={home.meta.title} description={home.meta.description}>
+<BaseLayout title={home.meta.title} description={home.meta.description} image={shareImage}>
   <Nav />
   <main>
     <Hero />

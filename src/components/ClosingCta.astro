@@ -9,6 +9,10 @@
    `left: 480.72px`, which is not a design decision — it is what
    centring compiled to at one frame width, and reproducing it would
    pin the block to the left edge on every other width.
+
+   MOBILE: the headline steps `d2` (60px, `lg` and up) → `d3` (48px,
+   `sm`) → `d4` (36px, below that) — the same existing-scale step-down
+   as the hero H1. DESIGN-SYSTEM.md §10.
    ============================================================ */
 import { home } from "../data/home";
 import Kicker from "./Kicker.astro";
@@ -17,11 +21,11 @@ const { cta } = home;
 ---
 
 <section class="bg-kd-ink py-96">
-  <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+  <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col items-center text-center">
     <Kicker label={cta.kicker} editKey="home.cta.kicker" variant="centred" />
 
     <h2
-      class="font-display text-d2 text-kd-mist mt-16"
+      class="font-display text-d4 sm:text-d3 lg:text-d2 text-kd-mist mt-16"
       data-edit="home.cta.headline"
     >
       {cta.headline}

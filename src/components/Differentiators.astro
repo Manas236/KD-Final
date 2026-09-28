@@ -19,8 +19,15 @@
    capability card at a glance — see DESIGN-SYSTEM.md §4.3. This one is
    for unordered, rhetorical claims; that one is for an ordered set.
 
-   The 3px mint top border sits on mist at about 1.2:1 and will read as
-   absent. Built to spec; OPEN-QUESTIONS.md #1.
+   Card 1's top border uses `--kd-mint-2`, not `--kd-mint` — pure mint on
+   mist is ~1.2:1 and reads as absent. See OPEN-QUESTIONS.md #1.
+
+   MOBILE: 3-up → 1-up at `md` (768), per DESIGN-SYSTEM.md §10. The left
+   border (i > 0) is a column divider and must not survive stacking —
+   the divider trap — so it only applies at `md` and up; below that, a
+   bottom border on every card but the last does the same job stacked.
+   The top border stays at every width: it is part of the card, not a
+   divider between cards.
    ============================================================ */
 import { home } from "../data/home";
 import Kicker from "./Kicker.astro";
@@ -29,8 +36,12 @@ const { differentiators } = home;
 ---
 
 <section class="bg-kd-mist py-96">
-  <div class="max-w-kd mx-auto px-48">
-    <Kicker label={differentiators.kicker} editKey="home.differentiators.kicker" />
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <Kicker
+      label={differentiators.kicker}
+      editKey="home.differentiators.kicker"
+      tone="light"
+    />
 
     <h2
       class="font-display text-d4 text-kd-ink mt-16"
@@ -39,14 +50,16 @@ const { differentiators } = home;
       {differentiators.heading}
     </h2>
 
-    <ul class="grid grid-cols-3 mt-56">
+    <ul class="grid grid-cols-1 md:grid-cols-3 mt-56">
       {
         differentiators.cards.map((card, i) => (
           <li
             class:list={[
               "border-t-[3px] p-40",
-              i === 0 ? "border-t-kd-mint" : "border-t-kd-card-border-light",
-              i > 0 && "border-l border-l-kd-card-border-light",
+              i === 0 ? "border-t-kd-mint-2" : "border-t-kd-card-border-light",
+              i > 0 && "md:border-l md:border-l-kd-card-border-light",
+              i < differentiators.cards.length - 1 &&
+                "max-md:border-b max-md:border-b-kd-card-border-light",
             ]}
           >
             <h3

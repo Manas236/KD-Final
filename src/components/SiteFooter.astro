@@ -1,35 +1,76 @@
 ---
 /* ============================================================
-   Footer — ink-deep band, four columns
+   Footer — ink-deep band, brand block + two link columns,
+             a standards band, then the bottom bar
    ------------------------------------------------------------
-   A 260px brand block, then three equal columns. A bottom bar under a
-   1px footer-divider top border with 24px of top padding: legal left,
-   founding line right.
+   PORTED FROM THE K.D._Construction FRAME. That footer leads with a
+   BRAND BLOCK carrying the whole contact surface — logo, tagline, legal
+   name, address, switchboard, email, LinkedIn — and follows it with a
+   full-width CERTIFIED-TO band above the bottom bar. Both are reproduced
+   here. What did not come across, and why:
 
-   THE HEADQUARTERS COLUMN CARRIES id="contact". The nav's primary CTA
-   points at it. Nothing was designed behind "Get in Touch" — no contact
-   page, no form, no phone or email anywhere in the frame — so the CTA
-   lands on the only address the design contains rather than on a 404.
-   That is a holding position, not an answer: OPEN-QUESTIONS.md #4.
+     · The source frame runs three link columns over thirteen routes.
+       This site has three routes. The columns are therefore two —
+       Navigation and Core Disciplines — rather than three padded out
+       with links that would 404. A footer that lists a page the site
+       does not serve is a defect, not a richer footer.
+     · Its palette (iron / steel / amber) and its amber link hover are
+       not in tokens.css and are not in the approved frame. The layout
+       ported; the paint is this project's own — ink-deep, mist, slate,
+       mint — per DESIGN-SYSTEM.md §0 rule 1. There is no hover state
+       anywhere in src/ and this file did not become the first.
+
+   THE BRAND BLOCK CARRIES id="contact". The nav's primary CTA points at
+   it. There is still no contact page and no form, so the CTA lands on
+   the only address the site contains rather than on a 404 — but it now
+   lands on a block that answers with a phone number and an email as
+   well as a street. That is a better holding position, not an answer:
+   OPEN-QUESTIONS.md #4.
+
+   THE BOTTOM BAR follows the source frame's order — company line left,
+   copyright right. `shrink-0` sits on the SHORT founding line, never on
+   the legal line: that one is the long run, and pinned unshrinkable it
+   runs off a 390px screen instead of wrapping.
 
    The year in the bottom bar is generated. The design shows 2025, which
    was already stale when it was approved; it sits in its own
    `data-no-edit` span so that editing that line through the in-page
-   editor cannot freeze a year back into the copy.
+   editor cannot freeze a year back into the copy. The `·` between a
+   standard and the discipline it covers is opted out the same way —
+   it is punctuation between two slots, not copy of its own.
+
+   THE COPY IS SHARED ACROSS PAGES; THE SLOT KEYS ARE NOT. See the same
+   note in Nav.astro — the strings come from home.ts on every page, and
+   `page` supplies the first segment of every key so that a key belongs
+   to exactly one page, as DESIGN-SYSTEM §9 requires.
+
+   MOBILE: the 3-column template (`1.4fr_1fr_1fr`) only holds from `md`
+   up. Below that it is a plain 2-up grid, and below `sm` a single
+   column — the wide brand column does not survive stacking, so it is
+   dropped in favour of equal-width columns at both smaller steps.
+   DESIGN-SYSTEM.md §10.
    ============================================================ */
 import { Image } from "astro:assets";
-import logo from "../assets/kd-logo-white.png";
+import logo from "../assets/kd-logo-mint.jpg";
 import { home } from "../data/home";
+
+interface Props {
+  /** First segment of every slot key this component writes. */
+  page?: string;
+}
+
+const { page = "home" } = Astro.props;
 
 const { footer } = home;
 const { navigation, headquarters, disciplines } = footer.columns;
+const { contact, certified } = footer;
 const year = new Date().getFullYear();
 ---
 
 <footer class="bg-kd-ink-deep py-64">
-  <div class="max-w-kd mx-auto px-48">
-    <div class="grid grid-cols-[260px_1fr_1fr_1fr] gap-56">
-      <div>
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] gap-56">
+      <div id="contact">
         <Image
           src={logo}
           alt={footer.logoAlt}
@@ -38,22 +79,58 @@ const year = new Date().getFullYear();
           loading="lazy"
           class="w-120 h-80 object-contain object-left"
         />
-        <p class="text-body-sm text-kd-mist mt-24" data-edit="home.footer.tagline">
+        <p class="text-body-sm text-kd-mist mt-24" data-edit={`${page}.footer.tagline`}>
           {footer.tagline}
         </p>
         <p
           class="text-meta-sm text-kd-slate mt-16"
-          data-edit="home.footer.legalName"
+          data-edit={`${page}.footer.legalName`}
         >
           {footer.legalName}
         </p>
+
+        <h2
+          class="text-kicker-sm uppercase text-kd-mist mt-32"
+          data-edit={`${page}.footer.columns.headquarters.head`}
+        >
+          {headquarters.head}
+        </h2>
+        <address class="mt-20 flex flex-col gap-12 not-italic">
+          {
+            headquarters.lines.map((line, i) => (
+              <span
+                class="block text-body-sm text-kd-slate"
+                data-edit={`${page}.footer.columns.headquarters.lines.${i}`}
+              >
+                {line}
+              </span>
+            ))
+          }
+        </address>
+
+        {/* Landline first, then email, then LinkedIn — the order
+            WEBSITE_INFO.md §Contact asks for. The label is the whole
+            slot; the href beside it is never copy. */}
+        <ul class="mt-20 flex flex-col gap-12">
+          {
+            contact.links.map((link, i) => (
+              <li>
+                <a href={link.href} rel="noopener" class="block text-body-sm text-kd-mist">
+                  <span data-edit={`${page}.footer.contact.links.${i}.label`}>
+                    {link.label}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
 
       <nav aria-labelledby="footer-navigation">
         <h2
           id="footer-navigation"
           class="text-kicker-sm uppercase text-kd-mist"
-          data-edit="home.footer.columns.navigation.head"
+          data-edit={`${page}.footer.columns.navigation.head`}
         >
           {navigation.head}
         </h2>
@@ -62,7 +139,7 @@ const year = new Date().getFullYear();
             navigation.links.map((link, i) => (
               <li>
                 <a href={link.href} class="block text-body-sm text-kd-slate">
-                  <span data-edit={`home.footer.columns.navigation.links.${i}.label`}>
+                  <span data-edit={`${page}.footer.columns.navigation.links.${i}.label`}>
                     {link.label}
                   </span>
                 </a>
@@ -72,31 +149,10 @@ const year = new Date().getFullYear();
         </ul>
       </nav>
 
-      <div id="contact">
-        <h2
-          class="text-kicker-sm uppercase text-kd-mist"
-          data-edit="home.footer.columns.headquarters.head"
-        >
-          {headquarters.head}
-        </h2>
-        <address class="mt-20 flex flex-col gap-12 not-italic">
-          {
-            headquarters.lines.map((line, i) => (
-              <span
-                class="block text-body-sm text-kd-slate"
-                data-edit={`home.footer.columns.headquarters.lines.${i}`}
-              >
-                {line}
-              </span>
-            ))
-          }
-        </address>
-      </div>
-
       <div>
         <h2
           class="text-kicker-sm uppercase text-kd-mist"
-          data-edit="home.footer.columns.disciplines.head"
+          data-edit={`${page}.footer.columns.disciplines.head`}
         >
           {disciplines.head}
         </h2>
@@ -105,7 +161,7 @@ const year = new Date().getFullYear();
             disciplines.items.map((item, i) => (
               <li
                 class="text-body-sm text-kd-slate"
-                data-edit={`home.footer.columns.disciplines.items.${i}`}
+                data-edit={`${page}.footer.columns.disciplines.items.${i}`}
               >
                 {item}
               </li>
@@ -115,18 +171,59 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div
-      class="mt-56 pt-24 border-t border-t-kd-footer-divider flex items-baseline justify-between gap-40"
-    >
-      <p class="text-meta-sm text-kd-slate">
-        <span data-no-edit>© {year}</span>{" "}
-        <span data-edit="home.footer.bottom.legal">{footer.bottom.legal}</span>
+    {/* WEBSITE_INFO.md §12 — the standards belong wherever a tender
+        evaluator looks, and the footer is one of those places. The
+        standard is set in mint and the discipline in slate; the source
+        frame separated them by weight, which this type scale does not
+        offer as a modifier. Names only. */}
+    <div class="mt-56 pt-32 border-t border-t-kd-footer-divider">
+      <h2
+        class="text-kicker-sm uppercase text-kd-mist"
+        data-edit={`${page}.footer.certified.head`}
+      >
+        {certified.head}
+      </h2>
+      <ul class="mt-20 flex flex-wrap gap-x-32 gap-y-8">
+        {
+          certified.items.map((item, i) => (
+            <li class="text-body-sm">
+              <span
+                class="text-kd-mint"
+                data-edit={`${page}.footer.certified.items.${i}.standard`}
+              >
+                {item.standard}
+              </span>
+              <span class="text-kd-slate" data-no-edit>·</span>
+              <span
+                class="text-kd-slate"
+                data-edit={`${page}.footer.certified.items.${i}.covers`}
+              >
+                {item.covers}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p
+        class="mt-12 text-body-sm text-kd-slate"
+        data-edit={`${page}.footer.certified.association`}
+      >
+        {certified.association}
       </p>
+    </div>
+
+    <div
+      class="mt-56 pt-24 border-t border-t-kd-footer-divider flex flex-wrap items-baseline justify-between gap-40"
+    >
       <p
         class="text-meta-sm text-kd-slate shrink-0"
-        data-edit="home.footer.bottom.founding"
+        data-edit={`${page}.footer.bottom.founding`}
       >
         {footer.bottom.founding}
+      </p>
+      <p class="text-meta-sm text-kd-slate">
+        <span data-no-edit>© {year}</span>{" "}
+        <span data-edit={`${page}.footer.bottom.legal`}>{footer.bottom.legal}</span>
       </p>
     </div>
   </div>

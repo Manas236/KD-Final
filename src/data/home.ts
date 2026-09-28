@@ -26,8 +26,9 @@
    to the approved wording cannot land in one place and not the other. */
 const HERO_SUB =
   "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — a full-spectrum EPC " +
-  "contractor spanning civil, mechanical, and electrical engineering across " +
-  "Indian Railways and urban infrastructure.";
+  "contractor spanning civil, structural steel fabrication & erection, " +
+  "mechanical, electrical, signalling & telecommunication, and track " +
+  "engineering across Indian Railways and public infrastructure.";
 
 export interface NavLink {
   readonly label: string;
@@ -57,6 +58,14 @@ export interface DifferentiatorCard {
   readonly body: string;
 }
 
+/* A named standard and the discipline it covers. WEBSITE_INFO.md §12
+   allows the STANDARD to be published and blocks the certificate
+   number, so this pair is the whole of what the footer may say. */
+export interface Certification {
+  readonly standard: string;
+  readonly covers: string;
+}
+
 export const home = {
   /* Head only. The design specifies neither a page title nor a meta
      description — see OPEN-QUESTIONS.md #7. Both are assembled from
@@ -68,16 +77,24 @@ export const home = {
 
   nav: {
     logoAlt: "K.D. Constructions",
+    /* No "Home" link — the logo goes home, which is what keeps the
+       links and the CTA on one bar above the 1080px drawer breakpoint.
+       CSR (the eighth, 2026-09-18) is a three-letter label and the bar
+       was measured at 1080px with it: OPEN-QUESTIONS.md #32. */
     links: [
-      { label: "Home", href: "/" },
       { label: "About", href: "/about" },
+      { label: "Capabilities", href: "/capabilities" },
       { label: "Projects", href: "/projects" },
+      { label: "Resources", href: "/resources" },
+      { label: "HSE", href: "/hse" },
+      { label: "Clients", href: "/clients" },
+      { label: "Contact", href: "/contact" },
+      /* Appended, not slotted before Contact: link i is edit key
+         `<page>.nav.links.i.label` on every page and a stored edit on
+         index 6 must keep meaning "Contact". */
+      { label: "CSR", href: "/csr" },
     ] as readonly NavLink[],
-    /* Nothing was designed behind this CTA — no contact page, no form,
-       no phone or email anywhere in the frame. It points at the footer's
-       Headquarters block so the primary call to action is live rather
-       than a 404. OPEN-QUESTIONS.md #4. */
-    cta: { label: "Get in Touch", href: "#contact" } as NavLink,
+    cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },
 
   hero: {
@@ -102,7 +119,7 @@ export const home = {
       { value: "₹220 Cr", label: "FY2025–26 Revenue" },
       { value: "53 Yrs", label: "Engineering Legacy" },
       { value: "₹500 Cr", label: "Vision 2030 Target" },
-      { value: "41+", label: "Owned Equipment Units" },
+      { value: "50+", label: "Owned Equipment Units" },
     ] as readonly Stat[],
   },
 
@@ -112,14 +129,18 @@ export const home = {
     body1:
       "What began in 1973 as a partnership firm delivering early Maharashtra " +
       "PWD works has grown into a full-spectrum EPC delivery partner — " +
-      "spanning civil, mechanical, and electrical engineering, with a growing " +
-      "footprint across Indian Railways infrastructure, government bodies, " +
-      "and urban development.",
+      "spanning civil, structural steel fabrication & erection, mechanical, " +
+      "electrical, signalling & telecommunication, and track engineering, " +
+      "with a growing footprint across Indian Railways infrastructure, " +
+      "government bodies, and urban development.",
     body2:
       "Headquartered in Vashi, Navi Mumbai, K.D. Constructions has chosen, " +
       "year after year, to endure, to evolve, and to lead — reinvesting " +
       "retained earnings rather than distributing them, building a " +
-      "zero-tolerance quality culture aligned with Railway Board standards.",
+      "zero-tolerance quality culture aligned with Railway Board standards, " +
+      "and reinforced by ISO 9001:2015, ISO 14001:2015 and ISO 45001:2018 " +
+      "certifications and membership of the Chamber of Railway Industries " +
+      "(Rail Chamber).",
     stats: [
       { value: "2.85×", label: "Revenue growth since FY2020" },
       { value: "₹362 Cr+", label: "Active tender pipeline" },
@@ -134,29 +155,33 @@ export const home = {
         num: "01",
         title: "Civil Engineering",
         body:
-          "Bridges, stations, workshops, and administrative buildings — " +
-          "including Gati Shakti–aligned railway infrastructure.",
+          "Railway stations, foot overbridges, bridges, workshops, depots, " +
+          "earthworks, and rail corridors — the foundation of our " +
+          "integrated EPC delivery.",
       },
       {
         num: "02",
         title: "Mechanical Engineering",
         body:
-          "Inspection sheds, heavy repair sheds, and workshop systems " +
-          "delivered without disrupting live rail operations.",
+          "Inspection sheds, heavy repair sheds, and workshop systems — " +
+          "plus specialised railway machinery sourced from OEMs and " +
+          "supported through the DLP period.",
       },
       {
         num: "03",
         title: "Electrical Engineering",
         body:
-          "Track engineering and electrical works integrated across civil " +
-          "and mechanical scopes for full turnkey delivery.",
+          "Railway and building electrical works integrated with civil " +
+          "and mechanical execution, including projects within live, " +
+          "operational railway environments.",
       },
       {
         num: "04",
-        title: "Steel Fabrication",
+        title: "Steel Fabrication & Erection",
         body:
-          "In-house structural steel fabrication plant at Vindhane, Raigad — " +
-          "reducing vendor dependency, tightening quality control.",
+          "Girders and trusses fabricated at our own plant in Vindhane, " +
+          "Raigad, then launched and erected on site — including FOBs " +
+          "over running railway lines.",
       },
     ] as readonly CapabilityCard[],
   },
@@ -168,20 +193,26 @@ export const home = {
     featured: {
       title: "Matunga Workshop",
       badge: "Civil · Mechanical · Electrical",
-      meta: "Indian Railways · ₹165 Cr",
-      alt: "The Carriage Repair Workshop Matunga entrance at dusk, lit water feature below the name wall",
+      /* Was "1,816 MT Steel" — that tonnage is the LHB coach maintenance
+         facility's, a separate contract with its own page. See
+         OPEN-QUESTIONS.md #24. */
+      meta: "Indian Railways · POH 350 → 575 Bogies/Month",
+      alt: "Architectural rendering of the Matunga Workshop administrative building",
     } as ProjectCard,
     cards: [
       {
         title: "Sanpada Carshed",
         badge: "Civil · Mechanical · Electrical",
-        meta: "Indian Railways · ₹48 Cr",
+        meta: "Central Railway · 11,338 m³ RCC",
         alt: "Aerial view of the Sanpada carshed, roofed maintenance bays alongside stabling lines",
       },
       {
-        title: "Matunga Z-Bridge",
-        badge: "Civil · Gati Shakti",
-        meta: "Central Railway · ₹21 Cr",
+        /* Renamed from "Matunga Z-Bridge" — this photo is a genuine
+           Harbour Line FOB (Vashi–Sanpada), not the Matunga structure it
+           was previously captioned as. See OPEN-QUESTIONS.md #19b. */
+        title: "Harbour Line FOBs & Trespass-Control",
+        badge: "Civil",
+        meta: "MRVC · 4 Locations",
         alt: "Steel truss foot overbridge on its piers, spanning railway tracks",
       },
     ] as readonly ProjectCard[],
@@ -206,8 +237,9 @@ export const home = {
       {
         title: "Full EPC Delivery",
         body:
-          "Civil, mechanical, and electrical delivered in-house. Self-owned " +
-          "41+ unit equipment fleet — zero rental leakage.",
+          "Civil, structural steel, mechanical, electrical, signalling & " +
+          "telecom, and track engineering delivered in-house. Self-owned " +
+          "50+ unit equipment fleet — zero rental leakage.",
       },
     ] as readonly DifferentiatorCard[],
   },
@@ -228,22 +260,76 @@ export const home = {
         links: [
           { label: "Home", href: "/" },
           { label: "About", href: "/about" },
+          { label: "Capabilities", href: "/capabilities" },
           { label: "Projects", href: "/projects" },
+          { label: "Resources", href: "/resources" },
+          { label: "HSE", href: "/hse" },
+          { label: "Clients", href: "/clients" },
+          { label: "Contact", href: "/contact" },
+          { label: "CSR", href: "/csr" },
         ] as readonly NavLink[],
       },
       headquarters: {
         head: "Headquarters",
-        lines: ["Vashi, Navi Mumbai", "Maharashtra, India"] as readonly string[],
+        lines: [
+          "Office No. 1313/1314, Real Tech Park",
+          "Sector 30A, Vashi, Navi Mumbai – 400703",
+          "Maharashtra, India",
+        ] as readonly string[],
       },
       disciplines: {
         head: "Core Disciplines",
         items: [
           "— Civil Engineering",
-          "— Mechanical Engineering",
+          "— Steel Fabrication & Erection",
+          "— Track Engineering",
           "— Electrical Engineering",
+          "— Mechanical Engineering",
+          "— Signalling & Telecommunication",
         ] as readonly string[],
       },
     },
+
+    /* The brand block's contact details, WEBSITE_INFO.md §Contact.
+       Landline leads — that document says so in as many words. Each
+       entry is a { label, href } pair so the URL sits in a field named
+       `href`, which is what keeps it out of the copy gate: a URL is an
+       attribute's source, not a run of text, and
+       scripts/check-edit-keys.mjs skips exactly that suffix.
+
+       The mobile numbers and the careers address are deliberately NOT
+       here. The footer is the tender evaluator's first contact surface
+       and one switchboard number is the answer it should give; the rest
+       belong on a contact page the site does not yet have.
+       OPEN-QUESTIONS.md #4. */
+    contact: {
+      links: [
+        { label: "022-2781 5380", href: "tel:02227815380" },
+        { label: "infra@kdconstructions.net", href: "mailto:infra@kdconstructions.net" },
+        {
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/company/k-d-constructions/",
+        },
+      ] as readonly NavLink[],
+    },
+
+    /* WEBSITE_INFO.md §12: the standards belong wherever a tender
+       evaluator looks, and the footer is one of those places. NAMES
+       ONLY — certificate numbers stay blocked until they arrive, and
+       §0 rule 3 forbids saying or implying RDSO certification. */
+    certified: {
+      head: "Certified to",
+      items: [
+        { standard: "ISO 9001:2015", covers: "Quality management" },
+        { standard: "ISO 14001:2015", covers: "Environmental management" },
+        {
+          standard: "ISO 45001:2018",
+          covers: "Occupational health & safety management",
+        },
+      ] as readonly Certification[],
+      association: "Member, Chamber of Railway Industries (Rail Chamber)",
+    },
+
     bottom: {
       /* Rendered as `© {year} <legal>`. The design shows 2025, which is
          already stale; the year is generated, so it cannot go stale

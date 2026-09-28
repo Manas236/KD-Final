@@ -7,21 +7,43 @@
 
    The active link is mint with a 1px mint bottom border. That border is
    the only underline in the design — never text-decoration.
+
+   THE COPY IS SHARED ACROSS PAGES; THE SLOT KEYS ARE NOT. The labels
+   come from home.ts on every page — one definition, so they cannot
+   drift — but a key's first segment is the page it renders on
+   (DESIGN-SYSTEM §9), so the caller passes `page` and the first link is
+   `home.nav.links.0.label` on `/` and `about.nav.links.0.label` on
+   `/about`. Nothing is lost by that: content_edits is keyed on
+   (page_path, edit_key) and /api/content returns one path's rows, so a
+   nav edit made on one page was never going to paint on another.
+
+   MOBILE, per DESIGN-SYSTEM.md §10: collapses to a drawer below 900px —
+   the logo stays in the bar; the links and the CTA move into a panel
+   under it, toggled by a hamburger button. The two link lists (bar and
+   drawer) are separate `.map()` calls over the same `nav.links` rather
+   than one shared render function, matching how this codebase already
+   repeats markup per instance instead of abstracting a one-off.
    ============================================================ */
 import { Image } from "astro:assets";
-import logo from "../assets/kd-logo-white.png";
+import logo from "../assets/kd-logo-mint.jpg";
 import { home } from "../data/home";
+
+interface Props {
+  /** First segment of every slot key this component writes. */
+  page?: string;
+}
+
+const { page = "home" } = Astro.props;
 
 const { nav } = home;
 const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
 ---
 
 <header
-  class="fixed top-0 inset-x-0 z-50 h-88 bg-kd-ink border-b border-b-kd-nav-border"
+  class="fixed top-0 inset-x-0 z-50 bg-kd-ink border-b border-b-kd-nav-border"
 >
-  <nav
-    class="max-w-kd mx-auto px-48 h-full flex items-center justify-between gap-40"
-    aria-label="Primary"
+  <div
+    class="max-w-kd mx-auto px-24 sm:px-48 h-88 flex items-center justify-between gap-40"
   >
     <a href="/" class="block shrink-0" aria-label={nav.logoAlt}>
       <Image
@@ -34,8 +56,11 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
       />
     </a>
 
-    <div class="flex items-center gap-40">
-      <ul class="flex items-center gap-40">
+    <nav
+      class="hidden min-[1080px]:flex items-center gap-40"
+      aria-label="Primary"
+    >
+      <ul class="flex items-center gap-32">
         {
           nav.links.map((link, i) => {
             const active = here === link.href;
@@ -51,7 +76,7 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
                       : "text-kd-mist border-b-transparent",
                   ]}
                 >
-                  <span data-edit={`home.nav.links.${i}.label`}>{link.label}</span>
+                  <span data-edit={`${page}.nav.links.${i}.label`}>{link.label}</span>
                 </a>
               </li>
             );
@@ -63,8 +88,110 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
         href={nav.cta.href}
         class="inline-flex items-center text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
       >
-        <span data-edit="home.nav.cta.label">{nav.cta.label}</span>
+        <span data-edit={`${page}.nav.cta.label`}>{nav.cta.label}</span>
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      id="nav-drawer-toggle"
+      class="min-[1080px]:hidden inline-flex items-center justify-center w-40 h-40 -mr-8 text-kd-mist shrink-0"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+      aria-label="Open menu"
+    >
+      <svg
+        id="nav-drawer-icon-open"
+        class="w-24 h-24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="square" />
+      </svg>
+      <svg
+        id="nav-drawer-icon-close"
+        class="hidden w-24 h-24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M5 5l14 14M19 5L5 19" stroke-linecap="square" />
+      </svg>
+    </button>
+  </div>
+
+  {/* The drawer renders the same `nav.links` / `nav.cta` values as the
+      bar above — not a second field, the same one twice. The bar's
+      spans carry the real data-edit key; check-edit-keys.mjs requires
+      every key to be unique on the page, so this copy is marked
+      data-no-edit rather than given a second key that would drift from
+      the one definition in home.ts. Same treatment as the footer's
+      generated year in SiteFooter.astro. */}
+  <nav
+    id="nav-drawer"
+    class="hidden min-[1080px]:hidden border-t border-t-kd-nav-border bg-kd-ink"
+    aria-label="Primary, mobile"
+  >
+    <ul class="flex flex-col px-24 py-24 gap-24">
+      {
+        nav.links.map((link, i) => {
+          const active = here === link.href;
+          return (
+            <li>
+              <a
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "inline-block text-nav pb-6 border-b",
+                  active
+                    ? "text-kd-mint border-b-kd-mint"
+                    : "text-kd-mist border-b-transparent",
+                ]}
+              >
+                <span data-no-edit>{link.label}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+    <div class="px-24 pb-24">
+      <a
+        href={nav.cta.href}
+        class="flex items-center justify-center text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
+      >
+        <span data-no-edit>{nav.cta.label}</span>
       </a>
     </div>
   </nav>
 </header>
+
+<script>
+  const toggle = document.getElementById("nav-drawer-toggle");
+  const drawer = document.getElementById("nav-drawer");
+  const iconOpen = document.getElementById("nav-drawer-icon-open");
+  const iconClose = document.getElementById("nav-drawer-icon-close");
+
+  const setOpen = (open: boolean) => {
+    drawer?.classList.toggle("hidden", !open);
+    iconOpen?.classList.toggle("hidden", open);
+    iconClose?.classList.toggle("hidden", !open);
+    toggle?.setAttribute("aria-expanded", String(open));
+    toggle?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  };
+
+  toggle?.addEventListener("click", () => {
+    setOpen(drawer?.classList.contains("hidden") ?? false);
+  });
+
+  drawer?.addEventListener("click", (event) => {
+    if ((event.target as HTMLElement).closest("a")) setOpen(false);
+  });
+</script>

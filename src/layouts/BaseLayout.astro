@@ -10,7 +10,11 @@
    see the long note above the head script.
    ============================================================ */
 import "../styles/global.css";
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import { CACHE_PREFIX } from "../lib/editable";
+import { organization } from "../data/organization";
+import logo from "../assets/kd-logo-mint.jpg";
 
 /* The two font files each family actually needs, imported so Vite
    fingerprints them and hands back the built URL. Preloading them is
@@ -33,11 +37,76 @@ interface Props {
   description: string;
   /** Keep this page out of the search index. */
   noindex?: boolean;
+  /** The share card — what WhatsApp, LinkedIn and search show beside
+      a link to this page. A page's own hero photograph, where it has
+      one; there is no designed 1200×630 card (OPEN-QUESTIONS.md #7). */
+  image?: ImageMetadata;
+  /** The share card's alt text — the photograph's own, where the page
+      has it to hand. Omitted, no og:image:alt is written. */
+  imageAlt?: string;
+  /** Home → … → this page, for the BreadcrumbList a search result
+      shows in place of the raw URL. Only pages below the top level
+      pass one; the last crumb is the page itself. */
+  breadcrumbs?: readonly { name: string; path: string }[];
 }
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, image, imageAlt, breadcrumbs } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+/* ---------- Share card ----------
+   The same rendition the hero draws, so the crawler fetches one file.
+   Absolute, because og:image must be. */
+const OG = { width: 1551, height: 700 };
+const shareImage = image ? await getImage({ src: image, ...OG }) : null;
+const shareImageUrl = shareImage ? new URL(shareImage.src, Astro.site).href : null;
+
+/* ---------- Structured data ----------
+   Two JSON-LD blocks, per docs/SEO.md "Schema recommendations":
+
+   Organization, on EVERY page. The facts are src/data/organization.ts,
+   which reads what it can from home.footer so the two cannot drift;
+   its header says what is withheld and why. The logo is the nav's.
+
+   BreadcrumbList, on pages that pass `breadcrumbs`. A search result
+   for a project page then reads "Home › Projects › Sanpada Carshed"
+   rather than the URL.
+
+   Serialised with `<\\/` escaped: a "</script>" inside a JSON string
+   would end the tag early. */
+const logoUrl = new URL((await getImage({ src: logo, width: logo.width })).src, Astro.site).href;
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": new URL("/#organization", Astro.site).href,
+  name: organization.name,
+  legalName: organization.legalName,
+  url: Astro.site?.href,
+  logo: logoUrl,
+  foundingDate: organization.foundingDate,
+  foundingLocation: organization.foundingLocation,
+  slogan: organization.slogan,
+  address: { "@type": "PostalAddress", ...organization.address },
+  telephone: organization.telephone,
+  email: organization.email,
+  sameAs: organization.sameAs,
+  memberOf: { "@type": "Organization", name: organization.memberOf },
+  areaServed: organization.areaServed,
+};
+
+const breadcrumbLd = breadcrumbs && {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbs.map((crumb, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: crumb.name,
+    item: new URL(crumb.path, Astro.site).href,
+  })),
+};
+
+const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/");
 
 /* ---------- In-page text editing ----------
    PORTED FROM NESTING TREE (src/layouts/BaseLayout.astro). The feature
@@ -129,9 +198,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="K.D. Constructions" />
+    <meta property="og:site_name" content={organization.name} />
     <meta property="og:locale" content="en_IN" />
-    <meta name="twitter:card" content="summary_large_image" />
+    {shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+    {shareImageUrl && <meta property="og:image:width" content={String(OG.width)} />}
+    {shareImageUrl && <meta property="og:image:height" content={String(OG.height)} />}
+    {shareImageUrl && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    <meta name="twitter:card" content={shareImageUrl ? "summary_large_image" : "summary"} />
+    {shareImageUrl && <meta name="twitter:image" content={shareImageUrl} />}
+
+    <!-- The KD monogram on mint, cut from the logo by scripts/build-favicon.mjs. -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <script type="application/ld+json" set:html={jsonLd(organizationLd)} />
+    {breadcrumbLd && <script type="application/ld+json" set:html={jsonLd(breadcrumbLd)} />}
 
     <link rel="preload" as="font" type="font/woff2" href={frauncesLatin} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={frauncesLatinExt} crossorigin />

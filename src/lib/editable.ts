@@ -63,17 +63,25 @@ export const CACHE_PREFIX = "kd-edits:";
    Hardcoded from src/pages rather than derived at runtime, so a stray
    `path` in a POST body can never reach the database.
 
-   THE SITE IA IS EXACTLY THESE THREE. /about and /projects have no
-   design yet and are not built; they are listed because the keys for
-   them are already reserved by the naming rule (`about.*`,
-   `projects.*`) and a page arriving later should not need this file
-   edited to become editable. Add a page here when you add one to
-   src/pages, and nowhere else.
+   THE SITE IA IS EXACTLY THESE THREE, and all three are now built.
+   They were listed here before /about and /projects existed because
+   the keys for them were already reserved by the naming rule
+   (`about.*`, `projects.*`), so a page arriving later would not need
+   this file edited to become editable — which is exactly what
+   happened. Add a page here when you add one to src/pages, and nowhere
+   else.
    ------------------------------------------------------------ */
 export const KNOWN_PATHS: readonly string[] = [
   "/",
   "/about",
   "/projects",
+  "/capabilities",
+  "/resources",
+  "/hse",
+  "/clients",
+  "/contact",
+  "/csr",
+  "/resources/vindhane-plant",
 ];
 
 const KNOWN_PATH_SET = new Set(KNOWN_PATHS);
