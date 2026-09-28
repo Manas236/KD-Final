@@ -45,6 +45,7 @@ import { galleryImage } from "../lib/gallery-images";
 import { socialPages } from "../data/social-projects";
 import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
+import { rmcPlant } from "../data/rmc-plant";
 
 export const prerender = false;
 
@@ -55,6 +56,7 @@ const HERO = { width: 1551, height: 700 };
 const TILE = { width: 800, height: 552 };
 
 const PLANT_ROUTE = "/resources/vindhane-plant";
+const RMC_ROUTE = "/resources/rmc-plant-karjat";
 
 interface SitemapImage {
   readonly loc: string;
@@ -154,10 +156,13 @@ export const GET: APIRoute = async ({ site }) => {
   const entries: SitemapEntry[] = [];
 
   for (const route of staticRoutes()) {
+    const { rmc } = rmcPlant;
     const images =
       route === PLANT_ROUTE
         ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, plant.plant.gallery, site)
-        : [];
+        : route === RMC_ROUTE
+          ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, rmc.gallery, site)
+          : [];
     entries.push({ loc: new URL(route, site).href, images });
   }
 

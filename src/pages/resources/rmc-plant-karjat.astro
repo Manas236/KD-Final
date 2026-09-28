@@ -9,14 +9,13 @@
      overview (white: paragraphs, two hairline lists, gallery) ->
      closing (ink, with the page's button) -> footer (ink-deep)
 
-   NO PHOTOGRAPH YET. The hero is plain ink until the plant photos are
-   processed; then import the hero here the way vindhane-plant.astro
-   does and add the three-layer image block. The gallery shows a
-   dashed `pending` card while `rmc.gallery` is empty.
+   The hero is vindhane-plant.astro's three-layer image block, its
+   photograph a gallery frame named by `rmc.file` (OPEN-QUESTIONS.md #38).
 
    KEYS are `resources.rmc.*`. Registered in scripts/check-edit-keys.mjs,
    scripts/check-placeholders.mjs and src/lib/editable.ts.
    ============================================================ */
+import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Nav from "../../components/Nav.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
@@ -25,10 +24,12 @@ import Arrow from "../../components/Arrow.astro";
 import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { rmcPlant as copy } from "../../data/rmc-plant";
+import { galleryImage } from "../../lib/gallery-images";
 
 export const prerender = false;
 
 const { rmc } = copy;
+const heroImg = galleryImage(rmc.file);
 const K = "resources.rmc";
 
 const breadcrumbs = [
@@ -39,10 +40,30 @@ const breadcrumbs = [
 const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";
 ---
 
-<BaseLayout title={copy.meta.title} description={copy.meta.description} breadcrumbs={breadcrumbs}>
+<BaseLayout
+  title={copy.meta.title}
+  description={copy.meta.description}
+  image={heroImg}
+  imageAlt={rmc.alt}
+  breadcrumbs={breadcrumbs}
+>
   <Nav page="resources" />
   <main>
     <section class="relative bg-kd-ink overflow-hidden">
+      <div class="absolute inset-0" aria-hidden="true">
+        <Image
+          src={heroImg}
+          alt={rmc.alt}
+          width={1551}
+          height={700}
+          loading="eager"
+          fetchpriority="high"
+          class="w-full h-full object-cover object-center"
+          style="opacity: var(--kd-hero-image-opacity)"
+        />
+        <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)"></div>
+      </div>
+
       <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
         <div class="w-568 max-w-full">
           <a href="/resources" class="inline-flex items-center gap-8 text-ui text-kd-fog">
@@ -149,20 +170,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
         <div class="mt-56 pt-56 border-t border-kd-divider-light">
           <Kicker label={rmc.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
           <div class="mt-32">
-            {rmc.gallery.length > 0 && (
-              <GalleryGrid project={rmc.title} photos={rmc.gallery} group="rmc-plant" keyPrefix={`${K}.gallery`} />
-            )}
-            <div class="border border-dashed border-kd-card-border-light p-24 max-w-560" data-pending>
-              <span class:list={[chip, "text-kd-ink"]} data-edit={`${K}.galleryPending.pending`}>
-                {rmc.galleryPending.pending}
-              </span>
-              <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.galleryPending.title`}>
-                {rmc.galleryPending.title}
-              </h3>
-              <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.galleryPending.body`}>
-                {rmc.galleryPending.body}
-              </p>
-            </div>
+            <GalleryGrid project={rmc.title} photos={rmc.gallery} group="rmc-plant" keyPrefix={`${K}.gallery`} />
           </div>
         </div>
       </div>

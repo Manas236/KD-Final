@@ -10,14 +10,15 @@
    sentence (K.D.Website_Details.md §Ready-Mix Concrete) and KD_INFO.md
    §4.7 confirms only that it is owned, at Karjat, and ready-mix. Every
    line below is that sentence, the capability it names, or a `pending`
-   placeholder (OPEN-QUESTIONS.md #32) — capacity, area, year, the
-   batching equipment and the photographs. `npm run check:placeholders`
-   fails until each is filled or removed; PRE-LAUNCH.md has the rows.
+   placeholder (OPEN-QUESTIONS.md #32) — capacity, area, year and the
+   batching equipment counts. `npm run check:placeholders` fails until
+   each is filled or removed; PRE-LAUNCH.md has the rows. The
+   photographs arrived 2026-09-28 (#38); what they plainly show — the
+   enclosure, the silos, the covered bays — is now on the page.
 
    NO IMAGES are imported here, for the same reason as plant.ts: the
-   check scripts load this file straight into Node. When the photos
-   arrive, the gallery names files in src/assets/gallery/ (rmc-plant-*.jpg)
-   and the page imports its hero.
+   check scripts load this file straight into Node. The gallery and the
+   hero name files in src/assets/gallery/ (rmc-plant-*.jpg).
 
    KEYS are `resources.rmc.*` — the page renders under the `resources`
    prefix, as the Vindhane page does with `resources.plant.*`.
@@ -43,6 +44,9 @@ export const rmcPlant = {
     title: "RMC Plant — Karjat",
     location: "Karjat · Raigad, Maharashtra",
     badges: ["Ready-Mix Concrete"],
+    /* The hero is gallery frame rmc-plant-01.jpg, resolved by the page. */
+    file: "rmc-plant-01.jpg",
+    alt: "The Karjat batching plant under its red steel cladding, aggregate stockpiles in front",
 
     stats: [
       {
@@ -62,6 +66,10 @@ export const rmcPlant = {
       "K.D. Constructions' own ready-mix concrete plant at Karjat strengthens the company's " +
         "concrete supply, with greater control over quality, consistency, availability and " +
         "project scheduling — reducing dependence on external suppliers.",
+      /* From the company's labelled photographs, 2026-09-28 ("Covered RMC
+         plant", "RMC plant coverage construction", "Silos", "TM loading"). */
+      "The plant works fully under cover: batching, cement handling and transit-mixer " +
+        "loading all happen inside a clad steel shed, with cement held in twin silos on site.",
       "Alongside the steel fabrication plant at Vindhane and a self-owned fleet of 50+ heavy " +
         "equipment units, it is part of the integrated resource base behind K.D.'s end-to-end " +
         "turnkey execution.",
@@ -80,9 +88,14 @@ export const rmcPlant = {
     equipment: {
       head: "How it is equipped",
       items: [
+        /* What the photographs show; the counts are still pending. */
+        { text: "Batching plant enclosed in a clad steel shed" },
+        { text: "Twin cement silos" },
+        { text: "Covered cement-bulker unloading bay" },
+        { text: "Covered transit-mixer loading bay" },
         {
           pending: "To be added",
-          title: "Plant equipment",
+          title: "Plant specifications",
           body:
             "Batching plant make and capacity, number of transit mixers and concrete pumps, and " +
             "any on-site testing lab.",
@@ -91,13 +104,19 @@ export const rmcPlant = {
     },
 
     galleryKicker: "Plant Gallery",
-    /* Empty until the photographs are processed — see the note above. */
-    gallery: [] as readonly GalleryPhoto[],
-    galleryPending: {
-      pending: "To be added",
-      title: "Plant photographs",
-      body: "Photographs of the Karjat plant — the batching plant, the yard and transit mixers loading.",
-    },
+    /* The company's labelled set, received 2026-09-28 — captions follow
+       its file names (OPEN-QUESTIONS.md #38). */
+    gallery: [
+      { file: "rmc-plant-01.jpg", caption: "The batching plant under its red cladding, aggregate stockpiles in front" },
+      { file: "rmc-plant-02.jpg", caption: "The plant fully enclosed, seen across the yard" },
+      { file: "rmc-plant-03.jpg", caption: "Inside the covered shed: a transit mixer loading at left, a cement bulker at right" },
+      { file: "rmc-plant-04.jpg", caption: "A transit mixer loading under the batching plant" },
+      { file: "rmc-plant-05.jpg", caption: "A cement bulker unloading into the covered bay" },
+      { file: "rmc-plant-06.jpg", caption: "The cement silos lifted into place by mobile crane" },
+      { file: "rmc-plant-07.jpg", caption: "The twin cement silos during erection" },
+      { file: "rmc-plant-08.jpg", caption: "Cladding the plant enclosure, a mobile crane lifting steel" },
+      { file: "rmc-plant-09.jpg", caption: "The strip-curtained loading bay inside the shed" },
+    ] as readonly GalleryPhoto[],
     lightbox: {
       previous: "Previous",
       next: "Next",
