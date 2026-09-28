@@ -132,6 +132,46 @@ const PHOTOS = [
   // Portrait; the tile's centre crop would cut the welder's face, so the
   // foot of the frame (the base of the welding set) is trimmed.
   { out: "vindhane-plant-02.jpg", src: "Vindhane Plant/vindhane-welder-wire-feed.png", cropBottom: 0.3 },
+  // The client's own labelled set, received 2026-09-28 (OPEN-QUESTIONS.md
+  // #38). Left out: "Dussera celebration at Vindhane" (a staff lunch, not
+  // the plant) and "Drain construction" (site drainage works).
+  { out: "vindhane-plant-03.jpg", src: "Vindhane Plant/Fabrication shop.jpeg" },
+  { out: "vindhane-plant-04.jpg", src: "Vindhane Plant/20T crane installation.jpeg" },
+  { out: "vindhane-plant-05.jpg", src: "Vindhane Plant/Fabricated girders for Railways.jpeg" },
+  { out: "vindhane-plant-06.jpg", src: "Vindhane Plant/WhatsApp Image 2026-09-27 at 18.10.59.jpeg" },
+  { out: "vindhane-plant-07.jpg", src: "Vindhane Plant/Fabricated members.jpeg" },
+  { out: "vindhane-plant-08.jpg", src: "Vindhane Plant/Fabrication of arched members.jpeg" },
+  { out: "vindhane-plant-09.jpg", src: "Vindhane Plant/Metalizing shop.jpeg" },
+  { out: "vindhane-plant-10.jpg", src: "Vindhane Plant/Painting shop.jpeg" },
+  { out: "vindhane-plant-11.jpg", src: "Vindhane Plant/DG powered facory.jpeg" },
+  { out: "vindhane-plant-12.jpg", src: "Vindhane Plant/Vindhane approach road.jpeg" },
+
+  // Karjat RMC plant — /resources/rmc-plant-karjat (OPEN-QUESTIONS.md
+  // #37, #38). 01 is also the page's hero. Left out: "New tippers for
+  // RMC plant" (a dealer's handover photo, banner and all).
+  { out: "rmc-plant-01.jpg", src: "RMC Plant Karjat/RMC plant.jpeg" },
+  { out: "rmc-plant-02.jpg", src: "RMC Plant Karjat/Covered RMC plant.jpeg" },
+  { out: "rmc-plant-03.jpg", src: "RMC Plant Karjat/RMC plant 2.jpeg" },
+  { out: "rmc-plant-04.jpg", src: "RMC Plant Karjat/TM loading.jpeg" },
+  { out: "rmc-plant-05.jpg", src: "RMC Plant Karjat/Cement Bulker unloading.jpeg" },
+  { out: "rmc-plant-06.jpg", src: "RMC Plant Karjat/RMC plant silos.jpeg" },
+  { out: "rmc-plant-07.jpg", src: "RMC Plant Karjat/Silos.jpeg" },
+  { out: "rmc-plant-08.jpg", src: "RMC Plant Karjat/RMC plant coverage construction.jpeg" },
+  { out: "rmc-plant-09.jpg", src: "RMC Plant Karjat/RMC plant inside.jpeg" },
+
+  // Matunga Workshop FOB — the Matunga Z-Bridge. Supplied 2026-09-28 in
+  // a folder named "Gati Shakti"; the file names say "Z bridge" and the
+  // frames are the Matunga Workshop yard, so it is this project
+  // (OPEN-QUESTIONS.md #38). 01 replaces the Bonkode stand-in as the
+  // project's card and hero image.
+  { out: "matunga-workshop-fob-01.jpg", src: "Gati Shakti/Z bridge approach from the West.jpeg" },
+  { out: "matunga-workshop-fob-02.jpg", src: "Gati Shakti/Z bridge.jpeg" },
+  { out: "matunga-workshop-fob-03.jpg", src: "Gati Shakti/Z bridge granite and toughened glass.jpeg" },
+  { out: "matunga-workshop-fob-04.jpg", src: "Gati Shakti/Girder erection.jpeg" },
+  { out: "matunga-workshop-fob-05.jpg", src: "Gati Shakti/Roof members 2.jpeg" },
+  { out: "matunga-workshop-fob-06.jpg", src: "Gati Shakti/Roof members.jpeg" },
+  { out: "matunga-workshop-fob-07.jpg", src: "Gati Shakti/Erection of roof sheeting over running workshop.jpeg" },
+  { out: "matunga-workshop-fob-08.jpg", src: "Gati Shakti/Beautification on the ground.jpeg" },
 ];
 
 const ONLY = process.argv[2] ?? "";
