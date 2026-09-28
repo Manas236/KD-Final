@@ -1,0 +1,235 @@
+---
+/* ============================================================
+   ProjectDetailPage — /projects/<slug> for a railway project
+   ------------------------------------------------------------
+   Added per the user's request — see OPEN-QUESTIONS.md #21. Rendered
+   by src/pages/projects/[slug].astro for every project in
+   project-detail.ts; the markup lived in that route file until
+   2026-09-19, when the route began serving a second kind of project
+   page (SocialProjectPage.astro, OPEN-QUESTIONS.md #36) and moved here
+   unchanged. No design export covers this; every band below is an
+   existing pattern reused, not a new one:
+
+     nav (ink) -> hero (ink + image, same three-layer construction as
+     the other three heroes) -> overview (white, Story.astro's plain
+     kicker/heading/paragraph shape) -> cta (ink, projects/Cta.astro's
+     own centred pattern, same copy shape with different words) ->
+     footer (ink-deep)
+
+   GALLERY. A project with photographs in src/data/gallery.ts gets a
+   second block inside the white overview band — divider, "Project
+   Gallery" kicker, GalleryGrid — rather than a band of its own: a
+   separate band would have had to be ink (breaking Overview/CTA
+   alternation with two ink bands) or light (two light bands running
+   together). Lightbox is rendered only when there is a gallery to open.
+
+   Hero -> Overview -> CTA -> CTA is not a rhythm violation: there is
+   only one CTA band here, ink, immediately before the ink-deep footer
+   — the same "last band before the footer is ink" shape every other
+   page on this site already ends on.
+
+   `data-edit` keys are NOT slug-prefixed. The in-page editor stores
+   every edit under (page path, key) — see the note in
+   scripts/check-edit-keys.mjs — and each project's URL is already a
+   distinct path, so plain keys (`projects.detail.title`, not
+   `projects.detail.<slug>.title`) cannot collide across the nine
+   pages this route renders. This route is NOT registered in that
+   script's PAGES map, though: the map assumes one static copy module
+   per path, and this is nine pages from one dynamic module built
+   around a different shape (see OPEN-QUESTIONS.md #21) — so these
+   pages are covered by the production build and a manual check, not
+   by the automated copy/slot gate yet.
+   ============================================================ */
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import Kicker from "../../components/Kicker.astro";
+import Arrow from "../../components/Arrow.astro";
+import GalleryGrid from "../../components/GalleryGrid.astro";
+import Lightbox from "../../components/Lightbox.astro";
+import { detailChrome } from "../../data/project-detail";
+import type { ProjectDetail } from "../../data/project-detail";
+import { getGallery } from "../../data/gallery";
+import { home } from "../../data/home";
+
+interface Props {
+  project: ProjectDetail;
+}
+
+const { project } = Astro.props;
+
+const gallery = getGallery(project.title);
+
+const title = `${project.title} — K.D. Constructions`;
+const description = project.body[0];
+
+/* Share card and breadcrumb trail — see BaseLayout's Props. The middle
+   crumb is the nav's own label for /projects, so a search result reads
+   "Home › Projects › <title>", the way the site bar does — not the
+   back link's "All Projects", which is a verb phrase on the page. */
+const projectsLabel = home.nav.links.find((l) => l.href === "/projects")?.label ?? "Projects";
+const breadcrumbs = [
+  { name: "Home", path: "/" },
+  { name: projectsLabel, path: "/projects" },
+  { name: project.title, path: `/projects/${project.slug}` },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={project.image}
+  imageAlt={project.alt}
+  breadcrumbs={breadcrumbs}
+>
+  <Nav page="projects" />
+  <main>
+    <section class="relative bg-kd-ink overflow-hidden">
+      <div class="absolute inset-0" aria-hidden="true">
+        <Image
+          src={project.image}
+          alt={project.alt}
+          width={1551}
+          height={700}
+          loading="eager"
+          fetchpriority="high"
+          class="w-full h-full object-cover object-center"
+          style="opacity: var(--kd-hero-image-opacity)"
+        />
+        <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)"></div>
+      </div>
+
+      <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+        <div class="w-568 max-w-full">
+          <a
+            href="/projects"
+            class="inline-flex items-center gap-8 text-ui text-kd-fog"
+          >
+            <span aria-hidden="true">←</span>
+            <span data-edit="projects.detail.backLabel">{detailChrome.backLabel}</span>
+          </a>
+
+          <div class="mt-24">
+            <Kicker label={project.eyebrow} editKey="projects.detail.eyebrow" />
+          </div>
+
+          <h1
+            class="font-display text-d1 text-kd-mist mt-16"
+            data-edit="projects.detail.title"
+          >
+            {project.title}
+          </h1>
+
+          <p class="text-body-lg text-kd-mist mt-24" data-edit="projects.detail.client">
+            {project.client}
+          </p>
+
+          <div class="flex items-center gap-8 mt-16">
+            {project.badges.map((badge, i) => (
+              <span
+                class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+                data-edit={`projects.detail.badges.${i}`}
+              >
+                {badge}
+              </span>
+            ))}
+            {project.statusBadge && (
+              <span
+                class="inline-block text-badge uppercase text-kd-ink-deep bg-kd-mint px-8 py-6"
+                data-edit="projects.detail.statusBadge"
+              >
+                {project.statusBadge}
+              </span>
+            )}
+          </div>
+
+          {project.stats.length > 0 && (
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+              {project.stats.map((stat, i) => (
+                <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                  <dd
+                    class="font-display text-d5 text-kd-mint"
+                    data-edit={`projects.detail.stats.${i}.value`}
+                  >
+                    {stat.value}
+                  </dd>
+                  <dt
+                    class="text-label uppercase text-kd-slate mt-8"
+                    data-edit={`projects.detail.stats.${i}.label`}
+                  >
+                    {stat.label}
+                  </dt>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-96">
+      <div class="max-w-kd mx-auto px-48">
+        <Kicker
+          label={detailChrome.overviewKicker}
+          editKey="projects.detail.overviewKicker"
+          tone="light"
+        />
+
+        <div class="mt-32 max-w-560 flex flex-col gap-20">
+          {project.body.map((paragraph, i) => (
+            <p class="text-body-sm text-kd-slate-2" data-edit={`projects.detail.body.${i}`}>
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        {gallery && (
+          <div class="mt-56 pt-56 border-t border-kd-divider-light">
+            <Kicker
+              label={detailChrome.galleryKicker}
+              editKey="projects.detail.galleryKicker"
+              tone="light"
+            />
+            <div class="mt-32">
+              <GalleryGrid
+                project={project.title}
+                photos={gallery.photos}
+                group={project.slug}
+                keyPrefix="projects.detail.gallery"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="bg-kd-ink py-96">
+      <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+        <Kicker
+          label={detailChrome.ctaKicker}
+          editKey="projects.detail.ctaKicker"
+          variant="centred"
+        />
+
+        <h2
+          class="font-display text-d2 text-kd-mist mt-24"
+          data-edit="projects.detail.ctaHeadline"
+        >
+          {detailChrome.ctaHeadline}
+        </h2>
+
+        <a
+          href="/projects"
+          class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+        >
+          <span data-edit="projects.detail.ctaButton">{detailChrome.ctaButton}</span>
+          <Arrow />
+        </a>
+      </div>
+    </section>
+
+    {gallery && <Lightbox labels={detailChrome.lightbox} keyPrefix="projects.detail.lightbox" />}
+  </main>
+  <SiteFooter page="projects" />
+</BaseLayout>

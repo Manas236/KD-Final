@@ -1,0 +1,369 @@
+---
+/* ============================================================
+   Listing — ink band, two-up blocks, tallest tier first
+   ------------------------------------------------------------
+   OPEN-QUESTIONS.md #5 guessed this would be the homepage's 704/464
+   grid, repeated and alternated. The export answered differently: one
+   full-width row per project, `gap-16` between them, each row shorter
+   than the last — 560 (featured) → 400 (medium) → 265 (small, the same
+   height the homepage's own small cards use). See OPEN-QUESTIONS.md #18.
+
+   TWO COLUMNS FROM 900px, at the user's direction — ten full-width rows
+   read as one endless strip on a desktop. See OPEN-QUESTIONS.md #26.
+   The tier heights are the export's; only the widths changed. The
+   featured card and the pipeline panel span both columns. Below 900px
+   (the same step as the homepage grid, DESIGN-SYSTEM §10) it is the
+   export's single column again.
+
+   ODD ONE OUT. A tier with an odd number of visible cards widens its
+   last one across both columns (`data-wide`), so a medium card never
+   sits beside an empty cell or a shorter small card. The server renders
+   that for the unfiltered list; Filters.astro recomputes it whenever a
+   tab hides cards. `data-project-tier` is how it finds each tier.
+
+   Media rules are unchanged from DESIGN-SYSTEM §5 regardless of tier:
+   full-bleed, always scrimmed, square corners, no frame, caption at
+   the foot of the box, 32px in on the two larger tiers and 20px on the
+   small one.
+
+   STATUS BADGE vs DISCIPLINE BADGE. Two different things share the
+   corner of a card and must not be confused:
+     · discipline badges ("Civil", "Mechanical") are the existing teal
+       chip from DESIGN-SYSTEM §7, bottom-left, with the caption.
+     · a status badge ("Live", "Live — 85%+ Complete") is new — this
+       design has no prior "is this still going" marker. Built solid
+       `bg-kd-mint` / `text-kd-ink-deep`, top-left, away from the
+       caption block, so the two badge kinds never compete for the same
+       corner. Only carried by projects where `live` is true; see the
+       note on ProjectEntry.statusBadge in src/data/projects.ts.
+
+   EVERY PHOTO CARD CARRIES `data-project-status`. Filters.astro reads
+   it to decide what "Live" / "Completed" shows. The pipeline panel at
+   the foot of the band is not a project and carries neither the
+   attribute nor a status badge — it is always visible.
+
+   EVERY CARD LINKS TO ITS OWN PAGE — see OPEN-QUESTIONS.md #21. A
+   plain `<a class="absolute inset-0">` as the last child of each
+   `<article>` rather than wrapping the article in an `<a>`: nothing
+   inside a card is itself interactive, so a single stretched link
+   makes the whole card clickable without changing the article's
+   sizing or its `position: relative` stacking context. `aria-label`
+   carries the project name since the link covers, rather than wraps,
+   the visible title text.
+
+   `data-listing-view` on the band is how Filters.astro's Gallery tab
+   swaps this band for projects/Gallery.astro and back.
+
+   STEEL FABRICATION & ERECTION (OPEN-QUESTIONS.md #31). Every card whose
+   project the source doc gives structural steel for carries
+   `data-project-steel`, which is all the "Steel Fabrication & Erection"
+   tab reads. Two entries follow the small tier, both full width:
+     · the Vindhane plant — a medium-height photo card built exactly as
+       the medium tier is, linking to its own page, /resources/vindhane-plant
+       (OPEN-QUESTIONS.md #33);
+     · the steel ledger — the pipeline panel's stat-tile fill, one row
+       per project with its tonnage, each row linking to that project.
+   Both carry `data-project-status="steel"`, so they show under All and
+   the steel tab and hide under Live and Completed, where a plant and a
+   tonnage total are not a status.
+   ============================================================ */
+import { Image } from "astro:assets";
+import featuredImg from "../../assets/about-mankhurd-workforce.jpg";
+import matungaImg from "../../assets/project-matunga-workshop.jpg";
+import nhavaShevaUranImg from "../../assets/project-nhava-sheva-uran.jpg";
+import harbourFobImg from "../../assets/project-fob-truss-span.jpg";
+import harbourRedevImg from "../../assets/project-harbour-redevelopment-progress.jpg";
+import sanpadaImg from "../../assets/project-sanpada-carshed.jpg";
+import matungaFobImg from "../../assets/project-matunga-workshop-fob.jpg";
+import solapurImg from "../../assets/project-solapur-vande-bharat.jpg";
+import lowerParelImg from "../../assets/project-lower-parel.jpg";
+import matungaLhbImg from "../../assets/project-matunga-lhb.jpg";
+import vindhanePlantImg from "../../assets/project-vindhane-plant.jpg";
+import { projects } from "../../data/projects";
+import { slugify } from "../../lib/slug";
+import Arrow from "../Arrow.astro";
+
+const { listing } = projects;
+const { plant, ledger } = listing.steel;
+/* Positionally paired with listing.medium / listing.small — see
+   OPEN-QUESTIONS.md #19b for what each image actually shows and why. */
+const mediumImages = [
+  matungaImg,
+  nhavaShevaUranImg,
+  harbourFobImg,
+  harbourRedevImg,
+  matungaLhbImg,
+];
+const smallImages = [sanpadaImg, matungaFobImg, solapurImg, lowerParelImg];
+/* Medium and small images are cut at 2× their one-column desktop box
+   (584px wide), not as 1184px-wide strips that a 584px box would crop
+   down to a sliver. */
+
+/* `undefined`, not `false`: Astro writes `data-wide="false"`, and the
+   `data-wide:` variant matches on the attribute being there at all. */
+const isOddOneOut = (i: number, count: number) =>
+  count % 2 === 1 && i === count - 1 ? true : undefined;
+---
+
+<section class="bg-kd-ink py-96" data-listing-view>
+  <div class="max-w-kd mx-auto px-48 grid grid-cols-1 min-[900px]:grid-cols-2 gap-16">
+    <article
+      class="relative h-560 overflow-hidden min-[900px]:col-span-2"
+      data-project-status={listing.featured.live ? "live" : "completed"}
+      data-project-steel={listing.featured.steel}
+    >
+      <Image
+        src={featuredImg}
+        alt={listing.featured.alt}
+        width={1184}
+        height={560}
+        loading="eager"
+        class="absolute inset-0 w-full h-full object-cover object-center"
+      />
+      <div class="absolute inset-0" style="background-image: var(--kd-scrim-lg)" aria-hidden="true"></div>
+
+      {listing.featured.statusBadge && (
+        <span
+          class="inline-block absolute left-24 top-24 text-badge uppercase text-kd-ink-deep bg-kd-mint px-12 py-6"
+          data-edit="projects.listing.featured.statusBadge"
+        >
+          {listing.featured.statusBadge}
+        </span>
+      )}
+
+      <div class="absolute inset-x-0 bottom-0 p-32">
+        <div class="flex items-center gap-8">
+          {listing.featured.badges.map((badge, i) => (
+            <span
+              class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+              data-edit={`projects.listing.featured.badges.${i}`}
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+        <h3 class="font-display text-d6 text-kd-mist mt-12" data-edit="projects.listing.featured.title">
+          {listing.featured.title}
+        </h3>
+        <p class="text-meta text-kd-fog mt-6" data-edit="projects.listing.featured.meta">
+          {listing.featured.meta}
+        </p>
+        <p class="text-body-sm text-kd-mist mt-16 max-w-560" data-edit="projects.listing.featured.body">
+          {listing.featured.body}
+        </p>
+        <p class="text-meta-sm text-kd-fog mt-12" data-edit="projects.listing.featured.footnote">
+          {listing.featured.footnote}
+        </p>
+      </div>
+
+      <a
+        href={`/projects/${slugify(listing.featured.title)}`}
+        class="absolute inset-0"
+        aria-label={listing.featured.title}
+      />
+    </article>
+
+    {
+      listing.medium.map((project, i) => (
+        <article
+          class="relative h-400 overflow-hidden min-[900px]:data-wide:col-span-2"
+          data-project-status={project.live ? "live" : "completed"}
+          data-project-steel={project.steel}
+          data-project-tier="medium"
+          data-wide={isOddOneOut(i, listing.medium.length)}
+        >
+          <Image
+            src={mediumImages[i]}
+            alt={project.alt}
+            width={1168}
+            height={800}
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          <div class="absolute inset-0" style="background-image: var(--kd-scrim-lg)" aria-hidden="true" />
+
+          {project.statusBadge && (
+            <span
+              class="inline-block absolute left-24 top-24 text-badge-sm uppercase text-kd-ink-deep bg-kd-mint px-8 py-6"
+              data-edit={`projects.listing.medium.${i}.statusBadge`}
+            >
+              {project.statusBadge}
+            </span>
+          )}
+
+          <div class="absolute inset-x-0 bottom-0 p-32">
+            <div class="flex items-center gap-8">
+              {project.badges.map((badge, j) => (
+                <span
+                  class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+                  data-edit={`projects.listing.medium.${i}.badges.${j}`}
+                >
+                  {badge}
+                </span>
+              ))}
+            </div>
+            <h3 class="font-display text-d6 text-kd-mist mt-12" data-edit={`projects.listing.medium.${i}.title`}>
+              {project.title}
+            </h3>
+            <p class="text-meta text-kd-fog mt-6" data-edit={`projects.listing.medium.${i}.meta`}>
+              {project.meta}
+            </p>
+          </div>
+
+          <a
+            href={`/projects/${slugify(project.title)}`}
+            class="absolute inset-0"
+            aria-label={project.title}
+          />
+        </article>
+      ))
+    }
+
+    {
+      listing.small.map((project, i) => (
+        <article
+          class="relative h-265 overflow-hidden min-[900px]:data-wide:col-span-2"
+          data-project-status={project.live ? "live" : "completed"}
+          data-project-steel={project.steel}
+          data-project-tier="small"
+          data-wide={isOddOneOut(i, listing.small.length)}
+        >
+          <Image
+            src={smallImages[i]}
+            alt={project.alt}
+            width={1168}
+            height={530}
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
+          <div class="absolute inset-x-0 bottom-0 p-20">
+            <div class="flex items-center gap-6">
+              {project.badges.map((badge, j) => (
+                <span
+                  class="inline-block text-badge-sm uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+                  data-edit={`projects.listing.small.${i}.badges.${j}`}
+                >
+                  {badge}
+                </span>
+              ))}
+            </div>
+            <h3 class="font-display text-d9 text-kd-mist mt-8" data-edit={`projects.listing.small.${i}.title`}>
+              {project.title}
+            </h3>
+            <p class="text-meta-sm text-kd-fog mt-6" data-edit={`projects.listing.small.${i}.meta`}>
+              {project.meta}
+            </p>
+          </div>
+
+          <a
+            href={`/projects/${slugify(project.title)}`}
+            class="absolute inset-0"
+            aria-label={project.title}
+          />
+        </article>
+      ))
+    }
+
+    <!-- 560px below 900px, the featured card's height: at phone width the
+         caption runs five lines, and at 400px it climbs onto the photograph's
+         white sky, where no scrim reaches. -->
+    <article
+      class="relative h-560 min-[900px]:h-400 overflow-hidden min-[900px]:col-span-2"
+      data-project-status="steel"
+      data-project-steel
+    >
+      <Image
+        src={vindhanePlantImg}
+        alt={plant.alt}
+        width={1600}
+        height={540}
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover object-center"
+      />
+      <div class="absolute inset-0" style="background-image: var(--kd-scrim-lg)" aria-hidden="true"></div>
+
+      <div class="absolute inset-x-0 bottom-0 p-32">
+        <div class="flex items-center gap-8">
+          <span
+            class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+            data-edit="projects.listing.steel.plant.badge"
+          >
+            {plant.badge}
+          </span>
+        </div>
+        <h3 class="font-display text-d6 text-kd-mist mt-12" data-edit="projects.listing.steel.plant.title">
+          {plant.title}
+        </h3>
+        <p class="text-meta text-kd-fog mt-6" data-edit="projects.listing.steel.plant.meta">
+          {plant.meta}
+        </p>
+        <p class="text-body-sm text-kd-mist mt-16 max-w-560" data-edit="projects.listing.steel.plant.body">
+          {plant.body}
+        </p>
+      </div>
+
+      <a href="/resources/vindhane-plant" class="absolute inset-0" aria-label={plant.title}></a>
+    </article>
+
+    <div
+      class="bg-kd-stat-fill border border-kd-stat-border p-32 min-[900px]:col-span-2"
+      data-project-status="steel"
+      data-project-steel
+    >
+      <span class="text-kicker uppercase text-kd-mint" data-edit="projects.listing.steel.ledger.kicker">
+        {ledger.kicker}
+      </span>
+      <p class="font-display text-d3 text-kd-mint mt-16" data-edit="projects.listing.steel.ledger.value">
+        {ledger.value}
+      </p>
+      <p class="text-body-sm text-kd-fog mt-12 max-w-560" data-edit="projects.listing.steel.ledger.body">
+        {ledger.body}
+      </p>
+      <ul class="grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 mt-32">
+        {ledger.items.map((row, i) => (
+          <li class="border-t border-t-kd-stat-border">
+            <a
+              href={`/projects/${slugify(row.title)}`}
+              class="flex items-baseline justify-between gap-16 py-16"
+            >
+              <span class="flex flex-col">
+                <span class="text-ui text-kd-mist" data-edit={`projects.listing.steel.ledger.items.${i}.title`}>
+                  {row.title}
+                </span>
+                <span class="text-meta-sm text-kd-fog mt-6" data-edit={`projects.listing.steel.ledger.items.${i}.label`}>
+                  {row.label}
+                </span>
+              </span>
+              <span
+                class="font-display text-d8 text-kd-mint shrink-0"
+                data-edit={`projects.listing.steel.ledger.items.${i}.figure`}
+              >
+                {row.figure}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="bg-kd-stat-fill border border-kd-stat-border p-32 min-[900px]:col-span-2">
+      <span class="text-kicker uppercase text-kd-mint" data-edit="projects.listing.pipeline.kicker">
+        {listing.pipeline.kicker}
+      </span>
+      <p class="font-display text-d3 text-kd-mint mt-16" data-edit="projects.listing.pipeline.value">
+        {listing.pipeline.value}
+      </p>
+      <p class="text-body-sm text-kd-fog mt-12 max-w-560" data-edit="projects.listing.pipeline.body">
+        {listing.pipeline.body}
+      </p>
+      <a
+        href={listing.pipeline.link.href}
+        class="inline-flex items-center gap-8 text-ui text-kd-mint mt-24"
+      >
+        <span data-edit="projects.listing.pipeline.link.label">{listing.pipeline.link.label}</span>
+        <Arrow />
+      </a>
+    </div>
+  </div>
+</section>

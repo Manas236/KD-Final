@@ -1,0 +1,146 @@
+---
+/* ============================================================
+   Social — mist band, the confirmed projects beyond the railway
+   ------------------------------------------------------------
+   Not in the export. Added at the user's request from the borrowed
+   docs/ folder — see OPEN-QUESTIONS.md #30 — which records the company
+   confirming six photographed, non-railway projects as its own work
+   and supplying nothing else about them. The docs are unanimous on
+   how such a project may appear: a NAME, a LOCATION and a PHOTOGRAPH,
+   never a case study with empty fields. That is exactly what each
+   tile here carries, and why this is its own band rather than six
+   more rows in Listing.astro, whose every card is built around a
+   client and a figure these projects do not have.
+
+   EVERY TILE LINKS TO ITS OWN PAGE — since 2026-09-19, when the user
+   asked for one per project (OPEN-QUESTIONS.md #36; the page is
+   SocialProjectPage.astro, copy in src/data/social-projects.ts). The
+   link is the listing cards' own: a plain `<a class="absolute inset-0">`
+   as the tile's last child, `aria-label` carrying the name, the same
+   slugify() of the title. Until then a click opened the page's
+   Lightbox; the photographs now open from each page's own gallery, and
+   from the Gallery tab, where these projects have groups too.
+
+   THE BAND IS MIST, between Listing (ink) and the closing CTA (ink).
+   That is the surface DESIGN-SYSTEM §2's alternation asks for — and
+   it closes the Listing → CTA ink-on-ink boundary that
+   OPEN-QUESTIONS.md #18f recorded as built-as-drawn, without moving
+   either neighbour. Kicker in the light tone, per Kicker.astro.
+
+   THE TILES ARE GalleryGrid's tile, verbatim — the §5 media box the
+   listing's small cards and every gallery tile already use: 265px,
+   `object-cover`, `--kd-scrim-sm`, caption 20px in, square corners.
+   Two runs of text in the caption instead of one — the small card's
+   own title/meta pair (`text-d9` over `text-meta-sm`) — because a
+   name and a location are two things, and the in-page editor needs a
+   text leaf for each.
+
+   FILTERS. The band carries the same two attributes the listing's
+   cards do and Filters.astro treats it as one of them:
+     `data-listing-view`            the Gallery tab hides it, like
+                                    Listing itself.
+     `data-project-status=completed` the Live tab hides it; All and
+                                    Completed show it. Every photograph
+                                    here is of a finished building —
+                                    that is the only status they
+                                    evidence, and the only one claimed.
+
+   PENDING TILES (review only). An item with `pending` has no
+   photograph. It is the same 265px box on the ink surface with a
+   dashed ghost outline, the project-card badge chip carrying the
+   `pending` label, the note in the body, and the same name/location
+   caption — so the client sees exactly which project is missing what.
+   It links to its page like the rest; the page carries the same
+   placeholder where the photograph will go. `data-pending` is for
+   scripts/check-placeholders.mjs. OPEN-QUESTIONS.md #32; every one is
+   filled or removed before go-live.
+   ============================================================ */
+import { Image } from "astro:assets";
+import Kicker from "../Kicker.astro";
+import { projects } from "../../data/projects";
+import { galleryImage } from "../../lib/gallery-images";
+import { slugify } from "../../lib/slug";
+
+const { social } = projects;
+
+const tiles = social.items.map((item) => ({
+  item,
+  image: item.file ? galleryImage(item.file) : undefined,
+  href: `/projects/${slugify(item.title)}`,
+}));
+---
+
+<section class="bg-kd-mist py-96" data-listing-view data-project-status="completed">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={social.kicker} editKey="projects.social.kicker" tone="light" />
+    <h2 class="font-display text-d4 text-kd-ink mt-16" data-edit="projects.social.heading">
+      {social.heading}
+    </h2>
+    <p class="text-body-sm text-kd-slate-2 mt-20 max-w-560" data-edit="projects.social.body">
+      {social.body}
+    </p>
+
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 mt-56">
+      {
+        tiles.map(({ item, image, href }, i) =>
+          !image ? (
+            <li>
+              <div
+                class="relative h-265 bg-kd-ink border border-dashed border-kd-ghost-outline p-20 flex flex-col"
+                data-pending
+              >
+                <span
+                  class="self-start inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+                  data-edit={`projects.social.items.${i}.pending`}
+                >
+                  {item.pending}
+                </span>
+                <p
+                  class="text-body-sm text-kd-fog mt-16"
+                  data-edit={`projects.social.items.${i}.note`}
+                >
+                  {item.note}
+                </p>
+                <div class="mt-auto">
+                  <h3
+                    class="font-display text-d9 text-kd-mist"
+                    data-edit={`projects.social.items.${i}.title`}
+                  >
+                    {item.title}
+                  </h3>
+                  <p class="text-meta-sm text-kd-fog mt-6" data-edit={`projects.social.items.${i}.location`}>
+                    {item.location}
+                  </p>
+                </div>
+                <a href={href} class="absolute inset-0" aria-label={item.title} />
+              </div>
+            </li>
+          ) : (
+          <li>
+            <figure class="relative h-265 overflow-hidden">
+              <Image
+                src={image}
+                alt={item.alt ?? item.title}
+                width={800}
+                height={552}
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-cover object-center"
+              />
+              <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
+              <figcaption class="absolute inset-x-0 bottom-0 p-20">
+                <h3 class="font-display text-d9 text-kd-mist" data-edit={`projects.social.items.${i}.title`}>
+                  {item.title}
+                </h3>
+                <p class="text-meta-sm text-kd-fog mt-6" data-edit={`projects.social.items.${i}.location`}>
+                  {item.location}
+                </p>
+              </figcaption>
+              <a href={href} class="absolute inset-0" aria-label={item.title} />
+            </figure>
+          </li>
+          )
+        )
+      }
+    </ul>
+  </div>
+</section>

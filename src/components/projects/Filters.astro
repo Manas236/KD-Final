@@ -1,0 +1,146 @@
+---
+/* ============================================================
+   Filters — mist band, status tabs
+   ------------------------------------------------------------
+   The export draws this as a bar directly under the hero, filled
+   darker than the hero itself — `bg-gray-800` against the hero's
+   `bg-zinc-700`, i.e. one step toward ink-deep. DESIGN-SYSTEM §7
+   reserves `--kd-ink-deep` for the footer, so that fill is not
+   reproduced; this band is `bg-kd-mist` instead. Two things fall out
+   of that one substitution, both wanted: it is no longer a third ink
+   band in a row after Nav and Hero (DESIGN-SYSTEM §2's alternation),
+   and it gives the active tab something to contrast against without a
+   colour the palette does not have.
+
+   THE TABS ARE REAL, NOT DECORATIVE. The export shows "All Projects"
+   filled and the other two outlined — an active/inactive state, not
+   three equal labels — so this ships as a working filter rather than a
+   static row that looks like one. `<script>` below toggles the `hidden`
+   utility on every `[data-project-status]` card in Listing.astro,
+   the same mechanism Nav.astro's drawer already uses.
+
+   WHICH STATUS EACH TAB FILTERS TO is a fixed mapping this component
+   owns, not something stored in src/data/projects.ts: the tab LABELS
+   are approved copy, but "all" / "live" / "completed" are behaviour,
+   not wording, and the order below is the order the copy is written
+   in. If the copy ever reorders the tabs, this array has to move with
+   it.
+
+   THE FOURTH TAB, "gallery", is not a status filter and not in the
+   export — added at the user's request. It swaps the Listing band
+   (`[data-listing-view]`) for the Gallery band (`[data-gallery-view]`,
+   projects/Gallery.astro); any other tab swaps them back. It also
+   writes `#gallery` to the URL, and a page loaded at /projects#gallery
+   opens on it, so the gallery can be linked to.
+
+   TWO LISTING VIEWS, not one, since projects/Social.astro: that band
+   carries `data-listing-view` too, so the Gallery tab hides it with
+   the listing, and `data-project-status="completed"` on the band
+   itself, so the status loop below hides it under Live and shows it
+   under All and Completed exactly as it does a card. Nothing here
+   special-cases it.
+
+   THE FIFTH TAB, "steel" (OPEN-QUESTIONS.md #31), is a filter, not a
+   view swap: it shows every element carrying `data-project-steel` —
+   the listing cards the source doc gives structural steel for, plus
+   the Vindhane plant card and the steel ledger — and hides the rest,
+   the "Beyond the railway" band included. The plant and ledger carry
+   `data-project-status="steel"`, so the ordinary status match hides
+   them under Live and Completed with no special case. Like the gallery,
+   it writes its key to the URL, so /projects#steel opens on it.
+   ============================================================ */
+import { projects } from "../../data/projects";
+
+const { filters } = projects;
+const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
+---
+
+<section class="bg-kd-mist py-24">
+  <div class="max-w-kd mx-auto px-48">
+    <div class="flex flex-wrap items-center gap-8" role="group" aria-label="Filter projects by status">
+      {
+        filters.tabs.map((label, i) => (
+          <button
+            type="button"
+            data-filter-tab={FILTER_KEYS[i]}
+            aria-pressed={i === 0 ? "true" : "false"}
+            class:list={[
+              "px-16 py-8 text-kicker uppercase",
+              i === 0
+                ? "bg-kd-mint-2 text-kd-mist"
+                : "border border-kd-divider-light text-kd-slate",
+            ]}
+          >
+            <span data-edit={`projects.filters.tabs.${i}`}>{label}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const ACTIVE = ["bg-kd-mint-2", "text-kd-mist"];
+  const INACTIVE = ["border", "border-kd-divider-light", "text-kd-slate"];
+
+  const tabs = document.querySelectorAll<HTMLButtonElement>("[data-filter-tab]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-project-status]");
+  const listingViews = document.querySelectorAll<HTMLElement>("[data-listing-view]");
+  const gallery = document.querySelector<HTMLElement>("[data-gallery-view]");
+
+  function applyFilter(filter: string) {
+    const showGallery = filter === "gallery";
+    for (const view of listingViews) view.classList.toggle("hidden", showGallery);
+    gallery?.classList.toggle("hidden", !showGallery);
+    if (showGallery) return;
+
+    for (const card of cards) {
+      const show =
+        filter === "all" ||
+        (filter === "steel"
+          ? card.dataset.projectSteel !== undefined
+          : card.dataset.projectStatus === filter);
+      card.classList.toggle("hidden", !show);
+    }
+    widenOddOneOut("medium");
+    widenOddOneOut("small");
+  }
+
+  // Listing.astro is two-up on desktop: a tier left with an odd number of
+  // visible cards stretches its last one across both columns.
+  function widenOddOneOut(tier: string) {
+    const tierCards = [...document.querySelectorAll<HTMLElement>(`[data-project-tier="${tier}"]`)];
+    const visible = tierCards.filter((card) => !card.classList.contains("hidden"));
+    const oddOneOut = visible.length % 2 === 1 ? visible[visible.length - 1] : null;
+    for (const card of tierCards) card.toggleAttribute("data-wide", card === oddOneOut);
+  }
+
+  function activate(tab: HTMLButtonElement) {
+    for (const t of tabs) {
+      const active = t === tab;
+      t.classList.remove(...ACTIVE, ...INACTIVE);
+      t.classList.add(...(active ? ACTIVE : INACTIVE));
+      t.setAttribute("aria-pressed", String(active));
+    }
+    applyFilter(tab.dataset.filterTab ?? "all");
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      activate(tab);
+      const key = tab.dataset.filterTab;
+      const hash = key === "gallery" || key === "steel" ? `#${key}` : "";
+      history.replaceState(null, "", location.pathname + location.search + hash);
+    });
+  });
+
+  // On load, and on a same-page link to #gallery or #steel (which does not reload).
+  function openTabFromHash() {
+    const key = location.hash.slice(1);
+    if (key !== "gallery" && key !== "steel") return;
+    const tab = [...tabs].find((t) => t.dataset.filterTab === key);
+    if (tab) activate(tab);
+  }
+  openTabFromHash();
+  window.addEventListener("hashchange", openTabFromHash);
+</script>

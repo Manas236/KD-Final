@@ -1,0 +1,40 @@
+---
+/* ============================================================
+   /projects/[slug] — one page per project
+   ------------------------------------------------------------
+   Two kinds of project live under this one route, and each has its own
+   page component, because they are built around different shapes:
+
+     · a railway project in src/data/project-detail.ts — client line,
+       discipline badges, a full stat grid, a narrative (OPEN-QUESTIONS.md
+       #21) → components/projects/ProjectDetailPage.astro
+     · a "Beyond the railway" project from the band on /projects, copy in
+       src/data/social-projects.ts — a location, whatever facts are on
+       record, and review-only placeholders for the rest
+       (OPEN-QUESTIONS.md #36) → components/projects/SocialProjectPage.astro
+
+   SLUGS ARE COMPUTED. Both modules key their projects by the one
+   `slugify()` of the title (src/lib/slug.ts) that every card, tile and
+   gallery heading links with, so a page exists for every project and
+   only for a project that exists. The two title sets are disjoint; a
+   railway project would win a collision, being looked up first. An
+   unknown slug goes back to /projects.
+   ============================================================ */
+import ProjectDetailPage from "../../components/projects/ProjectDetailPage.astro";
+import SocialProjectPage from "../../components/projects/SocialProjectPage.astro";
+import { getProjectDetail } from "../../data/project-detail";
+import { getSocialPage } from "../../data/social-projects";
+
+export const prerender = false;
+
+const slug = Astro.params.slug ?? "";
+const project = getProjectDetail(slug);
+const social = project ? undefined : getSocialPage(slug);
+
+if (!project && !social) {
+  return Astro.redirect("/projects", 302);
+}
+---
+
+{project && <ProjectDetailPage project={project} />}
+{social && <SocialProjectPage slug={slug} page={social} />}

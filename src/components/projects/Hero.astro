@@ -1,0 +1,80 @@
+---
+/* ============================================================
+   /projects hero — ink band, full-bleed image, 568px text column
+   ------------------------------------------------------------
+   Same backdrop construction as the other two heroes: the photograph
+   at 20% opacity under the 90° ink overlay, content in normal flow
+   above both. Previously reused the homepage's Nhava Sheva backdrop —
+   see OPEN-QUESTIONS.md #18 — now uses its own: an aerial of Uran
+   Railway Station, unused elsewhere on the site. See #19b.
+
+   Two stats, not four, in a plain flex row rather than the homepage's
+   2×2 grid: this page has no design of its own for a stat grid, and
+   DESIGN-SYSTEM §4.1's stat tile is the pattern regardless of count.
+
+   No buttons — the export's hero has none; the page's own calls to
+   action are the filter tabs below and the closing CTA.
+
+   FIXED-DESKTOP, like every `/about` section (DESIGN-SYSTEM §10):
+   this page is new work built after the mobile pass shipped for the
+   homepage and chrome only. OPEN-QUESTIONS.md #3 covers it.
+   ============================================================ */
+import { Image } from "astro:assets";
+import backdrop from "../../assets/hero-uran-station.jpg";
+import { projects } from "../../data/projects";
+import Kicker from "../Kicker.astro";
+
+const { hero } = projects;
+---
+
+<section class="relative bg-kd-ink overflow-hidden">
+  <div class="absolute inset-0" aria-hidden="true">
+    <Image
+      src={backdrop}
+      alt={hero.backdropAlt}
+      width={1551}
+      height={700}
+      loading="eager"
+      fetchpriority="high"
+      class="w-full h-full object-cover object-center"
+      style="opacity: var(--kd-hero-image-opacity)"
+    />
+    <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)">
+    </div>
+  </div>
+
+  <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+    <div class="w-568 max-w-full">
+      <Kicker label={hero.kicker} editKey="projects.hero.kicker" />
+
+      <h1 class="font-display text-d1 text-kd-mist mt-16" data-edit="projects.hero.heading">
+        {hero.heading}
+      </h1>
+
+      <p class="text-body-lg text-kd-mist mt-24" data-edit="projects.hero.sub">
+        {hero.sub}
+      </p>
+
+      <dl class="flex flex-wrap gap-16 mt-56">
+        {
+          hero.stats.map((stat, i) => (
+            <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+              <dd
+                class="font-display text-d5 text-kd-mint"
+                data-edit={`projects.hero.stats.${i}.value`}
+              >
+                {stat.value}
+              </dd>
+              <dt
+                class="text-label uppercase text-kd-slate mt-8"
+                data-edit={`projects.hero.stats.${i}.label`}
+              >
+                {stat.label}
+              </dt>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

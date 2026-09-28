@@ -1,0 +1,121 @@
+---
+/* ============================================================
+   Lightbox — full-screen photo viewer for GalleryGrid tiles
+   ------------------------------------------------------------
+   Render once per page, anywhere inside <main>. A native <dialog>
+   opened with showModal(), so focus trapping, Escape-to-close and the
+   inert page behind it come from the browser rather than from script.
+
+   Nothing in the approved design covers this; it is built from what
+   already exists. The surface is solid ink (no tint of ink exists in
+   tokens.css, so the backdrop is ink too, not a translucent wash), the
+   controls are the ghost button from DESIGN-SYSTEM §6, and the photo
+   is shown whole at its own aspect ratio — this is the one place a
+   photograph is not cropped into a layout box and carries no scrim,
+   because the point of opening it is to see the photograph itself.
+
+   The caption and counter are filled in by script from the tile that
+   was clicked, so they ship empty and carry `data-no-edit`: the
+   caption's editable copy is the tile's own <figcaption> — or, where a
+   tile's caption block holds more than one run of text, the one
+   element inside it marked `data-lightbox-title`, so two runs are never
+   joined into one. (projects/Social.astro's name-and-location tiles
+   were the case this was built for; since OPEN-QUESTIONS.md #36 they
+   link to their pages instead, and no tile uses it today.)
+
+   Keys: ArrowLeft / ArrowRight step through the clicked tile's group;
+   Escape closes; so does a click anywhere that is not the photo or a
+   button.
+   ============================================================ */
+interface Props {
+  labels: { readonly previous: string; readonly next: string; readonly close: string };
+  /** Label keys are `${keyPrefix}.previous` / `.next` / `.close`. */
+  keyPrefix: string;
+}
+
+const { labels, keyPrefix } = Astro.props;
+const ghost = "text-ui text-kd-mist border border-kd-ghost-outline px-24 py-12 cursor-pointer";
+---
+
+<dialog
+  class="w-full h-full max-w-none max-h-none m-0 p-0 bg-kd-ink backdrop:bg-kd-ink"
+  data-lightbox
+>
+  <div class="h-full max-w-kd mx-auto px-24 sm:px-48 py-24 flex flex-col gap-16">
+    <div class="flex items-center justify-between gap-16">
+      <span class="text-meta text-kd-fog" data-lightbox-count data-no-edit></span>
+      <button type="button" class={ghost} data-lightbox-close>
+        <span data-edit={`${keyPrefix}.close`}>{labels.close}</span>
+      </button>
+    </div>
+
+    <figure class="flex-1 min-h-0 flex flex-col items-center gap-16">
+      <div class="flex-1 min-h-0 w-full flex items-center justify-center">
+        <img class="max-w-full max-h-full w-auto h-auto" alt="" data-lightbox-image />
+      </div>
+      <figcaption class="text-body-sm text-kd-mist text-center" data-lightbox-caption data-no-edit></figcaption>
+    </figure>
+
+    <div class="flex items-center justify-center gap-16" data-lightbox-nav>
+      <button type="button" class={ghost} data-lightbox-prev>
+        <span data-edit={`${keyPrefix}.previous`}>{labels.previous}</span>
+      </button>
+      <button type="button" class={ghost} data-lightbox-next>
+        <span data-edit={`${keyPrefix}.next`}>{labels.next}</span>
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+
+  if (dialog) {
+    const image = dialog.querySelector<HTMLImageElement>("[data-lightbox-image]")!;
+    const caption = dialog.querySelector<HTMLElement>("[data-lightbox-caption]")!;
+    const count = dialog.querySelector<HTMLElement>("[data-lightbox-count]")!;
+    const nav = dialog.querySelector<HTMLElement>("[data-lightbox-nav]")!;
+
+    let items: HTMLElement[] = [];
+    let index = 0;
+
+    const show = (i: number) => {
+      index = (i + items.length) % items.length;
+      const item = items[index];
+      image.src = item.dataset.lightboxSrc ?? "";
+      image.alt = item.querySelector("img")?.alt ?? "";
+      const captionSource =
+        item.querySelector("[data-lightbox-title]") ?? item.querySelector("figcaption");
+      caption.textContent = captionSource?.textContent?.trim() ?? "";
+      count.textContent = `${index + 1} / ${items.length}`;
+      nav.classList.toggle("hidden", items.length < 2);
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-lightbox-item]").forEach((item) => {
+      item.addEventListener("click", () => {
+        const group = item.dataset.lightboxGroup;
+        items = [...document.querySelectorAll<HTMLElement>("[data-lightbox-item]")].filter(
+          (el) => el.dataset.lightboxGroup === group
+        );
+        show(items.indexOf(item));
+        dialog.showModal();
+      });
+    });
+
+    dialog.querySelector("[data-lightbox-prev]")!.addEventListener("click", () => show(index - 1));
+    dialog.querySelector("[data-lightbox-next]")!.addEventListener("click", () => show(index + 1));
+    dialog.querySelector("[data-lightbox-close]")!.addEventListener("click", () => dialog.close());
+
+    dialog.addEventListener("click", (e) => {
+      if (!(e.target as Element).closest("img, button")) dialog.close();
+    });
+
+    dialog.addEventListener("keydown", (e) => {
+      if (items.length < 2) return;
+      if (e.key === "ArrowLeft") show(index - 1);
+      if (e.key === "ArrowRight") show(index + 1);
+    });
+
+    dialog.addEventListener("close", () => image.removeAttribute("src"));
+  }
+</script>

@@ -1,0 +1,58 @@
+---
+/* ============================================================
+   /projects
+   ------------------------------------------------------------
+   The band stack, in the order this page's own export gives it:
+
+     nav (ink) → hero (ink + image) → filters (mist) → listing (ink)
+     → social (mist) → closing cta (ink) → footer (ink-deep)
+
+   `Gallery` is not an extra band: it ships hidden and replaces
+   `Listing` while the Gallery tab is active (see Filters.astro).
+   `Lightbox` is the dialog its tiles open, not a band either.
+
+   `Social` IS an extra band — not in the export, added at the user's
+   request (OPEN-QUESTIONS.md #30): the confirmed non-railway projects
+   as name + location + photograph. It sits on mist between the two
+   ink bands, which is where §2's alternation puts it; the listing →
+   cta ink-on-ink boundary that #18f recorded as built-as-drawn is
+   therefore no longer on this page. The Gallery and Live tabs hide it
+   (see Filters.astro), so on those views the page is again listing-or-
+   gallery → cta, ink on ink, as drawn.
+
+   `page="projects"` on the chrome supplies the first segment of every
+   slot key Nav and SiteFooter write here — `projects.nav.*` and
+   `projects.footer.*` — never `home.nav.*`, per DESIGN-SYSTEM §9. See
+   the same note in about.astro.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Hero from "../components/projects/Hero.astro";
+import Filters from "../components/projects/Filters.astro";
+import Listing from "../components/projects/Listing.astro";
+import Gallery from "../components/projects/Gallery.astro";
+import Social from "../components/projects/Social.astro";
+import Cta from "../components/projects/Cta.astro";
+import Lightbox from "../components/Lightbox.astro";
+import { projects } from "../data/projects";
+/* The hero's backdrop, doubling as the share card — the same file
+   components/projects/Hero.astro draws. */
+import shareImage from "../assets/hero-uran-station.jpg";
+
+export const prerender = false;
+---
+
+<BaseLayout title={projects.meta.title} description={projects.meta.description} image={shareImage}>
+  <Nav page="projects" />
+  <main>
+    <Hero />
+    <Filters />
+    <Listing />
+    <Gallery />
+    <Social />
+    <Cta />
+    <Lightbox labels={projects.gallery.lightbox} keyPrefix="projects.gallery.lightbox" />
+  </main>
+  <SiteFooter page="projects" />
+</BaseLayout>

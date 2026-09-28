@@ -1,0 +1,45 @@
+---
+/* ============================================================
+   Closing CTA — ink band, centred
+   ------------------------------------------------------------
+   Identical construction to ClosingCta.astro on the homepage — same
+   centred kicker variant, same heading-then-button stack — with
+   `projects.` slot keys. Sits directly after Listing, also ink: two
+   ink bands in a row, which breaks DESIGN-SYSTEM §2's alternation the
+   same way `/about`'s HSE→CTA boundary does (OPEN-QUESTIONS.md #17).
+   Built as drawn, for the same reason recorded there: this is what the
+   export puts back to back, and fidelity to an arrived export outranks
+   a rhythm rule written for a page that had none. See #18.
+
+   Fixed-desktop `text-d2` and the arrow-on-button, matching
+   about/Cta.astro rather than the homepage's responsive ClosingCta —
+   this page follows `/about`'s precedent throughout, not the
+   homepage's mobile pass. See OPEN-QUESTIONS.md #3.
+   ============================================================ */
+import { projects } from "../../data/projects";
+import Arrow from "../Arrow.astro";
+import Kicker from "../Kicker.astro";
+
+const { cta } = projects;
+---
+
+<section class="bg-kd-ink py-96">
+  <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+    <Kicker label={cta.kicker} editKey="projects.cta.kicker" variant="centred" />
+
+    <h2
+      class="font-display text-d2 text-kd-mist mt-24"
+      data-edit="projects.cta.headline"
+    >
+      {cta.headline}
+    </h2>
+
+    <a
+      href={cta.button.href}
+      class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+    >
+      <span data-edit="projects.cta.button.label">{cta.button.label}</span>
+      <Arrow />
+    </a>
+  </div>
+</section>

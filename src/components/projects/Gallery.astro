@@ -1,0 +1,59 @@
+---
+/* ============================================================
+   Gallery — ink band, every project's photographs, grouped
+   ------------------------------------------------------------
+   The fourth tab in Filters.astro. It does not add a band to the page:
+   it ships `hidden` and takes the Listing band's place when its tab is
+   active (and back again on any other tab), so the page's band order
+   is Nav → Hero → Filters → Listing-or-Gallery → CTA either way.
+
+   One group per project that has photographs (src/data/gallery.ts),
+   in the listing's own order. The group heading is the project title
+   as a link to that project's page; the tiles are GalleryGrid, and
+   projects.astro renders the Lightbox they open.
+
+   Reachable directly as /projects#gallery — see the script in
+   Filters.astro.
+   ============================================================ */
+import Kicker from "../Kicker.astro";
+import Arrow from "../Arrow.astro";
+import GalleryGrid from "../GalleryGrid.astro";
+import { projects } from "../../data/projects";
+import { slugify } from "../../lib/slug";
+
+const { gallery } = projects;
+---
+
+<section class="bg-kd-ink py-96 hidden" data-gallery-view>
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={gallery.kicker} editKey="projects.gallery.kicker" />
+    <h2 class="font-display text-d4 text-kd-mist mt-16" data-edit="projects.gallery.heading">
+      {gallery.heading}
+    </h2>
+
+    <div class="flex flex-col gap-56 mt-56">
+      {
+        gallery.groups.map((group, g) => (
+          <div>
+            <h3 class="font-display text-d6 text-kd-mist">
+              <a href={`/projects/${slugify(group.project)}`} class="inline-flex items-center gap-12">
+                <span data-edit={`projects.gallery.groups.${g}.project`}>{group.project}</span>
+                <span class="inline-flex text-kd-mint" aria-hidden="true">
+                  <Arrow />
+                </span>
+              </a>
+            </h3>
+            <div class="mt-24">
+              <GalleryGrid
+                project={group.project}
+                photos={group.photos}
+                group={slugify(group.project)}
+                keyPrefix={`projects.gallery.groups.${g}.photos`}
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

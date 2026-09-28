@@ -1,0 +1,86 @@
+---
+/* ============================================================
+   GalleryGrid — one project's photographs as a tile grid
+   ------------------------------------------------------------
+   Shared by the Gallery tab on /projects and the gallery block on
+   /projects/[slug]. Each tile follows DESIGN-SYSTEM §5 exactly as the
+   listing's small cards do: full-bleed `object-cover` in a fixed 265px
+   box, `--kd-scrim-sm` over it, caption at the foot 20px in, square
+   corners, no frame. The scrim is the light one on purpose — it only
+   darkens the foot of the photo, where the caption sits.
+
+   CLICK TO ENLARGE. Every tile opens Lightbox.astro, which must be
+   rendered once on any page that renders this grid. The tile's
+   `data-lightbox-src` carries a larger rendition; the lightbox reads
+   the caption straight off the tile's own <figcaption>, so a caption
+   edited in the in-page editor is the caption the lightbox shows.
+
+   The click listener sits on the <figure>, not only on the button:
+   the stretched <button> gives keyboard and screen-reader users a real
+   control, and the caption sits above it so the in-page editor can
+   still reach the caption text (its capture-phase handler swallows the
+   click in edit mode — see the Gestures note in inline-edit.js).
+   ============================================================ */
+import { Image, getImage } from "astro:assets";
+import type { GalleryPhoto } from "../data/gallery";
+import { galleryImage } from "../lib/gallery-images";
+
+interface Props {
+  /** The project title — prefixes every alt text. */
+  project: string;
+  photos: readonly GalleryPhoto[];
+  /** Lightbox group: prev/next cycle within one group only. */
+  group: string;
+  /** Caption keys are `${keyPrefix}.${i}.caption`. */
+  keyPrefix: string;
+}
+
+const { project, photos, group, keyPrefix } = Astro.props;
+
+const LIGHTBOX_WIDTH = 1600;
+
+const tiles = await Promise.all(
+  photos.map(async (photo) => {
+    const image = galleryImage(photo.file);
+    const full = await getImage({ src: image, width: Math.min(LIGHTBOX_WIDTH, image.width) });
+    return { photo, image, full: full.src, alt: `${project} — ${photo.caption}` };
+  })
+);
+---
+
+<ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+  {
+    tiles.map(({ photo, image, full, alt }, i) => (
+      <li>
+        <figure
+          class="relative h-265 overflow-hidden cursor-pointer"
+          data-lightbox-item
+          data-lightbox-group={group}
+          data-lightbox-src={full}
+        >
+          <Image
+            src={image}
+            alt={alt}
+            width={800}
+            height={552}
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
+          <button
+            type="button"
+            class="absolute inset-0 w-full h-full cursor-pointer"
+            aria-haspopup="dialog"
+            aria-label={alt}
+          />
+          <figcaption
+            class="absolute inset-x-0 bottom-0 p-20 text-meta text-kd-mist"
+            data-edit={`${keyPrefix}.${i}.caption`}
+          >
+            {photo.caption}
+          </figcaption>
+        </figure>
+      </li>
+    ))
+  }
+</ul>
