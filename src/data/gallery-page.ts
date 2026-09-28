@@ -16,7 +16,7 @@
    ============================================================ */
 import { home } from "./home.ts";
 import type { NavLink } from "./home.ts";
-import { railwayGalleries, socialGalleries, plantGalleries } from "./gallery.ts";
+import { railwayGalleries, socialGalleries, plantGalleries, hseGalleries } from "./gallery.ts";
 
 export const galleryPage = {
   meta: {
@@ -33,8 +33,8 @@ export const galleryPage = {
     kicker: "Gallery",
     title: "Our work, on site.",
     sub:
-      "Photographs from our railway projects, our work beyond the railway, and our own plants " +
-      "at Vindhane and Karjat. Select any photograph to enlarge it.",
+      "Photographs from our railway projects, our work beyond the railway, our own plants at " +
+      "Vindhane and Karjat, and safety on our sites. Select any photograph to enlarge it.",
   },
 
   sections: [
@@ -55,6 +55,14 @@ export const galleryPage = {
       kicker: "Integrated Resources",
       heading: "Where our steel and concrete come from.",
       groups: plantGalleries,
+    },
+    /* Added 2026-09-28 with the rest of the supplied photographs
+       (OPEN-QUESTIONS.md #40). */
+    {
+      jump: "Safety on Site",
+      kicker: "Health, Safety & Environment",
+      heading: "Safety, on every site.",
+      groups: hseGalleries,
     },
   ],
 
