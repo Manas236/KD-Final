@@ -2422,3 +2422,43 @@ give the hero an image the way `vindhane-plant.astro` does.
 **Verification.** `npm run build` clean · `check-edit-keys` passes on
 `/resources/rmc-plant-karjat` (80 keys) and `/resources` (70) ·
 `check-placeholders` lists the four new rows.
+## 38. New photographs: Karjat RMC plant, Vindhane plant, and the Matunga Z-Bridge
+
+**Received 2026-09-28**, found by `npm run media:scan` + `git diff raw-media.manifest.txt`
+(the #37 tooling): 10 frames in `RMC Plant Karjat/`, 12 in `Vindhane Plant/`,
+and a new folder, `Gati Shakti/`, of 8.
+
+**"Gati Shakti" is not a new project — it is the Matunga Workshop FOB.** Its
+files are named "Z bridge …", the frames are the Matunga Workshop yard
+(wheelsets, EOT gantry, coaches under the shed), and the 2026-08-18 session
+confirmed the Z-Bridge and the Workshop FOB are one structure (docs/ASK.md #1).
+"Gati Shakti" is the framing the earlier documents gave this project (KD_INFO
+§7.2). So the photos went onto `/projects/matunga-workshop-fob` rather than a
+new page. If the company does mean a separate Gati Shakti project, the folder
+maps straight onto a new page — one question closes it.
+
+**Done.**
+- **Matunga Workshop FOB** — first real photographs. New gallery group (8
+  frames); `matunga-workshop-fob-01.jpg` (the western approach) replaces the
+  Bonkode FOB stand-in as the card and hero image, and
+  `src/assets/project-matunga-workshop-fob.jpg` is deleted. This closes the
+  stand-in point open since #19b/#30. `WHITE HOUSE FOB 1.jpg` is now free for
+  the Bonkode page if wanted.
+- **Karjat RMC plant** — hero (`rmc-plant-01.jpg`) and a 9-frame gallery;
+  the "Plant photographs" placeholder is gone. What the photos and their file
+  names plainly show is now copy: the plant works fully under cover, twin
+  cement silos, covered bulker-unloading and mixer-loading bays. Capacity,
+  area/year and the equipment counts stay pending (PRE-LAUNCH 4d–4f).
+  Left out: "New tippers for RMC plant" (a dealer's handover photo).
+- **Vindhane plant** — gallery 2 → 12. "How it is equipped" gains a
+  metalizing shop, a painting shop and diesel-generator power, each from the
+  company's own labelled frames. Left out: "Dussera celebration at Vindhane"
+  (a staff lunch) and "Drain construction" (site drainage).
+- Captions describe what is in each frame, led by the company's file names.
+  `/resources/rmc-plant-karjat` images added to the sitemap.
+
+**Verification.** `npm run build` clean · `check-edit-keys` passes on
+`/resources/rmc-plant-karjat` (91 keys), `/resources/vindhane-plant` (124) and
+`/projects` (235) · `/projects/matunga-workshop-fob` renders the new hero and
+gallery · no horizontal overflow at 390 px on the RMC page · `check-placeholders`
+35 (the RMC photographs row closed).
