@@ -2500,3 +2500,50 @@ folders (Kharghar 8/3, Uran 6/3, Bonkode 10/4, Lush Meadows 3/1) is open.
 `/gallery` (165 keys), `/projects` (260), `/`, `/resources/vindhane-plant`,
 `/resources/rmc-plant-karjat` · no horizontal overflow at 390 px ·
 lightbox opens on `/gallery`.
+
+## 40. Every supplied photograph is now on the site
+
+**Asked 2026-09-28:** "it is my request that all photos that are supplied are
+to be used" — after seeing only 12 of 97 Matunga frames on the site. This
+**reverses the PHOTOS.md curation** (tiers A/B/C, "one frame is enough" for
+near-duplicate sets): from now on every still the company supplies is shown.
+
+**Done — 236 more photographs**, 321 on the site in all:
+
+| Group | Before | Now | Source |
+|---|---|---|---|
+| Matunga Workshop | 12 | 97 | the office-block shoot, interiors, night views |
+| Health, Safety & Environment *(new)* | — | 55 | Mankhurd 75,000 safe man-hours event (48) + HSE Department (7) |
+| Sanpada Carshed | 6 | 42 | the inauguration set |
+| Bonkode FOB | 4 | 28 | incl. 18 RAW-only frames, 2 design renderings |
+| Harbour Line FOBs & Trespass-Control | 9 | 23 | Vashi FOB folder, incl. 8 RAW-only |
+| Kharghar Golf Course | 3 | 13 | incl. 5 RAW-only, 3 presentation collages |
+| Vindhane plant | 12 | 16 | drain works, Dussehra lunch, team and fleet, EOT crane (B21) |
+| Nhava Sheva & Uran | 9 | 13 | |
+| Lush Meadows | 1 | 3 | presentation board, tower |
+| RMC plant | 9 | 10 | tipper handover |
+| Karanjade Health Care | 1 | 2 | `Ulwa Hospital/ULWE HOSPITAL.jpg`, which shows this building (#30) |
+
+- **RAW-only frames.** 31 photographs exist only as Canon `.CR2`.
+  `scripts/build-gallery.mjs` now reads a CR2's embedded full-size JPEG (the
+  camera's own rendering) and applies its orientation — no new dependency.
+  CR2s that have a JPG twin are not duplicated.
+- **Not used, because they are not photographs:** `Logo/` (the nine client
+  logos, already on `/clients` via `src/assets/clients/`) and the nine `.mp4`
+  videos (Panvel–Karjat's gallery is already frames cut from the Chowk ones).
+- The Health, Safety & Environment group links to `/hse`, and is a fourth
+  section on `/gallery` ("Safety on Site") and the last group of the
+  `/projects` Gallery tab.
+- `matunga-workshop-14` is cropped 5% at the foot to remove "Shot on OnePlus".
+- Captions describe each frame; near-identical frames (the 33 certificate
+  handovers, the Sanpada frontage series) share a few wordings — review
+  them in the in-page editor if the company wants names or detail.
+
+**Check with the company:** the certificate frames show individual workers
+by face — they supplied them, but a yes on publishing them is worth having.
+
+**Verification.** `npm run build` clean · `check-edit-keys` passes on
+`/gallery` (405 keys), `/projects` (497), both plant pages · 321 tiles on
+`/gallery`, no horizontal overflow at 390 px, page HTML ~550 KB (tiles are
+lazy-loaded) · sitemap 30 URLs, 605 images · repository +51 MB of
+derivatives.
