@@ -1,0 +1,62 @@
+---
+/* ============================================================
+   Our Philosophy — ink band, four cards
+   ------------------------------------------------------------
+   No design export covers this — see OPEN-QUESTIONS.md #20. Rather
+   than invent a fifth card variant, this reuses Hse.astro's own
+   grammar exactly: differentiator grammar at four across (a claim and
+   its argument, no numeral), card 1 with a 2px mint top border and no
+   left border, cards 2-4 with a hairline top border and a 1px left
+   hairline dividing 1|2, 2|3, 3|4. Same `p-32` / `d9` title measure
+   HSE uses for the same reason HSE does — four cards, not three, is
+   the capability card's measure on the differentiator card's grammar.
+
+   The heading is the company's own philosophy quote, set as the H2 —
+   the same "quote as heading" move Hse.astro makes with
+   '"Everyone Goes Home."' one band down.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { philosophy } = about;
+---
+
+<section class="bg-kd-ink py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={philosophy.kicker} editKey="about.philosophy.kicker" />
+
+    <h2
+      class="font-display text-d3 text-kd-mist mt-16"
+      data-edit="about.philosophy.heading"
+    >
+      {philosophy.heading}
+    </h2>
+
+    <ul class="grid grid-cols-4 mt-56">
+      {
+        philosophy.cards.map((card, i) => (
+          <li
+            class:list={[
+              "border-t-2 p-32",
+              i === 0 ? "border-t-kd-mint" : "border-t-kd-nav-border",
+              i > 0 && "border-l border-l-kd-nav-border",
+            ]}
+          >
+            <h3
+              class="font-display text-d9 text-kd-mist"
+              data-edit={`about.philosophy.cards.${i}.title`}
+            >
+              {card.title}
+            </h3>
+            <p
+              class="text-body-sm text-kd-fog mt-16"
+              data-edit={`about.philosophy.cards.${i}.body`}
+            >
+              {card.body}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

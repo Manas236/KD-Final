@@ -1,0 +1,113 @@
+---
+/* ============================================================
+   Our Journey — mist band, a three-chapter horizontal timeline
+   ------------------------------------------------------------
+   Three equal columns across the 1184px container with a 32px gutter,
+   and a 1px rail running the full width behind them. The export gave
+   the columns as absolutely-positioned boxes at left 0 / 405.33 /
+   810.66 with three stacked spacers behind them; that arithmetic is a
+   3 × 373.33 grid with a 32px gap, and it is built as a grid.
+
+   THE RAIL PASSES THROUGH THE MARKERS. The export put it 12px below
+   them, which reads as a stray line rather than a timeline; the markers
+   carry a 3px mist border, so on this band they punch a clean hole in
+   the rail wherever they sit on it. Logged in OPEN-QUESTIONS.md #15.
+
+   THE MARKERS ARE SQUARE, and this is the one place where the export
+   and the design system flatly contradict each other. The export draws
+   the markers as circles, with the pill-shaped corner utility on them.
+   DESIGN-SYSTEM §0 rule 2 forbids a corner radius anywhere and enforces
+   it with a grep that must return nothing — so building the export
+   literally would fail a build gate twice over: once for the property,
+   and once because this very comment would compile the utility it named
+   into the shipped stylesheet, which is the trap the note at the top of
+   tokens.css is about. Squared, flagged, and written up as the first
+   item of OPEN-QUESTIONS.md #16.
+
+   The 2px teal ring around each marker IS kept, even though §11 reserves
+   teal for project badges, because it is the only thing that makes the
+   marker visible: a mint mark on mist is the 1.2:1 problem of
+   OPEN-QUESTIONS.md #1, and a designer reaching for a second colour
+   here looks like a fix for exactly that. Also #16.
+
+   RESOLVED, #1: every mint element on this band — the marker fill, the
+   `CHAPTER I` labels, the bullet marks, and the Kicker — now uses
+   `--kd-mint-2`. The teal ring stays; it was doing real work, and the
+   darker fill only makes the marker read better inside it.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { journey } = about;
+---
+
+<section class="bg-kd-mist py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={journey.kicker} editKey="about.journey.kicker" tone="light" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16"
+      data-edit="about.journey.heading"
+    >
+      {journey.heading}
+    </h2>
+
+    <div class="relative mt-56">
+      {/* Behind the columns, centred on the 16px markers. */}
+      <span
+        class="absolute inset-x-0 top-8 h-1 bg-kd-divider-light"
+        aria-hidden="true"></span>
+
+      <ol class="relative grid grid-cols-3 gap-32">
+        {
+          journey.chapters.map((chapter, i) => (
+            <li>
+              <span
+                class="block size-16 bg-kd-mint-2 border-[3px] border-kd-mist outline-2 outline-kd-teal"
+                aria-hidden="true"
+              />
+
+              <p
+                class="text-num uppercase text-kd-mint-2 mt-32"
+                data-edit={`about.journey.chapters.${i}.chapter`}
+              >
+                {chapter.chapter}
+              </p>
+
+              <h3
+                class="font-display text-d7 text-kd-ink mt-8"
+                data-edit={`about.journey.chapters.${i}.title`}
+              >
+                {chapter.title}
+              </h3>
+
+              <p
+                class="text-label uppercase text-kd-slate mt-6"
+                data-edit={`about.journey.chapters.${i}.phase`}
+              >
+                {chapter.phase}
+              </p>
+
+              <ul class="mt-20 flex flex-col gap-8">
+                {chapter.points.map((point, j) => (
+                  <li class="flex items-start gap-8">
+                    <span
+                      class="block size-6 bg-kd-mint-2 shrink-0 mt-6"
+                      aria-hidden="true"
+                    />
+                    <span
+                      class="text-body-sm text-kd-slate-2"
+                      data-edit={`about.journey.chapters.${i}.points.${j}`}
+                    >
+                      {point}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

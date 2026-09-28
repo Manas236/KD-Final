@@ -1,0 +1,90 @@
+---
+/* ============================================================
+   /about hero — ink band, full-bleed image, 896px text column
+   ------------------------------------------------------------
+   The homepage hero's construction, one column wider: the backdrop is
+   the photograph at 20% opacity with the 90° ink overlay on top of it,
+   and the content sits in normal flow above both. The export placed the
+   image and the overlay at absolute pixel offsets inside a 1551px
+   frame; that is what centring and full-bleed compiled to at one
+   viewport width, not a design decision, so neither is reproduced.
+
+   THE PULL-QUOTE IS THE PAGE H1. This band has no other headline — the
+   export sets the quote at 72/77.76, which is `d1`, the page-H1 token —
+   so it is marked up as the <h1> rather than given a hidden heading to
+   sit under. It is the company's own words about itself, not a citation
+   of a third party, so there is no <blockquote> around it.
+
+   Three numbers here came from the export and were NOT used as given.
+   All three are logged in OPEN-QUESTIONS.md #15:
+
+     · top padding 160 -> pt-144. DESIGN-SYSTEM §7: a hero clears the
+       88px fixed nav with pt-144, and the export agrees on pb-80.
+     · image opacity 25% -> --kd-hero-image-opacity (now 35%, lightened
+       per client request — see tokens.css), and the overlay's 270°
+       gradient -> --kd-hero-overlay (90°). §11 allows exactly three
+       gradients and forbids adding a token; a right-lit overlay would
+       also put the text on the transparent half.
+     · the vertical rule's slate/40 -> --kd-ghost-outline (mist/35%),
+       the nearest alpha the palette actually contains.
+   ============================================================ */
+import { Image } from "astro:assets";
+import backdrop from "../../assets/about-mankhurd-workforce.jpg";
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { hero } = about;
+---
+
+<section class="relative bg-kd-ink overflow-hidden">
+  <div class="absolute inset-0" aria-hidden="true">
+    <Image
+      src={backdrop}
+      alt={hero.backdropAlt}
+      width={1551}
+      height={582}
+      loading="eager"
+      fetchpriority="high"
+      class="w-full h-full object-cover object-center"
+      style="opacity: var(--kd-hero-image-opacity)"
+    />
+    <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)">
+    </div>
+  </div>
+
+  <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+    <div class="w-896 max-w-full">
+      <Kicker label={hero.kicker} editKey="about.hero.kicker" />
+
+      <h1
+        class="font-display text-d1 text-kd-mist mt-16"
+        data-edit="about.hero.quote"
+      >
+        {hero.quote}
+      </h1>
+
+      <div class="flex flex-wrap items-start gap-24 mt-32">
+        <div class="w-320 max-w-full">
+          <p class="text-ui text-kd-mist" data-edit="about.hero.company.name">
+            {hero.company.name}
+          </p>
+          <p class="text-meta text-kd-fog mt-6" data-edit="about.hero.company.meta">
+            {hero.company.meta}
+          </p>
+        </div>
+
+        <span class="block w-1 h-40 bg-kd-ghost-outline shrink-0" aria-hidden="true"
+        ></span>
+
+        <div class="w-128">
+          <p class="text-ui text-kd-mint" data-edit="about.hero.founded.name">
+            {hero.founded.name}
+          </p>
+          <p class="text-meta text-kd-fog mt-6" data-edit="about.hero.founded.meta">
+            {hero.founded.meta}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

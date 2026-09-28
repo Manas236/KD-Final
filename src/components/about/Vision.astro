@@ -1,0 +1,53 @@
+---
+/* ============================================================
+   Our Vision & Mission — white band
+   ------------------------------------------------------------
+   No design export covers this — see OPEN-QUESTIONS.md #20. Built
+   from Story.astro's own text-block shape one band up: kicker, `d4`
+   heading, a max-w-560 column — rather than inventing a new one.
+
+   The two named statements (Our Vision / Our Mission) stack inside
+   that column as a small mint label over a paragraph — the exact
+   treatment Board.astro already uses for a director's role, one band
+   down, reused here for the same reason: a label over a block of text
+   has one pattern on this page, not two.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { vision } = about;
+---
+
+<section class="bg-white py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={vision.kicker} editKey="about.vision.kicker" tone="light" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16"
+      data-edit="about.vision.heading"
+    >
+      {vision.heading}
+    </h2>
+
+    <div class="mt-56 max-w-560 flex flex-col gap-32">
+      {
+        vision.sections.map((section, i) => (
+          <div>
+            <p
+              class="text-label uppercase text-kd-mint-2"
+              data-edit={`about.vision.sections.${i}.title`}
+            >
+              {section.title}
+            </p>
+            <p
+              class="text-body-sm text-kd-slate-2 mt-12"
+              data-edit={`about.vision.sections.${i}.body`}
+            >
+              {section.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

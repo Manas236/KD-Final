@@ -1,0 +1,110 @@
+---
+/* ============================================================
+   Our Story — white band
+   ------------------------------------------------------------
+   A single 560px measured column down the left of the 1184px band,
+   built in the order the export gives:
+
+     kicker
+     H2
+     lead paragraph      body, ink      — this one is the lead
+     two body paragraphs body-sm, slate-2
+     the ₹220 Cr figure  a 560px ink block
+     four stats          the light-band "about stat" pattern
+
+   THE RIGHT HALF OF THE BAND IS EMPTY, and that is what the export
+   says: the story block and the figure block are siblings in a
+   `flex-col`, not columns. It is the same shape — and the same 560 + 560
+   coincidence against a 1184px container — that OPEN-QUESTIONS.md #8
+   raised about the homepage's About band, and it is built literally
+   here for the same reason it was built literally there.
+
+   Two type calls, both logged in OPEN-QUESTIONS.md #15:
+
+     · the H2 came through at 30/36, which is `d5`, the dark-band stat
+       numeral. DESIGN-SYSTEM §8 gives the section-H2 role to `d4`, and
+       the export's own other two H2s are `d4`, so this one is `d4`.
+     · the four stat numerals came through at 20/28 (`d7`, the
+       differentiator title). The "about stat" pattern is `d6` over
+       `label-sm` — the pattern OPEN-QUESTIONS.md #5 named for exactly
+       this band — so they are `d6`.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { story } = about;
+---
+
+<section class="bg-white py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={story.kicker} editKey="about.story.kicker" tone="light" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16 max-w-560"
+      data-edit="about.story.heading"
+    >
+      {story.heading}
+    </h2>
+
+    <p class="text-body text-kd-ink mt-32 max-w-560" data-edit="about.story.lead">
+      {story.lead}
+    </p>
+
+    <p
+      class="text-body-sm text-kd-slate-2 mt-20 max-w-560"
+      data-edit="about.story.body1"
+    >
+      {story.body1}
+    </p>
+
+    <p
+      class="text-body-sm text-kd-slate-2 mt-20 max-w-560"
+      data-edit="about.story.body2"
+    >
+      {story.body2}
+    </p>
+
+    {/* The one figure set on ink. 560px overall — 496px of content
+        inside 32px of padding — so it lines up with the column above. */}
+    <div class="bg-kd-ink p-32 mt-40 max-w-560">
+      <p
+        class="font-display text-d3 text-kd-mint"
+        data-edit="about.story.figure.value"
+      >
+        {story.figure.value}
+      </p>
+      <p class="text-ui text-kd-mist mt-8" data-edit="about.story.figure.label">
+        {story.figure.label}
+      </p>
+      <span class="block w-40 h-1 bg-kd-ghost-outline mt-16" aria-hidden="true"
+      ></span>
+      <p
+        class="text-body-sm text-kd-fog mt-16"
+        data-edit="about.story.figure.body"
+      >
+        {story.figure.body}
+      </p>
+    </div>
+
+    <dl class="mt-40 flex flex-col gap-24 max-w-560">
+      {
+        story.stats.map((stat, i) => (
+          <div class="border-t border-t-kd-divider-light pt-16">
+            <dd
+              class="font-display text-d6 text-kd-ink"
+              data-edit={`about.story.stats.${i}.value`}
+            >
+              {stat.value}
+            </dd>
+            <dt
+              class="text-label-sm text-kd-slate mt-6"
+              data-edit={`about.story.stats.${i}.label`}
+            >
+              {stat.label}
+            </dt>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

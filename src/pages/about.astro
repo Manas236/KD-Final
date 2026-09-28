@@ -1,0 +1,61 @@
+---
+/* ============================================================
+   /about
+   ------------------------------------------------------------
+   The band stack, in the order the design export gives it:
+
+     nav (ink) → hero (ink + image) → story (white) → journey (mist)
+     → vision (white) → philosophy (ink) → board (white) → HSE (ink)
+     → CTA (ink) → footer (ink-deep)
+
+   ONE OF THOSE BOUNDARIES BREAKS THE BAND RHYTHM in DESIGN-SYSTEM §2 —
+   HSE → CTA is ink on ink. What the export draws, built as drawn, and
+   written up in OPEN-QUESTIONS.md #17 with the one-word fix it would
+   take. The journey → board violation #17 also flagged (mist then
+   white, two light bands running together) no longer exists: vision
+   and philosophy — new bands with no export behind them, added per
+   OPEN-QUESTIONS.md #20 — sit between them as white then ink, which
+   restores the alternation on both sides rather than breaking it
+   further. See #20.
+
+   `page="about"` on the chrome is not decoration: it is the first
+   segment of every slot key the nav and the footer write, so the nav's
+   labels are `about.nav.*` here and `home.nav.*` on the homepage. See
+   the note at the top of src/data/about.ts.
+
+   Each band paints its own surface and holds its own 1280px container,
+   so this file is a list and nothing else.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Hero from "../components/about/Hero.astro";
+import Story from "../components/about/Story.astro";
+import Journey from "../components/about/Journey.astro";
+import Vision from "../components/about/Vision.astro";
+import Philosophy from "../components/about/Philosophy.astro";
+import Board from "../components/about/Board.astro";
+import Hse from "../components/about/Hse.astro";
+import Cta from "../components/about/Cta.astro";
+import { about } from "../data/about";
+/* The hero's backdrop, doubling as the share card — the same file
+   components/about/Hero.astro draws. */
+import shareImage from "../assets/about-mankhurd-workforce.jpg";
+
+export const prerender = false;
+---
+
+<BaseLayout title={about.meta.title} description={about.meta.description} image={shareImage}>
+  <Nav page="about" />
+  <main>
+    <Hero />
+    <Story />
+    <Journey />
+    <Vision />
+    <Philosophy />
+    <Board />
+    <Hse />
+    <Cta />
+  </main>
+  <SiteFooter page="about" />
+</BaseLayout>

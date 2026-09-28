@@ -1,0 +1,47 @@
+---
+/* ============================================================
+   Vision 2030 — ink band, centred closing CTA
+   ------------------------------------------------------------
+   The centred kicker variant, a `d2` headline and the large mint
+   button, exactly as the homepage's closing band. Centred with flow
+   layout: the export put the button at `left: 485px`, which is what
+   centring compiled to at one frame width, not a position.
+
+   The export sets the button label in white. Buttons are the one place
+   DESIGN-SYSTEM §6 states the pair outright — mint fill, `ink-deep`
+   label — and white on mint is the same 1.2:1 that OPEN-QUESTIONS.md #1
+   is about, so `text-kd-ink-deep` it is.
+
+   THIS BAND IS INK AND SO IS THE ONE ABOVE IT. That breaks "never two
+   adjacent bands of the same surface" (§2), and it is what the export
+   does: HSE and Vision 2030 are two ink bands in a row, so the page
+   closes on 192px of unbroken ink between the HSE cards and this
+   kicker. Built as drawn; OPEN-QUESTIONS.md #17.
+   ============================================================ */
+import { about } from "../../data/about";
+import Arrow from "../Arrow.astro";
+import Kicker from "../Kicker.astro";
+
+const { cta } = about;
+---
+
+<section class="bg-kd-ink py-96">
+  <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+    <Kicker label={cta.kicker} editKey="about.cta.kicker" variant="centred" />
+
+    <h2
+      class="font-display text-d2 text-kd-mist mt-24"
+      data-edit="about.cta.headline"
+    >
+      {cta.headline}
+    </h2>
+
+    <a
+      href={cta.button.href}
+      class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+    >
+      <span data-edit="about.cta.button.label">{cta.button.label}</span>
+      <Arrow />
+    </a>
+  </div>
+</section>

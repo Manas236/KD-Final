@@ -1,0 +1,76 @@
+---
+/* ============================================================
+   Board of Directors — white band, a ruled 2×2
+   ------------------------------------------------------------
+   Four cards across the 1184px container in two columns of 592, each
+   with 40px of padding — the differentiator card's padding, and its
+   grammar too: a claim and its argument, no numeral, dividers drawn as
+   the cards' own borders rather than as gutters. See DESIGN-SYSTEM §4.3.
+
+   THE BORDERS ARE THE GRID. Every card carries a 1px top border and the
+   left-hand column carries a 1px right border; that is all a ruled 2×2
+   needs. The export also put a bottom border on the top row, which
+   would double up against the second row's top border — dropped, since
+   the line it draws is already there.
+
+   The 40px mint rule at the head of each card is set at 32 — `--kd-rule`.
+   The design has a mint accent rule in two lengths, 32 and 48, and a
+   third would be a new token. OPEN-QUESTIONS.md #15.
+
+   RESOLVED, #1: this band is white, where `--kd-mint` is ~1.2:1. The
+   head rule, the role labels, and the Kicker all use `--kd-mint-2`.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { board } = about;
+---
+
+<section class="bg-white py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={board.kicker} editKey="about.board.kicker" tone="light" />
+
+    <h2
+      class="font-display text-d4 text-kd-ink mt-16"
+      data-edit="about.board.heading"
+    >
+      {board.heading}
+    </h2>
+
+    <ul class="grid grid-cols-2 mt-56">
+      {
+        board.directors.map((director, i) => (
+          <li
+            class:list={[
+              "border-t border-t-kd-card-border-light p-40",
+              i % 2 === 0 && "border-r border-r-kd-card-border-light",
+            ]}
+          >
+            <span class="block w-32 h-1 bg-kd-mint-2" aria-hidden="true" />
+
+            <h3
+              class="font-display text-d7 text-kd-ink mt-24"
+              data-edit={`about.board.directors.${i}.name`}
+            >
+              {director.name}
+            </h3>
+
+            <p
+              class="text-label uppercase text-kd-mint-2 mt-6"
+              data-edit={`about.board.directors.${i}.role`}
+            >
+              {director.role}
+            </p>
+
+            <p
+              class="text-body-sm text-kd-slate-2 mt-16"
+              data-edit={`about.board.directors.${i}.bio`}
+            >
+              {director.bio}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

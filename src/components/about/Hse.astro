@@ -1,0 +1,70 @@
+---
+/* ============================================================
+   Health, Safety & Environment — ink band, four cards
+   ------------------------------------------------------------
+   Differentiator grammar (DESIGN-SYSTEM §4.3) at four across instead of
+   three: a claim and its argument, no numeral, no gap, the dividers
+   drawn as the cards' own left borders.
+
+     card 1   2px MINT top border, no left border
+     cards 2-4  2px hairline top border, 1px left hairline
+
+   so the mint marks the start of the row rather than decorating all
+   four, and the left borders divide 1|2, 2|3, 3|4 without drawing a
+   line down the outside of the block.
+
+   TWO DEPARTURES FROM §4.3, both from the export and both because there
+   are four cards here rather than three: the top border is 2px, not 3,
+   and the padding is 32 with a `d9` title, not 40 with `d7`. That is the
+   capability card's measure on the differentiator card's grammar. It is
+   the fourth card variant in a design system that says there are three,
+   so it is written up in OPEN-QUESTIONS.md #16.
+
+   The band's own heading is a quotation set at 48/48, which is `d3` —
+   the pull-quote token — and that is what it is.
+   ============================================================ */
+import { about } from "../../data/about";
+import Kicker from "../Kicker.astro";
+
+const { hse } = about;
+---
+
+<section class="bg-kd-ink py-96">
+  <div class="max-w-kd mx-auto px-48">
+    <Kicker label={hse.kicker} editKey="about.hse.kicker" />
+
+    <h2
+      class="font-display text-d3 text-kd-mist mt-16"
+      data-edit="about.hse.heading"
+    >
+      {hse.heading}
+    </h2>
+
+    <ul class="grid grid-cols-4 mt-56">
+      {
+        hse.cards.map((card, i) => (
+          <li
+            class:list={[
+              "border-t-2 p-32",
+              i === 0 ? "border-t-kd-mint" : "border-t-kd-nav-border",
+              i > 0 && "border-l border-l-kd-nav-border",
+            ]}
+          >
+            <h3
+              class="font-display text-d9 text-kd-mist"
+              data-edit={`about.hse.cards.${i}.title`}
+            >
+              {card.title}
+            </h3>
+            <p
+              class="text-body-sm text-kd-fog mt-16"
+              data-edit={`about.hse.cards.${i}.body`}
+            >
+              {card.body}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
