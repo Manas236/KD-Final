@@ -61,6 +61,7 @@ const PAGES = {
      `resources` prefix, and the page's own keys are `resources.plant.*`
      — see the note at the top of src/data/plant.ts. */
   "/resources/vindhane-plant": { module: "../src/data/plant.ts", exportName: "plant", prefix: "resources" },
+  "/resources/rmc-plant-karjat": { module: "../src/data/rmc-plant.ts", exportName: "rmcPlant", prefix: "resources" },
   /* The 404 page. Loaded at its own address for the check; on the site
      it renders for any address that is not a page (src/pages/404.astro). */
   "/404": { module: "../src/data/not-found.ts", exportName: "notFound", prefix: "not-found" },

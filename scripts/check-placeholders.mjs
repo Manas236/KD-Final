@@ -33,6 +33,7 @@ const MODULES = [
   { file: "../src/data/pages.ts", exportName: "contact", route: "/contact" },
   { file: "../src/data/pages.ts", exportName: "csr", route: "/csr" },
   { file: "../src/data/plant.ts", exportName: "plant", route: "/resources/vindhane-plant" },
+  { file: "../src/data/rmc-plant.ts", exportName: "rmcPlant", route: "/resources/rmc-plant-karjat" },
   { file: "../src/data/not-found.ts", exportName: "notFound", route: "/404" },
   /* Keyed by slug, one page per key — `each` gives every page its own
      route, /projects/<slug>, instead of one route for the export. */

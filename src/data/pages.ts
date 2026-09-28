@@ -189,8 +189,7 @@ export const resources: InfoPageCopy = {
             "Welding, bending and cutting lines producing girders, trusses, roofing systems and " +
             "sheds for railway structures, bridges and FOBs — with greater control over quality, " +
             "cost and delivery schedules.",
-          /* The plant's own page — OPEN-QUESTIONS.md #33. The RMC plant
-             has no page: no photograph and one sentence on record. */
+          /* The plant's own page — OPEN-QUESTIONS.md #33. */
           links: [{ label: "About the plant", href: "/resources/vindhane-plant" }],
         },
         {
@@ -198,6 +197,8 @@ export const resources: InfoPageCopy = {
           body:
             "Ready-mix concrete supply with greater control over quality, consistency, availability " +
             "and project scheduling, reducing dependence on external suppliers.",
+          /* Its own page since 2026-09-28 — OPEN-QUESTIONS.md #37. */
+          links: [{ label: "About the plant", href: "/resources/rmc-plant-karjat" }],
         },
       ],
     },

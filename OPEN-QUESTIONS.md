@@ -2395,3 +2395,30 @@ answers 200, a tile click lands on its page, the lightbox opens on a
 detail page and steps through its own group, the Gallery tab shows 12
 groups, an unknown slug still 302s to `/projects` · no horizontal overflow
 at 390 px · sitemap 20 → 28 pages, 57 → 75 images.
+
+## 37. A page for the Karjat RMC plant
+
+**Asked 2026-09-28:** the RMC Plant — Karjat card on `/resources` should have
+its own page, like Vindhane; photographs are coming.
+
+**Done.** `/resources/rmc-plant-karjat` (`src/data/rmc-plant.ts`,
+`src/pages/resources/rmc-plant-karjat.astro`) — the Vindhane page's bands
+without its image hero or erection band: ink hero with two pending figure
+tiles, white overview (the doc's one sentence plus the integrated-resources
+line, a "what the plant gives our projects" list, a pending equipment card,
+a pending gallery card), ink closing band to `/capabilities`. The `/resources`
+card gained an "About the plant" link. Keys `resources.rmc.*`; registered in
+`editable.ts`, `check-edit-keys.mjs`, `check-placeholders.mjs`; the sitemap
+picks the route up by itself. PRE-LAUNCH rows 4d–4g.
+
+**Photographs.** Originals go in `RMC Plant Karjat/` (git-ignored, like every
+raw folder). Because git cannot see ignored folders, `npm run media:scan`
+writes `raw-media.manifest.txt` (path + size of every original, committed);
+`git diff raw-media.manifest.txt` after a scan lists what was dropped in.
+When they arrive: derivatives into `src/assets/gallery/rmc-plant-*.jpg` via
+`scripts/build-gallery.mjs`, fill `rmc.gallery`, drop `galleryPending`, and
+give the hero an image the way `vindhane-plant.astro` does.
+
+**Verification.** `npm run build` clean · `check-edit-keys` passes on
+`/resources/rmc-plant-karjat` (80 keys) and `/resources` (70) ·
+`check-placeholders` lists the four new rows.
