@@ -83,6 +83,7 @@ export const KNOWN_PATHS: readonly string[] = [
   "/csr",
   "/resources/vindhane-plant",
   "/resources/rmc-plant-karjat",
+  "/gallery",
 ];
 
 const KNOWN_PATH_SET = new Set(KNOWN_PATHS);

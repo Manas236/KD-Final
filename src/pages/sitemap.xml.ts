@@ -46,6 +46,7 @@ import { socialPages } from "../data/social-projects";
 import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
 import { rmcPlant } from "../data/rmc-plant";
+import { galleryPage } from "../data/gallery-page";
 
 export const prerender = false;
 
@@ -57,6 +58,7 @@ const TILE = { width: 800, height: 552 };
 
 const PLANT_ROUTE = "/resources/vindhane-plant";
 const RMC_ROUTE = "/resources/rmc-plant-karjat";
+const GALLERY_ROUTE = "/gallery";
 
 interface SitemapImage {
   readonly loc: string;
@@ -114,6 +116,24 @@ async function projectImages(
   return out;
 }
 
+/* /gallery: every tile on the page, at the tile rendition — the same
+   photographs the project and plant entries list, here under the page
+   that shows them all together. */
+async function galleryPageImages(origin: URL): Promise<SitemapImage[]> {
+  const out: SitemapImage[] = [];
+  for (const section of galleryPage.sections) {
+    for (const group of section.groups) {
+      for (const photo of group.photos) {
+        out.push({
+          loc: await rendition(galleryImage(photo.file), TILE, origin),
+          title: `${group.project} — ${photo.caption}`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
 function escapeXml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -162,7 +182,9 @@ export const GET: APIRoute = async ({ site }) => {
         ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, plant.plant.gallery, site)
         : route === RMC_ROUTE
           ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, rmc.gallery, site)
-          : [];
+          : route === GALLERY_ROUTE
+            ? await galleryPageImages(site)
+            : [];
     entries.push({ loc: new URL(route, site).href, images });
   }
 

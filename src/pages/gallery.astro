@@ -1,0 +1,139 @@
+---
+/* ============================================================
+   /gallery — every photograph on the site
+   ------------------------------------------------------------
+   Added at the user's request on 2026-09-28 (OPEN-QUESTIONS.md #39).
+   No design export covers it; every band is an existing pattern:
+
+     nav (ink) -> hero (ink: kicker, H1, sub, jump links) -> photographs
+     (white: three sections split by hairlines, each group a linked
+     heading over GalleryGrid, as projects/Gallery.astro draws them) ->
+     CTA (ink, centred, InfoPage's) -> footer (ink-deep)
+
+   Copy and groups: src/data/gallery-page.ts. Keys are `gallery.*`.
+   Registered in scripts/check-edit-keys.mjs, scripts/check-placeholders.mjs
+   and src/lib/editable.ts; the sitemap lists every photograph here.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Kicker from "../components/Kicker.astro";
+import Arrow from "../components/Arrow.astro";
+import GalleryGrid from "../components/GalleryGrid.astro";
+import Lightbox from "../components/Lightbox.astro";
+import { galleryPage as copy } from "../data/gallery-page";
+import { galleryHref } from "../data/gallery";
+import { galleryImage } from "../lib/gallery-images";
+import { slugify } from "../lib/slug";
+
+export const prerender = false;
+
+const K = "gallery";
+const { hero, sections, cta } = copy;
+const anchor = (s: { jump: string }) => slugify(s.jump);
+
+/* Share image: the first railway photograph. */
+const first = sections[0].groups[0];
+const shareImg = galleryImage(first.photos[0].file);
+---
+
+<BaseLayout
+  title={copy.meta.title}
+  description={copy.meta.description}
+  image={shareImg}
+  imageAlt={`${first.project} — ${first.photos[0].caption}`}
+  breadcrumbs={[
+    { name: "Home", path: "/" },
+    { name: hero.kicker, path: "/gallery" },
+  ]}
+>
+  <Nav page={K} />
+  <main>
+    <section class="bg-kd-ink">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
+        <div class="max-w-720">
+          <Kicker label={hero.kicker} editKey={`${K}.hero.kicker`} />
+          <h1 class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16" data-edit={`${K}.hero.title`}>
+            {hero.title}
+          </h1>
+          <p class="text-body-lg text-kd-fog mt-24" data-edit={`${K}.hero.sub`}>
+            {hero.sub}
+          </p>
+        </div>
+        <ul class="flex flex-wrap gap-8 mt-40">
+          {sections.map((section, s) => (
+            <li>
+              <a
+                href={`#${anchor(section)}`}
+                class="inline-flex items-center px-16 py-8 text-kicker uppercase border border-kd-ghost-outline text-kd-mist"
+              >
+                <span data-edit={`${K}.sections.${s}.jump`}>{section.jump}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-white py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col gap-56">
+        {sections.map((section, s) => (
+          <div
+            id={anchor(section)}
+            class:list={["scroll-mt-112", s > 0 && "pt-56 border-t border-kd-divider-light"]}
+          >
+            <Kicker label={section.kicker} editKey={`${K}.sections.${s}.kicker`} tone="light" />
+            <h2
+              class="font-display text-d4 min-[900px]:text-d3 text-kd-ink mt-16"
+              data-edit={`${K}.sections.${s}.heading`}
+            >
+              {section.heading}
+            </h2>
+
+            <div class="flex flex-col gap-48 mt-48">
+              {section.groups.map((group, g) => (
+                <div>
+                  <h3 class="font-display text-d6 text-kd-ink">
+                    <a href={galleryHref(group)} class="inline-flex items-center gap-12">
+                      <span data-edit={`${K}.sections.${s}.groups.${g}.project`}>{group.project}</span>
+                      <span class="inline-flex text-kd-mint-2" aria-hidden="true">
+                        <Arrow />
+                      </span>
+                    </a>
+                  </h3>
+                  <div class="mt-24">
+                    <GalleryGrid
+                      project={group.project}
+                      photos={group.photos}
+                      group={slugify(group.project)}
+                      keyPrefix={`${K}.sections.${s}.groups.${g}.photos`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-kd-ink py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col items-center text-center">
+        <Kicker label={cta.kicker} editKey={`${K}.cta.kicker`} variant="centred" />
+        <h2 class="font-display text-d4 min-[900px]:text-d2 text-kd-mist mt-24" data-edit={`${K}.cta.headline`}>
+          {cta.headline}
+        </h2>
+        <a
+          href={cta.button.href}
+          class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+        >
+          <span data-edit={`${K}.cta.button.label`}>{cta.button.label}</span>
+          <Arrow />
+        </a>
+      </div>
+    </section>
+
+    <Lightbox labels={copy.lightbox} keyPrefix={`${K}.lightbox`} />
+  </main>
+  <SiteFooter page={K} />
+</BaseLayout>

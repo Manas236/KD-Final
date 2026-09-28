@@ -62,6 +62,7 @@ const PAGES = {
      — see the note at the top of src/data/plant.ts. */
   "/resources/vindhane-plant": { module: "../src/data/plant.ts", exportName: "plant", prefix: "resources" },
   "/resources/rmc-plant-karjat": { module: "../src/data/rmc-plant.ts", exportName: "rmcPlant", prefix: "resources" },
+  "/gallery": { module: "../src/data/gallery-page.ts", exportName: "galleryPage", prefix: "gallery" },
   /* The 404 page. Loaded at its own address for the check; on the site
      it renders for any address that is not a page (src/pages/404.astro). */
   "/404": { module: "../src/data/not-found.ts", exportName: "notFound", prefix: "not-found" },
