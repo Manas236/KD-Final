@@ -24,7 +24,8 @@
     "check:shift-cause": "node scripts/diagnose-shift.mjs",
     "fonts:measure": "node scripts/measure-font-fallbacks.mjs",
     "logos:build": "node scripts/build-client-logos.mjs",
-    "favicon:build": "node scripts/build-favicon.mjs"
+    "favicon:build": "node scripts/build-favicon.mjs",
+    "media:scan": "node scripts/raw-media-manifest.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.5",
