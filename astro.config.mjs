@@ -4,7 +4,6 @@ import { loadEnv } from 'vite';
 
 import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
-import sitemap from '@astrojs/sitemap';
 
 /* Config-time env. `loadEnv` is Vite's reader rather than dotenv's: it is
    what runs before the config object exists, so values here — the port the
@@ -18,9 +17,13 @@ const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 /* 4321 belongs to another project's dev server on this machine. */
 const PORT = Number(env.PORT) || 4322;
 
-/* Sitemap and canonical URLs need an absolute origin. Deployment is out of
-   scope for this build, so the default is the local dev origin and the real
-   one arrives through the environment — see OPEN-QUESTIONS.md. */
+/* Sitemap, robots.txt, canonical URLs, og:image and the JSON-LD all need an
+   absolute origin. Deployment is out of scope for this build, so the default
+   is the local dev origin and the real one arrives through the environment —
+   see OPEN-QUESTIONS.md #13. `npm run build:release` refuses to build while
+   it is unset (scripts/check-site-url.mjs): every one of those would
+   otherwise say localhost, and a canonical of localhost tells the crawler
+   the real domain is a copy. */
 const SITE = env.PUBLIC_SITE_URL || `http://localhost:${PORT}`;
 
 // https://astro.build/config
@@ -57,7 +60,10 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()]
-  },
+  }
 
-  integrations: [sitemap()]
+  /* No sitemap integration. @astrojs/sitemap lists the routes it can see
+     at build time, and with every page server-rendered that was the ten
+     static ones and none of /projects/[slug]. The sitemap is served instead,
+     from the same data the pages render — src/pages/sitemap.xml.ts. */
 });

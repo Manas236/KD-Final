@@ -14,8 +14,8 @@
         nothing else. The editor refuses to mark anything richer,
         because assigning textContent to it would delete its children,
         so a key on a non-leaf is a slot that silently does not work.
-     4. Every string in src/data/home.ts is rendered exactly once, as
-        the whole text of some slot.
+     4. Every string in the page's copy module is rendered exactly once,
+        as the whole text of some slot.
 
    On (4), "exactly once" means once as a COMPLETE slot value, not once
    as a substring of the page. The approved copy repeats the company's
@@ -29,10 +29,65 @@
    ============================================================ */
 import { chromium } from "playwright";
 import "dotenv/config";
-import { home } from "../src/data/home.ts";
 
 const ORIGIN = process.argv[2] || `http://localhost:${process.env.PORT || 4322}`;
 const PAGE = process.argv[3] || "/";
+
+/* ------------------------------------------------------------
+   Which copy module answers for which route
+   ------------------------------------------------------------
+   Hardcoded rather than derived, the same way KNOWN_PATHS is in
+   src/lib/editable.ts, and for the same reason: the check is only worth
+   anything if the page it loads and the object it compares against were
+   named together. `prefix` is the first segment of every slot key on
+   that page, which by the naming rule in DESIGN-SYSTEM §9 is the page.
+
+   Add a route here when you add one to src/pages, and remember that the
+   shared chrome (Nav, SiteFooter) renders under the page's own prefix —
+   which is why each page's copy module re-exports home.ts's `nav` and
+   `footer` rather than the components hardcoding "home.".
+   ------------------------------------------------------------ */
+const PAGES = {
+  "/": { module: "../src/data/home.ts", exportName: "home", prefix: "home" },
+  "/about": { module: "../src/data/about.ts", exportName: "about", prefix: "about" },
+  "/projects": { module: "../src/data/projects.ts", exportName: "projects", prefix: "projects" },
+  "/capabilities": { module: "../src/data/pages.ts", exportName: "capabilities", prefix: "capabilities" },
+  "/resources": { module: "../src/data/pages.ts", exportName: "resources", prefix: "resources" },
+  "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse" },
+  "/clients": { module: "../src/data/pages.ts", exportName: "clients", prefix: "clients" },
+  "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
+  "/csr": { module: "../src/data/pages.ts", exportName: "csr", prefix: "csr" },
+  /* A child of /resources: Nav and SiteFooter render there under the
+     `resources` prefix, and the page's own keys are `resources.plant.*`
+     — see the note at the top of src/data/plant.ts. */
+  "/resources/vindhane-plant": { module: "../src/data/plant.ts", exportName: "plant", prefix: "resources" },
+  /* The 404 page. Loaded at its own address for the check; on the site
+     it renders for any address that is not a page (src/pages/404.astro). */
+  "/404": { module: "../src/data/not-found.ts", exportName: "notFound", prefix: "not-found" },
+};
+
+/* The "Beyond the railway" project pages — one route per tile on
+   /projects, all from one module (OPEN-QUESTIONS.md #36). Its export is
+   keyed by slug, each value one page's whole copy, so `pick` names the
+   page. Enumerated from the module rather than listed, because the
+   module itself refuses to build without a page for every tile. The
+   railway project pages are still not here — see the note in
+   src/components/projects/ProjectDetailPage.astro. */
+const SOCIAL = "../src/data/social-projects.ts";
+for (const slug of Object.keys((await import(SOCIAL)).socialPages)) {
+  PAGES[`/projects/${slug}`] = { module: SOCIAL, exportName: "socialPages", pick: slug, prefix: "projects" };
+}
+
+const route = PAGES[PAGE.replace(/(.)\/+$/, "$1")];
+if (!route) {
+  console.log(
+    `  FAIL  no copy module registered for "${PAGE}" — known: ${Object.keys(PAGES).join(", ")}`
+  );
+  process.exit(1);
+}
+
+const exported = (await import(route.module))[route.exportName];
+const copy = route.pick ? exported[route.pick] : exported;
 
 let failures = 0;
 const fail = (msg) => {
@@ -55,7 +110,7 @@ function leaves(node, path = [], out = []) {
   return out;
 }
 
-const { meta, ...body } = home;
+const { meta, ...body } = copy;
 const copyLeaves = leaves(body);
 
 async function launch() {
@@ -162,12 +217,15 @@ else
    2) and a stray second copy of a value would have to come from a slot
    whose own copy value it is not. */
 const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
-const attrPaths = /\.(href|alt|logoAlt|backdropAlt)$/;
+/* `file` names a gallery image (src/data/gallery.ts) and `logo` a client
+   mark (src/data/pages.ts) — an attribute's source, like `alt`, never a
+   run of text. */
+const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo)$/;
 const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path));
 
 let bad = 0;
 for (const leaf of rendered) {
-  const key = "home." + leaf.path;
+  const key = route.prefix + "." + leaf.path;
   const slot = slotByKey.get(key);
   const wanted = leaf.value.replace(/\s+/g, " ").trim();
   if (!slot) {
@@ -182,10 +240,12 @@ if (!bad) pass(`all ${rendered.length} copy strings render into their own slot, 
 
 /* A slot on the page whose key is not in home.ts is a hardcoded string
    or a stale key — both are defects. */
-const copyKeys = new Set(rendered.map((l) => "home." + l.path));
+const copyKeys = new Set(rendered.map((l) => route.prefix + "." + l.path));
 const orphans = report.slots.filter((s) => !copyKeys.has(s.key));
-if (orphans.length === 0) pass("no slot on the page is missing from home.ts");
-else for (const o of orphans) fail(`slot "${o.key}" has no matching string in home.ts`);
+if (orphans.length === 0)
+  pass(`no slot on the page is missing from ${route.module.replace("../", "")}`);
+else for (const o of orphans)
+  fail(`slot "${o.key}" has no matching string in ${route.module.replace("../", "")}`);
 
 /* Informational: distinct slots that legitimately carry the same words. */
 const sameWords = new Map();
