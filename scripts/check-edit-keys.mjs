@@ -57,6 +57,15 @@ const PAGES = {
   "/clients": { module: "../src/data/pages.ts", exportName: "clients", prefix: "clients" },
   "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
   "/csr": { module: "../src/data/pages.ts", exportName: "csr", prefix: "csr" },
+  /* `runtime`: the job-posting cards come from the database, not the
+     module (src/pages/careers.astro), so keys and copy under these
+     paths are neither required on the page nor orphans when present. */
+  "/careers": {
+    module: "../src/data/pages.ts",
+    exportName: "careers",
+    prefix: "careers",
+    runtime: ["jobs.", "openings."],
+  },
   /* A child of /resources: Nav and SiteFooter render there under the
      `resources` prefix, and the page's own keys are `resources.plant.*`
      — see the note at the top of src/data/plant.ts. */
@@ -219,11 +228,16 @@ else
    2) and a stray second copy of a value would have to come from a slot
    whose own copy value it is not. */
 const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
-/* `file` names a gallery image (src/data/gallery.ts) and `logo` a client
-   mark (src/data/pages.ts) — an attribute's source, like `alt`, never a
-   run of text. */
-const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo)$/;
-const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path));
+/* `file` names a gallery image (src/data/gallery.ts), `logo` a client
+   mark (src/data/pages.ts) and `id` a section's element id
+   (InfoPage.astro) — an attribute's source, like `alt`, never a run of
+   text. `video` names a clip in public/video/ and `tone` a band surface
+   (both /hse, src/components/hse/Record.astro). `parent` is the href a
+   nav link drops down from (home.ts nav.links). */
+const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|id|video|tone|parent)$/;
+const runtime = route.runtime ?? [];
+const isRuntime = (path) => runtime.some((r) => path.startsWith(r));
+const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path) && !isRuntime(l.path));
 
 let bad = 0;
 for (const leaf of rendered) {
@@ -243,7 +257,9 @@ if (!bad) pass(`all ${rendered.length} copy strings render into their own slot, 
 /* A slot on the page whose key is not in home.ts is a hardcoded string
    or a stale key — both are defects. */
 const copyKeys = new Set(rendered.map((l) => route.prefix + "." + l.path));
-const orphans = report.slots.filter((s) => !copyKeys.has(s.key));
+const orphans = report.slots.filter(
+  (s) => !copyKeys.has(s.key) && !isRuntime(s.key.slice(route.prefix.length + 1))
+);
 if (orphans.length === 0)
   pass(`no slot on the page is missing from ${route.module.replace("../", "")}`);
 else for (const o of orphans)

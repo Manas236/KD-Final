@@ -365,9 +365,8 @@ export const socialGalleries: readonly ProjectGallery[] = [
    above changes index. */
 const railwayLater: readonly ProjectGallery[] = [
   {
-    project: "Matunga Workshop FOB",
+    project: "Matunga Z-Bridge",
     photos: [
-      { file: "matunga-workshop-fob-01.jpg", caption: "The western approach, granite-paved between steel railings" },
       { file: "matunga-workshop-fob-02.jpg", caption: "The covered bridge running the length of the workshop yard, ventilators along its roof" },
       { file: "matunga-workshop-fob-03.jpg", caption: "Granite flooring and toughened-glass side screens on the deck" },
       { file: "matunga-workshop-fob-04.jpg", caption: "Steel girders set in place during erection" },
@@ -430,6 +429,20 @@ export const rmcPlantPhotos: readonly GalleryPhoto[] = [
 export const plantGalleries: readonly ProjectGallery[] = [
   { project: "Vindhane Steel Fabrication Plant", href: "/resources/vindhane-plant", photos: vindhanePlantPhotos },
   { project: "RMC Plant — Karjat", href: "/resources/rmc-plant-karjat", photos: rmcPlantPhotos },
+];
+
+/* The EHS team's September 2026 site reports — also the photo band on
+   /hse (pages.ts). Chosen, not all supplied: no worker names, injuries,
+   individual health screening, open corrective actions or signed audit
+   sheets (OPEN-QUESTIONS.md #42). */
+export const hseReportPhotos: readonly GalleryPhoto[] = [
+  { file: "hse-national-safety-week-karjat.jpg", caption: "National Safety Week at Karjat — 3,00,000 safe man-hours without a lost-time injury" },
+  { file: "hse-national-safety-day-mankhurd.jpg", caption: "National Safety Day at Mankhurd Station — safety pledge and awards" },
+  { file: "hse-medical-camp-mankhurd.jpg", caption: "Free medical camp at Mankhurd for 88 workers and staff" },
+  { file: "hse-lifting-training-govandi.jpg", caption: "Lifting procedure and tools-and-tackles training at Govandi" },
+  { file: "hse-air-monitoring-mankhurd.jpg", caption: "Ambient air-quality monitoring on the Mankhurd site" },
+  { file: "hse-world-environment-day.jpg", caption: "The site workforce marks World Environment Day" },
+  { file: "hse-worker-recognition.jpg", caption: "Prize distribution for safe work on site" },
 ];
 
 /* Health, Safety & Environment — the Mankhurd 75,000 safe man-hours
@@ -496,6 +509,7 @@ export const hseGalleries: readonly ProjectGallery[] = [
       { file: "hse-53.jpg", caption: "Workers and engineers around the site-office table" },
       { file: "hse-54.jpg", caption: "Site perimeter secured with sheet barricading" },
       { file: "hse-55.jpg", caption: "Sheet barricading around the site boundary" },
+      ...hseReportPhotos,
     ],
   },
 ];

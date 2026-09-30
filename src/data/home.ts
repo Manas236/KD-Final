@@ -33,6 +33,13 @@ const HERO_SUB =
 export interface NavLink {
   readonly label: string;
   readonly href: string;
+  /** Nav only: the href of the top-level link this one drops down
+      from. An attribute, never rendered text — check-edit-keys.mjs
+      skips `.parent` the way it skips `.href`. */
+  readonly parent?: string;
+  /** Nav only: a top-level link's position on the bar, left to right.
+      Array order cannot be display order — the index is the edit key. */
+  readonly order?: number;
 }
 
 export interface Stat {
@@ -77,24 +84,29 @@ export const home = {
 
   nav: {
     logoAlt: "K.D. Constructions",
-    /* No "Home" link — the logo goes home, which is what keeps the
-       links and the CTA on one bar above the 1080px drawer breakpoint.
-       CSR (the eighth, 2026-09-18) is a three-letter label and the bar
-       was measured at 1080px with it: OPEN-QUESTIONS.md #32. */
+    /* 2026-09-29: the bar had grown to nine links, so it was grouped
+       into four — Home · About ▾ · Projects ▾ · Contact. `parent` puts a
+       link in that top-level link's drop-down (company pages under
+       About, track-record pages under Projects); `order` places the
+       top-level ones on the bar.
+
+       NEVER REORDER OR INSERT: link i is edit key
+       `<page>.nav.links.i.label` on every page, and a stored edit on
+       index 6 must keep meaning "Contact". New links are appended
+       (CSR 2026-09-18, OPEN-QUESTIONS.md #32; Gallery 2026-09-28, #39;
+       Home and Careers 2026-09-29) and positioned by order/parent. */
     links: [
-      { label: "About", href: "/about" },
-      { label: "Capabilities", href: "/capabilities" },
-      { label: "Projects", href: "/projects" },
-      { label: "Resources", href: "/resources" },
-      { label: "HSE", href: "/hse" },
-      { label: "Clients", href: "/clients" },
-      { label: "Contact", href: "/contact" },
-      /* Appended, not slotted before Contact: link i is edit key
-         `<page>.nav.links.i.label` on every page and a stored edit on
-         index 6 must keep meaning "Contact". */
-      { label: "CSR", href: "/csr" },
-      /* Appended 2026-09-28 for the same reason (OPEN-QUESTIONS.md #39). */
-      { label: "Gallery", href: "/gallery" },
+      { label: "About", href: "/about", order: 1 },
+      { label: "Capabilities", href: "/capabilities", parent: "/projects" },
+      { label: "Projects", href: "/projects", order: 2 },
+      { label: "Resources", href: "/resources", parent: "/projects" },
+      { label: "HSE", href: "/hse", parent: "/about" },
+      { label: "Clients", href: "/clients", parent: "/projects" },
+      { label: "Contact", href: "/contact", order: 3 },
+      { label: "CSR", href: "/csr", parent: "/about" },
+      { label: "Gallery", href: "/gallery", parent: "/projects" },
+      { label: "Home", href: "/", order: 0 },
+      { label: "Careers", href: "/careers", parent: "/about" },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },
@@ -270,6 +282,7 @@ export const home = {
           { label: "Contact", href: "/contact" },
           { label: "CSR", href: "/csr" },
           { label: "Gallery", href: "/gallery" },
+          { label: "Careers", href: "/careers" },
         ] as readonly NavLink[],
       },
       headquarters: {

@@ -68,13 +68,43 @@ CREATE TABLE IF NOT EXISTS content_edits (
   INDEX idx_page_key (page_path, edit_key(191))
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- ------------------------------------------------------------
+-- job_posting_events — the job cards on /careers, added and removed
+-- from the page itself in edit mode (src/pages/api/careers.ts).
+--
+-- APPEND-ONLY, like content_edits, so the app still needs nothing but
+-- SELECT and INSERT:
+--
+--   add     a row with action = 'add'; its own id IS the posting id
+--   remove  a row with action = 'remove' and posting_id = that id
+--
+--   open postings = the 'add' rows with no 'remove' row pointing at them
+--
+-- Wording changes after a card is added go through content_edits like
+-- any other text, under the keys careers.jobs.<id>.title / .body.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS job_posting_events (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  action        ENUM('add', 'remove') NOT NULL,
+  posting_id    INT           NULL,
+  title         VARCHAR(160)  NULL,
+  details       VARCHAR(300)  NULL,
+  linkedin_url  VARCHAR(500)  NULL,
+  indeed_url    VARCHAR(500)  NULL,
+  client_ip     VARCHAR(45)   NULL,
+  user_agent    VARCHAR(255)  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_posting (action, posting_id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ============================================================
 -- After running this, confirm:
 --
---   USE kd_construction; SHOW TABLES;      -- expect content_edits
+--   USE kd_construction; SHOW TABLES;      -- expect content_edits, job_posting_events
 --
 -- SELECT and INSERT are all the app ever uses — the table is
 -- append-only, and a revert INSERTs a new row carrying the older text:
 --
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
 -- ============================================================

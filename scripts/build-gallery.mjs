@@ -17,10 +17,12 @@
      video + at   a frame grab (seconds). Panvel–Karjat has no stills at
                   all — the Chowk folder is video only — so its gallery
                   is frames from the site's own 720p phone footage.
-   and three fixes:
+   and four fixes:
      cropBottom   fraction to trim off the foot ("Shot on OnePlus").
      inset        px to trim off every edge (a Canva export's border).
      trim         remove letterbox bars matching the corner pixel.
+     crop         [left, top, right, bottom] as fractions — one panel of
+                  a WhatsApp collage, or a GPS-camera overlay cut away.
 
    Usage:  node scripts/build-gallery.mjs [prefix]
    Needs ffmpeg on PATH for the video frames. With a prefix, only the
@@ -101,7 +103,7 @@ const PHOTOS = [
   // each, shown on /projects as name + location + photograph only. See
   // OPEN-QUESTIONS.md #30 for why one frame and why these frames.
   // `WHITE HOUSE FOB 1.jpg` is deliberately NOT the Bonkode pick: it is
-  // already the Matunga Workshop FOB stand-in (project-matunga-workshop-fob.jpg).
+  // formerly the Matunga Z-Bridge stand-in (project-matunga-workshop-fob.jpg).
   { out: "social-bonkode-fob.jpg", src: "Bonkode FOB/AX6A7070.JPG" },
   { out: "social-ulwe-hospital.jpg", src: "Ulwa Hospital/1.jpg" },
   { out: "social-ulwe-cidco-school.jpg", src: "Ulwa CIDCO School/school.jpg" },
@@ -114,7 +116,7 @@ const PHOTOS = [
   // social-*.jpg tile above; these follow it. Left out on purpose:
   // AX6A7054 (a hoarding with a model's face fills the left third) and
   // AX6A7071 (AX6A7070 again, a second later); WHITE HOUSE FOB X, the
-  // twin of the Matunga Workshop FOB stand-in (see the note above); and
+  // twin of the former Matunga Z-Bridge stand-in (see the note above); and
   // `Ulwa Hospital/ULWE HOSPITAL.jpg`, which shows the Karanjade building
   // (#30). The two collages are cut above their inset thumbnails.
   { out: "bonkode-fob-02.jpg", src: "Bonkode FOB/AX6A7062.JPG" },
@@ -159,12 +161,13 @@ const PHOTOS = [
   { out: "rmc-plant-08.jpg", src: "RMC Plant Karjat/RMC plant coverage construction.jpeg" },
   { out: "rmc-plant-09.jpg", src: "RMC Plant Karjat/RMC plant inside.jpeg" },
 
-  // Matunga Workshop FOB — the Matunga Z-Bridge. Supplied 2026-09-28 in
+  // Matunga Z-Bridge (the Matunga Workshop FOB). Supplied 2026-09-28 in
   // a folder named "Gati Shakti"; the file names say "Z bridge" and the
   // frames are the Matunga Workshop yard, so it is this project
-  // (OPEN-QUESTIONS.md #38). 01 replaces the Bonkode stand-in as the
-  // project's card and hero image.
-  { out: "matunga-workshop-fob-01.jpg", src: "Gati Shakti/Z bridge approach from the West.jpeg" },
+  // (OPEN-QUESTIONS.md #38). 02, the aerial of the covered deck, is the
+  // project's card and hero image. `Z bridge approach from the West.jpeg`
+  // is deliberately NOT used: 2026-09-29 the user confirmed that walkway
+  // is not K.D.'s work (#41).
   { out: "matunga-workshop-fob-02.jpg", src: "Gati Shakti/Z bridge.jpeg" },
   { out: "matunga-workshop-fob-03.jpg", src: "Gati Shakti/Z bridge granite and toughened glass.jpeg" },
   { out: "matunga-workshop-fob-04.jpg", src: "Gati Shakti/Girder erection.jpeg" },
@@ -318,6 +321,17 @@ const PHOTOS = [
   { out: "hse-53.jpg", src: "HSE Department/Picture5.jpg" },
   { out: "hse-54.jpg", src: "HSE Department/WhatsApp Image 2025-04-30 at 9.44.56 PM.jpeg" },
   { out: "hse-55.jpg", src: "HSE Department/WhatsApp Image 2025-04-30 at 9.44.57 PM.jpeg" },
+  // hse — the EHS team's September 2026 WhatsApp reports (OPEN-QUESTIONS.md #42).
+  // Named by subject, not number, so the file name says what the picture is.
+  { out: "hse-national-safety-week-karjat.jpg", src: "HSE Department/2026-09 EHS reports/safety-week-300000-safe-man-hours-karjat.jpg" },
+  { out: "hse-national-safety-day-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/national-safety-day-mankhurd.jpg" },
+  { out: "hse-medical-camp-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/medical-camp-mankhurd.jpeg" },
+  // top panel of a two-photo collage
+  { out: "hse-lifting-training-govandi.jpg", src: "HSE Department/2026-09 EHS reports/lifting-training-govandi.jpeg", crop: [0.027, 0.02, 0.973, 0.494] },
+  // cuts the GPS-camera map (top) and the coordinates stamp (foot)
+  { out: "hse-air-monitoring-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/air-quality-monitoring-mankhurd.jpg", crop: [0, 0.2, 1, 0.9] },
+  { out: "hse-world-environment-day.jpg", src: "HSE Department/2026-09 EHS reports/world-environment-day-toolbox-talk.jpg" },
+  { out: "hse-worker-recognition.jpg", src: "HSE Department/2026-09 EHS reports/worker-recognition-award.jpg" },
   // sanpada-carshed
   { out: "sanpada-carshed-07.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.14 PM.jpeg" },
   { out: "sanpada-carshed-08.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.15 PM (1).jpeg" },
@@ -470,6 +484,19 @@ for (const p of PHOTOS) {
   // against the image the way it is actually seen.
   let buf = await sharp(input).rotate().toBuffer();
   if (p.trim) buf = await sharp(buf).trim({ threshold: 24 }).toBuffer();
+
+  if (p.crop) {
+    const m = await sharp(buf).metadata();
+    const [l, t, r, b] = p.crop;
+    buf = await sharp(buf)
+      .extract({
+        left: Math.round(m.width * l),
+        top: Math.round(m.height * t),
+        width: Math.round(m.width * (r - l)),
+        height: Math.round(m.height * (b - t)),
+      })
+      .toBuffer();
+  }
 
   const { width, height } = await sharp(buf).metadata();
   const inset = p.inset ?? 0;

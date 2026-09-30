@@ -4,10 +4,11 @@
    ------------------------------------------------------------
    No design export covers this — see OPEN-QUESTIONS.md #20. Built
    from Story.astro's own text-block shape one band up: kicker, `d4`
-   heading, a max-w-560 column — rather than inventing a new one.
+   heading — rather than inventing a new one.
 
-   The two named statements (Our Vision / Our Mission) stack inside
-   that column as a small mint label over a paragraph — the exact
+   The two named statements (Our Vision / Our Mission) sit side by side
+   in Story's 560 + 64 + 560 columns (stacking below `lg`), each under a
+   divider rule, as a small mint label over a paragraph — the exact
    treatment Board.astro already uses for a director's role, one band
    down, reused here for the same reason: a label over a block of text
    has one pattern on this page, not two.
@@ -29,10 +30,10 @@ const { vision } = about;
       {vision.heading}
     </h2>
 
-    <div class="mt-56 max-w-560 flex flex-col gap-32">
+    <div class="mt-56 grid grid-cols-1 lg:grid-cols-2 gap-y-40 lg:gap-x-64">
       {
         vision.sections.map((section, i) => (
-          <div>
+          <div class="max-w-560 border-t border-t-kd-divider-light pt-24">
             <p
               class="text-label uppercase text-kd-mint-2"
               data-edit={`about.vision.sections.${i}.title`}

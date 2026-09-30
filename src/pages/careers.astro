@@ -1,0 +1,46 @@
+---
+/* /careers. The page copy is src/data/pages.ts; the "Current openings"
+   cards are read from the database on every request (src/lib/job-postings.ts)
+   and managed in edit mode by src/scripts/careers-editor.js. */
+import InfoPage from "../components/InfoPage.astro";
+import { careers } from "../data/pages";
+import type { InfoItem } from "../data/pages";
+import { openPostings } from "../lib/job-postings";
+
+export const prerender = false;
+
+const postings = (await openPostings()) ?? [];
+const { openings } = careers;
+
+const cards: InfoItem[] = postings.length
+  ? postings.map((p) => ({
+      slot: `jobs.${p.id}`,
+      posting: p.id,
+      title: p.title,
+      body: p.details || undefined,
+      links: [
+        ...(p.linkedin ? [{ label: openings.apply.linkedin, href: p.linkedin }] : []),
+        ...(p.indeed ? [{ label: openings.apply.indeed, href: p.indeed }] : []),
+      ],
+    }))
+  : [{ ...openings.empty, slot: "openings.empty" }];
+
+const copy = {
+  ...careers,
+  sections: careers.sections.map((section) =>
+    section.id === "openings" ? { ...section, items: cards } : section
+  ),
+};
+
+// Postings change without a deploy, so the page must never be served stale.
+Astro.response.headers.set("Cache-Control", "no-store");
+---
+
+<InfoPage page="careers" copy={copy} />
+
+<!-- Add / remove postings: signed-in editors only, like the text editor. -->
+<script>
+  if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+    import("../scripts/careers-editor.js");
+  }
+</script>

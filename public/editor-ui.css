@@ -196,11 +196,101 @@
   color: var(--kd-slate, #8a96a6);
 }
 
+/* ---- Job postings on /careers (src/scripts/careers-editor.js) ----
+   Added 2026-09-29; not part of the Nesting Tree port. The add card and
+   the remove buttons exist for a signed-in editor only, and show only
+   while the mode is on, like Undo. */
+.nt-jobs-add,
+.nt-jobs-remove {
+  display: none;
+}
+:root[data-nt-mode] .nt-jobs-add {
+  display: block;
+}
+:root[data-nt-mode] .nt-jobs-remove {
+  display: inline-block;
+}
+
+.nt-jobs-add {
+  border: 2px dashed var(--kd-teal, #68a6a0);
+  padding: 32px;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  color: var(--kd-ink, #2c3a40);
+}
+.nt-jobs-add form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.nt-jobs-head {
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.nt-jobs-add label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.nt-jobs-add label span {
+  font-weight: 400;
+  color: var(--kd-slate, #8a96a6);
+}
+.nt-jobs-add input {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 10px;
+  border: 1px solid rgba(44, 58, 64, 0.3);
+  background-color: #fff;
+  color: var(--kd-ink, #2c3a40);
+  width: 100%;
+}
+.nt-jobs-note {
+  font-size: 12px;
+  color: var(--kd-slate, #8a96a6);
+}
+.nt-jobs-error {
+  font-size: 13px;
+  color: #a4312a;
+}
+.nt-jobs-submit,
+.nt-jobs-remove {
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.nt-jobs-submit {
+  align-self: flex-start;
+  background-color: var(--kd-teal, #68a6a0);
+  color: var(--kd-ink-deep, #1e2b30);
+}
+.nt-jobs-remove {
+  margin-top: 20px;
+  border: 1px solid #a4312a;
+  color: #a4312a;
+  background: transparent;
+}
+.nt-jobs-submit:disabled,
+.nt-jobs-remove:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 @media print {
   .nt-bar,
   .nt-pill,
   .nt-toast,
-  .nt-menu {
+  .nt-menu,
+  .nt-jobs-add,
+  .nt-jobs-remove {
     display: none !important;
   }
 }

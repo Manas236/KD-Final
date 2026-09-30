@@ -2547,3 +2547,77 @@ by face — they supplied them, but a yes on publishing them is worth having.
 `/gallery`, no horizontal overflow at 390 px, page HTML ~550 KB (tiles are
 lazy-loaded) · sitemap 30 URLs, 605 images · repository +51 MB of
 derivatives.
+
+## 41. "Matunga Workshop FOB" renamed "Matunga Z-Bridge"; one frame dropped
+
+2026-09-29, at the user's request:
+
+- **Renamed.** The project is titled **Matunga Z-Bridge** on its card, page,
+  steel ledger, the Central Railway client card and its gallery group. The
+  page URL follows the title (`slugify()`): `/projects/matunga-z-bridge`
+  replaces `/projects/matunga-workshop-fob`. Nothing has been published
+  under the old slug, so no redirect is owed. The page's first line still
+  says "the Matunga Workshop FOB", so the doc's name stays searchable.
+- **Dropped:** `Gati Shakti/Z bridge approach from the West.jpeg`
+  (`matunga-workshop-fob-01.jpg`) — the user confirmed that walkway is not
+  K.D.'s work. It is the one supplied photograph deliberately left off the
+  site (#40 otherwise stands). The asset file is deleted.
+- **New card and hero image:** `matunga-workshop-fob-02.jpg`, the aerial of
+  the covered deck running the length of the workshop yard. The remaining
+  files keep their numbers (02–08), so nothing else moves.
+
+## 42. The EHS team's September 2026 reports on /hse
+
+2026-09-29. The HSE team forwarded a batch of WhatsApp site reports (20
+photos, 3 videos). The boss left the choice of what goes to the user, who
+left it to Claude, so **this batch is curated, not all-in** (an exception
+to #40, the same way #41 is).
+
+**On `/hse`: five new bands** between the certifications and the CTA
+(`src/components/hse/Record.astro`, copy in `hse.record`, pages.ts) —
+Emergency Preparedness, Training, Worker Health, Environment & Audits
+(ink, with stat tiles), Recognition. They carry the reports' substance,
+not just the pictures: the 9 training topics, the medical camp's tests
+and headcount, the monitoring readings, the electrical-audit scope and
+result, the Safety Day award categories.
+
+**Two videos**, silent loops that start when scrolled into view (no
+player, nothing to press; paused off screen; never started under
+prefers-reduced-motion): a 20 s cut of the 2 min 19 s work-at-height
+rescue drill and the two fire-extinguisher drill clips joined (12.8 s).
+640 px H.264, 2.0 MB and 1.1 MB, in `public/video/` with poster frames.
+
+**Also used, as text only:** the first-aid case (GTB Nagar, 17 Sep) —
+**anonymised**: what happened, the treatment, the three corrective
+actions; and the extinguisher refill (7 × 6 kg DCP, Mankhurd), framed as
+routine servicing. **Both are the company's call** — delete the card if
+they would rather not publish an incident.
+
+**7 photographs** also close the "Safety on Site" group on `/gallery`.
+Raw files are in `HSE Department/2026-09 EHS reports/`, renamed by
+subject; derivatives are `hse-<subject>.jpg`, not numbered, so the file
+name says what the picture is. `/hse` now lists its photos in
+`/sitemap.xml`.
+
+| File | Subject |
+|---|---|
+| `hse-national-safety-week-karjat` | National Safety Week, Karjat; 3,00,000 safe man-hours banner |
+| `hse-national-safety-day-mankhurd` | National Safety Day, Mankhurd — pledge and awards |
+| `hse-medical-camp-mankhurd` | Free medical camp, Mankhurd — 88 workers and staff, 12 Sep 2026 |
+| `hse-lifting-training-govandi` | Lifting procedure / tools & tackles training — top panel of a collage |
+| `hse-air-monitoring-mankhurd` | Ambient air sampler — GPS map and coordinates stamp cropped off |
+| `hse-world-environment-day` | Site assembly, 5 June |
+| `hse-worker-recognition` | Prize distribution |
+
+**Left out, on purpose:**
+- **First-aid photos and the injured worker's name** — the wound is shown.
+- **The extinguisher photo** — the text says it; the photo only shows used kit.
+- **The electrical audit sheet itself** — names and signatures.
+- **HIV/STI screening collage and clinic interiors** — identifiable workers
+  in a health setting. The camp is shown from outside instead.
+- **Other collages** (GTBN training, Govandi monitoring, tree planting,
+  the 4-up camp) and **3 exact duplicates**.
+- **Award winners' names** — the categories are used, not the people.
+
+**Check with the company:** the 3,00,000 safe man-hours figure is read off
+the Karjat banner ("as on January 2026") — confirm before go-live.

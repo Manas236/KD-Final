@@ -18,7 +18,7 @@ K.D. confirms it does not exist — delete the item. Then run
 `npm run check:placeholders` and `npm run check:keys` for that page, and strike
 the row here.
 
-**Last updated:** 2026-09-28 · **32 placeholders on the site** (22 of them on the eight "Beyond the railway" project pages, rows 5a–5h — down from 32 after the public-source research of 2026-09-28) · **8 sign-offs** · **4 go-live configuration rows**
+**Last updated:** 2026-09-29 · **34 placeholders on the site** (1 on the new `/careers` page, row 6) (22 of them on the eight "Beyond the railway" project pages, rows 5a–5h — down from 32 after the public-source research of 2026-09-28) · **8 sign-offs** · **6 go-live configuration rows**
 
 ---
 
@@ -47,6 +47,7 @@ the row here.
 | 5f | `/projects/lush-meadows` · hero tiles 3, 4 + overview card | **Scope of works · Year completed** · To be added; **Figures from a property portal** · To be verified | Scope and year; **and** a check of MahaRERA A51800000454 on the MahaRERA site — the developer (Kailash Developers), 2 & 3 BHK and 711–852 sq ft are Square Yards portal data | Registration does not match: remove the developer and flat tiles and the second half of the paragraph. Checked and matches: delete the card |
 | 5g | `/projects/kharghar-football-stadium` · hero tiles 3, 4 + the gallery | **Scope of works · Year completed** · To be added; **Photographs** · Photograph to be added | Scope and year (client **CIDCO** and the **40,000 planned capacity** are filled — S8), and landscape photographs of the stadium — the first becomes the page's header and the tile on `/projects` (row 3a) | No photograph: delete the page, its tile (3a) and its gallery card together — a page with no picture and no facts is the empty-fields case OPEN-QUESTIONS.md #30 warns about |
 | 5h | `/projects/kharghar-centre-of-excellence` · the whole page | **K.D. Constructions' own work?** · To be confirmed; hero tile 3 **Scope of works** · To be added; **Photographs** · Photograph to be added | First the yes/no (with 3b). On a yes: K.D.'s scope and a photograph — client, pitches, 2022 and the description are now filled from public sources (S8) | A no deletes the page's entry in `src/data/social-projects.ts`, the tile (3b) and the name in `K.D.Website_Details.md` — delete the tile first, or the module refuses to build a tile with no page |
+| 6 | `/careers` · Where We Hire · card 2 | **K.D. Constructions on Indeed** · To be added | The URL of K.D. Constructions' company / jobs page on Indeed. (The individual job cards are **not** placeholders: an editor adds and removes them on the page itself in edit mode — "Add a job posting" card, "Remove posting" on each) | Delete the card — the LinkedIn card stands |
 
 **If all four `/csr` cards are deleted:** the page keeps its three commitments
 and the Content Pending section goes. Then decide whether `/csr` stays at all —
@@ -86,6 +87,8 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | G2 | Submit `https://<origin>/sitemap.xml` in **Google Search Console** (and Bing Webmaster Tools) after the first deploy | The sitemap is served from the site, so it is not "submitted" by building; someone has to hand the URL over once | Search Console shows the sitemap read, 28 URLs discovered (as of 2026-09-19 — fewer if any row 5 page is deleted) |
 | G3 | **Share card for the six pages without a photograph** — capabilities, resources, HSE, clients, contact, CSR | They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only. Pages with a hero already use it. Needs one designed 1200×630 card, or a decision to reuse the home hero | A `src/assets` card exists and `InfoPage`'s routes pass it to `BaseLayout` — or the client says text-only is fine (OPEN-QUESTIONS.md #7) |
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
+| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it |
+| G6 | **`SITE_NOINDEX` removed** from the production `.env` | The test server on a bare IP runs with `SITE_NOINDEX=1` (src/lib/staging.ts): every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything. Copied to the real domain, the site never enters the index | `npm run check:site-url` passes (it fails while the switch is on); `curl -I https://<origin>/` shows no `X-Robots-Tag` |
 
 ## Where the placeholder mechanism lives
 

@@ -1,8 +1,8 @@
 /* ============================================================
    Copy for the lighter pages: /capabilities, /resources, /hse,
-   /clients, /contact, /csr
+   /clients, /contact, /csr, /careers
    ------------------------------------------------------------
-   All six render through src/components/InfoPage.astro — hero,
+   All seven render through src/components/InfoPage.astro — hero,
    a stack of card sections, closing CTA — so each export here has the
    same shape. One export per page, not one object keyed by page,
    because check-edit-keys.mjs compares a page against every string in
@@ -35,9 +35,16 @@ export interface InfoItem {
       fails while any exists — none may survive to go-live. PRE-LAUNCH.md
       is the human side of the same list. */
   readonly pending?: string;
+  /** Keys the card's copy by name (`<page>.<slot>.title`) instead of by
+      position. For cards added at runtime — see InfoPage.astro. */
+  readonly slot?: string;
+  /** The job_posting_events id of a /careers posting card. */
+  readonly posting?: number;
 }
 
 export interface InfoSection {
+  /** The section element's id, for an in-page link or a script. */
+  readonly id?: string;
   readonly kicker: string;
   readonly heading: string;
   readonly intro?: string;
@@ -227,7 +234,43 @@ export const resources: InfoPageCopy = {
   },
 };
 
-export const hse: InfoPageCopy = {
+/* /hse's site record — see src/components/hse/Record.astro. A media item
+   is a photograph (`file`, in src/assets/gallery/) or a silent looping
+   clip (`video`, public/video/<name>.mp4 with a .jpg poster). */
+export interface HseMedia {
+  readonly file?: string;
+  readonly video?: string;
+  readonly alt: string;
+  readonly title: string;
+  readonly where: string;
+}
+
+export interface HseCard {
+  readonly title: string;
+  readonly where: string;
+  readonly body?: string;
+  readonly points?: readonly string[];
+  /** Spans the whole row, under the paired cards — for the one card
+      whose copy is much longer than its neighbours'. */
+  readonly wide?: boolean;
+}
+
+export interface HseBand {
+  readonly tone: "white" | "mist" | "ink";
+  readonly kicker: string;
+  readonly heading: string;
+  readonly intro?: string;
+  readonly media?: readonly HseMedia[];
+  readonly stats?: readonly { readonly value: string; readonly label: string }[];
+  readonly statsNote?: string;
+  readonly cards?: readonly HseCard[];
+}
+
+export interface HseCopy extends InfoPageCopy {
+  readonly record: { readonly bands: readonly HseBand[] };
+}
+
+export const hse: HseCopy = {
   meta: {
     title: "Health, Safety & Environment — K.D. Constructions",
     description:
@@ -296,6 +339,221 @@ export const hse: InfoPageCopy = {
       ],
     },
   ],
+  /* The EHS team's September 2026 site reports, band by band
+     (OPEN-QUESTIONS.md #42). Rendered by src/components/hse/Record.astro
+     between the card sections and the CTA. No worker names anywhere —
+     the first-aid case is told by what happened and what changed. */
+  record: {
+    bands: [
+      {
+        tone: "white",
+        kicker: "Emergency Preparedness",
+        heading: "Drilled until it is routine.",
+        intro:
+          "Mock drills run on live sites, with the real equipment and the crews who would use it — " +
+          "so the first minutes of a real emergency are ones everyone has already rehearsed.",
+        media: [
+          {
+            video: "hse-work-at-height-rescue-drill",
+            alt: "A work-at-height rescue drill: responders attend a casualty, carry him on a stretcher and load him into an ambulance",
+            title: "Work-at-height medical emergency drill",
+            where: "GTB Nagar Station",
+          },
+          {
+            video: "hse-fire-extinguisher-drill",
+            alt: "Workers take turns putting out a test fire with a DCP extinguisher while the crew watches",
+            title: "Fire-extinguisher drill",
+            where: "GTB Nagar Station",
+          },
+        ],
+        cards: [
+          {
+            title: "Electrical-shock rescue drill",
+            where: "Mankhurd Station",
+            body: "An emergency mock drill for an electrical-shock casualty, run on the live site.",
+          },
+          {
+            title: "Fire extinguishers kept in service",
+            where: "Every site",
+            body:
+              "Extinguishers are tracked and sent for refilling when due — seven 6 kg DCP units " +
+              "at Mankhurd this September.",
+          },
+          {
+            wide: true,
+            title: "First aid, and what changed after it",
+            where: "GTB Nagar · 17 September 2026",
+            body:
+              "A helper cut his hand on a sharp edge while shifting a cut column piece during FOB " +
+              "deck fabrication. The wound was cleaned and dressed on site; no further treatment " +
+              "was needed. What changed:",
+            points: [
+              "Sharp edges on cut column pieces are ground off or covered before they are moved.",
+              "Hand gloves are mandatory when handling fabricated or cut steel.",
+              "Correct handling and shifting methods followed for every piece.",
+            ],
+          },
+        ],
+      },
+      {
+        tone: "mist",
+        kicker: "Training",
+        heading: "Taught on site, to the people doing the work.",
+        media: [
+          {
+            file: "hse-lifting-training-govandi.jpg",
+            alt: "An HSE officer briefs workers and supervisors around the table in the Govandi site office",
+            title: "Lifting procedure and tools-and-tackles training",
+            where: "Govandi Station",
+          },
+        ],
+        cards: [
+          {
+            title: "Manual handling and work at height",
+            where: "GTB Nagar Station · workers and supervisors",
+            points: [
+              "Safe manual handling and correct lifting methods",
+              "Spotting manual-handling hazards and preventing injury",
+              "PPE for material handling",
+              "Safe working practice at height",
+              "Using and inspecting harnesses and fall-arrest systems",
+              "Safe access and egress at height",
+              "Preventing slips, trips and falls",
+              "Housekeeping and safe working conditions",
+              "Emergency precautions and what to do after an incident",
+            ],
+          },
+        ],
+      },
+      {
+        tone: "white",
+        kicker: "Worker Health",
+        heading: "Health checks brought to the site.",
+        media: [
+          {
+            file: "hse-medical-camp-mankhurd.jpg",
+            alt: "Workers queue outside the Mankhurd site office beside the free medical camp banner and K.D. safety posters",
+            title: "Free medical camp — 88 workers and staff",
+            where: "Mankhurd Station · 12 September 2026",
+          },
+        ],
+        cards: [
+          {
+            title: "Medical camp, Mankhurd",
+            where: "88 workers and staff covered",
+            points: [
+              "Blood sugar",
+              "Blood pressure",
+              "Chest X-ray",
+              "HIV testing",
+              "Doctor's consultation and prescription",
+              "Medicines and creams given as advised",
+            ],
+          },
+          {
+            title: "Routine health check-ups",
+            where: "Site workforce",
+            points: [
+              "Blood pressure",
+              "Blood sugar",
+              "Eye check-up",
+              "HIV/STI screening",
+              "TB screening",
+              "Other basic medical examinations",
+            ],
+          },
+        ],
+      },
+      {
+        tone: "ink",
+        kicker: "Environment & Audits",
+        heading: "Measured, not assumed.",
+        intro:
+          "Our HSE team runs its own air-quality and noise monitoring at the station sites, and " +
+          "audits electrical safety every month.",
+        stats: [
+          { value: "14 µg/m³", label: "PM2.5" },
+          { value: "16 µg/m³", label: "PM10" },
+          { value: "67.8 dB(A)", label: "Noise" },
+          { value: "28-point", label: "Electrical audit" },
+        ],
+        statsNote:
+          "Air and noise: Govandi Station FOB, 26 September 2026. Electrical audit: Chowk, " +
+          "September 2026 — overall result satisfactory.",
+        media: [
+          {
+            file: "hse-air-monitoring-mankhurd.jpg",
+            alt: "Two HSE staff in hard hats set up an ambient air sampler on the Mankhurd site",
+            title: "Ambient air monitoring started",
+            where: "Mankhurd Station",
+          },
+          {
+            file: "hse-world-environment-day.jpg",
+            alt: "Workers in yellow helmets gather beneath an FOB deck for a World Environment Day talk",
+            title: "World Environment Day, 5 June",
+            where: "Site assembly",
+          },
+        ],
+        cards: [
+          {
+            title: "Monthly electrical safety audit",
+            where: "Chowk and Mohape · Panvel–Karjat",
+            points: [
+              "Tools, cords, plugs and earthing",
+              "ELCB/RCCB protection and closed panels",
+              "Risk control near overhead power lines",
+            ],
+          },
+          {
+            title: "Air quality and noise",
+            where: "Govandi and Mankhurd",
+            points: [
+              "PM2.5 and PM10, with a handheld monitor",
+              "Formaldehyde (HCHO) and volatile organic compounds",
+              "Noise, with a sound-level meter; an ambient air sampler at Mankhurd",
+            ],
+          },
+        ],
+      },
+      {
+        tone: "white",
+        kicker: "Recognition",
+        heading: "Safe work is noticed, and rewarded.",
+        media: [
+          {
+            file: "hse-national-safety-week-karjat.jpg",
+            alt: "Rows of workers in K.D. helmets and hi-vis harnesses seated on site for National Safety Week at Karjat",
+            title: "3,00,000 safe man-hours without a lost-time injury",
+            where: "National Safety Week · Karjat",
+          },
+          {
+            file: "hse-national-safety-day-mankhurd.jpg",
+            alt: "Workers and site staff gathered beneath the steel frame of the new FOB at Mankhurd for National Safety Day",
+            title: "National Safety Day",
+            where: "Mankhurd Station",
+          },
+          {
+            file: "hse-worker-recognition.jpg",
+            alt: "A site worker in a hi-vis harness receives a prize and a handshake",
+            title: "Prize distribution",
+            where: "On site",
+          },
+        ],
+        cards: [
+          {
+            title: "National Safety Day awards, Mankhurd",
+            where: "Every worker and staff member took the safety pledge",
+            points: [
+              "Best Drawing",
+              "Best Slogan",
+              "Best Worker of the Year",
+              "Best Skilled Worker",
+            ],
+          },
+        ],
+      },
+    ],
+  },
   cta: {
     kicker: "Our Work",
     headline: "Safety delivered in live railway environments.",
@@ -435,7 +693,7 @@ export const clients: InfoPageCopy = {
         {
           title: "Central Railway",
           body:
-            "Matunga Workshop FOB · Sanpada Carshed · Nhava Sheva & Uran Railway Stations · " +
+            "Matunga Z-Bridge · Sanpada Carshed · Nhava Sheva & Uran Railway Stations · " +
             "Solapur Vande Bharat Maintenance Depot",
           logo: "central-railway.png",
         },
@@ -531,14 +789,27 @@ export const contact: InfoPageCopy = {
         {
           title: "Careers",
           body: "Join the team building Maharashtra's infrastructure.",
-          links: [{ label: "hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" }],
+          links: [
+            { label: "hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" },
+            { label: "Current openings", href: "/careers" },
+          ],
         },
         {
           title: "LinkedIn",
+          /* This card spans two columns (the last row of a 5-card grid), so
+             it carries a body like its neighbours rather than a bare link. */
+          body:
+            "Project milestones, site updates and new openings from K.D. Constructions. Follow " +
+            "our company page to keep up with our work across railways, bridges and urban " +
+            "infrastructure.",
           links: [
             {
               label: "Follow K.D. Constructions",
               href: "https://www.linkedin.com/company/k-d-constructions/",
+            },
+            {
+              label: "Jobs on LinkedIn",
+              href: "https://www.linkedin.com/company/k-d-constructions/jobs/",
             },
           ],
         },
@@ -548,6 +819,142 @@ export const contact: InfoPageCopy = {
   cta: {
     kicker: "Our Work",
     headline: "Five decades of delivery.",
+    button: { label: "View Projects", href: "/projects" },
+  },
+};
+
+/* /careers — added 2026-09-29 at the company's request: a page linking
+   to K.D.'s hiring posts on LinkedIn and Indeed, one card per post.
+   No careers content was ever supplied (WEBSITE_INFO.md §14 row 9), so
+   "Why K.D." is assembled only from facts already on the site. hr@ is
+   the careers address (KD_INFO.md, WEBSITE_INFO.md).
+
+   THE POSTINGS ARE NOT IN THIS FILE. Section 0 ships empty and
+   src/pages/careers.astro fills it at request time from the database:
+   one card per open role, added and removed in edit mode ("Add a job
+   posting" card, "Remove" on each card — src/scripts/careers-editor.js).
+   Each card is keyed `careers.jobs.<id>`, so its title and details stay
+   editable as text like everything else. `openings` holds the copy those
+   cards are built with: `empty` is the card shown while no role is
+   open, `apply` the button labels. */
+const LINKEDIN_JOBS = "https://www.linkedin.com/company/k-d-constructions/jobs/";
+
+export interface CareersCopy extends InfoPageCopy {
+  readonly openings: {
+    readonly empty: InfoItem;
+    readonly apply: { readonly linkedin: string; readonly indeed: string };
+  };
+}
+
+export const careers: CareersCopy = {
+  meta: {
+    title: "Careers — K.D. Constructions",
+    description:
+      "Careers at K.D. Constructions — railway and public infrastructure across Maharashtra " +
+      "since 1973. See current openings on LinkedIn and Indeed, or email hr@kdconstructions.net.",
+  },
+  ...chrome,
+  hero: {
+    kicker: "Careers",
+    title: "Build what Maharashtra runs on.",
+    sub:
+      "Join the team delivering railway stations, foot overbridges, workshops and public " +
+      "infrastructure across Maharashtra — with five decades of engineering discipline behind " +
+      "every project.",
+  },
+  sections: [
+    {
+      id: "openings",
+      kicker: "Open Positions",
+      heading: "Current openings.",
+      intro:
+        "We post our openings on LinkedIn and Indeed. Each card below links straight to the " +
+        "live posting, where you can read the full role and apply.",
+      items: [],
+    },
+    {
+      kicker: "Where We Hire",
+      heading: "Follow our openings.",
+      items: [
+        {
+          title: "K.D. Constructions on LinkedIn",
+          body: "Every role we are hiring for, on our LinkedIn company page.",
+          links: [{ label: "View jobs on LinkedIn", href: LINKEDIN_JOBS }],
+        },
+        {
+          pending: "To be added",
+          title: "K.D. Constructions on Indeed",
+          body:
+            "The link to K.D. Constructions' company or jobs page on Indeed, so this card can " +
+            "open every Indeed posting in one place.",
+        },
+      ],
+    },
+    {
+      kicker: "Why K.D.",
+      heading: "Work that stands for decades.",
+      items: [
+        {
+          title: "Five decades of delivery",
+          body:
+            "Building since 1973 — from Maharashtra PWD works in Dhule to railway workshops, " +
+            "depots and stations across Mumbai.",
+        },
+        {
+          title: "Work that serves the public",
+          body:
+            "Railway stations, foot overbridges and civic buildings used by lakhs of commuters " +
+            "and residents every day.",
+        },
+        {
+          title: "Owned plant & fleet",
+          body:
+            "In-house steel fabrication at Vindhane, an RMC plant at Karjat and 50+ self-owned " +
+            "heavy equipment units.",
+        },
+        {
+          title: "Safety on every site",
+          body:
+            "Certified to ISO 45001:2018, with the same HSE discipline on every project, at every " +
+            "site, every day.",
+        },
+      ],
+    },
+    {
+      kicker: "How to Apply",
+      heading: "Two ways in.",
+      items: [
+        {
+          title: "Apply to a posting",
+          body: "Open a role above and apply directly through LinkedIn or Indeed.",
+          links: [{ label: "See current openings", href: "#openings" }],
+        },
+        {
+          title: "Email your CV",
+          body:
+            "Send your CV to our HR team, with the role you are applying for in the subject " +
+            "line.",
+          links: [{ label: "hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" }],
+        },
+      ],
+    },
+  ],
+  openings: {
+    empty: {
+      title: "No openings listed right now",
+      body:
+        "New roles are posted on LinkedIn and Indeed as they open. You are welcome to send your " +
+        "CV to our HR team in the meantime.",
+      links: [
+        { label: "View jobs on LinkedIn", href: LINKEDIN_JOBS },
+        { label: "Email hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" },
+      ],
+    },
+    apply: { linkedin: "Apply on LinkedIn", indeed: "Apply on Indeed" },
+  },
+  cta: {
+    kicker: "Our Work",
+    headline: "See what you would be building.",
     button: { label: "View Projects", href: "/projects" },
   },
 };

@@ -41,7 +41,7 @@ import harbourRedevImg from "../assets/project-harbour-redevelopment-progress.jp
 import sanpadaImg from "../assets/project-sanpada-carshed.jpg";
 /* The structure's own photograph since 2026-09-28 — it was a Bonkode FOB
    stand-in before (OPEN-QUESTIONS.md #38). */
-import matungaFobImg from "../assets/gallery/matunga-workshop-fob-01.jpg";
+import matungaFobImg from "../assets/gallery/matunga-workshop-fob-02.jpg";
 import matungaLhbImg from "../assets/project-matunga-lhb.jpg";
 import solapurImg from "../assets/project-solapur-vande-bharat.jpg";
 import lowerParelImg from "../assets/project-lower-parel.jpg";
@@ -309,14 +309,15 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     alt: "Aerial view of the Sanpada carshed, roofed maintenance bays alongside stabling lines",
   },
   {
-    title: "Matunga Workshop FOB",
+    title: "Matunga Z-Bridge",
     eyebrow: "Signature Project",
     client: "Central Railway",
     badges: ["Civil", "Structural Steel"],
     live: false,
     statusBadge: "",
     body: [
-      "A strategically located pedestrian infrastructure project at " +
+      "The Matunga Z-Bridge — the Matunga Workshop FOB — is a " +
+        "strategically located pedestrian infrastructure project at " +
         "Matunga Workshop, involving RCC construction, structural steel " +
         "and girder fabrication, piling, roofing, side glazing and " +
         "finishing works.",
@@ -328,9 +329,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
          structure (docs/ASK.md #1) — which is what released this
          story for the page (docs/CONTENT.md, KD_INFO §7.2). The "lakhs
          of residents" line is also the source doc's own CSR paragraph.
-         The local name is introduced once, so both searches land here
-         (docs/SEO.md). */
-      "Locally known as the Matunga Z-Bridge, the structure restored " +
+         Titled by its local name since 2026-09-29 (OPEN-QUESTIONS.md
+         #41); the doc's "Matunga Workshop FOB" is kept in the first
+         line, so both searches land here (docs/SEO.md). */
+      "The bridge restored " +
         "the daily link between Matunga East and West after more than a " +
         "year with the original footbridge closed — a crossing relied on " +
         "by lakhs of commuters, students and residents.",
@@ -341,7 +343,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "1,584 m³", label: "RCC" },
     ],
     image: matungaFobImg,
-    alt: "The Matunga Z-Bridge's western approach, granite-paved between steel railings",
+    alt: "Aerial view of the Matunga Z-Bridge, its covered deck running the length of the workshop yard",
   },
   {
     title: "Solapur Vande Bharat Maintenance Depot",

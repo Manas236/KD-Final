@@ -1,0 +1,238 @@
+---
+/* ============================================================
+   HSE Record — /hse's site bands, between the cards and the CTA
+   ------------------------------------------------------------
+   Copy and shape: `hse.record` in src/data/pages.ts (OPEN-QUESTIONS.md
+   #42). Each band is one surface (white / mist / ink, set in the data
+   so the rhythm stays readable there) holding, in order: kicker, H2,
+   intro, a media grid, stat tiles (ink only), then cards.
+
+   MEDIA follows DESIGN-SYSTEM §5: full-bleed object-cover in a fixed
+   box, a scrim, the caption at the foot. With an odd count the first
+   item spans the row, so three read as a lead and a pair.
+
+   VIDEO is silent and loops, and starts itself when it scrolls into
+   view — no player chrome, nothing to press. It pauses off screen, and
+   under prefers-reduced-motion it never starts: the poster frame shows
+   instead. preload="none" keeps the clips off the network until then.
+
+   SYMMETRY. Every grid — media, stats, cards — uses the same 24px gap,
+   so a 2-column row's gutter lands on a 4-column row's middle gutter
+   and the edges line up down the band. Cards in one row stretch to one
+   height, so the copy is shaped to match: side-by-side cards carry
+   similar amounts, and a card much longer than its neighbours is
+   `wide` — it takes its own row beneath them, with its list run
+   across in even columns (as does a band's only card). Cards take as
+   many columns as there are narrow cards, up to three.
+
+   Cards on light bands are InfoPage's card; on ink they take the stat
+   tile's fill and border (§4.1), the only card surface drawn on ink.
+   ============================================================ */
+import { Image } from "astro:assets";
+import Kicker from "../Kicker.astro";
+import { galleryImage } from "../../lib/gallery-images";
+import type { HseBand, HseCard } from "../../data/pages";
+
+interface Props {
+  bands: readonly HseBand[];
+}
+
+const { bands } = Astro.props;
+const K = "hse.record.bands";
+const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as const;
+---
+
+{
+  bands.map((band, b) => {
+    const ink = band.tone === "ink";
+    const media = band.media ?? [];
+    const odd = media.length % 2 === 1;
+    const cards = band.cards ?? [];
+    const narrow = cards.filter((c) => !c.wide).length;
+    const spans = (c: HseCard) => c.wide || cards.length === 1;
+    return (
+      <section class:list={["py-96", surface[band.tone]]}>
+        <div class="max-w-kd mx-auto px-24 sm:px-48">
+          <Kicker label={band.kicker} editKey={`${K}.${b}.kicker`} tone={ink ? "dark" : "light"} />
+          <h2
+            class:list={["font-display text-d4 mt-16", ink ? "text-kd-mist" : "text-kd-ink"]}
+            data-edit={`${K}.${b}.heading`}
+          >
+            {band.heading}
+          </h2>
+          {band.intro && (
+            <p
+              class:list={["text-body mt-20 max-w-720", ink ? "text-kd-fog" : "text-kd-slate-2"]}
+              data-edit={`${K}.${b}.intro`}
+            >
+              {band.intro}
+            </p>
+          )}
+
+          {media.length > 0 && (
+            <ul class="grid gap-24 mt-48 sm:grid-cols-2">
+              {media.map((m, i) => {
+                const wide = odd && i === 0;
+                return (
+                  <li
+                    class:list={[
+                      "relative overflow-hidden h-265",
+                      wide ? "sm:col-span-2 sm:h-480" : "sm:h-360",
+                    ]}
+                  >
+                    {m.video ? (
+                      <video
+                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        poster={`/video/${m.video}.jpg`}
+                        muted
+                        loop
+                        playsinline
+                        preload="none"
+                        aria-label={m.alt}
+                        data-hse-video
+                      >
+                        <source src={`/video/${m.video}.mp4`} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <Image
+                        src={galleryImage(m.file!)}
+                        alt={m.alt}
+                        width={wide ? 1232 : 800}
+                        height={wide ? 480 : 480}
+                        loading="lazy"
+                        class="absolute inset-0 w-full h-full object-cover object-center"
+                      />
+                    )}
+                    <div
+                      class="absolute inset-0"
+                      style={`background-image: var(${wide ? "--kd-scrim-lg" : "--kd-scrim-sm"})`}
+                      aria-hidden="true"
+                    />
+                    <div class:list={["absolute inset-x-0 bottom-0", wide ? "p-32" : "p-20"]}>
+                      <p class="text-meta-sm text-kd-fog" data-edit={`${K}.${b}.media.${i}.where`}>
+                        {m.where}
+                      </p>
+                      <p
+                        class:list={["font-display text-kd-mist mt-6", wide ? "text-d6" : "text-d8"]}
+                        data-edit={`${K}.${b}.media.${i}.title`}
+                      >
+                        {m.title}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          {band.stats && (
+            <div class="mt-48">
+              <ul class="grid gap-24 grid-cols-2 lg:grid-cols-4">
+                {band.stats.map((s, i) => (
+                  <li class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                    <p class="font-display text-d5 text-kd-mint" data-edit={`${K}.${b}.stats.${i}.value`}>
+                      {s.value}
+                    </p>
+                    <p class="text-label uppercase text-kd-slate mt-8" data-edit={`${K}.${b}.stats.${i}.label`}>
+                      {s.label}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              {band.statsNote && (
+                <p class="text-meta-sm text-kd-fog mt-16" data-edit={`${K}.${b}.statsNote`}>
+                  {band.statsNote}
+                </p>
+              )}
+            </div>
+          )}
+
+          {band.cards && (
+            <ul
+              class:list={[
+                "grid gap-24 mt-48",
+                narrow === 2 && "sm:grid-cols-2",
+                narrow >= 3 && "sm:grid-cols-2 lg:grid-cols-3",
+              ]}
+            >
+              {band.cards.map((c, i) => {
+                const k = `${K}.${b}.cards.${i}`;
+                return (
+                  <li
+                    class:list={[
+                      "p-32",
+                      c.wide && "sm:col-span-full",
+                      ink
+                        ? "bg-kd-stat-fill border border-kd-stat-border"
+                        : "border border-kd-card-border-light border-t-2 border-t-kd-mint-2",
+                    ]}
+                  >
+                    <p
+                      class:list={["text-label-sm uppercase", ink ? "text-kd-mint" : "text-kd-mint-2"]}
+                      data-edit={`${k}.where`}
+                    >
+                      {c.where}
+                    </p>
+                    <h3
+                      class:list={["font-display text-d8 mt-12", ink ? "text-kd-mist" : "text-kd-ink"]}
+                      data-edit={`${k}.title`}
+                    >
+                      {c.title}
+                    </h3>
+                    {c.body && (
+                      <p
+                        class:list={["text-body-sm mt-12", ink ? "text-kd-fog" : "text-kd-slate-2"]}
+                        data-edit={`${k}.body`}
+                      >
+                        {c.body}
+                      </p>
+                    )}
+                    {c.points && (
+                      <ul
+                        class:list={[
+                          "mt-16",
+                          // A row-wide card runs its list across the row, in
+                          // columns that divide it evenly (9 → 3×3, 4 → 4×1).
+                          spans(c) && "sm:grid sm:grid-cols-2 sm:gap-x-24",
+                          spans(c) && (c.points.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-4"),
+                        ]}
+                      >
+                        {c.points.map((point, j) => (
+                          <li
+                            class:list={[
+                              "text-body-sm py-10 border-t",
+                              ink ? "text-kd-fog border-t-kd-stat-border" : "text-kd-slate-2 border-t-kd-card-border-light",
+                            ]}
+                            data-edit={`${k}.points.${j}`}
+                          >
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </section>
+    );
+  })
+}
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const videos = document.querySelectorAll<HTMLVideoElement>("video[data-hse-video]");
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        const video = target as HTMLVideoElement;
+        if (isIntersecting && !reduce.matches) video.play().catch(() => {});
+        else video.pause();
+      }
+    },
+    { threshold: 0.25 }
+  );
+  videos.forEach((v) => seen.observe(v));
+</script>

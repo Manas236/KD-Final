@@ -47,6 +47,7 @@ import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
 import { rmcPlant } from "../data/rmc-plant";
 import { galleryPage } from "../data/gallery-page";
+import { hse } from "../data/pages";
 
 export const prerender = false;
 
@@ -59,6 +60,7 @@ const TILE = { width: 800, height: 552 };
 const PLANT_ROUTE = "/resources/vindhane-plant";
 const RMC_ROUTE = "/resources/rmc-plant-karjat";
 const GALLERY_ROUTE = "/gallery";
+const HSE_ROUTE = "/hse";
 
 interface SitemapImage {
   readonly loc: string;
@@ -134,6 +136,25 @@ async function galleryPageImages(origin: URL): Promise<SitemapImage[]> {
   return out;
 }
 
+/* /hse: the photographs in its record bands, at the rendition
+   hse/Record.astro draws (1232×480 for a row-wide lead, else 800×480).
+   The looping clips are not images and are not listed. */
+async function hseImages(origin: URL): Promise<SitemapImage[]> {
+  const out: SitemapImage[] = [];
+  for (const band of hse.record.bands) {
+    const media = band.media ?? [];
+    for (const [i, m] of media.entries()) {
+      if (!m.file) continue;
+      const wide = media.length % 2 === 1 && i === 0;
+      out.push({
+        loc: await rendition(galleryImage(m.file), wide ? { width: 1232, height: 480 } : { width: 800, height: 480 }, origin),
+        title: `${hse.hero.kicker} — ${m.title}`,
+      });
+    }
+  }
+  return out;
+}
+
 function escapeXml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -184,7 +205,9 @@ export const GET: APIRoute = async ({ site }) => {
           ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, rmc.gallery, site)
           : route === GALLERY_ROUTE
             ? await galleryPageImages(site)
-            : [];
+            : route === HSE_ROUTE
+              ? await hseImages(site)
+              : [];
     entries.push({ loc: new URL(route, site).href, images });
   }
 

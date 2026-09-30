@@ -504,7 +504,11 @@ Named so that nobody adds them back:
 - No drop shadows, no elevation, no glassmorphism.
 - No hover animation, no scroll reveal, no parallax, no counters that count up.
 - No gradient text, no gradient borders. The only three gradients are the hero
-  overlay and the two image scrims.
+  overlay and the two image scrims. One exception, by client request: the
+  homepage on desktop (≥1080px) shows the hero photo at full strength with a
+  transparent nav over it, which adds `--kd-hero-overlay-photo` and
+  `--kd-nav-overlay` (tokens.css). The nav turns solid ink once the hero has
+  scrolled under it. Phones keep the standard hero.
 - No icon set. The only vector in the design is the arrow on a button.
 - No second accent colour. Teal is for badges and nothing else.
 - No tints or shades of the eight colours. If you need a lighter ink, you need

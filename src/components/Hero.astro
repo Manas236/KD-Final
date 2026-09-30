@@ -19,6 +19,12 @@
    opacity, the 90° ink gradient over it, then the content. The gradient
    is opaque ink across the left 45%, which is exactly where the text
    sits — so the photograph is chosen for what is in its RIGHT half.
+
+   DESKTOP (≥1080px) IS DIFFERENT, by client request: the photograph
+   runs at full strength under `--kd-hero-overlay-photo`, the stat tiles
+   sit on ink, and the nav is transparent over it (Nav.astro, `overlay`).
+   Below 1080 the description above holds unchanged. `data-nav-overlay`
+   is what the nav watches to know when to go solid again.
    ============================================================ */
 import { Image } from "astro:assets";
 import backdrop from "../assets/hero-nhava-sheva-station.jpg";
@@ -29,7 +35,7 @@ import Kicker from "./Kicker.astro";
 const { hero } = home;
 ---
 
-<section class="relative bg-kd-ink overflow-hidden">
+<section class="relative bg-kd-ink overflow-hidden" data-nav-overlay>
   <div class="absolute inset-0" aria-hidden="true">
     <Image
       src={backdrop}
@@ -38,10 +44,11 @@ const { hero } = home;
       height={813}
       loading="eager"
       fetchpriority="high"
-      class="w-full h-full object-cover object-center"
-      style="opacity: var(--kd-hero-image-opacity)"
+      class="w-full h-full object-cover object-center [opacity:var(--kd-hero-image-opacity)] min-[1080px]:[opacity:1]"
     />
-    <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)">
+    <div
+      class="absolute inset-0 [background-image:var(--kd-hero-overlay)] min-[1080px]:[background-image:var(--kd-hero-overlay-photo)]"
+    >
     </div>
   </div>
 
@@ -96,7 +103,7 @@ const { hero } = home;
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
         {
           hero.stats.map((stat, i) => (
-            <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+            <div class="bg-kd-stat-fill min-[1080px]:[background-color:var(--kd-hero-stat-fill-photo)] border border-kd-stat-border p-24">
               <dd
                 class="font-display text-d5 text-kd-mint"
                 data-edit={`home.hero.stats.${i}.value`}

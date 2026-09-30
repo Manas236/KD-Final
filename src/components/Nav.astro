@@ -31,16 +31,42 @@ import { home } from "../data/home";
 interface Props {
   /** First segment of every slot key this component writes. */
   page?: string;
+  /** Transparent over the hero on desktop (homepage only). */
+  overlay?: boolean;
 }
 
-const { page = "home" } = Astro.props;
+const { page = "home", overlay = false } = Astro.props;
 
 const { nav } = home;
 const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
+
+/* Links with a `parent` render in that link's drop-down instead of on
+   the bar. `i` is kept alongside so the edit key stays the link's own
+   array index. */
+const indexed = nav.links.map((link, i) => ({ link, i }));
+const childrenOf = (href: string) =>
+  indexed.filter(({ link }) => link.parent === href);
+/* The bar's links, left to right by `order` — array order is edit-key
+   order and cannot be changed (home.ts). */
+const topLevel = indexed
+  .filter(({ link }) => !link.parent)
+  .sort((a, b) => (a.link.order ?? a.i) - (b.link.order ?? b.i));
+/* A link is current on its own page and on any page beneath it, so
+   Projects stays lit on /projects/<slug>. Home matches only itself. */
+const isHere = (href: string) =>
+  here === href || (href !== "/" && here.startsWith(href + "/"));
 ---
 
+{/* OVERLAY (homepage, ≥1080px only): while the hero is under the bar,
+    `data-transparent` swaps the ink for `--kd-nav-overlay` and drops the
+    border, so the photograph runs to the top of the window. The script
+    below removes it once the hero has scrolled out from under the bar.
+    It is rendered on, so the first paint is already transparent. Below
+    1080 the attribute does nothing — phones keep the solid bar. */}
 <header
-  class="fixed top-0 inset-x-0 z-50 bg-kd-ink border-b border-b-kd-nav-border"
+  class="fixed top-0 inset-x-0 z-50 bg-kd-ink border-b border-b-kd-nav-border min-[1080px]:data-transparent:[background:var(--kd-nav-overlay)_no-repeat] min-[1080px]:data-transparent:border-b-transparent"
+  data-overlay={overlay ? "" : undefined}
+  data-transparent={overlay ? "" : undefined}
 >
   <div
     class="max-w-kd mx-auto px-24 sm:px-48 h-88 flex items-center justify-between gap-40"
@@ -62,22 +88,60 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
     >
       <ul class="flex items-center gap-24 min-[1200px]:gap-32">
         {
-          nav.links.map((link, i) => {
-            const active = here === link.href;
+          topLevel.map(({ link, i }) => {
+            const kids = childrenOf(link.href);
+            const active =
+              isHere(link.href) || kids.some(({ link: k }) => isHere(k.href));
             return (
-              <li>
+              <li class="relative group">
                 <a
                   href={link.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={here === link.href ? "page" : undefined}
                   class:list={[
-                    "block text-nav pb-6 border-b",
+                    "flex items-center gap-6 text-nav pb-6 border-b",
                     active
                       ? "text-kd-mint border-b-kd-mint"
                       : "text-kd-mist border-b-transparent",
                   ]}
                 >
                   <span data-edit={`${page}.nav.links.${i}.label`}>{link.label}</span>
+                  {kids.length > 0 && (
+                    <svg
+                      class="w-10 h-10 transition-transform group-hover:rotate-180 group-focus-within:rotate-180"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="M1.5 3.5L5 7l3.5-3.5" stroke-linecap="square" />
+                    </svg>
+                  )}
                 </a>
+                {/* pt-31 bridges the gap from the link to the header's
+                    bottom edge, so the pointer never leaves the group on
+                    its way down and the menu hangs from the bar. */}
+                {kids.length > 0 && (
+                  <div class="absolute left-0 top-full pt-31 hidden group-hover:block group-focus-within:block">
+                    <ul class="min-w-200 bg-kd-ink border border-kd-nav-border py-8">
+                      {kids.map(({ link: kid, i: j }) => (
+                        <li>
+                          <a
+                            href={kid.href}
+                            aria-current={here === kid.href ? "page" : undefined}
+                            class:list={[
+                              "block text-nav px-20 py-10 whitespace-nowrap hover:text-kd-mint",
+                              isHere(kid.href) ? "text-kd-mint" : "text-kd-mist",
+                            ]}
+                          >
+                            <span data-edit={`${page}.nav.links.${j}.label`}>{kid.label}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </li>
             );
           })
@@ -141,8 +205,9 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
   >
     <ul class="flex flex-col px-24 py-24 gap-24">
       {
-        nav.links.map((link, i) => {
-          const active = here === link.href;
+        topLevel.map(({ link }) => {
+          const kids = childrenOf(link.href);
+          const active = isHere(link.href);
           return (
             <li>
               <a
@@ -157,6 +222,26 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
               >
                 <span data-no-edit>{link.label}</span>
               </a>
+              {kids.length > 0 && (
+                <ul class="flex flex-col gap-16 mt-16 pl-16 border-l border-l-kd-nav-border">
+                  {kids.map(({ link: kid }) => (
+                    <li>
+                      <a
+                        href={kid.href}
+                        aria-current={here === kid.href ? "page" : undefined}
+                        class:list={[
+                          "inline-block text-nav pb-6 border-b",
+                          isHere(kid.href)
+                            ? "text-kd-mint border-b-kd-mint"
+                            : "text-kd-mist border-b-transparent",
+                        ]}
+                      >
+                        <span data-no-edit>{kid.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           );
         })
@@ -194,4 +279,17 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
   drawer?.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest("a")) setOpen(false);
   });
+
+  const header = document.querySelector<HTMLElement>("header[data-overlay]");
+  const hero = document.querySelector("[data-nav-overlay]");
+  if (header && hero) {
+    const update = () =>
+      header.toggleAttribute(
+        "data-transparent",
+        hero.getBoundingClientRect().bottom > header.offsetHeight,
+      );
+    update();
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+  }
 </script>

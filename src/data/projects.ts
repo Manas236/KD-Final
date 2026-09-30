@@ -29,7 +29,7 @@
    src/components/projects/Filters.astro.
 
    Three real projects here — Matunga Workshop, Sanpada Carshed, Matunga
-   Workshop FOB — already appear on the homepage. Their facts (name,
+   Z-Bridge — already appear on the homepage. Their facts (name,
    value, client) are copied by hand rather than imported from home.ts,
    the same way about.ts writes its own STORY_LEAD instead of importing
    home.ts's HERO_SUB even though both describe the same company: this
@@ -48,6 +48,8 @@
    fabricated and erected over a live line at Matunga, Central Railway)
    matches this project's description closely enough that the two are
    treated as the same structure under its doc-given name — see #19b.
+   (Renamed back to "Matunga Z-Bridge" 2026-09-29 at the user's request,
+   #41.)
    Four projects named in the doc but previously absent from this page
    — Nhava Sheva & Uran Railway Stations, Harbour Line FOBs &
    Trespass-Control, Solapur Vande Bharat Maintenance Depot and Lower
@@ -169,7 +171,7 @@ export const projects = {
       /* No dedicated photograph exists for this project — see
          OPEN-QUESTIONS.md #18. The alt text describes the stand-in
          image actually in the box, not the project, the same way the
-         Matunga Workshop FOB card's alt text does — see #19b. */
+         Matunga Z-Bridge card's alt text does — see #19b. */
       alt: "K.D. Constructions workforce on site at Mankhurd",
     } as FeaturedProject,
 
@@ -251,11 +253,13 @@ export const projects = {
         statusBadge: "",
         badges: ["Civil", "Structural Steel"],
         steel: true,
-        title: "Matunga Workshop FOB",
-        /* Renamed from "Matunga Z-Bridge" — see OPEN-QUESTIONS.md #19b.
-           Its own photograph since 2026-09-28 (#38), no longer a stand-in. */
+        title: "Matunga Z-Bridge",
+        /* The Matunga Workshop FOB. Was titled that per #19b; renamed back
+           to the name it is known by at the user's request 2026-09-29
+           (OPEN-QUESTIONS.md #41). Its own photograph since 2026-09-28
+           (#38), no longer a stand-in. */
         meta: "Central Railway · 303m Span",
-        alt: "The Matunga Z-Bridge's western approach, granite-paved between steel railings",
+        alt: "Aerial view of the Matunga Z-Bridge, its covered deck running the length of the workshop yard",
       },
       {
         live: true,
@@ -326,7 +330,7 @@ export const projects = {
           { title: "Nhava Sheva & Uran Railway Stations", figure: "3,046 MT", label: "Structural steel" },
           { title: "Matunga LHB Coach Maintenance Facilities", figure: "1,816 MT", label: "Structural steel" },
           { title: "Sanpada Carshed", figure: "1,412 MT", label: "Fabrication & erection" },
-          { title: "Matunga Workshop FOB", figure: "704.88 MT", label: "303 m FOB erected over a running line" },
+          { title: "Matunga Z-Bridge", figure: "704.88 MT", label: "303 m FOB erected over a running line" },
           { title: "Harbour Line FOBs & Trespass-Control", figure: "4 Locations", label: "FOBs launched over running lines" },
         ] as readonly SteelLedgerRow[],
       },

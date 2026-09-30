@@ -1,8 +1,11 @@
 ---
 import InfoPage from "../components/InfoPage.astro";
+import Record from "../components/hse/Record.astro";
 import { hse } from "../data/pages";
 
 export const prerender = false;
 ---
 
-<InfoPage page="hse" copy={hse} />
+<InfoPage page="hse" copy={hse}>
+  <Record bands={hse.record.bands} />
+</InfoPage>

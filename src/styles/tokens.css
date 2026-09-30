@@ -170,6 +170,19 @@
      lightened the same way. */
   --kd-hero-overlay: linear-gradient(90deg, rgba(44, 58, 64, 0.85) 45%, rgba(44, 58, 64, 0.40) 100%);
   --kd-hero-image-opacity: 0.35;
+  /* HOMEPAGE HERO ON DESKTOP ONLY (≥1080px, where the nav is a bar and
+     not a drawer): the photograph runs at full strength, L&T-style, with
+     the nav transparent over it. So the overlay has to do all the
+     legibility work — a short top fade under the nav and a left-to-right
+     ink wash behind the text column, clear by 72% so the right half is
+     the photo. The stat tiles' 6% mist fill disappears on a bright
+     photo, so on this hero they sit on 55% ink instead. Client request,
+     Sep 29 2026; DESIGN-SYSTEM.md §11 lists these as the exception. */
+  --kd-hero-overlay-photo:
+    linear-gradient(180deg, rgba(44, 58, 64, 0.35) 0%, rgba(44, 58, 64, 0) 25%),
+    linear-gradient(90deg, rgba(44, 58, 64, 0.88) 0%, rgba(44, 58, 64, 0.65) 40%, rgba(44, 58, 64, 0) 72%);
+  --kd-nav-overlay: linear-gradient(180deg, rgba(44, 58, 64, 0.55) 0%, rgba(44, 58, 64, 0) 100%);
+  --kd-hero-stat-fill-photo: rgba(44, 58, 64, 0.55);
   --kd-scrim-lg: linear-gradient(
     0deg,
     rgba(44, 58, 64, 0.75) 0%,
