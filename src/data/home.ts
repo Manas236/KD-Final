@@ -85,7 +85,8 @@ export const home = {
   nav: {
     logoAlt: "K.D. Constructions",
     /* 2026-09-29: the bar had grown to nine links, so it was grouped
-       into four — Home · About ▾ · Projects ▾ · Contact. `parent` puts a
+       into four — Home · About ▾ · Projects ▾ · Contact (Careers joined
+       the bar beside Contact 2026-09-30). `parent` puts a
        link in that top-level link's drop-down (company pages under
        About, track-record pages under Projects); `order` places the
        top-level ones on the bar.
@@ -106,7 +107,7 @@ export const home = {
       { label: "CSR", href: "/csr", parent: "/about" },
       { label: "Gallery", href: "/gallery", parent: "/projects" },
       { label: "Home", href: "/", order: 0 },
-      { label: "Careers", href: "/careers", parent: "/about" },
+      { label: "Careers", href: "/careers", order: 2.5 },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },
