@@ -17,12 +17,24 @@
    - NOT /studio/. The sign-in page sets X-Robots-Tag: noindex and its
      slug is a 40-character secret nothing links to; a Disallow line
      would only announce that the path exists.
+
+   Except on a test deployment (SITE_NOINDEX=1, src/lib/staging.ts):
+   there it disallows everything and names no sitemap.
    ============================================================ */
 import type { APIRoute } from "astro";
+import { isNoindexDeployment } from "../lib/staging";
 
 export const prerender = false;
 
 export const GET: APIRoute = ({ site }) => {
+  if (isNoindexDeployment()) {
+    return new Response("User-agent: *\nDisallow: /\n", {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-cache",
+      },
+    });
+  }
   const lines = ["User-agent: *", "Allow: /"];
   if (site) lines.push("", `Sitemap: ${new URL("/sitemap.xml", site).href}`);
   return new Response(lines.join("\n") + "\n", {

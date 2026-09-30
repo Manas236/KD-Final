@@ -49,3 +49,13 @@ if (url.pathname !== "/" || url.search || url.hash) {
 }
 
 console.log(`  PASS  PUBLIC_SITE_URL=${url.origin}`);
+
+/* The staging switch (src/lib/staging.ts) keeps a test copy out of the
+   index. Left on at launch, the real site never enters it either. */
+const noindex = (process.env.SITE_NOINDEX ?? "").trim().toLowerCase();
+if (noindex === "1" || noindex === "true") {
+  console.log("  FAIL  SITE_NOINDEX is on — the launch site would tell every crawler to go away.");
+  console.log("        Remove it from .env (it is for the test server only). PRE-LAUNCH.md G6.");
+  process.exit(1);
+}
+console.log("  PASS  SITE_NOINDEX is off");
