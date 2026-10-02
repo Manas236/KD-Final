@@ -741,7 +741,24 @@ export const clients: InfoPageCopy = {
   },
 };
 
-export const contact: InfoPageCopy = {
+/* /contact's map band (Oct 2 2026) — a live Google Maps embed between
+   the cards and the CTA, rendered by src/pages/contact.astro. `embed`
+   is the iframe's src and `embedTitle` its title attribute, so the key
+   check reads both as attributes, not copy. The pin is the company's own
+   Maps listing ("K.D. Constructions", Real Tech Park) — the same place
+   the Headquarters card's short link opens, 19.0661905, 72.9988837.
+   No API key: this is the classic output=embed URL. */
+export interface ContactCopy extends InfoPageCopy {
+  readonly map: {
+    readonly kicker: string;
+    readonly heading: string;
+    readonly embed: string;
+    readonly embedTitle: string;
+    readonly directions: NavLink;
+  };
+}
+
+export const contact: ContactCopy = {
   meta: {
     title: "Contact — K.D. Constructions",
     description:
@@ -774,8 +791,6 @@ export const contact: InfoPageCopy = {
           title: "Phone",
           links: [
             { label: "022-2781 5380 (landline)", href: "tel:02227815380" },
-            { label: "+91 98676 06692", href: "tel:+919867606692" },
-            { label: "+91 98922 43804", href: "tel:+919892243804" },
             { label: "+91 91369 10475", href: "tel:+919136910475" },
           ],
         },
@@ -816,6 +831,18 @@ export const contact: InfoPageCopy = {
       ],
     },
   ],
+  map: {
+    kicker: "Find Us",
+    heading: "Real Tech Park, Vashi.",
+    embed:
+      "https://maps.google.com/maps?q=K.D.+Constructions,+Real+Tech+Park,+Sector+30A,+Vashi," +
+      "+Navi+Mumbai+400703&ll=19.0661905,72.9988837&z=17&output=embed",
+    embedTitle: "Map showing K.D. Constructions at Real Tech Park, Vashi, Navi Mumbai",
+    directions: {
+      label: "Get directions",
+      href: "https://www.google.com/maps/dir/?api=1&destination=19.0661905,72.9988837",
+    },
+  },
   cta: {
     kicker: "Our Work",
     headline: "Five decades of delivery.",

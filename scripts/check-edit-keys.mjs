@@ -233,8 +233,9 @@ const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
    (InfoPage.astro) — an attribute's source, like `alt`, never a run of
    text. `video` names a clip in public/video/ and `tone` a band surface
    (both /hse, src/components/hse/Record.astro). `parent` is the href a
-   nav link drops down from (home.ts nav.links). */
-const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|id|video|tone|parent)$/;
+   nav link drops down from (home.ts nav.links). `embed` and `embedTitle`
+   are /contact's map iframe src and title (pages.ts contact.map). */
+const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|id|video|tone|parent|embed|embedTitle)$/;
 const runtime = route.runtime ?? [];
 const isRuntime = (path) => runtime.some((r) => path.startsWith(r));
 const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path) && !isRuntime(l.path));

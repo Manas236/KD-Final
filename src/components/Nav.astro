@@ -124,7 +124,8 @@ const isHere = (href: string) =>
                     its way down and the menu hangs from the bar. */}
                 {kids.length > 0 && (
                   <div class="absolute left-0 top-full pt-31 hidden group-hover:block group-focus-within:block">
-                    <ul class="min-w-200 bg-kd-ink border border-kd-nav-border py-8">
+                    {/* kd-nav-menu: frosted over the hero, see global.css. */}
+                    <ul class="kd-nav-menu min-w-200 bg-kd-ink border border-kd-nav-border py-8">
                       {kids.map(({ link: kid, i: j }) => (
                         <li>
                           <a

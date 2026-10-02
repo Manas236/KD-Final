@@ -183,6 +183,15 @@
     linear-gradient(90deg, rgba(44, 58, 64, 0.88) 0%, rgba(44, 58, 64, 0.65) 40%, rgba(44, 58, 64, 0) 72%);
   --kd-nav-overlay: linear-gradient(180deg, rgba(44, 58, 64, 0.55) 0%, rgba(44, 58, 64, 0) 100%);
   --kd-hero-stat-fill-photo: rgba(44, 58, 64, 0.55);
+  /* Nav drop-down while the bar is transparent over the homepage photo
+     (Oct 2 2026, client request): frosted glass instead of solid ink.
+     Same 55% ink as the hero stat tiles above, so the two glass surfaces
+     on that hero read as one material; the blur does the legibility work
+     over a bright sky that 55% alone would not. Solid ink is the
+     fallback where backdrop-filter is unsupported (global.css). */
+  --kd-nav-menu-glass: rgba(44, 58, 64, 0.55);
+  --kd-nav-menu-glass-border: rgba(219, 229, 231, 0.14);
+  --kd-nav-menu-blur: blur(16px) saturate(140%);
   --kd-scrim-lg: linear-gradient(
     0deg,
     rgba(44, 58, 64, 0.75) 0%,

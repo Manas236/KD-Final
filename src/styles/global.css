@@ -44,3 +44,26 @@
     text-decoration: none;
   }
 }
+
+/* Nav drop-down (Projects, About) while the bar is transparent over the
+   homepage hero — Nav.astro sets data-transparent on the header only
+   there, only at ≥1080px, and removes it once the hero scrolls out from
+   under the bar. Everywhere else the menu keeps its solid ink, so it
+   always matches the bar it hangs from. Unlayered on purpose: it has to
+   win over the menu's bg-kd-ink utility. Colours are tokens.css's. */
+@media (min-width: 1080px) {
+  header[data-transparent] .kd-nav-menu {
+    background-color: var(--kd-nav-menu-glass);
+    border-color: var(--kd-nav-menu-glass-border);
+    -webkit-backdrop-filter: var(--kd-nav-menu-blur);
+    backdrop-filter: var(--kd-nav-menu-blur);
+  }
+
+  /* No backdrop-filter means 55% ink over a bright sky: unreadable. Stay
+     solid instead. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    header[data-transparent] .kd-nav-menu {
+      background-color: var(--kd-ink);
+    }
+  }
+}
