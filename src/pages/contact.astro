@@ -1,8 +1,64 @@
 ---
+/* ============================================================
+   /contact — InfoPage, plus a map band before the CTA (Oct 2 2026)
+   ------------------------------------------------------------
+   Copy: `contact` in src/data/pages.ts, the map under `contact.map`.
+
+   The map is a live Google Maps embed (no API key). Its cost is
+   Google's own script, ~0.5 MB with cookies, so:
+     - loading="lazy": nothing is fetched until the band nears the
+       viewport, so the cards above load exactly as before;
+     - the frame sits in a fixed-ratio box (4:5 on phones, 16:9 from
+       sm, 21:9 from lg), so the page never shifts when it arrives —
+       scripts/check-layout-shift.mjs stays honest;
+     - "Get directions" under it opens Google Maps (the app, on a
+       phone) straight into a route, which a scroll-trapped iframe on a
+       small screen is bad at;
+     - square corners and the light-band card border, per
+       DESIGN-SYSTEM (radius 0 everywhere).
+   One section on this page means the cards are on white, so this band
+   is mist — no two adjacent bands share a surface (DESIGN-SYSTEM §2).
+   ============================================================ */
 import InfoPage from "../components/InfoPage.astro";
+import Kicker from "../components/Kicker.astro";
+import Arrow from "../components/Arrow.astro";
 import { contact } from "../data/pages";
 
 export const prerender = false;
+
+const { map } = contact;
 ---
 
-<InfoPage page="contact" copy={contact} />
+<InfoPage page="contact" copy={contact}>
+  <section class="bg-kd-mist py-96">
+    <div class="max-w-kd mx-auto px-24 sm:px-48">
+      <Kicker label={map.kicker} editKey="contact.map.kicker" tone="light" />
+      <h2 class="font-display text-d4 text-kd-ink mt-16" data-edit="contact.map.heading">
+        {map.heading}
+      </h2>
+
+      <div
+        class="relative mt-48 aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/9] bg-white border border-kd-card-border-light"
+      >
+        <iframe
+          src={map.embed}
+          title={map.embedTitle}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          class="absolute inset-0 w-full h-full border-0"
+        ></iframe>
+      </div>
+
+      <a
+        href={map.directions.href}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-8 text-ui text-kd-mint-2 pb-2 mt-24 border-b border-b-transparent hover:border-b-kd-mint-2"
+      >
+        <span data-edit="contact.map.directions.label">{map.directions.label}</span>
+        <Arrow />
+      </a>
+    </div>
+  </section>
+</InfoPage>
