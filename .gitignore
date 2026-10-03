@@ -47,3 +47,6 @@ pnpm-debug.log*
 /kd_logo.jpg
 *.pptx
 *.docx
+
+# studio uploads in local development (MEDIA_DIR default)
+/media/

@@ -24,7 +24,7 @@
 import { getImage } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthed } from "../../lib/edit-auth";
-import { galleryImage } from "../../lib/gallery-images";
+import { galleryImage, isUpload } from "../../lib/gallery-images";
 import { liveState } from "../../lib/gallery-live";
 import { galleryPage } from "../../data/gallery-page";
 
@@ -40,7 +40,9 @@ Astro.response.headers.set("Cache-Control", "no-store");
 /* A thumbnail for every photograph the manager can show, hidden and
    library ones included. The list itself comes from /api/gallery. */
 const state = await liveState();
-const files = [...state.groups.values()].flat().map((p) => p.file);
+/* Studio uploads are left out: the manager builds their URLs itself
+   from the file name (isUpload / uploadUrls in gallery-images.ts). */
+const files = [...state.groups.values()].flat().map((p) => p.file).filter((f) => !isUpload(f));
 const thumbs = Object.fromEntries(
   await Promise.all(
     files.map(async (file) => {
@@ -76,6 +78,7 @@ const bootJson = JSON.stringify(boot).replace(/</g, "\\u003c");
             <span>Jump to</span>
             <select id="gm-jump"></select>
           </label>
+          <button type="button" class="gm-btn" id="gm-upload-open" aria-controls="gm-upload">Upload photos</button>
           <button type="button" class="gm-btn" id="gm-history-open" aria-controls="gm-history">History</button>
           <a class="gm-btn gm-btn-primary" href="/gallery">View the gallery</a>
         </div>
@@ -93,6 +96,7 @@ const bootJson = JSON.stringify(boot).replace(/</g, "\\u003c");
         <li><strong>Move</strong>: pick another project from "Move to".</li>
         <li><strong>Hide</strong>: takes a photo off the site. It stays here under "Hidden", ready to show again.</li>
         <li><strong>Caption</strong>: click the caption to edit it. It changes everywhere the photo appears.</li>
+        <li><strong>Upload</strong>: "Upload photos" at the top, or "Upload here" on a project. Every photo needs a caption.</li>
       </ul>
     </section>
 
@@ -108,6 +112,29 @@ const bootJson = JSON.stringify(boot).replace(/</g, "\\u003c");
       </div>
       <ol id="gm-history-list"></ol>
     </aside>
+
+    <dialog id="gm-upload" class="gm-upload" aria-labelledby="gm-upload-title">
+      <div class="gm-upload-head">
+        <h2 id="gm-upload-title">Upload photos</h2>
+        <button type="button" class="gm-btn" id="gm-upload-close">Close</button>
+      </div>
+      <label class="gm-field">
+        <span>Project</span>
+        <select id="gm-upload-group"></select>
+      </label>
+      <div class="gm-drop" id="gm-drop">
+        <p>
+          Drag photos here, or
+          <label class="gm-link gm-pick">choose photos<input id="gm-upload-input" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>.
+        </p>
+        <p class="gm-note">JPG, PNG or WebP, up to 25 MB each and at least 1000 px on the long side. Location data is removed before anything is saved.</p>
+      </div>
+      <ol id="gm-queue" class="gm-queue"></ol>
+      <div class="gm-upload-foot">
+        <span id="gm-upload-summary" class="gm-note"></span>
+        <button type="button" class="gm-btn gm-btn-primary" id="gm-upload-go" disabled>Upload</button>
+      </div>
+    </dialog>
 
     <dialog id="gm-preview" class="gm-preview">
       <img id="gm-preview-img" alt="" />

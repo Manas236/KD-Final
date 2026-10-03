@@ -25,21 +25,20 @@ import type { APIRoute } from "astro";
 import type { RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
-import { cleanText, clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { clientIpFrom, userAgentFrom } from "../../lib/editable";
 import {
-  allGroups,
-  effectiveEvents,
+  checkCaption,
+  hasPhoto,
   isGroup,
-  isKnownFile,
   readEvents,
   replay,
   type GalleryEvent,
+  type LiveState,
 } from "../../lib/gallery-live";
+import { snapshot } from "../../lib/gallery-snapshot";
 
 export const prerender = false;
 
-const MAX_CAPTION = 200;
-const HISTORY = 60;
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -51,52 +50,11 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-/** Everything the manager draws. */
-function snapshot(events: readonly GalleryEvent[]) {
-  const state = replay(events);
-  const groups = allGroups.map((g) => ({
-    project: g.project,
-    section: g.section,
-    photos: state.groups.get(g.project) ?? [],
-  }));
-
-  // Which non-undo events are in force, and which undo row cancelled
-  // each one that is not: that row is what "Redo" undoes. Same walk as
-  // effectiveEvents(): newest first, a cancelled undo cancels nothing.
-  const active = new Set(effectiveEvents(events).map((e) => e.id));
-  const cancelledBy = new Map<number, number>();
-  const cancelled = new Set<number>();
-  for (let i = events.length - 1; i >= 0; i--) {
-    const e = events[i];
-    if (e.action !== "undo" || e.ref_id == null || cancelled.has(e.id)) continue;
-    cancelled.add(e.ref_id);
-    if (!cancelledBy.has(e.ref_id)) cancelledBy.set(e.ref_id, e.id);
-  }
-
-  const history = events
-    .filter((e) => e.action !== "undo")
-    .slice(-HISTORY)
-    .reverse()
-    .map((e) => ({
-      id: e.id,
-      action: e.action,
-      file: e.file,
-      group: e.target_group,
-      position: e.position,
-      caption: e.caption,
-      at: e.created_at,
-      undone: !active.has(e.id),
-      undoneBy: active.has(e.id) ? null : (cancelledBy.get(e.id) ?? null),
-    }));
-
-  return { groups, history };
-}
-
 export const GET: APIRoute = async ({ request }) => {
   if (!isAuthed(request)) return json({ error: "Not signed in." }, 401);
   const events = await readEvents();
   if (!events) return json({ error: "Could not read the gallery. Try again in a moment." }, 503);
-  return json(snapshot(events));
+  return json(await snapshot(events));
 };
 
 interface Insert {
@@ -108,7 +66,7 @@ interface Insert {
   ref: number | null;
 }
 
-function validate(body: Record<string, unknown>): Insert | string {
+function validate(body: Record<string, unknown>, state: LiveState): Insert | string {
   const action = body.action;
   const file = body.file;
 
@@ -118,7 +76,7 @@ function validate(body: Record<string, unknown>): Insert | string {
     return { action, file: null, group: null, position: null, caption: null, ref };
   }
 
-  if (!isKnownFile(file)) return "That photograph is not in the gallery.";
+  if (!hasPhoto(state, file)) return "That photograph is not in the gallery.";
 
   switch (action) {
     case "hide":
@@ -135,10 +93,9 @@ function validate(body: Record<string, unknown>): Insert | string {
       return { action, file, group: body.group, position, caption: null, ref: null };
     }
     case "caption": {
-      const caption = cleanText(body.caption);
-      if (!caption) return "A caption cannot be empty.";
-      if (caption.length > MAX_CAPTION) return `Keep captions under ${MAX_CAPTION} characters.`;
-      return { action, file, group: null, position: null, caption, ref: null };
+      const checked = checkCaption(body.caption);
+      if ("error" in checked) return checked.error;
+      return { action, file, group: null, position: null, caption: checked.caption, ref: null };
     }
     default:
       return "Unknown change.";
@@ -176,7 +133,9 @@ export const POST: APIRoute = async (context) => {
   }
   if (!body || typeof body !== "object") return json({ error: "Could not read the request." }, 400);
 
-  const change = validate(body);
+  const before = await readEvents();
+  if (!before) return json({ error: "Could not read the gallery. Nothing was changed." }, 503);
+  const change = validate(body, replay(before));
   if (typeof change === "string") return json({ error: change }, 400);
 
   try {
@@ -204,5 +163,5 @@ export const POST: APIRoute = async (context) => {
 
   const events = await readEvents();
   if (!events) return json({ error: "Saved, but could not reload. Refresh the page." }, 503);
-  return json(snapshot(events));
+  return json(await snapshot(events));
 };

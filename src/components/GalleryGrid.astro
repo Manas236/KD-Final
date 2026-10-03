@@ -30,7 +30,7 @@
    ============================================================ */
 import { Image, getImage } from "astro:assets";
 import type { GalleryPhoto } from "../data/gallery";
-import { galleryImage } from "../lib/gallery-images";
+import { galleryImage, isUpload, uploadUrls } from "../lib/gallery-images";
 
 interface Props {
   /** The project title — prefixes every alt text. */
@@ -44,18 +44,27 @@ const { project, photos, group } = Astro.props;
 
 const LIGHTBOX_WIDTH = 1600;
 
+/* A studio upload is not in src/assets: its 800×552 tile and its
+   lightbox rendition were made when it was uploaded (see
+   src/lib/gallery-media.ts), so it is drawn as a plain <img> of the
+   same size and crop instead of through <Image>. */
 const tiles = await Promise.all(
   photos.map(async (photo) => {
+    const alt = `${project} — ${photo.caption}`;
+    if (isUpload(photo.file)) {
+      const urls = uploadUrls(photo.file);
+      return { photo, image: null, tile: urls.tile, full: urls.full, alt };
+    }
     const image = galleryImage(photo.file);
     const full = await getImage({ src: image, width: Math.min(LIGHTBOX_WIDTH, image.width) });
-    return { photo, image, full: full.src, alt: `${project} — ${photo.caption}` };
+    return { photo, image, tile: null, full: full.src, alt };
   })
 );
 ---
 
 <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
   {
-    tiles.map(({ photo, image, full, alt }) => (
+    tiles.map(({ photo, image, tile, full, alt }) => (
       <li>
         <figure
           class="relative h-265 overflow-hidden cursor-pointer"
@@ -63,14 +72,26 @@ const tiles = await Promise.all(
           data-lightbox-group={group}
           data-lightbox-src={full}
         >
-          <Image
-            src={image}
-            alt={alt}
-            width={800}
-            height={552}
-            loading="lazy"
-            class="absolute inset-0 w-full h-full object-cover object-center"
-          />
+          {image ? (
+            <Image
+              src={image}
+              alt={alt}
+              width={800}
+              height={552}
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          ) : (
+            <img
+              src={tile}
+              alt={alt}
+              width="800"
+              height="552"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          )}
           <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
           <button
             type="button"

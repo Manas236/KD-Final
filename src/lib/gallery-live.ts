@@ -20,6 +20,7 @@
    ============================================================ */
 import type { RowDataPacket } from "mysql2";
 import pool from "./db";
+import { cleanText } from "./editable";
 import {
   hseGalleries,
   plantGalleries,
@@ -37,7 +38,7 @@ export type Section = "railway" | "social" | "plant" | "hse";
 
 export interface GalleryEvent {
   readonly id: number;
-  readonly action: "hide" | "show" | "move" | "caption" | "undo";
+  readonly action: "hide" | "show" | "move" | "caption" | "undo" | "add";
   readonly file: string | null;
   readonly target_group: string | null;
   readonly position: number | null;
@@ -106,6 +107,8 @@ export interface LivePhoto extends GalleryPhoto {
   readonly hidden: boolean;
   /** In src/data/gallery-library.ts rather than gallery.ts. */
   readonly library: boolean;
+  /** Uploaded in the studio: its files are in MEDIA_DIR, not src/assets. */
+  readonly upload: boolean;
   /** The caption the code ships with, before any studio edit. */
   readonly baseCaption: string;
 }
@@ -138,6 +141,7 @@ export function replay(events: readonly GalleryEvent[], fromDatabase = true): Li
   const baseCaption = new Map<string, string>();
   const hidden = new Set<string>();
   const library = new Set<string>();
+  const uploads = new Set<string>();
   const placement = new Map<string, string>();
 
   for (const g of allGroups) order.set(g.project, []);
@@ -160,7 +164,22 @@ export function replay(events: readonly GalleryEvent[], fromDatabase = true): Li
 
   for (const e of effectiveEvents(events)) {
     const file = e.file;
-    if (!file || !placement.has(file)) continue;
+    if (!file) continue;
+    // An upload enters the gallery here: at the end of its project (or
+    // at `position`), visible, with the caption it was uploaded with.
+    // Undoing the `add` row takes it off the site again.
+    if (e.action === "add") {
+      if (placement.has(file) || !e.target_group || !order.has(e.target_group)) continue;
+      const to = order.get(e.target_group)!;
+      const at = e.position == null ? to.length : Math.max(0, Math.min(e.position, to.length));
+      to.splice(at, 0, file);
+      placement.set(file, e.target_group);
+      caption.set(file, e.caption ?? "");
+      baseCaption.set(file, e.caption ?? "");
+      uploads.add(file);
+      continue;
+    }
+    if (!placement.has(file)) continue;
     switch (e.action) {
       case "hide":
         hidden.add(file);
@@ -195,6 +214,7 @@ export function replay(events: readonly GalleryEvent[], fromDatabase = true): Li
         baseCaption: baseCaption.get(file)!,
         hidden: hidden.has(file),
         library: library.has(file),
+        upload: uploads.has(file),
       }))
     );
   }
@@ -224,6 +244,37 @@ export async function readEvents(): Promise<GalleryEvent[] | null> {
     console.error("Failed to read gallery events:", err);
     return null;
   }
+}
+
+/** Longest caption, in characters. */
+export const MAX_CAPTION = 200;
+
+/** A caption cleaned and checked, or the reason it cannot be used. */
+export function checkCaption(raw: unknown): { caption: string } | { error: string } {
+  const caption = cleanText(raw);
+  if (!caption) return { error: "A caption cannot be empty." };
+  if (caption.length > MAX_CAPTION) return { error: `Keep captions under ${MAX_CAPTION} characters.` };
+  return { caption };
+}
+
+/** Width and height of every studio upload, from gallery_uploads. The
+    manager uses them to label a photo landscape or portrait. */
+export async function uploadSizes(): Promise<Map<string, { w: number; h: number }>> {
+  try {
+    const [rows] = await pool.execute<RowDataPacket[]>("SELECT file, width, height FROM gallery_uploads");
+    return new Map(rows.map((r) => [r.file as string, { w: r.width as number, h: r.height as number }]));
+  } catch (err) {
+    console.error("Failed to read gallery uploads:", err);
+    return new Map();
+  }
+}
+
+/** Whether a photograph is anywhere in this state, hidden or not —
+    baseline, library or upload. What the API checks a `file` against. */
+export function hasPhoto(state: LiveState, file: unknown): file is string {
+  if (typeof file !== "string") return false;
+  for (const photos of state.groups.values()) if (photos.some((p) => p.file === file)) return true;
+  return false;
 }
 
 /** The live gallery for one page render. Never throws. */

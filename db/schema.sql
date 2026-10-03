@@ -115,11 +115,13 @@ CREATE TABLE IF NOT EXISTS job_posting_events (
 --   caption  file, caption   new caption, shown everywhere the photo is
 --   undo     ref_id          cancel event ref_id; undoing an undo puts
 --                            the change back
+--   add      file, target_group, caption   a photograph uploaded in the
+--                            studio (gallery_uploads holds its details)
 -- An undo never deletes anything, so the table is the whole history.
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS gallery_events (
   id            INT AUTO_INCREMENT PRIMARY KEY,
-  action        ENUM('hide', 'show', 'move', 'caption', 'undo') NOT NULL,
+  action        ENUM('hide', 'show', 'move', 'caption', 'undo', 'add') NOT NULL,
   file          VARCHAR(120)  NULL,
   target_group  VARCHAR(160)  NULL,
   position      INT           NULL,
@@ -131,10 +133,40 @@ CREATE TABLE IF NOT EXISTS gallery_events (
   INDEX idx_ref (ref_id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Installs created before uploads (3 Oct 2026) need the new action:
+--   ALTER TABLE gallery_events
+--     MODIFY action ENUM('hide', 'show', 'move', 'caption', 'undo', 'add') NOT NULL;
+
+-- ------------------------------------------------------------
+-- gallery_uploads — photographs uploaded through the studio
+--
+-- One row per upload. The files themselves are on disk under MEDIA_DIR
+-- (src/lib/gallery-media.ts), NOT in the repo and NOT in dist/, so a
+-- deploy never touches them — and so they need their own backup.
+-- `file` is the name every other table and page uses
+-- (up-YYYYMMDD-<8 hex>.jpg); `hash` is its dHash (src/lib/dhash.ts).
+-- original_name is what the editor's computer called it, for the
+-- audit trail only. APPEND-ONLY: an upload is taken off the site with
+-- a `hide` event, never by deleting this row or its files.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS gallery_uploads (
+  id             INT AUTO_INCREMENT PRIMARY KEY,
+  file           VARCHAR(120)  NOT NULL,
+  width          INT           NOT NULL,
+  height         INT           NOT NULL,
+  bytes          INT           NOT NULL,
+  hash           CHAR(16)      NOT NULL,
+  original_name  VARCHAR(255)  NULL,
+  client_ip      VARCHAR(45)   NULL,
+  user_agent     VARCHAR(255)  NULL,
+  created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_file (file)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ============================================================
 -- After running this, confirm:
 --
---   USE kd_construction; SHOW TABLES;      -- expect content_edits, gallery_events, job_posting_events
+--   USE kd_construction; SHOW TABLES;      -- expect content_edits, gallery_events, gallery_uploads, job_posting_events
 --
 -- SELECT and INSERT are all the app ever uses — the table is
 -- append-only, and a revert INSERTs a new row carrying the older text:
@@ -142,4 +174,5 @@ CREATE TABLE IF NOT EXISTS gallery_events (
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.gallery_events TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.gallery_uploads TO 'kd_app'@'localhost';
 -- ============================================================

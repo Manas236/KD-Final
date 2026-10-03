@@ -41,7 +41,7 @@ import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { projectDetails } from "../data/project-detail";
 import { livePhotos, livePlantPhotos, liveSection, liveState, type LiveState } from "../lib/gallery-live";
-import { galleryImage } from "../lib/gallery-images";
+import { galleryImage, isUpload, uploadUrls } from "../lib/gallery-images";
 import { socialPages } from "../data/social-projects";
 import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
@@ -92,6 +92,12 @@ function staticRoutes(): string[] {
     .sort();
 }
 
+/* A gallery photo's tile URL: the 800×552 rendition, made by Astro for
+   a src/assets photo or at upload time for a studio upload. */
+async function tileUrl(file: string, origin: URL): Promise<string> {
+  return isUpload(file) ? new URL(uploadUrls(file).tile, origin).href : rendition(galleryImage(file), TILE, origin);
+}
+
 async function rendition(
   src: ImageMetadata,
   size: { width: number; height: number },
@@ -111,7 +117,7 @@ async function projectImages(
   const out: SitemapImage[] = [{ loc: await rendition(hero, HERO, origin), title: heroAlt }];
   for (const photo of photos ?? []) {
     out.push({
-      loc: await rendition(galleryImage(photo.file), TILE, origin),
+      loc: await tileUrl(photo.file, origin),
       title: `${title} — ${photo.caption}`,
     });
   }
@@ -127,7 +133,7 @@ async function galleryPageImages(origin: URL, live: LiveState): Promise<SitemapI
     for (const group of liveSection(live, section.groups)) {
       for (const photo of group.photos) {
         out.push({
-          loc: await rendition(galleryImage(photo.file), TILE, origin),
+          loc: await tileUrl(photo.file, origin),
           title: `${group.project} — ${photo.caption}`,
         });
       }
