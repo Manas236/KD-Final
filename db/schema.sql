@@ -97,14 +97,49 @@ CREATE TABLE IF NOT EXISTS job_posting_events (
   INDEX idx_posting (action, posting_id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- ------------------------------------------------------------
+-- gallery_events — changes made in the studio gallery manager
+-- (/studio/gallery): which photographs show, in which project group,
+-- in what order, under what caption.
+--
+-- src/data/gallery.ts is the BASELINE and src/data/gallery-library.ts
+-- the photographs not on the site. The live gallery is the baseline
+-- with these events replayed over it in id order (src/lib/gallery-live.ts).
+-- If this table cannot be read, the site shows the baseline.
+--
+-- APPEND-ONLY, like the two tables above:
+--   hide     file            take a photograph off the site
+--   show     file            put a hidden or library photograph back
+--   move     file, target_group, position   move it (or reorder it
+--                            within its own group); position NULL = end
+--   caption  file, caption   new caption, shown everywhere the photo is
+--   undo     ref_id          cancel event ref_id; undoing an undo puts
+--                            the change back
+-- An undo never deletes anything, so the table is the whole history.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS gallery_events (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  action        ENUM('hide', 'show', 'move', 'caption', 'undo') NOT NULL,
+  file          VARCHAR(120)  NULL,
+  target_group  VARCHAR(160)  NULL,
+  position      INT           NULL,
+  caption       VARCHAR(300)  NULL,
+  ref_id        INT           NULL,
+  client_ip     VARCHAR(45)   NULL,
+  user_agent    VARCHAR(255)  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_ref (ref_id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ============================================================
 -- After running this, confirm:
 --
---   USE kd_construction; SHOW TABLES;      -- expect content_edits, job_posting_events
+--   USE kd_construction; SHOW TABLES;      -- expect content_edits, gallery_events, job_posting_events
 --
 -- SELECT and INSERT are all the app ever uses — the table is
 -- append-only, and a revert INSERTs a new row carrying the older text:
 --
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.gallery_events TO 'kd_app'@'localhost';
 -- ============================================================

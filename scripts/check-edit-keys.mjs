@@ -237,7 +237,13 @@ const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
    are /contact's map iframe src and title (pages.ts contact.map). */
 const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|id|video|tone|parent|embed|embedTitle)$/;
 const runtime = route.runtime ?? [];
-const isRuntime = (path) => runtime.some((r) => path.startsWith(r));
+/* Gallery captions are runtime data on every page since 3 Oct 2026:
+   one caption per photograph, edited in /studio/gallery and replayed
+   over gallery.ts when a page renders (src/lib/gallery-live.ts). They
+   carry no data-edit slot, so a caption in the copy object is neither
+   required on the page nor an orphan. See GalleryGrid.astro. */
+const galleryCaption = /(?:^|\.)(?:photos|gallery)\.\d+\.caption$/;
+const isRuntime = (path) => runtime.some((r) => path.startsWith(r)) || galleryCaption.test(path);
 const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path) && !isRuntime(l.path));
 
 let bad = 0;

@@ -294,3 +294,32 @@
     display: none !important;
   }
 }
+
+/* ---- Gallery manager link (added 3 Oct 2026) ----
+   On pages that show photographs, edit mode adds a link to the studio
+   gallery manager (/studio/gallery) in the opposite corner to the
+   editor bar. Gallery captions are not edited in the page any more —
+   see src/components/GalleryGrid.astro — so this is where they are. */
+.nt-gallery-manage {
+  display: none;
+}
+:root[data-nt-mode] .nt-gallery-manage {
+  display: block;
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 0.6rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--kd-teal, #68a6a0);
+  color: var(--kd-ink-deep, #1e2b30);
+  box-shadow: 0 4px 16px rgba(30, 43, 48, 0.28);
+  text-decoration: none;
+}

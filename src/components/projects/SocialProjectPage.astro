@@ -50,6 +50,8 @@ import Lightbox from "../Lightbox.astro";
 import type { SocialPageCopy } from "../../data/social-projects";
 import { galleryImage } from "../../lib/gallery-images";
 import { home } from "../../data/home";
+import { detailChrome } from "../../data/detail-chrome";
+import { livePhotos, liveState } from "../../lib/gallery-live";
 
 interface Props {
   slug: string;
@@ -61,6 +63,12 @@ const { detail } = page;
 const K = "projects.detail";
 
 const heroImage = detail.file ? galleryImage(detail.file) : undefined;
+
+/* Live photographs: gallery.ts with the studio gallery manager's
+   changes. A project with none in the baseline can gain some from the
+   studio, so the lightbox labels fall back to the shared chrome. */
+const photos = livePhotos(await liveState(), detail.title);
+const lightbox = photos.length > 0 ? (detail.lightbox ?? detailChrome.lightbox) : undefined;
 
 /* The nav's own label for /projects as the middle crumb — see the same
    note in ProjectDetailPage.astro. */
@@ -177,8 +185,8 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
         <div class="mt-56 pt-56 border-t border-kd-divider-light">
           <Kicker label={detail.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
           <div class="mt-32">
-            {detail.gallery.length > 0 ? (
-              <GalleryGrid project={detail.title} photos={detail.gallery} group={slug} keyPrefix={`${K}.gallery`} />
+            {photos.length > 0 ? (
+              <GalleryGrid project={detail.title} photos={photos} group={slug} />
             ) : (
               detail.photoNote && (
                 <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
@@ -222,7 +230,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
       </div>
     </section>
 
-    {detail.lightbox && <Lightbox labels={detail.lightbox} keyPrefix={`${K}.lightbox`} />}
+    {lightbox && <Lightbox labels={lightbox} keyPrefix={`${K}.lightbox`} />}
   </main>
   <SiteFooter page="projects" />
 </BaseLayout>

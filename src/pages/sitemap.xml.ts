@@ -40,7 +40,7 @@ import type { APIRoute } from "astro";
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { projectDetails } from "../data/project-detail";
-import { getGallery } from "../data/gallery";
+import { livePhotos, livePlantPhotos, liveSection, liveState, type LiveState } from "../lib/gallery-live";
 import { galleryImage } from "../lib/gallery-images";
 import { socialPages } from "../data/social-projects";
 import { plant } from "../data/plant";
@@ -121,10 +121,10 @@ async function projectImages(
 /* /gallery: every tile on the page, at the tile rendition — the same
    photographs the project and plant entries list, here under the page
    that shows them all together. */
-async function galleryPageImages(origin: URL): Promise<SitemapImage[]> {
+async function galleryPageImages(origin: URL, live: LiveState): Promise<SitemapImage[]> {
   const out: SitemapImage[] = [];
   for (const section of galleryPage.sections) {
-    for (const group of section.groups) {
+    for (const group of liveSection(live, section.groups)) {
       for (const photo of group.photos) {
         out.push({
           loc: await rendition(galleryImage(photo.file), TILE, origin),
@@ -195,16 +195,19 @@ export const GET: APIRoute = async ({ site }) => {
   if (!site) return new Response("site is not configured", { status: 500 });
 
   const entries: SitemapEntry[] = [];
+  /* Photographs as the site shows them now, studio changes included —
+     a photograph taken off the site must not stay in the sitemap. */
+  const live = await liveState();
 
   for (const route of staticRoutes()) {
     const { rmc } = rmcPlant;
     const images =
       route === PLANT_ROUTE
-        ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, plant.plant.gallery, site)
+        ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, livePlantPhotos(live, PLANT_ROUTE), site)
         : route === RMC_ROUTE
-          ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, rmc.gallery, site)
+          ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, livePlantPhotos(live, RMC_ROUTE), site)
           : route === GALLERY_ROUTE
-            ? await galleryPageImages(site)
+            ? await galleryPageImages(site, live)
             : route === HSE_ROUTE
               ? await hseImages(site)
               : [];
@@ -218,7 +221,7 @@ export const GET: APIRoute = async ({ site }) => {
         project.title,
         project.image,
         project.alt,
-        getGallery(project.title)?.photos,
+        livePhotos(live, project.title),
         site
       ),
     });
@@ -228,7 +231,7 @@ export const GET: APIRoute = async ({ site }) => {
     entries.push({
       loc: new URL(`/projects/${slug}`, site).href,
       images: detail.file
-        ? await projectImages(detail.title, galleryImage(detail.file), detail.alt ?? detail.title, detail.gallery, site)
+        ? await projectImages(detail.title, galleryImage(detail.file), detail.alt ?? detail.title, livePhotos(live, detail.title), site)
         : [],
     });
   }
