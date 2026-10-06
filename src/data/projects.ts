@@ -62,7 +62,7 @@ import { allGalleries } from "./gallery.ts";
 
 export interface ProjectEntry {
   readonly live: boolean;
-  /** Only set when `live` — e.g. "Live" or "Live — 85%+ Complete".
+  /** Only set when `live` — e.g. "Ongoing" or "Ongoing — 85%+ Complete".
       Empty string when not live, and rendered nowhere: leaves() in
       check-edit-keys.mjs skips empty-string leaves, so no slot is
       expected for it either. */
@@ -138,7 +138,7 @@ export const projects = {
       "Indian Railways, urban transit, and government infrastructure.",
     backdropAlt: "",
     stats: [
-      { value: "29.6 km", label: "Panvel–Karjat Live Corridor" },
+      { value: "29.6 km", label: "Panvel–Karjat Ongoing Corridor" },
       { value: "₹362.90 Cr", label: "Pipeline (3 Tenders)" },
     ] as readonly Stat[],
   },
@@ -150,7 +150,7 @@ export const projects = {
      (OPEN-QUESTIONS.md #31), appended last so no existing tab's slot
      key moves. */
   filters: {
-    tabs: ["All Projects", "Live", "Completed", "Gallery", "Steel Fabrication & Erection"] as readonly string[],
+    tabs: ["All Projects", "Ongoing", "Completed", "Gallery", "Steel Fabrication & Erection"] as readonly string[],
   },
 
   /* One continuous ink band, tallest card first — not the 704/464
@@ -159,7 +159,7 @@ export const projects = {
   listing: {
     featured: {
       live: true,
-      statusBadge: "Live — 90%+ Complete",
+      statusBadge: "Ongoing — 90%+ Complete",
       badges: ["Civil"],
       steel: true,
       title: "Panvel–Karjat Railway Line",
@@ -207,7 +207,7 @@ export const projects = {
       },
       {
         live: true,
-        statusBadge: "Live — 60%+ Complete",
+        statusBadge: "Ongoing — 60%+ Complete",
         badges: ["Civil"],
         title: "Mumbai Harbour Line Station Redevelopment",
         meta: "Mumbai Railway Vikas Corporation Ltd · 4 Stations",

@@ -56,7 +56,7 @@ export interface DetailStat {
 export interface ProjectDetail {
   readonly slug: string;
   readonly title: string;
-  /** Small ink-band label above the H1 — "Live Project", "Signature
+  /** Small ink-band label above the H1 — "Ongoing Project", "Signature
       Project" or "Recently Awarded". Not the same string as the
       listing's `statusBadge`, which only exists for live projects. */
   readonly eyebrow: string;
@@ -73,11 +73,11 @@ export interface ProjectDetail {
 const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
   {
     title: "Panvel–Karjat Railway Line",
-    eyebrow: "Live Project",
+    eyebrow: "Ongoing Project",
     client: "Mumbai Railway Vikas Corporation Limited (MRVC)",
     badges: ["Civil"],
     live: true,
-    statusBadge: "Live — 90%+ Complete",
+    statusBadge: "Ongoing — 90%+ Complete",
     body: [
       "A 29.6 km double-line suburban railway corridor forming part of " +
         "MUTP-III, connecting Panvel with Chikhale, Mohape, Chowk and " +
@@ -245,11 +245,11 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
   },
   {
     title: "Mumbai Harbour Line Station Redevelopment",
-    eyebrow: "Live Project",
+    eyebrow: "Ongoing Project",
     client: "Mumbai Railway Vikas Corporation (MRVC)",
     badges: ["Civil"],
     live: true,
-    statusBadge: "Live — 60%+ Complete",
+    statusBadge: "Ongoing — 60%+ Complete",
     body: [
       "A major brownfield station redevelopment programme across GTB " +
         "Nagar, Chembur, Govandi and Mankhurd, executed within an " +
