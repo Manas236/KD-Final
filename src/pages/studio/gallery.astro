@@ -1,0 +1,152 @@
+---
+/* ============================================================
+   GET /studio/gallery — the gallery manager
+   ------------------------------------------------------------
+   Every photograph the site has, project by project: keep it, move it
+   to another project, reorder it, recaption it, hide it, or put a
+   hidden one back. Changes are rows in gallery_events and show on the
+   site at the next page load — no rebuild, no deploy
+   (src/lib/gallery-live.ts, src/pages/api/gallery.ts).
+
+   SIGNED-IN EDITORS ONLY. Anyone else gets the same bodyless 404 the
+   studio sign-in page gives a wrong slug (see the long note at the top
+   of [key].astro for why it is built this way), so the page's
+   existence is not advertised. The static route wins over [key], so a
+   sign-in slug of literally "gallery" would be shadowed — pick any
+   other.
+
+   This is editor tooling, like the sign-in page: its strings live
+   here and in src/scripts/gallery-manager.js rather than in a copy
+   module, its markup carries no data-edit keys, and its styles are in
+   public/gallery-manager.css next to public/editor-ui.css, outside the
+   src/ design gates for the reason that file gives.
+   ============================================================ */
+import { getImage } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isAuthed } from "../../lib/edit-auth";
+import { galleryImage, isUpload } from "../../lib/gallery-images";
+import { liveState } from "../../lib/gallery-live";
+import { galleryPage } from "../../data/gallery-page";
+
+export const prerender = false;
+
+if (!isAuthed(Astro.request)) {
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
+}
+
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Cache-Control", "no-store");
+
+/* A thumbnail for every photograph the manager can show, hidden and
+   library ones included. The list itself comes from /api/gallery. */
+const state = await liveState();
+/* Studio uploads are left out: the manager builds their URLs itself
+   from the file name (isUpload / uploadUrls in gallery-images.ts). */
+const files = [...state.groups.values()].flat().map((p) => p.file).filter((f) => !isUpload(f));
+const thumbs = Object.fromEntries(
+  await Promise.all(
+    files.map(async (file) => {
+      const image = galleryImage(file);
+      const thumb = await getImage({ src: image, width: Math.min(480, image.width) });
+      const large = await getImage({ src: image, width: Math.min(1600, image.width) });
+      return [file, { thumb: thumb.src, large: large.src, w: image.width, h: image.height }];
+    })
+  )
+);
+
+const [railway, social, plant, hse] = galleryPage.sections.map((s) => s.jump);
+const boot = {
+  thumbs,
+  sections: { railway, social, plant, hse },
+};
+/* Inlined as JSON; `<` escaped so nothing in it can close the tag. */
+const bootJson = JSON.stringify(boot).replace(/</g, "\\u003c");
+---
+
+<BaseLayout title="Gallery manager — K.D. Constructions" description="Manage the site's photographs." noindex>
+  <link rel="stylesheet" href="/gallery-manager.css" />
+  <main class="gm" id="gm">
+    <header class="gm-top">
+      <div class="gm-top-inner">
+        <div class="gm-title">
+          <span class="gm-kicker">K.D. Constructions · Studio</span>
+          <h1>Gallery manager</h1>
+        </div>
+        <div class="gm-stats" id="gm-stats" aria-live="polite"></div>
+        <div class="gm-actions">
+          <label class="gm-jump">
+            <span>Jump to</span>
+            <select id="gm-jump"></select>
+          </label>
+          <button type="button" class="gm-btn" id="gm-upload-open" aria-controls="gm-upload">Upload photos</button>
+          <button type="button" class="gm-btn" id="gm-history-open" aria-controls="gm-history">History</button>
+          <a class="gm-btn gm-btn-primary" href="/gallery">View the gallery</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="gm-help">
+      <p>
+        Changes go live as soon as you make them: the next time anyone opens the gallery or a project page, they
+        see the new version. Nothing is ever deleted. Every change is listed under <strong>History</strong>, where
+        you can undo it.
+      </p>
+      <ul>
+        <li><strong>Reorder</strong>: drag a photo onto another one, or use the arrows.</li>
+        <li><strong>Move</strong>: pick another project from "Move to".</li>
+        <li><strong>Hide</strong>: takes a photo off the site. It stays here under "Hidden", ready to show again.</li>
+        <li><strong>Caption</strong>: click the caption to edit it. It changes everywhere the photo appears.</li>
+        <li><strong>Upload</strong>: "Upload photos" at the top, or "Upload here" on a project. Every photo needs a caption.</li>
+      </ul>
+    </section>
+
+    <div id="gm-banner" class="gm-banner" role="alert" hidden></div>
+    <div id="gm-groups" class="gm-groups">
+      <p class="gm-loading">Loading the gallery…</p>
+    </div>
+
+    <aside id="gm-history" class="gm-history" aria-label="History of changes" hidden>
+      <div class="gm-history-head">
+        <h2>History</h2>
+        <button type="button" class="gm-btn" id="gm-history-close">Close</button>
+      </div>
+      <ol id="gm-history-list"></ol>
+    </aside>
+
+    <dialog id="gm-upload" class="gm-upload" aria-labelledby="gm-upload-title">
+      <div class="gm-upload-head">
+        <h2 id="gm-upload-title">Upload photos</h2>
+        <button type="button" class="gm-btn" id="gm-upload-close">Close</button>
+      </div>
+      <label class="gm-field">
+        <span>Project</span>
+        <select id="gm-upload-group"></select>
+      </label>
+      <div class="gm-drop" id="gm-drop">
+        <p>
+          Drag photos here, or
+          <label class="gm-link gm-pick">choose photos<input id="gm-upload-input" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>.
+        </p>
+        <p class="gm-note">JPG, PNG or WebP, up to 25 MB each and at least 1000 px on the long side. Location data is removed before anything is saved.</p>
+      </div>
+      <ol id="gm-queue" class="gm-queue"></ol>
+      <div class="gm-upload-foot">
+        <span id="gm-upload-summary" class="gm-note"></span>
+        <button type="button" class="gm-btn gm-btn-primary" id="gm-upload-go" disabled>Upload</button>
+      </div>
+    </dialog>
+
+    <dialog id="gm-preview" class="gm-preview">
+      <img id="gm-preview-img" alt="" />
+      <p id="gm-preview-cap"></p>
+      <form method="dialog"><button class="gm-btn" type="submit">Close</button></form>
+    </dialog>
+
+    <div id="gm-toast" class="gm-toast" role="status" hidden></div>
+  </main>
+
+  <script id="gm-boot" type="application/json" set:html={bootJson} />
+  <script>
+    import "../../scripts/gallery-manager.js";
+  </script>
+</BaseLayout>

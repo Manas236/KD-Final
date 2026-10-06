@@ -12,18 +12,25 @@
    CLICK TO ENLARGE. Every tile opens Lightbox.astro, which must be
    rendered once on any page that renders this grid. The tile's
    `data-lightbox-src` carries a larger rendition; the lightbox reads
-   the caption straight off the tile's own <figcaption>, so a caption
-   edited in the in-page editor is the caption the lightbox shows.
+   the caption straight off the tile's own <figcaption>.
+
+   CAPTIONS ARE NOT IN-PAGE EDITABLE (since 3 Oct 2026). They used to
+   carry a positional `data-edit` key (`...photos.<i>.caption`), which
+   stopped meaning anything once the studio gallery manager could hide,
+   move and reorder photographs: photo 5 today is a different photo
+   tomorrow. A caption is now one value per photograph, edited in
+   /studio/gallery and shown everywhere that photograph appears
+   (src/lib/gallery-live.ts). The figcaption carries `data-no-edit`,
+   the documented opt-out for text the in-page editor must not touch,
+   and check-edit-keys.mjs treats gallery captions as runtime data.
 
    The click listener sits on the <figure>, not only on the button:
    the stretched <button> gives keyboard and screen-reader users a real
-   control, and the caption sits above it so the in-page editor can
-   still reach the caption text (its capture-phase handler swallows the
-   click in edit mode — see the Gestures note in inline-edit.js).
+   control.
    ============================================================ */
 import { Image, getImage } from "astro:assets";
 import type { GalleryPhoto } from "../data/gallery";
-import { galleryImage } from "../lib/gallery-images";
+import { galleryImage, isUpload, uploadUrls } from "../lib/gallery-images";
 
 interface Props {
   /** The project title — prefixes every alt text. */
@@ -31,26 +38,33 @@ interface Props {
   photos: readonly GalleryPhoto[];
   /** Lightbox group: prev/next cycle within one group only. */
   group: string;
-  /** Caption keys are `${keyPrefix}.${i}.caption`. */
-  keyPrefix: string;
 }
 
-const { project, photos, group, keyPrefix } = Astro.props;
+const { project, photos, group } = Astro.props;
 
 const LIGHTBOX_WIDTH = 1600;
 
+/* A studio upload is not in src/assets: its 800×552 tile and its
+   lightbox rendition were made when it was uploaded (see
+   src/lib/gallery-media.ts), so it is drawn as a plain <img> of the
+   same size and crop instead of through <Image>. */
 const tiles = await Promise.all(
   photos.map(async (photo) => {
+    const alt = `${project} — ${photo.caption}`;
+    if (isUpload(photo.file)) {
+      const urls = uploadUrls(photo.file);
+      return { photo, image: null, tile: urls.tile, full: urls.full, alt };
+    }
     const image = galleryImage(photo.file);
     const full = await getImage({ src: image, width: Math.min(LIGHTBOX_WIDTH, image.width) });
-    return { photo, image, full: full.src, alt: `${project} — ${photo.caption}` };
+    return { photo, image, tile: null, full: full.src, alt };
   })
 );
 ---
 
 <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
   {
-    tiles.map(({ photo, image, full, alt }, i) => (
+    tiles.map(({ photo, image, tile, full, alt }) => (
       <li>
         <figure
           class="relative h-265 overflow-hidden cursor-pointer"
@@ -58,14 +72,26 @@ const tiles = await Promise.all(
           data-lightbox-group={group}
           data-lightbox-src={full}
         >
-          <Image
-            src={image}
-            alt={alt}
-            width={800}
-            height={552}
-            loading="lazy"
-            class="absolute inset-0 w-full h-full object-cover object-center"
-          />
+          {image ? (
+            <Image
+              src={image}
+              alt={alt}
+              width={800}
+              height={552}
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          ) : (
+            <img
+              src={tile}
+              alt={alt}
+              width="800"
+              height="552"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          )}
           <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
           <button
             type="button"
@@ -73,10 +99,7 @@ const tiles = await Promise.all(
             aria-haspopup="dialog"
             aria-label={alt}
           />
-          <figcaption
-            class="absolute inset-x-0 bottom-0 p-20 text-meta text-kd-mist"
-            data-edit={`${keyPrefix}.${i}.caption`}
-          >
+          <figcaption class="absolute inset-x-0 bottom-0 p-20 text-meta text-kd-mist" data-no-edit>
             {photo.caption}
           </figcaption>
         </figure>

@@ -49,10 +49,13 @@ import Lightbox from "../../components/Lightbox.astro";
 import heroImg from "../../assets/project-vindhane-plant.jpg";
 import { plant as copy } from "../../data/plant";
 import { slugify } from "../../lib/slug";
+import { livePlantPhotos, liveState } from "../../lib/gallery-live";
 
 export const prerender = false;
 
 const { plant } = copy;
+/* Live photographs: gallery.ts with the studio gallery manager's changes. */
+const photos = livePlantPhotos(await liveState(), "/resources/vindhane-plant");
 const K = "resources.plant";
 
 /* Breadcrumb trail for search results — see BaseLayout's Props. */
@@ -204,9 +207,8 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
           <div class="mt-32">
             <GalleryGrid
               project={plant.title}
-              photos={plant.gallery}
+              photos={photos}
               group="vindhane-plant"
-              keyPrefix={`${K}.gallery`}
             />
           </div>
         </div>

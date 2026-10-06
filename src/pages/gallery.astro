@@ -23,18 +23,28 @@ import GalleryGrid from "../components/GalleryGrid.astro";
 import Lightbox from "../components/Lightbox.astro";
 import { galleryPage as copy } from "../data/gallery-page";
 import { galleryHref } from "../data/gallery";
-import { galleryImage } from "../lib/gallery-images";
+import { galleryImage, isUpload } from "../lib/gallery-images";
+import { liveSection, liveState } from "../lib/gallery-live";
 import { slugify } from "../lib/slug";
 
 export const prerender = false;
 
 const K = "gallery";
-const { hero, sections, cta } = copy;
+const { hero, cta } = copy;
+
+/* The photographs are live: gallery.ts with the studio gallery
+   manager's changes replayed over it (src/lib/gallery-live.ts). Each
+   section keeps its copy; only its groups are swapped. */
+const live = await liveState();
+const sections = copy.sections.map((section) => ({ ...section, groups: liveSection(live, section.groups) }));
 const anchor = (s: { jump: string }) => slugify(s.jump);
 
-/* Share image: the first railway photograph. */
-const first = sections[0].groups[0];
-const shareImg = galleryImage(first.photos[0].file);
+/* Share image: the first photograph on the page that is in src/assets
+   (a studio upload has no ImageMetadata for the share card). */
+const firstGroup = sections.flatMap((s) => s.groups).find((g) => g.photos.some((p) => !isUpload(p.file)))!;
+const firstPhoto = firstGroup.photos.find((p) => !isUpload(p.file))!;
+const first = { project: firstGroup.project, photos: [firstPhoto] };
+const shareImg = galleryImage(firstPhoto.file);
 ---
 
 <BaseLayout
@@ -106,7 +116,6 @@ const shareImg = galleryImage(first.photos[0].file);
                       project={group.project}
                       photos={group.photos}
                       group={slugify(group.project)}
-                      keyPrefix={`${K}.sections.${s}.groups.${g}.photos`}
                     />
                   </div>
                 </div>
@@ -136,4 +145,11 @@ const shareImg = galleryImage(first.photos[0].file);
     <Lightbox labels={copy.lightbox} keyPrefix={`${K}.lightbox`} />
   </main>
   <SiteFooter page={K} />
+
+  <!-- Edit mode: a link to the studio gallery manager, signed-in editors only. -->
+  <script>
+    if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+      import("../scripts/gallery-manage-link.js");
+    }
+  </script>
 </BaseLayout>

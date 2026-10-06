@@ -21,8 +21,12 @@ import GalleryGrid from "../GalleryGrid.astro";
 import { projects } from "../../data/projects";
 import { slugify } from "../../lib/slug";
 import { galleryHref } from "../../data/gallery";
+import { liveAllGalleries, liveState } from "../../lib/gallery-live";
 
 const { gallery } = projects;
+/* Live groups: gallery.ts with the studio gallery manager's changes
+   (src/lib/gallery-live.ts). `gallery.groups` is the baseline. */
+const groups = liveAllGalleries(await liveState());
 ---
 
 <section class="bg-kd-ink py-96 hidden" data-gallery-view>
@@ -34,7 +38,7 @@ const { gallery } = projects;
 
     <div class="flex flex-col gap-56 mt-56">
       {
-        gallery.groups.map((group, g) => (
+        groups.map((group, g) => (
           <div>
             <h3 class="font-display text-d6 text-kd-mist">
               <a href={galleryHref(group)} class="inline-flex items-center gap-12">
@@ -49,7 +53,6 @@ const { gallery } = projects;
                 project={group.project}
                 photos={group.photos}
                 group={slugify(group.project)}
-                keyPrefix={`projects.gallery.groups.${g}.photos`}
               />
             </div>
           </div>

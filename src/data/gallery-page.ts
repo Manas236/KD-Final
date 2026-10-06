@@ -9,8 +9,10 @@
 
    The groups ARE the objects in src/data/gallery.ts, so a new photograph
    added there appears here, on its project page and in the /projects tab
-   with no second edit. Captions are keyed per page (`gallery.sections.
-   <s>.groups.<g>.photos.<i>.caption`) like every other page's slots.
+   with no second edit. These groups are the BASELINE: the page renders
+   them with the studio gallery manager's changes replayed over them
+   (src/lib/gallery-live.ts), and captions are edited there, not in the
+   page (see GalleryGrid.astro).
 
    NO IMAGE IMPORTS — the check scripts load this file into Node.
    ============================================================ */

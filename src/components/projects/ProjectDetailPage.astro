@@ -50,7 +50,7 @@ import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { detailChrome } from "../../data/project-detail";
 import type { ProjectDetail } from "../../data/project-detail";
-import { getGallery } from "../../data/gallery";
+import { livePhotos, liveState } from "../../lib/gallery-live";
 import { home } from "../../data/home";
 
 interface Props {
@@ -59,7 +59,9 @@ interface Props {
 
 const { project } = Astro.props;
 
-const gallery = getGallery(project.title);
+/* Live: gallery.ts with the studio gallery manager's changes. */
+const livePhotoList = livePhotos(await liveState(), project.title);
+const gallery = livePhotoList.length ? { project: project.title, photos: livePhotoList } : undefined;
 
 const title = `${project.title} — K.D. Constructions`;
 const description = project.body[0];
@@ -196,7 +198,6 @@ const breadcrumbs = [
                 project={project.title}
                 photos={gallery.photos}
                 group={project.slug}
-                keyPrefix="projects.detail.gallery"
               />
             </div>
           </div>

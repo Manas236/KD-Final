@@ -25,10 +25,13 @@ import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { rmcPlant as copy } from "../../data/rmc-plant";
 import { galleryImage } from "../../lib/gallery-images";
+import { livePlantPhotos, liveState } from "../../lib/gallery-live";
 
 export const prerender = false;
 
 const { rmc } = copy;
+/* Live photographs: gallery.ts with the studio gallery manager's changes. */
+const photos = livePlantPhotos(await liveState(), "/resources/rmc-plant-karjat");
 const heroImg = galleryImage(rmc.file);
 const K = "resources.rmc";
 
@@ -170,7 +173,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
         <div class="mt-56 pt-56 border-t border-kd-divider-light">
           <Kicker label={rmc.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
           <div class="mt-32">
-            <GalleryGrid project={rmc.title} photos={rmc.gallery} group="rmc-plant" keyPrefix={`${K}.gallery`} />
+            <GalleryGrid project={rmc.title} photos={photos} group="rmc-plant" />
           </div>
         </div>
       </div>

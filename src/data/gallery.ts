@@ -11,6 +11,13 @@
    is not renamed here simply loses its gallery rather than linking
    somewhere wrong.
 
+   THIS FILE IS THE BASELINE. Since 3 Oct 2026 the site shows it with
+   the studio gallery manager's changes (/studio/gallery) replayed over
+   it — hides, moves, reorders, captions — see src/lib/gallery-live.ts.
+   Editing this file still works and still ships; the studio's changes
+   apply on top of whatever it says. Photographs taken off the site live
+   in gallery-library.ts.
+
    `file` names a derivative in src/assets/gallery/, written by
    scripts/build-gallery.mjs, which also records the raw source of
    every file. It is an attribute value, never rendered as text, which
