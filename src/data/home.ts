@@ -95,19 +95,29 @@ export const home = {
        `<page>.nav.links.i.label` on every page, and a stored edit on
        index 6 must keep meaning "Contact". New links are appended
        (CSR 2026-09-18, OPEN-QUESTIONS.md #32; Gallery 2026-09-28, #39;
-       Home and Careers 2026-09-29) and positioned by order/parent. */
+       Home and Careers 2026-09-29) and positioned by order/parent.
+
+       2026-10-06 regroup: every page link that dropped from Projects
+       moved under About, CSR left About for the bar, and Projects now
+       drops down to its own page's tabs (appended entries 11–15, which
+       Filters.astro opens from the URL hash). */
     links: [
       { label: "About", href: "/about", order: 1 },
-      { label: "Capabilities", href: "/capabilities", parent: "/projects" },
+      { label: "Capabilities", href: "/capabilities", parent: "/about" },
       { label: "Projects", href: "/projects", order: 2 },
-      { label: "Resources", href: "/resources", parent: "/projects" },
+      { label: "Resources", href: "/resources", parent: "/about" },
       { label: "HSE", href: "/hse", parent: "/about" },
-      { label: "Clients", href: "/clients", parent: "/projects" },
+      { label: "Clients", href: "/clients", parent: "/about" },
       { label: "Contact", href: "/contact", order: 3 },
-      { label: "CSR", href: "/csr", parent: "/about" },
-      { label: "Gallery", href: "/gallery", parent: "/projects" },
+      { label: "CSR", href: "/csr", order: 2.2 },
+      { label: "Gallery", href: "/gallery", parent: "/about" },
       { label: "Home", href: "/", order: 0 },
       { label: "Careers", href: "/careers", order: 2.5 },
+      { label: "All Projects", href: "/projects#all", parent: "/projects" },
+      { label: "Ongoing", href: "/projects#ongoing", parent: "/projects" },
+      { label: "Completed", href: "/projects#completed", parent: "/projects" },
+      { label: "Gallery", href: "/projects#gallery", parent: "/projects" },
+      { label: "Steel Fabrication & Erection", href: "/projects#steel", parent: "/projects" },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },

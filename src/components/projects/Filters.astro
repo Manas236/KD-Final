@@ -48,6 +48,12 @@
    `data-project-status="steel"`, so the ordinary status match hides
    them under Live and Completed with no special case. Like the gallery,
    it writes its key to the URL, so /projects#steel opens on it.
+
+   EVERY TAB OPENS FROM THE URL since the nav's Projects drop-down
+   (home.ts, 2026-10-06) links to each one: #all, #ongoing, #completed,
+   #gallery, #steel. "live" is still the status key on the cards; its
+   hash is #ongoing because that is what the tab says. Clicking a tab
+   writes its hash only for gallery and steel, as before.
    ============================================================ */
 import { projects } from "../../data/projects";
 
@@ -134,12 +140,25 @@ const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
     });
   });
 
-  // On load, and on a same-page link to #gallery or #steel (which does not reload).
+  // On load, and on a same-page link to a tab's hash (which does not
+  // reload) — the nav's Projects drop-down links to every tab.
+  const HASH_KEYS: Record<string, string> = {
+    all: "all",
+    ongoing: "live",
+    completed: "completed",
+    gallery: "gallery",
+    steel: "steel",
+  };
   function openTabFromHash() {
-    const key = location.hash.slice(1);
-    if (key !== "gallery" && key !== "steel") return;
+    const key = HASH_KEYS[location.hash.slice(1)];
+    if (!key) return;
     const tab = [...tabs].find((t) => t.dataset.filterTab === key);
-    if (tab) activate(tab);
+    if (!tab) return;
+    activate(tab);
+    // Land on the tab row, not the hero — just under the fixed nav.
+    const bar = tab.closest("section");
+    const navHeight = document.querySelector("header")?.offsetHeight ?? 0;
+    if (bar) scrollTo({ top: bar.getBoundingClientRect().top + scrollY - navHeight });
   }
   openTabFromHash();
   window.addEventListener("hashchange", openTabFromHash);
