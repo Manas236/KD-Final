@@ -17,6 +17,17 @@
    rendered by the server. Changing a posting's WORDING needs neither:
    its title and details are ordinary editable text.
    ============================================================ */
+/* A short ladder rather than every day from 1 to 30: nobody picks 17.
+   The server accepts any whole number of days from 1 to 30. */
+const DAYS = [
+  [1, "1 day"],
+  [3, "3 days"],
+  [7, "1 week"],
+  [14, "2 weeks"],
+  [21, "3 weeks"],
+  [30, "30 days (the most)"],
+];
+
 const grid = document.querySelector("#openings ul");
 if (grid) {
   for (const card of grid.querySelectorAll(":scope > li[data-posting]")) addRemove(card);
@@ -105,16 +116,6 @@ function addCard() {
   return li;
 }
 
-/* A short ladder rather than every day from 1 to 30: nobody picks 17.
-   The server accepts any whole number of days from 1 to 30. */
-const DAYS = [
-  [1, "1 day"],
-  [3, "3 days"],
-  [7, "1 week"],
-  [14, "2 weeks"],
-  [21, "3 weeks"],
-  [30, "30 days (the most)"],
-];
 
 function dayOptions() {
   return DAYS.map(
