@@ -64,7 +64,7 @@ const PAGES = {
     module: "../src/data/pages.ts",
     exportName: "careers",
     prefix: "careers",
-    runtime: ["jobs.", "openings."],
+    runtime: ["jobs.", "openings.", "form.general", "form.sending"],
   },
   /* A child of /resources: Nav and SiteFooter render there under the
      `resources` prefix, and the page's own keys are `resources.plant.*`

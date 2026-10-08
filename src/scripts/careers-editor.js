@@ -8,9 +8,10 @@
    data-nt-ui so the text editor leaves them alone, and both hidden by
    public/editor-ui.css until "Edit text" is on:
 
-     · an "Add a job posting" card at the end: title, details, and the
-       LinkedIn and/or Indeed link
-     · a "Remove posting" button on every posting card
+     · an "Add a job posting" card at the end: title, details, the
+       LinkedIn and/or Indeed link, and how many days (1–30) to list it
+     · on every posting card, the date it comes down by itself and a
+       "Remove posting" button
 
    Either one reloads the page on success, because the cards are
    rendered by the server. Changing a posting's WORDING needs neither:
@@ -23,6 +24,18 @@ if (grid) {
 }
 
 function addRemove(card) {
+  if (card.dataset.expires) {
+    const note = document.createElement("p");
+    note.className = "nt-jobs-expiry";
+    note.setAttribute("data-nt-ui", "");
+    const when = new Date(card.dataset.expires);
+    note.textContent = `Comes down by itself on ${when.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })}, ${when.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" })}`;
+    card.appendChild(note);
+  }
   const button = document.createElement("button");
   button.type = "button";
   button.className = "nt-jobs-remove";
@@ -62,9 +75,15 @@ function addCard() {
         <input name="indeed" type="url" inputmode="url" placeholder="https://in.indeed.com/viewjob?jk=…" />
       </label>
       <p class="nt-jobs-note">One link is enough; add both if the role is on both sites.</p>
+      <label>Show it for
+        <select name="days">${dayOptions()}</select>
+      </label>
+      <p class="nt-jobs-note">After this the card comes off the site by itself, so a closed
+        posting is never left up. To keep a role up longer, add it again.</p>
       <p class="nt-jobs-error" role="alert" hidden></p>
       <button type="submit" class="nt-jobs-submit">Add posting</button>
-    </form>`;
+    </form>
+    <a class="nt-jobs-link" href="/studio/applications">See applications sent from this page</a>`;
 
   const form = li.querySelector("form");
   const error = li.querySelector(".nt-jobs-error");
@@ -84,6 +103,15 @@ function addCard() {
     error.hidden = false;
   });
   return li;
+}
+
+function dayOptions() {
+  let html = "";
+  for (let d = 1; d <= 30; d++) {
+    const label = d === 1 ? "1 day" : d === 7 ? "7 days (1 week)" : d === 14 ? "14 days (2 weeks)" : d === 30 ? "30 days (the most)" : `${d} days`;
+    html += `<option value="${d}"${d === 30 ? " selected" : ""}>${label}</option>`;
+  }
+  return html;
 }
 
 async function send(body) {

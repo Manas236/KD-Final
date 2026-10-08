@@ -1,7 +1,7 @@
 /* ============================================================
    POST /api/careers — add or remove a job posting on /careers
    ------------------------------------------------------------
-   Body: { action: "add", title, details, linkedin, indeed }
+   Body: { action: "add", title, details, linkedin, indeed, days }
       or { action: "remove", id }
 
    Behind the same signed-cookie session as /api/content, checked before
@@ -15,7 +15,7 @@ import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
-import { validatePosting } from "../../lib/job-postings";
+import { OPEN_WHERE, ensureExpiryColumn, validatePosting } from "../../lib/job-postings";
 
 export const prerender = false;
 
@@ -31,8 +31,8 @@ function json(body: unknown, status = 200): Response {
 
 const INSERT_ADD = `
   INSERT INTO job_posting_events
-    (action, title, details, linkedin_url, indeed_url, client_ip, user_agent)
-  VALUES ('add', ?, ?, ?, ?, ?, ?)
+    (action, title, details, linkedin_url, indeed_url, open_days, client_ip, user_agent)
+  VALUES ('add', ?, ?, ?, ?, ?, ?, ?)
 `;
 
 const INSERT_REMOVE = `
@@ -40,15 +40,11 @@ const INSERT_REMOVE = `
   VALUES ('remove', ?, ?, ?)
 `;
 
-/* Only an open posting can be removed: an id that was never added, or
-   was removed already, gets a 404 rather than a second remove row. */
+/* Only an open posting can be removed: an id that was never added, was
+   removed already, or has expired gets a 404 rather than a remove row. */
 const SELECT_OPEN_ONE = `
   SELECT a.id FROM job_posting_events a
-   WHERE a.id = ? AND a.action = 'add'
-     AND NOT EXISTS (
-       SELECT 1 FROM job_posting_events r
-        WHERE r.action = 'remove' AND r.posting_id = a.id
-     )
+   WHERE a.id = ? AND ${OPEN_WHERE}
 `;
 
 const MAX_BODY = 8 * 1024;
@@ -81,6 +77,7 @@ export const POST: APIRoute = async (context) => {
   const ua = userAgentFrom(request);
 
   try {
+    await ensureExpiryColumn();
     if (body.action === "add") {
       const check = validatePosting(body);
       if (!check.ok) return json({ error: check.reason }, 400);
@@ -89,6 +86,7 @@ export const POST: APIRoute = async (context) => {
         check.details,
         check.linkedin,
         check.indeed,
+        check.days,
         ip,
         ua,
       ]);

@@ -140,6 +140,7 @@ const withLogos = sections.map((section) => section.items.some((item) => item.lo
                   ]}
                   data-pending={item.pending ? "" : undefined}
                   data-posting={item.posting}
+                  data-expires={item.expires}
                 >
                   {withLogos[s] && (
                     <div class="-mx-32 -mt-32 mb-32 h-176 px-24 flex items-center justify-center border-b border-b-kd-card-border-light">

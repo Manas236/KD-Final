@@ -1,8 +1,13 @@
 ---
 /* /careers. The page copy is src/data/pages.ts; the "Current openings"
    cards are read from the database on every request (src/lib/job-postings.ts)
-   and managed in edit mode by src/scripts/careers-editor.js. */
+   and managed in edit mode by src/scripts/careers-editor.js. Under
+   them, before the CTA, the "Apply here" band: a form that sends the
+   applicant's details and resume to HR (src/scripts/apply-form.js →
+   src/pages/api/apply.ts). */
 import InfoPage from "../components/InfoPage.astro";
+import Kicker from "../components/Kicker.astro";
+import Arrow from "../components/Arrow.astro";
 import { careers } from "../data/pages";
 import type { InfoItem } from "../data/pages";
 import { openPostings } from "../lib/job-postings";
@@ -10,12 +15,14 @@ import { openPostings } from "../lib/job-postings";
 export const prerender = false;
 
 const postings = (await openPostings()) ?? [];
-const { openings } = careers;
+const { openings, form } = careers;
+const { fields } = form;
 
 const cards: InfoItem[] = postings.length
   ? postings.map((p) => ({
       slot: `jobs.${p.id}`,
       posting: p.id,
+      expires: p.expires,
       title: p.title,
       body: p.details || undefined,
       links: [
@@ -36,7 +43,156 @@ const copy = {
 Astro.response.headers.set("Cache-Control", "no-store");
 ---
 
-<InfoPage page="careers" copy={copy} />
+<InfoPage page="careers" copy={copy}>
+  <section id="apply" class="bg-white py-96 border-t border-t-kd-card-border-light">
+    <div class="max-w-kd mx-auto px-24 sm:px-48 grid gap-48 lg:grid-cols-[5fr_7fr]">
+      <div>
+        <Kicker label={form.kicker} editKey="careers.form.kicker" tone="light" />
+        <h2 class="font-display text-d4 text-kd-ink mt-16" data-edit="careers.form.heading">
+          {form.heading}
+        </h2>
+        <p class="text-body text-kd-slate-2 mt-20" data-edit="careers.form.intro">{form.intro}</p>
+      </div>
+
+      <div>
+        <form
+          data-apply-form
+          data-sending={form.sending}
+          novalidate
+          class="grid gap-24 sm:grid-cols-2 border border-kd-card-border-light border-t-2 border-t-kd-mint-2 p-24 sm:p-32"
+        >
+          <label class="flex flex-col gap-8 sm:col-span-2">
+            <span class="text-ui text-kd-ink" data-edit="careers.form.fields.name">{fields.name}</span>
+            <input name="name" required maxlength="100" autocomplete="name" class="apply-input" />
+          </label>
+          <label class="flex flex-col gap-8">
+            <span class="text-ui text-kd-ink" data-edit="careers.form.fields.email">{fields.email}</span>
+            <input name="email" type="email" required maxlength="254" autocomplete="email" class="apply-input" />
+          </label>
+          <label class="flex flex-col gap-8">
+            <span class="text-ui text-kd-ink" data-edit="careers.form.fields.phone">{fields.phone}</span>
+            <input name="phone" type="tel" required maxlength="20" autocomplete="tel" inputmode="tel" class="apply-input" />
+          </label>
+          <label class="flex flex-col gap-8 sm:col-span-2">
+            <span class="text-ui text-kd-ink" data-edit="careers.form.fields.role">{fields.role}</span>
+            <select name="role" required class="apply-input">
+              {postings.map((p) => (
+                <option value={p.title} data-no-edit>{p.title}</option>
+              ))}
+              <option value={form.general} data-no-edit>{form.general}</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-8 sm:col-span-2">
+            <span class="text-ui text-kd-ink" data-edit="careers.form.fields.resume">{fields.resume}</span>
+            <input
+              name="resume"
+              type="file"
+              required
+              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              class="apply-input apply-file"
+            />
+            <span class="text-meta-sm text-kd-slate-2" data-edit="careers.form.fields.hint">
+              {fields.hint}
+            </span>
+          </label>
+          <label class="flex flex-col gap-8 sm:col-span-2">
+            <span class="text-ui text-kd-ink">
+              <span data-edit="careers.form.fields.message">{fields.message}</span>
+              <span class="text-kd-slate-2 font-normal" data-edit="careers.form.fields.optional">
+                {fields.optional}
+              </span>
+            </span>
+            <textarea name="message" rows="4" maxlength="1000" class="apply-input"></textarea>
+          </label>
+
+          {/* Honeypot: off-screen and out of the tab order. A person never fills it. */}
+          <label class="apply-trap" aria-hidden="true">
+            <span data-no-edit>Website</span>
+            <input name="website" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <p class="text-meta-sm text-kd-slate-2 sm:col-span-2" data-edit="careers.form.consent">
+            {form.consent}
+          </p>
+          <p class="apply-error text-body-sm text-kd-ink border-l-2 border-l-kd-ink pl-12 sm:col-span-2" role="alert" data-no-edit hidden></p>
+          <div class="sm:col-span-2">
+            <button
+              type="submit"
+              class="inline-flex items-center gap-8 text-ui bg-kd-mint text-kd-ink-deep px-24 py-12 disabled:opacity-60"
+            >
+              <span data-edit="careers.form.submit">{form.submit}</span>
+              <Arrow />
+            </button>
+          </div>
+        </form>
+
+        <div
+          data-apply-done
+          class="border border-kd-card-border-light border-t-2 border-t-kd-mint-2 p-32"
+          tabindex="-1"
+          hidden
+        >
+          <h3 class="font-display text-d7 text-kd-ink" data-edit="careers.form.success.heading">
+            {form.success.heading}
+          </h3>
+          <p class="text-body-sm text-kd-slate-2 mt-12" data-edit="careers.form.success.body">
+            {form.success.body}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</InfoPage>
+
+<script>
+  import "../scripts/apply-form.js";
+</script>
+
+<style>
+  .apply-input {
+    font: inherit;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--kd-ink);
+    background-color: white;
+    border: var(--kd-hairline) solid var(--kd-divider-light);
+    padding: var(--kd-gap-12) var(--kd-gap-16);
+    width: 100%;
+  }
+  .apply-input:focus {
+    outline: 2px solid var(--kd-teal);
+    outline-offset: 0;
+    border-color: var(--kd-teal);
+  }
+  .apply-input[aria-invalid="true"] {
+    border-color: var(--kd-ink);
+    border-width: 2px;
+  }
+  textarea.apply-input {
+    resize: vertical;
+  }
+  .apply-file {
+    padding: var(--kd-gap-8);
+  }
+  .apply-file::file-selector-button {
+    font: inherit;
+    font-size: var(--text-ui);
+    font-weight: var(--text-ui--font-weight);
+    background-color: var(--kd-mint);
+    color: var(--kd-ink-deep);
+    border: 0;
+    padding: var(--kd-gap-8) var(--kd-gap-16);
+    margin-right: var(--kd-gap-16);
+    cursor: pointer;
+  }
+  .apply-trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
 
 <!-- Add / remove postings: signed-in editors only, like the text editor. -->
 <script>

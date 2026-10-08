@@ -201,8 +201,16 @@
    the remove buttons exist for a signed-in editor only, and show only
    while the mode is on, like Undo. */
 .nt-jobs-add,
-.nt-jobs-remove {
+.nt-jobs-remove,
+.nt-jobs-expiry {
   display: none;
+}
+:root[data-nt-mode] .nt-jobs-expiry {
+  display: block;
+  margin-top: 20px;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 12px;
+  color: var(--kd-slate-2, #5b6672);
 }
 :root[data-nt-mode] .nt-jobs-add {
   display: block;
@@ -239,7 +247,8 @@
   font-weight: 400;
   color: var(--kd-slate, #8a96a6);
 }
-.nt-jobs-add input {
+.nt-jobs-add input,
+.nt-jobs-add select {
   font: inherit;
   font-size: 14px;
   font-weight: 400;
@@ -248,6 +257,13 @@
   background-color: #fff;
   color: var(--kd-ink, #2c3a40);
   width: 100%;
+}
+.nt-jobs-link {
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kd-mint-2, #2e6b39);
 }
 .nt-jobs-note {
   font-size: 12px;

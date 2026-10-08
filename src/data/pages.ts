@@ -40,6 +40,8 @@ export interface InfoItem {
   readonly slot?: string;
   /** The job_posting_events id of a /careers posting card. */
   readonly posting?: number;
+  /** When that posting stops being listed (ISO 8601), for the editor. */
+  readonly expires?: string;
 }
 
 export interface InfoSection {
@@ -863,13 +865,39 @@ export const contact: ContactCopy = {
    Each card is keyed `careers.jobs.<id>`, so its title and details stay
    editable as text like everything else. `openings` holds the copy those
    cards are built with: `empty` is the card shown while no role is
-   open, `apply` the button labels. */
+   open, `apply` the button labels.
+
+   `form` (8 Oct 2026, at the company's request) is the "Apply here"
+   band under the cards: an applicant sends their details and resume,
+   and the site emails it to hr@ (src/pages/api/apply.ts). It works
+   whether or not any posting is listed. */
 const LINKEDIN_JOBS = "https://www.linkedin.com/company/k-d-constructions/jobs/";
 
 export interface CareersCopy extends InfoPageCopy {
   readonly openings: {
     readonly empty: InfoItem;
     readonly apply: { readonly linkedin: string; readonly indeed: string };
+  };
+  readonly form: {
+    readonly kicker: string;
+    readonly heading: string;
+    readonly intro: string;
+    readonly fields: {
+      readonly name: string;
+      readonly email: string;
+      readonly phone: string;
+      readonly role: string;
+      readonly resume: string;
+      readonly hint: string;
+      readonly message: string;
+      readonly optional: string;
+    };
+    /** The role list's last option, after the open postings. */
+    readonly general: string;
+    readonly consent: string;
+    readonly submit: string;
+    readonly sending: string;
+    readonly success: { readonly heading: string; readonly body: string };
   };
 }
 
@@ -878,7 +906,7 @@ export const careers: CareersCopy = {
     title: "Careers — K.D. Constructions",
     description:
       "Careers at K.D. Constructions — railway and public infrastructure across Maharashtra " +
-      "since 1973. See current openings on LinkedIn and Indeed, or email hr@kdconstructions.net.",
+      "since 1973. See current openings and apply online with your resume.",
   },
   ...chrome,
   hero: {
@@ -895,8 +923,8 @@ export const careers: CareersCopy = {
       kicker: "Open Positions",
       heading: "Current openings.",
       intro:
-        "We post our openings on LinkedIn and Indeed. Each card below links straight to the " +
-        "live posting, where you can read the full role and apply.",
+        "Each card below links to the live posting on LinkedIn or Indeed, where you can read " +
+        "the full role. To apply, use the form below or apply on the posting itself.",
       items: [],
     },
     {
@@ -952,16 +980,16 @@ export const careers: CareersCopy = {
       heading: "Two ways in.",
       items: [
         {
+          title: "Apply on this page",
+          body:
+            "Fill in your details, choose the role and attach your resume. It goes straight to " +
+            "our HR team — no account needed.",
+          links: [{ label: "Go to the application form", href: "#apply" }],
+        },
+        {
           title: "Apply to a posting",
           body: "Open a role above and apply directly through LinkedIn or Indeed.",
           links: [{ label: "See current openings", href: "#openings" }],
-        },
-        {
-          title: "Email your CV",
-          body:
-            "Send your CV to our HR team, with the role you are applying for in the subject " +
-            "line.",
-          links: [{ label: "hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" }],
         },
       ],
     },
@@ -970,14 +998,41 @@ export const careers: CareersCopy = {
     empty: {
       title: "No openings listed right now",
       body:
-        "New roles are posted on LinkedIn and Indeed as they open. You are welcome to send your " +
-        "CV to our HR team in the meantime.",
+        "New roles are listed here as they open. You are welcome to send us your resume in the " +
+        "meantime, and we will keep it on file.",
       links: [
+        { label: "Send your resume", href: "#apply" },
         { label: "View jobs on LinkedIn", href: LINKEDIN_JOBS },
-        { label: "Email hr@kdconstructions.net", href: "mailto:hr@kdconstructions.net" },
       ],
     },
     apply: { linkedin: "Apply on LinkedIn", indeed: "Apply on Indeed" },
+  },
+  form: {
+    kicker: "Apply Here",
+    heading: "Send us your resume.",
+    intro:
+      "Tell us who you are and which role you are interested in, and attach your resume. It " +
+      "goes directly to our HR team, who will contact you if your profile matches a role.",
+    fields: {
+      name: "Full name",
+      email: "Email",
+      phone: "Phone",
+      role: "Role you are applying for",
+      resume: "Resume",
+      hint: "PDF or Word, up to 5 MB",
+      message: "Anything you would like to add",
+      optional: "optional",
+    },
+    general: "General application — any suitable role",
+    consent:
+      "By sending this you agree that K.D. Constructions may keep your details and resume to " +
+      "consider you for current and future roles.",
+    submit: "Send application",
+    sending: "Sending…",
+    success: {
+      heading: "Thank you — your application has been sent.",
+      body: "Our HR team has received your details and resume, and will be in touch if there is a match.",
+    },
   },
   cta: {
     kicker: "Our Work",

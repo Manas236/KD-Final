@@ -1,0 +1,169 @@
+---
+/* ============================================================
+   GET /studio/applications — every application sent from /careers
+   ------------------------------------------------------------
+   Each one was also emailed to HR (src/pages/api/apply.ts); this page
+   is the copy that does not depend on the email arriving — and the only
+   place to find an application that came in before email was set up,
+   or while Google was refusing the password. "Email" says which.
+
+   SIGNED-IN EDITORS ONLY: anyone else gets the bodyless 404 the other
+   studio pages give (see the note at the top of studio/gallery.astro).
+   Editor tooling, so its strings live here, not in a copy module, and
+   it reuses the gallery manager's header styles.
+   ============================================================ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isAuthed } from "../../lib/edit-auth";
+import { listApplications } from "../../lib/applications";
+import { careersInbox, mailConfigured } from "../../lib/mailer";
+
+export const prerender = false;
+
+if (!isAuthed(Astro.request)) {
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
+}
+
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Cache-Control", "no-store");
+
+const apps = await listApplications();
+const mailOn = mailConfigured();
+const when = (d: Date) =>
+  d.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(b / 1024)} KB`);
+---
+
+<BaseLayout title="Applications — K.D. Constructions" description="Job applications sent from the careers page." noindex>
+  <link rel="stylesheet" href="/gallery-manager.css" />
+  <main class="gm">
+    <header class="gm-top">
+      <div class="gm-top-inner">
+        <div class="gm-title">
+          <span class="gm-kicker">K.D. Constructions · Studio</span>
+          <h1>Job applications</h1>
+        </div>
+        <div class="gm-actions">
+          <a class="gm-btn gm-btn-primary" href="/careers">View the careers page</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="gm-help">
+      {
+        mailOn ? (
+          <p>
+            Every application sent from the careers page is emailed to <strong>{careersInbox()}</strong> with the
+            resume attached, and also kept here. If one shows <strong>Not emailed</strong>, the email failed — the
+            application and resume are still here.
+          </p>
+        ) : (
+          <p>
+            <strong>Email is not set up yet</strong>, so applications are only kept here and are not being sent
+            to {careersInbox()}. Once the SMTP settings are added to the server, new applications are emailed too.
+          </p>
+        )
+      }
+    </section>
+
+    {apps === null && <div class="gm-banner" role="alert">Could not read the applications from the database.</div>}
+
+    {
+      apps && apps.length === 0 && (
+        <section class="gm-help">
+          <p>No applications yet.</p>
+        </section>
+      )
+    }
+
+    {
+      apps && apps.length > 0 && (
+        <div class="ja-wrap">
+          <table class="ja">
+            <thead>
+              <tr>
+                <th>Received</th>
+                <th>Applicant</th>
+                <th>Role</th>
+                <th>Message</th>
+                <th>Resume</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apps.map((a) => (
+                <tr>
+                  <td class="ja-nowrap">{when(a.at)}</td>
+                  <td>
+                    <strong>{a.name}</strong>
+                    <br />
+                    <a href={`mailto:${a.email}`}>{a.email}</a>
+                    <br />
+                    <a href={`tel:${a.phone.replace(/[^+\d]/g, "")}`}>{a.phone}</a>
+                  </td>
+                  <td>{a.role}</td>
+                  <td class="ja-msg">{a.message}</td>
+                  <td class="ja-nowrap">
+                    <a href={`/api/applications/resume?file=${encodeURIComponent(a.file)}`}>Download</a>
+                    <br />
+                    <span class="ja-dim">{a.file.split(".").pop()!.toUpperCase()} · {size(a.bytes)}</span>
+                  </td>
+                  <td class="ja-nowrap">{a.emailed ? "Sent" : <strong>Not emailed</strong>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<style>
+  .ja-wrap {
+    overflow-x: auto;
+    padding: 0 var(--kd-gap-24) var(--kd-gap-56);
+    max-width: var(--kd-container);
+    margin: 0 auto;
+  }
+  .ja {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    color: var(--kd-ink);
+    background-color: white;
+  }
+  .ja th,
+  .ja td {
+    text-align: left;
+    vertical-align: top;
+    padding: var(--kd-gap-12) var(--kd-gap-16);
+    border-bottom: var(--kd-hairline) solid var(--kd-card-border-light);
+  }
+  .ja th {
+    font-size: var(--text-kicker);
+    letter-spacing: var(--text-kicker--letter-spacing);
+    text-transform: uppercase;
+    color: var(--kd-slate-2);
+  }
+  .ja a {
+    color: var(--kd-mint-2);
+  }
+  .ja-nowrap {
+    white-space: nowrap;
+  }
+  .ja-msg {
+    max-width: 360px;
+    white-space: pre-wrap;
+  }
+  .ja-dim {
+    color: var(--kd-slate-2);
+  }
+</style>

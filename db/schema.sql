@@ -91,11 +91,20 @@ CREATE TABLE IF NOT EXISTS job_posting_events (
   details       VARCHAR(300)  NULL,
   linkedin_url  VARCHAR(500)  NULL,
   indeed_url    VARCHAR(500)  NULL,
+  open_days     TINYINT UNSIGNED NULL,
   client_ip     VARCHAR(45)   NULL,
   user_agent    VARCHAR(255)  NULL,
   created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_posting (action, posting_id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- open_days (added 2026-10-08): how long an 'add' row's card is listed,
+-- 1-30 days from created_at; NULL counts as 30. The app adds the column
+-- itself on first use if it may ALTER the table; where the app user may
+-- only SELECT and INSERT, run this once on a table created before then:
+--
+--   ALTER TABLE job_posting_events
+--     ADD COLUMN open_days TINYINT UNSIGNED NULL AFTER indeed_url;
 
 -- ------------------------------------------------------------
 -- gallery_events — changes made in the studio gallery manager
@@ -189,6 +198,31 @@ CREATE TABLE IF NOT EXISTS project_text_events (
   INDEX idx_slug (page_slug)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- ------------------------------------------------------------
+-- job_applications — the "Apply here" form on /careers
+-- (src/pages/api/apply.ts, src/lib/applications.ts). One row per
+-- application; the resume itself is on disk under
+-- MEDIA_DIR/applications/ (not served by /media — editors download it
+-- from /studio/applications). `emailed` records whether the copy to HR
+-- was accepted by the mail server. The app creates this table on first
+-- use if it is missing. APPEND-ONLY.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS job_applications (
+  id             INT AUTO_INCREMENT PRIMARY KEY,
+  name           VARCHAR(120)  NOT NULL,
+  email          VARCHAR(254)  NOT NULL,
+  phone          VARCHAR(30)   NOT NULL,
+  role           VARCHAR(160)  NOT NULL,
+  message        TEXT          NULL,
+  resume_file    VARCHAR(80)   NOT NULL,
+  original_name  VARCHAR(255)  NULL,
+  bytes          INT           NOT NULL,
+  emailed        TINYINT(1)    NOT NULL DEFAULT 0,
+  client_ip      VARCHAR(45)   NULL,
+  user_agent     VARCHAR(255)  NULL,
+  created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ============================================================
 -- After running this, confirm:
 --
@@ -201,4 +235,5 @@ CREATE TABLE IF NOT EXISTS project_text_events (
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.gallery_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.gallery_uploads TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.job_applications TO 'kd_app'@'localhost';
 -- ============================================================
