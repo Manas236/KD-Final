@@ -86,7 +86,9 @@ const PAGES = {
    src/components/projects/ProjectDetailPage.astro. */
 const SOCIAL = "../src/data/social-projects.ts";
 for (const slug of Object.keys((await import(SOCIAL)).socialPages)) {
-  PAGES[`/projects/${slug}`] = { module: SOCIAL, exportName: "socialPages", pick: slug, prefix: "projects" };
+  /* `blocks.`: headings and paragraphs an editor added in edit mode —
+     database rows (src/lib/project-blocks.ts), not module copy. */
+  PAGES[`/projects/${slug}`] = { module: SOCIAL, exportName: "socialPages", pick: slug, prefix: "projects", runtime: ["blocks."] };
 }
 
 const route = PAGES[PAGE.replace(/(.)\/+$/, "$1")];

@@ -1,0 +1,50 @@
+---
+/* ============================================================
+   TextBlocks — headings and paragraphs an editor added to a project page
+   ------------------------------------------------------------
+   Rendered at the end of the overview column on both kinds of project
+   page (ProjectDetailPage, SocialProjectPage). `display: contents`, so
+   each block is a flex item of that column and takes its 20px gap, the
+   same as the page's own paragraphs.
+
+   Each block is a wrapper (`data-block`, which the editor hangs its
+   move/remove buttons on) around ONE text leaf with an ordinary
+   `data-edit` key, `projects.blocks.<id>` — so changing its wording is
+   the same click-and-type as every other line on the site.
+
+   The editor half is src/scripts/project-blocks-editor.js, loaded only
+   for a signed-in browser; storage is src/lib/project-blocks.ts.
+   ============================================================ */
+import type { TextBlock } from "../../lib/project-blocks";
+
+interface Props {
+  slug: string;
+  blocks: readonly TextBlock[];
+}
+
+const { slug, blocks } = Astro.props;
+---
+
+<div class="contents" data-text-blocks={slug}>
+  {
+    blocks.map((block) => (
+      <div class="relative" data-block={block.id}>
+        {block.kind === "heading" ? (
+          <h2 class="font-display text-d6 text-kd-ink mt-16" data-edit={`projects.blocks.${block.id}`}>
+            {block.text}
+          </h2>
+        ) : (
+          <p class="text-body-sm text-kd-slate-2" data-edit={`projects.blocks.${block.id}`}>
+            {block.text}
+          </p>
+        )}
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+    import("../../scripts/project-blocks-editor.js");
+  }
+</script>

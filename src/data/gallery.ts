@@ -57,6 +57,20 @@ export interface ProjectGallery {
       project> — only the plant groups, which live under /resources,
       set it. An attribute, never rendered as text. */
   readonly href?: string;
+  /** Set on a PART of a project's gallery (MATUNGA_PARTS): the title of
+      the project it belongs to. Pages show the parent with one
+      sub-heading per part; only the studio shows a part on its own. */
+  readonly parent?: string;
+  /** A part's sub-heading on the page — "Civil Works". */
+  readonly label?: string;
+  readonly photos: readonly GalleryPhoto[];
+  /** Filled in by src/lib/gallery-live.ts, never written here: a split
+      project's photographs, part by part. `photos` is then all of them. */
+  readonly parts?: readonly GalleryPart[];
+}
+
+export interface GalleryPart {
+  readonly label: string;
   readonly photos: readonly GalleryPhoto[];
 }
 
@@ -71,51 +85,11 @@ const railwayFirst: readonly ProjectGallery[] = [
       { file: "panvel-karjat-05.jpg", caption: "Night work: rail cutting on the corridor" },
     ],
   },
+  /* Split three ways since 8 Oct 2026 — see MATUNGA_PARTS below. The
+     group stays here, empty, so no group after it changes index. */
   {
     project: "Matunga Workshop",
-    photos: [
-      { file: "matunga-workshop-01.jpg", caption: "Vande Bharat trainset inside the maintenance shed" },
-      { file: "matunga-workshop-02.jpg", caption: "LHB coach shed under its full-length arched roof" },
-      { file: "matunga-workshop-05.jpg", caption: "Looking down the workshop yard from above" },
-      { file: "matunga-workshop-07.jpg", caption: "Carriage workshop office building" },
-      { file: "matunga-workshop-08.jpg", caption: "Workshop facility block and landscaped approach" },
-      { file: "matunga-workshop-09.jpg", caption: "Workshop entrance monument at dusk" },
-      { file: "matunga-workshop-10.jpg", caption: "Name wall and water feature at the workshop entrance" },
-      { file: "matunga-workshop-11.jpg", caption: "Tensile canopy over the forecourt, lit at dusk" },
-      { file: "matunga-workshop-16.jpg", caption: "Office block side elevation and service lane" },
-      { file: "matunga-workshop-17.jpg", caption: "Renovated two-storey block with a landscaped forecourt" },
-      { file: "matunga-workshop-18.jpg", caption: "Shed facade under scaffold netting, covered coach entry below" },
-      { file: "matunga-workshop-21.jpg", caption: "Workshop gate with the new office block beyond" },
-      { file: "matunga-workshop-23.jpg", caption: "Office block and its paved approach" },
-      { file: "matunga-workshop-25.jpg", caption: "Planting bed along the office block" },
-      { file: "matunga-workshop-27.jpg", caption: "Paved drive to the office block entrance" },
-      { file: "matunga-workshop-29.jpg", caption: "Potted palms lining the entrance walk" },
-      { file: "matunga-workshop-31.jpg", caption: "Name wall and water feature at the workshop entrance" },
-      { file: "matunga-workshop-34.jpg", caption: "Stone planters and the name wall from the side" },
-      { file: "matunga-workshop-38.jpg", caption: "Boundary screens, with the workshop gate beyond" },
-      { file: "matunga-workshop-39.jpg", caption: "Planted bed along the tiled boundary wall" },
-      { file: "matunga-workshop-40.jpg", caption: "Office block end elevation" },
-      { file: "matunga-workshop-41.jpg", caption: "Tiled boundary wall with green panels" },
-      { file: "matunga-workshop-44.jpg", caption: "Tensile canopy over the office block entrance" },
-      { file: "matunga-workshop-52.jpg", caption: "The manager's office reception, full height" },
-      { file: "matunga-workshop-56.jpg", caption: "Lobby planters and wall-mounted artwork" },
-      { file: "matunga-workshop-59.jpg", caption: "Lit stair treads and steel handrail" },
-      { file: "matunga-workshop-62.jpg", caption: "Frosted-glass entry to the manager's suite" },
-      { file: "matunga-workshop-64.jpg", caption: "Corridor of timber doors and framed paintings" },
-      { file: "matunga-workshop-66.jpg", caption: "Stair void and corridor on the upper floor" },
-      { file: "matunga-workshop-67.jpg", caption: "Office with meeting table and timber-panelled walls" },
-      { file: "matunga-workshop-72.jpg", caption: "Lounge seating, front view" },
-      { file: "matunga-workshop-73.jpg", caption: "Lounge corner under a Vande Bharat painting" },
-      { file: "matunga-workshop-74.jpg", caption: "Sofas against the timber panelling" },
-      { file: "matunga-workshop-75.jpg", caption: "Manager's desk and visitor chairs" },
-      { file: "matunga-workshop-76.jpg", caption: "Manager's office seen from the lounge" },
-      { file: "matunga-workshop-77.jpg", caption: "Office meeting table and wall art" },
-      { file: "matunga-workshop-78.jpg", caption: "The Chief Workshop Manager's nameplate" },
-      { file: "matunga-workshop-82.jpg", caption: "Conference room from the window side" },
-      { file: "matunga-workshop-86.jpg", caption: "Courtyard and tensile canopies at night" },
-      { file: "matunga-workshop-88.jpg", caption: "Office block cove lighting at dusk" },
-      { file: "matunga-workshop-93.jpg", caption: "Workshop name board and gate at night" },
-    ],
+    photos: [],
   },
   {
     project: "Nhava Sheva & Uran Railway Stations",
@@ -242,6 +216,93 @@ export const socialGalleries: readonly ProjectGallery[] = [
     project: "Lush Meadows",
     photos: [
       { file: "social-lush-meadows.jpg", caption: "The entrance porch, the name lettering above it" },
+    ],
+  },
+];
+
+/* The Matunga Workshop's photographs, split by discipline at the
+   owner's request on 8 Oct 2026. Each part is a group of its own — so
+   the studio gallery manager can move a photograph from one to another,
+   upload into one, reorder within one — with `parent` naming the
+   project it belongs to. Pages never show a part as a project: they
+   show the parent, with one sub-heading per part (src/lib/gallery-live.ts).
+   They are in NONE of the lists below — every page lists the parent —
+   only in galleryParts at the end of this file, which gallery-live.ts
+   folds in. So no group in any list changes index, and with it no
+   stored heading edit (projects.gallery.groups.N).
+
+   Sorted by eye: Mechanical is the shed, its cranes, traverser and
+   rolling stock; Electrical is the lighting — the dusk and night shots,
+   the lit stair and the reception ceiling; Civil is everything else,
+   buildings, landscaping, boundary works and interiors. */
+export const MATUNGA_PARTS = {
+  civil: "Matunga Workshop — Civil Works",
+  mechanical: "Matunga Workshop — Mechanical Works",
+  electrical: "Matunga Workshop — Electrical Works",
+} as const;
+
+const matungaParts: readonly ProjectGallery[] = [
+  {
+    project: MATUNGA_PARTS.civil,
+    parent: "Matunga Workshop",
+    label: "Civil Works",
+    photos: [
+      { file: "matunga-workshop-10.jpg", caption: "Name wall and water feature at the workshop entrance" },
+      { file: "matunga-workshop-16.jpg", caption: "Office block side elevation and service lane" },
+      { file: "matunga-workshop-17.jpg", caption: "Renovated two-storey block with a landscaped forecourt" },
+      { file: "matunga-workshop-18.jpg", caption: "Shed facade under scaffold netting, covered coach entry below" },
+      { file: "matunga-workshop-21.jpg", caption: "Workshop gate with the new office block beyond" },
+      { file: "matunga-workshop-23.jpg", caption: "Office block and its paved approach" },
+      { file: "matunga-workshop-25.jpg", caption: "Planting bed along the office block" },
+      { file: "matunga-workshop-27.jpg", caption: "Paved drive to the office block entrance" },
+      { file: "matunga-workshop-29.jpg", caption: "Potted palms lining the entrance walk" },
+      { file: "matunga-workshop-31.jpg", caption: "Name wall and water feature at the workshop entrance" },
+      { file: "matunga-workshop-34.jpg", caption: "Stone planters and the name wall from the side" },
+      { file: "matunga-workshop-38.jpg", caption: "Boundary screens, with the workshop gate beyond" },
+      { file: "matunga-workshop-39.jpg", caption: "Planted bed along the tiled boundary wall" },
+      { file: "matunga-workshop-40.jpg", caption: "Office block end elevation" },
+      { file: "matunga-workshop-41.jpg", caption: "Tiled boundary wall with green panels" },
+      { file: "matunga-workshop-44.jpg", caption: "Tensile canopy over the office block entrance" },
+      { file: "matunga-workshop-56.jpg", caption: "Lobby planters and wall-mounted artwork" },
+      { file: "matunga-workshop-62.jpg", caption: "Frosted-glass entry to the manager's suite" },
+      { file: "matunga-workshop-64.jpg", caption: "Corridor of timber doors and framed paintings" },
+      { file: "matunga-workshop-66.jpg", caption: "Stair void and corridor on the upper floor" },
+      { file: "matunga-workshop-67.jpg", caption: "Office with meeting table and timber-panelled walls" },
+      { file: "matunga-workshop-72.jpg", caption: "Lounge seating, front view" },
+      { file: "matunga-workshop-73.jpg", caption: "Lounge corner under a Vande Bharat painting" },
+      { file: "matunga-workshop-74.jpg", caption: "Sofas against the timber panelling" },
+      { file: "matunga-workshop-75.jpg", caption: "Manager's desk and visitor chairs" },
+      { file: "matunga-workshop-76.jpg", caption: "Manager's office seen from the lounge" },
+      { file: "matunga-workshop-77.jpg", caption: "Office meeting table and wall art" },
+      { file: "matunga-workshop-78.jpg", caption: "The Chief Workshop Manager's nameplate" },
+      { file: "matunga-workshop-82.jpg", caption: "Conference room from the window side" },
+      { file: "matunga-workshop-07.jpg", caption: "Carriage workshop office building" },
+      { file: "matunga-workshop-08.jpg", caption: "Workshop facility block and landscaped approach" },
+    ],
+  },
+  {
+    project: MATUNGA_PARTS.mechanical,
+    parent: "Matunga Workshop",
+    label: "Mechanical Works",
+    photos: [
+      { file: "matunga-workshop-01.jpg", caption: "Vande Bharat trainset inside the maintenance shed" },
+      { file: "matunga-workshop-02.jpg", caption: "LHB coach shed under its full-length arched roof" },
+      { file: "matunga-workshop-05.jpg", caption: "Looking down the workshop yard from above" },
+      { file: "matunga-workshop-04.jpg", caption: "Boom lift at work under the shed roof trusses" },
+    ],
+  },
+  {
+    project: MATUNGA_PARTS.electrical,
+    parent: "Matunga Workshop",
+    label: "Electrical Works",
+    photos: [
+      { file: "matunga-workshop-09.jpg", caption: "Workshop entrance monument at dusk" },
+      { file: "matunga-workshop-11.jpg", caption: "Tensile canopy over the forecourt, lit at dusk" },
+      { file: "matunga-workshop-52.jpg", caption: "The manager's office reception, full height" },
+      { file: "matunga-workshop-59.jpg", caption: "Lit stair treads and steel handrail" },
+      { file: "matunga-workshop-86.jpg", caption: "Courtyard and tensile canopies at night" },
+      { file: "matunga-workshop-88.jpg", caption: "Office block cove lighting at dusk" },
+      { file: "matunga-workshop-93.jpg", caption: "Workshop name board and gate at night" },
     ],
   },
 ];
@@ -396,9 +457,12 @@ export const hseGalleries: readonly ProjectGallery[] = [
 /* Every photograph group on the site — the /projects Gallery tab. */
 export const allGalleries: readonly ProjectGallery[] = [...projectGalleries, ...plantGalleries, ...hseGalleries];
 
+/* The parts of split projects — see MATUNGA_PARTS. */
+export const galleryParts: readonly ProjectGallery[] = [...matungaParts];
+
 /** Where a group's heading links. */
 export function galleryHref(group: ProjectGallery): string {
-  return group.href ?? `/projects/${slugify(group.project)}`;
+  return group.href ?? `/projects/${slugify(group.parent ?? group.project)}`;
 }
 
 export function getGallery(projectTitle: string): ProjectGallery | undefined {

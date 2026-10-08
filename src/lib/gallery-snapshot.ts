@@ -9,6 +9,7 @@
 import {
   allGroups,
   effectiveEvents,
+  isSplitParent,
   replay,
   uploadSizes,
   type GalleryEvent,
@@ -20,7 +21,9 @@ const HISTORY = 60;
 export async function snapshot(events: readonly GalleryEvent[]) {
   const state = replay(events);
   const sizes = await uploadSizes();
-  const groups = allGroups.map((g) => ({
+  // A split project's parent holds no photographs (see gallery-live.ts):
+  // the manager shows its parts instead.
+  const groups = allGroups.filter((g) => !isSplitParent(g.project)).map((g) => ({
     project: g.project,
     section: g.section,
     photos: (state.groups.get(g.project) ?? []).map((p) => (p.upload ? { ...p, ...sizes.get(p.file) } : p)),

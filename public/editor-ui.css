@@ -284,11 +284,71 @@
   cursor: default;
 }
 
+/* ---- Text blocks on project pages (src/scripts/project-blocks-editor.js) ----
+   Added 2026-10-08. The add card reuses .nt-jobs-add above; these are
+   its textarea and kind switch, and the move/remove buttons on each
+   added block — shown, like the card, only while the mode is on. */
+.nt-blocks-add textarea {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 10px;
+  border: 1px solid rgba(44, 58, 64, 0.3);
+  background-color: #fff;
+  color: var(--kd-ink, #2c3a40);
+  width: 100%;
+  resize: vertical;
+}
+.nt-blocks-kind {
+  display: flex;
+  gap: 20px;
+}
+.nt-blocks-add .nt-blocks-kind label {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.nt-blocks-tools {
+  display: none;
+}
+:root[data-nt-mode] .nt-blocks-tools {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+:root[data-nt-mode] [data-block] {
+  outline: 1px dashed var(--kd-teal, #68a6a0);
+  outline-offset: 6px;
+}
+.nt-blocks-tools button {
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 10px;
+  cursor: pointer;
+  border: 1px solid var(--kd-teal, #68a6a0);
+  color: var(--kd-ink, #2c3a40);
+  background: #fff;
+}
+.nt-blocks-tools button:last-child {
+  border-color: #a4312a;
+  color: #a4312a;
+}
+.nt-blocks-tools button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 @media print {
   .nt-bar,
   .nt-pill,
   .nt-toast,
   .nt-menu,
+  .nt-blocks-tools,
   .nt-jobs-add,
   .nt-jobs-remove {
     display: none !important;

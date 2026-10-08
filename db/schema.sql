@@ -163,6 +163,32 @@ CREATE TABLE IF NOT EXISTS gallery_uploads (
   UNIQUE KEY uq_file (file)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- ------------------------------------------------------------
+-- project_text_events — headings and paragraphs added to a
+-- /projects/<slug> page in edit mode (src/lib/project-blocks.ts).
+-- The app also creates this table on first use if it is missing.
+--
+-- APPEND-ONLY:
+--   add     page_slug, kind, text; its own id IS the block id
+--   remove  block_id
+--   move    block_id, position = its new index on the page
+-- A block's later wording edits are ordinary content_edits rows under
+-- the key projects.blocks.<id>.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS project_text_events (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  action        ENUM('add', 'remove', 'move') NOT NULL,
+  page_slug     VARCHAR(160)  NOT NULL,
+  block_id      INT           NULL,
+  kind          ENUM('heading', 'paragraph') NULL,
+  text          TEXT          NULL,
+  position      INT           NULL,
+  client_ip     VARCHAR(45)   NULL,
+  user_agent    VARCHAR(255)  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_slug (page_slug)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ============================================================
 -- After running this, confirm:
 --

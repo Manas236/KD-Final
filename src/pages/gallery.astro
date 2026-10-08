@@ -20,6 +20,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 import Kicker from "../components/Kicker.astro";
 import Arrow from "../components/Arrow.astro";
 import GalleryGrid from "../components/GalleryGrid.astro";
+import GalleryParts from "../components/GalleryParts.astro";
 import Lightbox from "../components/Lightbox.astro";
 import { galleryPage as copy } from "../data/gallery-page";
 import { galleryHref } from "../data/gallery";
@@ -112,11 +113,15 @@ const shareImg = galleryImage(firstPhoto.file);
                     </a>
                   </h3>
                   <div class="mt-24">
-                    <GalleryGrid
-                      project={group.project}
-                      photos={group.photos}
-                      group={slugify(group.project)}
-                    />
+                    {group.parts ? (
+                      <GalleryParts project={group.project} parts={group.parts} group={slugify(group.project)} />
+                    ) : (
+                      <GalleryGrid
+                        project={group.project}
+                        photos={group.photos}
+                        group={slugify(group.project)}
+                      />
+                    )}
                   </div>
                 </div>
               ))}

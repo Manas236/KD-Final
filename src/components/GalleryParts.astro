@@ -1,0 +1,45 @@
+---
+/* ============================================================
+   GalleryParts — one project's photographs, part by part
+   ------------------------------------------------------------
+   For a project whose gallery is split by discipline (Matunga Workshop:
+   Civil, Mechanical, Electrical — MATUNGA_PARTS in src/data/gallery.ts).
+   Each part is a small sub-heading over its own GalleryGrid. Every grid
+   shares one lightbox group, so prev/next walks the whole project, not
+   just one part.
+
+   The sub-headings are data, not copy: they carry `data-no-edit`, the
+   same opt-out GalleryGrid's captions use, and are renamed in
+   gallery.ts.
+   ============================================================ */
+import GalleryGrid from "./GalleryGrid.astro";
+import type { GalleryPart } from "../data/gallery";
+
+interface Props {
+  project: string;
+  parts: readonly GalleryPart[];
+  /** Lightbox group for every grid. */
+  group: string;
+  tone?: "dark" | "light";
+}
+
+const { project, parts, group, tone = "light" } = Astro.props;
+const head = tone === "light" ? "text-kd-ink" : "text-kd-mist";
+const rule = tone === "light" ? "bg-kd-mint-2" : "bg-kd-mint";
+---
+
+<div class="flex flex-col gap-40">
+  {
+    parts.map((part) => (
+      <div>
+        <h4 class:list={["flex items-center gap-12 text-label uppercase", head]} data-no-edit>
+          <span class:list={["block w-16 h-1 shrink-0", rule]} aria-hidden="true" />
+          <span>{part.label}</span>
+        </h4>
+        <div class="mt-16">
+          <GalleryGrid project={`${project} — ${part.label}`} photos={part.photos} group={group} />
+        </div>
+      </div>
+    ))
+  }
+</div>

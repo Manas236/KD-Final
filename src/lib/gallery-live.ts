@@ -22,11 +22,13 @@ import type { RowDataPacket } from "mysql2";
 import pool from "./db";
 import { cleanText } from "./editable";
 import {
+  galleryParts,
   hseGalleries,
   plantGalleries,
   projectGalleries,
   railwayGalleries,
   socialGalleries,
+  type GalleryPart,
   type GalleryPhoto,
   type ProjectGallery,
 } from "../data/gallery";
@@ -62,11 +64,27 @@ export interface GroupInfo {
   readonly href?: string;
 }
 
+/* A split project's parts (gallery.ts, galleryParts) are listed right
+   after it, in its section — see "Split projects" below. */
+const splitParts = new Map<string, ProjectGallery[]>();
+for (const g of galleryParts) {
+  if (!g.parent) continue;
+  if (!splitParts.has(g.parent)) splitParts.set(g.parent, []);
+  splitParts.get(g.parent)!.push(g);
+}
+
+function withParts(list: readonly ProjectGallery[], section: Section): GroupInfo[] {
+  return list.flatMap((g) => [
+    { project: g.project, section, href: g.href },
+    ...(splitParts.get(g.project) ?? []).map((p) => ({ project: p.project, section })),
+  ]);
+}
+
 const baselineGroups: readonly GroupInfo[] = [
-  ...railwayGalleries.map((g) => ({ project: g.project, section: "railway" as const, href: g.href })),
-  ...socialGalleries.map((g) => ({ project: g.project, section: "social" as const, href: g.href })),
-  ...plantGalleries.map((g) => ({ project: g.project, section: "plant" as const, href: g.href })),
-  ...hseGalleries.map((g) => ({ project: g.project, section: "hse" as const, href: g.href })),
+  ...withParts(railwayGalleries, "railway"),
+  ...withParts(socialGalleries, "social"),
+  ...withParts(plantGalleries, "plant"),
+  ...withParts(hseGalleries, "hse"),
 ];
 const baselineNames = new Set(baselineGroups.map((g) => g.project));
 
@@ -84,14 +102,31 @@ const extraGroups: readonly GroupInfo[] = [
 export const allGroups: readonly GroupInfo[] = [...baselineGroups, ...extraGroups];
 const groupByName = new Map(allGroups.map((g) => [g.project, g]));
 
+/* ------------------------------------------------------------
+   Split projects
+   ------------------------------------------------------------
+   A project whose gallery is divided into parts (Matunga Workshop:
+   civil, mechanical, electrical — gallery.ts) keeps its own group, but
+   EMPTY: every photograph lives in one of the parts. So the parent is
+   not somewhere a photograph can be put — isGroup() refuses it, and the
+   manager never lists it — and an older event that put a photograph
+   there (a reorder, a move or an upload made before the split) is
+   replayed into the part instead: the part the photograph is in on the
+   baseline, or the first part for one that never was.
+   ------------------------------------------------------------ */
+
+export function isSplitParent(name: string): boolean {
+  return splitParts.has(name);
+}
+
 export function isGroup(name: unknown): name is string {
-  return typeof name === "string" && groupByName.has(name);
+  return typeof name === "string" && groupByName.has(name) && !splitParts.has(name);
 }
 
 /* Every photograph the manager knows: the baseline plus the library.
    A file not in here cannot be shown, moved or captioned. */
 const baselinePhotos: { file: string; caption: string; project: string }[] = [];
-for (const g of [...railwayGalleries, ...socialGalleries, ...plantGalleries, ...hseGalleries]) {
+for (const g of [...railwayGalleries, ...socialGalleries, ...plantGalleries, ...hseGalleries, ...galleryParts]) {
   for (const p of g.photos) baselinePhotos.push({ file: p.file, caption: p.caption, project: g.project });
 }
 const knownFiles = new Set([...baselinePhotos.map((p) => p.file), ...galleryLibrary.map((p) => p.file)]);
@@ -162,9 +197,19 @@ export function replay(events: readonly GalleryEvent[], fromDatabase = true): Li
     library.add(p.file);
   }
 
-  for (const e of effectiveEvents(events)) {
-    const file = e.file;
+  /* Where an event aimed at a split parent lands — see "Split projects". */
+  const homePart = new Map(placement);
+  const target = (group: string | null, file: string): string | null => {
+    const parts = group ? splitParts.get(group) : undefined;
+    if (!parts) return group;
+    const home = homePart.get(file);
+    return parts.some((p) => p.project === home) ? home! : parts[0].project;
+  };
+
+  for (const raw of effectiveEvents(events)) {
+    const file = raw.file;
     if (!file) continue;
+    const e = raw.target_group ? { ...raw, target_group: target(raw.target_group, file) } : raw;
     // An upload enters the gallery here: at the end of its project (or
     // at `position`), visible, with the caption it was uploaded with.
     // Undoing the `add` row takes it off the site again.
@@ -292,14 +337,27 @@ function visible(state: LiveState, project: string): GalleryPhoto[] {
     .map((p) => ({ file: p.file, caption: p.caption }));
 }
 
-/** One project's photographs as they are on the site now. */
+/** A split project's parts that have photographs on the site, or null
+    for a project that is not split. */
+export function liveParts(state: LiveState, project: string): GalleryPart[] | null {
+  const parts = splitParts.get(project);
+  if (!parts) return null;
+  return parts
+    .map((p) => ({ label: p.label ?? p.project, photos: visible(state, p.project) }))
+    .filter((p) => p.photos.length);
+}
+
+/** One project's photographs as they are on the site now — for a split
+    project, every part's, in part order. */
 export function livePhotos(state: LiveState, project: string): GalleryPhoto[] {
-  return visible(state, project);
+  const parts = liveParts(state, project);
+  return parts ? parts.flatMap((p) => p.photos) : visible(state, project);
 }
 
 /** A baseline list of groups with the live photographs: empty groups
     dropped, and groups the studio created for the given sections
-    appended at the end. */
+    appended at the end. A split project is one group carrying its
+    `parts`; the parts are never groups of their own here. */
 export function liveGroups(
   state: LiveState,
   baseline: readonly ProjectGallery[],
@@ -307,8 +365,9 @@ export function liveGroups(
 ): ProjectGallery[] {
   const out: ProjectGallery[] = [];
   for (const g of baseline) {
-    const photos = visible(state, g.project);
-    if (photos.length) out.push({ ...g, photos });
+    const parts = liveParts(state, g.project);
+    const photos = parts ? parts.flatMap((p) => p.photos) : visible(state, g.project);
+    if (photos.length) out.push(parts ? { ...g, photos, parts } : { ...g, photos });
   }
   for (const g of extraGroups) {
     if (!sections.includes(g.section)) continue;

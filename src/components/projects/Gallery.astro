@@ -18,6 +18,7 @@
 import Kicker from "../Kicker.astro";
 import Arrow from "../Arrow.astro";
 import GalleryGrid from "../GalleryGrid.astro";
+import GalleryParts from "../GalleryParts.astro";
 import { projects } from "../../data/projects";
 import { slugify } from "../../lib/slug";
 import { galleryHref } from "../../data/gallery";
@@ -49,11 +50,15 @@ const groups = liveAllGalleries(await liveState());
               </a>
             </h3>
             <div class="mt-24">
-              <GalleryGrid
-                project={group.project}
-                photos={group.photos}
-                group={slugify(group.project)}
-              />
+              {group.parts ? (
+                <GalleryParts project={group.project} parts={group.parts} group={slugify(group.project)} tone="dark" />
+              ) : (
+                <GalleryGrid
+                  project={group.project}
+                  photos={group.photos}
+                  group={slugify(group.project)}
+                />
+              )}
             </div>
           </div>
         ))

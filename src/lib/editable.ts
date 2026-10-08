@@ -89,6 +89,13 @@ export const KNOWN_PATHS: readonly string[] = [
 
 const KNOWN_PATH_SET = new Set(KNOWN_PATHS);
 
+/* Every /projects/<slug> page, added 8 Oct 2026. Those pages are one
+   dynamic route over two data modules, which this file cannot import
+   (it ships to the browser), so they are matched by shape — a single
+   slugify()-shaped segment — rather than listed. Until then their
+   copy carried data-edit keys that no save could reach. */
+const RE_PROJECT_PAGE = /^\/projects\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 /**
  * Reduce a pathname to the single form we store: lower case, no query,
  * no hash, no trailing slash (except the root). "/About/" -> "/about".
@@ -112,7 +119,7 @@ export function normalizePath(raw: unknown): string | null {
   if (p.length > 1) p = p.replace(/\/+$/, "");
   if (p === "") p = "/";
 
-  return KNOWN_PATH_SET.has(p) ? p : null;
+  return KNOWN_PATH_SET.has(p) || RE_PROJECT_PAGE.test(p) ? p : null;
 }
 
 /* ------------------------------------------------------------

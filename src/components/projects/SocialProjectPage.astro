@@ -52,6 +52,8 @@ import { galleryImage } from "../../lib/gallery-images";
 import { home } from "../../data/home";
 import { detailChrome } from "../../data/detail-chrome";
 import { livePhotos, liveState } from "../../lib/gallery-live";
+import { blocksFor } from "../../lib/project-blocks";
+import TextBlocks from "./TextBlocks.astro";
 
 interface Props {
   slug: string;
@@ -69,6 +71,9 @@ const heroImage = detail.file ? galleryImage(detail.file) : undefined;
    studio, so the lightbox labels fall back to the shared chrome. */
 const photos = livePhotos(await liveState(), detail.title);
 const lightbox = photos.length > 0 ? (detail.lightbox ?? detailChrome.lightbox) : undefined;
+
+/* Headings and paragraphs an editor added to this page (edit mode). */
+const blocks = await blocksFor(slug);
 
 /* The nav's own label for /projects as the middle crumb — see the same
    note in ProjectDetailPage.astro. */
@@ -180,6 +185,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
               {paragraph}
             </p>
           ))}
+          <TextBlocks slug={slug} blocks={blocks} />
         </div>
 
         <div class="mt-56 pt-56 border-t border-kd-divider-light">

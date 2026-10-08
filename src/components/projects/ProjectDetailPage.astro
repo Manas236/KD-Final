@@ -50,7 +50,10 @@ import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { detailChrome } from "../../data/project-detail";
 import type { ProjectDetail } from "../../data/project-detail";
-import { livePhotos, liveState } from "../../lib/gallery-live";
+import GalleryParts from "../../components/GalleryParts.astro";
+import TextBlocks from "./TextBlocks.astro";
+import { liveParts, livePhotos, liveState } from "../../lib/gallery-live";
+import { blocksFor } from "../../lib/project-blocks";
 import { home } from "../../data/home";
 
 interface Props {
@@ -59,9 +62,17 @@ interface Props {
 
 const { project } = Astro.props;
 
-/* Live: gallery.ts with the studio gallery manager's changes. */
-const livePhotoList = livePhotos(await liveState(), project.title);
-const gallery = livePhotoList.length ? { project: project.title, photos: livePhotoList } : undefined;
+/* Live: gallery.ts with the studio gallery manager's changes. A split
+   project (Matunga Workshop) also carries its parts. */
+const live = await liveState();
+const livePhotoList = livePhotos(live, project.title);
+const parts = liveParts(live, project.title);
+const gallery = livePhotoList.length
+  ? { project: project.title, photos: livePhotoList, parts: parts ?? undefined }
+  : undefined;
+
+/* Headings and paragraphs an editor added to this page (edit mode). */
+const blocks = await blocksFor(project.slug);
 
 const title = `${project.title} — K.D. Constructions`;
 const description = project.body[0];
@@ -184,6 +195,7 @@ const breadcrumbs = [
               {paragraph}
             </p>
           ))}
+          <TextBlocks slug={project.slug} blocks={blocks} />
         </div>
 
         {gallery && (
@@ -194,11 +206,15 @@ const breadcrumbs = [
               tone="light"
             />
             <div class="mt-32">
-              <GalleryGrid
-                project={project.title}
-                photos={gallery.photos}
-                group={project.slug}
-              />
+              {gallery.parts ? (
+                <GalleryParts project={project.title} parts={gallery.parts} group={project.slug} />
+              ) : (
+                <GalleryGrid
+                  project={project.title}
+                  photos={gallery.photos}
+                  group={project.slug}
+                />
+              )}
             </div>
           </div>
         )}
