@@ -105,13 +105,21 @@ function addCard() {
   return li;
 }
 
+/* A short ladder rather than every day from 1 to 30: nobody picks 17.
+   The server accepts any whole number of days from 1 to 30. */
+const DAYS = [
+  [1, "1 day"],
+  [3, "3 days"],
+  [7, "1 week"],
+  [14, "2 weeks"],
+  [21, "3 weeks"],
+  [30, "30 days (the most)"],
+];
+
 function dayOptions() {
-  let html = "";
-  for (let d = 1; d <= 30; d++) {
-    const label = d === 1 ? "1 day" : d === 7 ? "7 days (1 week)" : d === 14 ? "14 days (2 weeks)" : d === 30 ? "30 days (the most)" : `${d} days`;
-    html += `<option value="${d}"${d === 30 ? " selected" : ""}>${label}</option>`;
-  }
-  return html;
+  return DAYS.map(
+    ([d, label]) => `<option value="${d}"${d === 30 ? " selected" : ""}>${label}</option>`
+  ).join("");
 }
 
 async function send(body) {
