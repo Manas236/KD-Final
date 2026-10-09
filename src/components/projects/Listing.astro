@@ -54,18 +54,20 @@
    `data-listing-view` on the band is how Filters.astro's Gallery tab
    swaps this band for projects/Gallery.astro and back.
 
-   STEEL FABRICATION & ERECTION (OPEN-QUESTIONS.md #31). Every card whose
-   project the source doc gives structural steel for carries
-   `data-project-steel`, which is all the "Steel Fabrication & Erection"
-   tab reads. Two entries follow the small tier, both full width:
-     Â· the Vindhane plant â€” a medium-height photo card built exactly as
-       the medium tier is, linking to its own page, /resources/vindhane-plant
-       (OPEN-QUESTIONS.md #33);
-     Â· the steel ledger â€” the pipeline panel's stat-tile fill, one row
-       per project with its tonnage, each row linking to that project.
-   Both carry `data-project-status="steel"`, so they show under All and
-   the steel tab and hide under Live and Completed, where a plant and a
-   tonnage total are not a status.
+   PLANTS AND STEEL. Three full-width entries follow the small tier:
+     - the Vindhane steel fabrication plant and the Karjat RMC plant,
+       medium-height photo cards built exactly as the medium tier is,
+       each linking to its own page under /resources (OPEN-QUESTIONS.md
+       #33). Both carry `data-project-plant`, which is all the "Plants"
+       tab reads, and `data-project-status="plant"`;
+     - the steel ledger - the pipeline panel's stat-tile fill, one row
+       per project with its tonnage, each row linking to that project
+       (OPEN-QUESTIONS.md #31). `data-project-status="steel"`.
+   No tab's key is "plant" or "steel", so all three show under All and
+   hide under Live and Completed, where a plant and a tonnage total are
+   not a status. Until 2026-10-09 the fifth tab was "Steel Fabrication &
+   Erection" and filtered on a per-card `data-project-steel`; the client
+   asked for "Plants" in its place.
    ============================================================ */
 import { Image } from "astro:assets";
 import featuredImg from "../../assets/about-mankhurd-workforce.jpg";
@@ -81,10 +83,12 @@ import matungaLhbImg from "../../assets/project-matunga-lhb.jpg";
 import vindhanePlantImg from "../../assets/project-vindhane-plant.jpg";
 import { projects } from "../../data/projects";
 import { slugify } from "../../lib/slug";
+import { galleryImage } from "../../lib/gallery-images";
 import Arrow from "../Arrow.astro";
 
 const { listing } = projects;
 const { plant, ledger } = listing.steel;
+const rmc = listing.rmcPlant;
 /* Positionally paired with listing.medium / listing.small â€” see
    OPEN-QUESTIONS.md #19b for what each image actually shows and why. */
 const mediumImages = [
@@ -110,7 +114,6 @@ const isOddOneOut = (i: number, count: number) =>
     <article
       class="relative h-560 overflow-hidden min-[900px]:col-span-2"
       data-project-status={listing.featured.live ? "live" : "completed"}
-      data-project-steel={listing.featured.steel}
     >
       <Image
         src={featuredImg}
@@ -168,7 +171,6 @@ const isOddOneOut = (i: number, count: number) =>
         <article
           class="relative h-400 overflow-hidden min-[900px]:data-wide:col-span-2"
           data-project-status={project.live ? "live" : "completed"}
-          data-project-steel={project.steel}
           data-project-tier="medium"
           data-wide={isOddOneOut(i, listing.medium.length)}
         >
@@ -224,7 +226,6 @@ const isOddOneOut = (i: number, count: number) =>
         <article
           class="relative h-265 overflow-hidden min-[900px]:data-wide:col-span-2"
           data-project-status={project.live ? "live" : "completed"}
-          data-project-steel={project.steel}
           data-project-tier="small"
           data-wide={isOddOneOut(i, listing.small.length)}
         >
@@ -270,8 +271,8 @@ const isOddOneOut = (i: number, count: number) =>
          white sky, where no scrim reaches. -->
     <article
       class="relative h-560 min-[900px]:h-400 overflow-hidden min-[900px]:col-span-2"
-      data-project-status="steel"
-      data-project-steel
+      data-project-status="plant"
+      data-project-plant
     >
       <Image
         src={vindhanePlantImg}
@@ -306,10 +307,47 @@ const isOddOneOut = (i: number, count: number) =>
       <a href="/resources/vindhane-plant" class="absolute inset-0" aria-label={plant.title}></a>
     </article>
 
+    <article
+      class="relative h-560 min-[900px]:h-400 overflow-hidden min-[900px]:col-span-2"
+      data-project-status="plant"
+      data-project-plant
+    >
+      <Image
+        src={galleryImage(rmc.file)}
+        alt={rmc.alt}
+        width={1600}
+        height={540}
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover object-center"
+      />
+      <div class="absolute inset-0" style="background-image: var(--kd-scrim-lg)" aria-hidden="true"></div>
+
+      <div class="absolute inset-x-0 bottom-0 p-32">
+        <div class="flex items-center gap-8">
+          <span
+            class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+            data-edit="projects.listing.rmcPlant.badge"
+          >
+            {rmc.badge}
+          </span>
+        </div>
+        <h3 class="font-display text-d6 text-kd-mist mt-12" data-edit="projects.listing.rmcPlant.title">
+          {rmc.title}
+        </h3>
+        <p class="text-meta text-kd-fog mt-6" data-edit="projects.listing.rmcPlant.meta">
+          {rmc.meta}
+        </p>
+        <p class="text-body-sm text-kd-mist mt-16 max-w-560" data-edit="projects.listing.rmcPlant.body">
+          {rmc.body}
+        </p>
+      </div>
+
+      <a href="/resources/rmc-plant-karjat" class="absolute inset-0" aria-label={rmc.title}></a>
+    </article>
+
     <div
       class="bg-kd-stat-fill border border-kd-stat-border p-32 min-[900px]:col-span-2"
       data-project-status="steel"
-      data-project-steel
     >
       <span class="text-kicker uppercase text-kd-mint" data-edit="projects.listing.steel.ledger.kicker">
         {ledger.kicker}

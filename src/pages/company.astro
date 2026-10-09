@@ -1,0 +1,11 @@
+---
+/* /company — formation and the board of directors, under About in the
+   nav. Added 2026-10-09 at the client's request. Copy: `company` in
+   src/data/pages.ts. */
+import InfoPage from "../components/InfoPage.astro";
+import { company } from "../data/pages";
+
+export const prerender = false;
+---
+
+<InfoPage page="company" copy={company} />

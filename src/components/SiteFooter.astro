@@ -50,8 +50,6 @@
    dropped in favour of equal-width columns at both smaller steps.
    DESIGN-SYSTEM.md §10.
    ============================================================ */
-import { Image } from "astro:assets";
-import logo from "../assets/kd-logo-mint.jpg";
 import { home } from "../data/home";
 
 interface Props {
@@ -71,11 +69,11 @@ const year = new Date().getFullYear();
   <div class="max-w-kd mx-auto px-24 sm:px-48">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] gap-56">
       <div id="contact">
-        <Image
-          src={logo}
+        <img
+          src="/kd-logo.svg"
           alt={footer.logoAlt}
-          width={120}
-          height={80}
+          width="120"
+          height="80"
           loading="lazy"
           class="w-120 h-80 object-contain object-left"
         />

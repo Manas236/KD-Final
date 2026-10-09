@@ -62,6 +62,12 @@ const LOGOS = [
   { out: "jnpt.png", src: "JNPT.png", bg: "flood" },
   { out: "balbharati.png", src: "Balbharti.jpg", bg: "pattern" },
   { out: "maharashtra-pwd.png", src: "Maha_PWD.jpg", bg: "flood" },
+  /* Added 2026-10-09 at the client's request. Not supplied by K.D.: both
+     are the organisations' published marks, rendered from the SVGs on
+     Wikipedia ("Ircon International.svg", "Food Corporation of
+     India.svg") to 1280px transparent PNGs and saved in Logo/. */
+  { out: "ircon.png", src: "IRCON.png", bg: "transparent" },
+  { out: "fci.png", src: "FCI.png", bg: "transparent" },
 ];
 
 /* How far a pixel may sit from the canvas colour and still be canvas.

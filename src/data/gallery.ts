@@ -389,6 +389,8 @@ export const hseReportPhotos: readonly GalleryPhoto[] = [
   { file: "hse-air-monitoring-mankhurd.jpg", caption: "Ambient air-quality monitoring on the Mankhurd site" },
   { file: "hse-world-environment-day.jpg", caption: "The site workforce marks World Environment Day" },
   { file: "hse-worker-recognition.jpg", caption: "Prize distribution for safe work on site" },
+  /* Appended 2026-10-09, so no earlier caption key moves. */
+  { file: "hse-electrical-shock-drill-mankhurd.jpg", caption: "Electrical-shock mock drill at Mankhurd — the casualty is moved to a standby ambulance" },
 ];
 
 /* Health, Safety & Environment — the Mankhurd 75,000 safe man-hours

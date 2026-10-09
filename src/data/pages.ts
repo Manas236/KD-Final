@@ -27,6 +27,11 @@ export interface InfoItem {
       check-edit-keys.mjs skips `.logo` the way it skips `.file`. A
       section in which any item has one gives every card a logo well. */
   readonly logo?: string;
+  /** A file in src/assets/directors/ (/company). An attribute's source,
+      never text — check-edit-keys.mjs skips `.portrait`. */
+  readonly portrait?: string;
+  /** Rendered as a small label under the title — a director's role. */
+  readonly role?: string;
   /** REVIEW-ONLY. The card is a placeholder for content K.D. has not
       supplied: the value is the label it renders under ("To be added"),
       `title` names the missing thing and `body` says what is needed.
@@ -245,6 +250,11 @@ export interface HseMedia {
   readonly alt: string;
   readonly title: string;
   readonly where: string;
+  /** REVIEW-ONLY, as on InfoItem: a tile whose photograph or video K.D.
+      has not supplied. Record.astro draws it dashed with this badge and
+      `note`; scripts/check-placeholders.mjs fails while one remains. */
+  readonly pending?: string;
+  readonly note?: string;
 }
 
 export interface HseCard {
@@ -366,6 +376,14 @@ export const hse: HseCopy = {
             alt: "Workers take turns putting out a test fire with a DCP extinguisher while the crew watches",
             title: "Fire-extinguisher drill",
             where: "GTB Nagar Station",
+          },
+          /* Client feedback 2026-10-09: images for the drills. The photo
+             came from the EHS team's September WhatsApp reports. */
+          {
+            file: "hse-electrical-shock-drill-mankhurd.jpg",
+            alt: "Electrical-shock mock drill: a supervisor directs the crew as the casualty is loaded into a standby ambulance",
+            title: "Electrical-shock rescue drill",
+            where: "Mankhurd Station",
           },
         ],
         cards: [
@@ -667,12 +685,121 @@ export const csr: InfoPageCopy = {
   },
 };
 
+/* /company — added 2026-10-09 at the client's request: "a new title
+   called Company that involves information about company formation and
+   the directors", under About. Formation is K.D.Website_Details.md's own
+   Chapter I, II and III (1973 partnership firm in Dhule; Private
+   Limited, August 2004; multi-disciplinary EPC from 2017); the board is the leadership
+   slide of the 2026 annual deck — the same four names, roles and
+   remits as about.ts's board, in the slide's order, with the slide's
+   portraits. Registration numbers (CIN, GSTIN) were never supplied, so
+   they are a pending card. */
+export const company: InfoPageCopy = {
+  meta: {
+    title: "Company — K.D. Constructions · Formation & Board of Directors",
+    description:
+      "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — founded in Dhule in 1973 as a " +
+      "partnership firm, incorporated as a Private Limited company in August 2004.",
+  },
+  ...chrome,
+  hero: {
+    kicker: "Company",
+    title: "Kailashchandra Dilipkumar Constructions Pvt. Ltd.",
+    sub:
+      "Founded in Dhule, Maharashtra, in 1973 as a partnership firm, incorporated as a Private " +
+      "Limited company in August 2004, and led today from Vashi, Navi Mumbai, by a board of " +
+      "four directors.",
+  },
+  sections: [
+    {
+      kicker: "Company Formation",
+      heading: "From a partnership firm to a Private Limited company.",
+      items: [
+        {
+          title: "1973 · Partnership firm",
+          body:
+            "K.D. Constructions began in Dhule, Maharashtra, as a partnership firm undertaking " +
+            "early Maharashtra state PWD works — the years that set its engineering discipline " +
+            "and financial prudence.",
+        },
+        {
+          title: "August 2004 · Private Limited company",
+          body:
+            "Incorporated as Kailashchandra Dilipkumar Constructions Pvt. Ltd. The company became " +
+            "pre-qualified for Indian Railway infrastructure works and grew its portfolio with " +
+            "CIDCO, NMMC and other government bodies.",
+        },
+        /* K.D.Website_Details.md Chapter III ("2017–present"). The year
+           the Vashi head office opened is not in any K.D. document
+           (KD_INFO.md §Chapter III), so this card does not tie Vashi to
+           2017 — PRE-LAUNCH.md asks for it. */
+        {
+          title: "2017 onward · Multi-disciplinary EPC",
+          body:
+            "The company grew beyond core civil works into mechanical, electrical and track " +
+            "engineering, with integrated resources, owned equipment and strengthened HSE practices.",
+        },
+        {
+          pending: "To be added",
+          title: "Registration details",
+          body:
+            "Corporate Identification Number (CIN), registered office address and GSTIN, as " +
+            "K.D. wishes them published.",
+        },
+      ],
+    },
+    {
+      kicker: "Board of Directors",
+      heading: "The Stewards of the Vision",
+      items: [
+        {
+          title: "Kailash S. Gindodia",
+          role: "Founding Director",
+          portrait: "kailash-s-gindodia.jpg",
+          body:
+            "Five decades at the helm — the architect of the firm's enduring principles of " +
+            "precision, discipline, and engineering integrity.",
+        },
+        {
+          title: "Sarita K. Gindodia",
+          role: "Director",
+          portrait: "sarita-k-gindodia.jpg",
+          body:
+            "Guides corporate strategy, financial strength, and governance — the quiet framework " +
+            "behind sustainable growth.",
+        },
+        {
+          title: "Mohanlal S. Gindodia",
+          role: "Director",
+          portrait: "mohanlal-s-gindodia.jpg",
+          body:
+            "Leads stakeholder engagement and government relations, unlocking the trust that " +
+            "complex infrastructure demands.",
+        },
+        {
+          title: "Shiv K. Gindodia",
+          role: "Director · Inducted 2017",
+          portrait: "shiv-k-gindodia.jpg",
+          body:
+            "Carries the firm into its modern era — advancing technology, sustainable " +
+            "development, HSE excellence, and a broader EPC horizon.",
+        },
+      ],
+    },
+  ],
+  cta: {
+    kicker: "Our Story",
+    headline: "Five decades of engineering integrity.",
+    button: { label: "About K.D. Constructions", href: "/about" },
+  },
+};
+
 export const clients: InfoPageCopy = {
   meta: {
     title: "Clients — K.D. Constructions",
     description:
-      "Trusted partner to Indian Railways, Central Railway, Western Railway, MRVC, CIDCO, NMMC, " +
-      "JNPT and Balbharati.",
+      "Trusted partner to Indian Railways, Central Railway, Western Railway, MRVC, IRCON, CIDCO, " +
+      "NMMC, JNPT, the Food Corporation of India and Balbharati.",
   },
   ...chrome,
   hero: {
@@ -714,6 +841,17 @@ export const clients: InfoPageCopy = {
         /* No COFMOW mark was supplied — InfoPage sets the name in the
            well instead. Add `logo` here when one arrives. */
         { title: "COFMOW", body: "LHB Coach Maintenance Facilities at Matunga" },
+        /* Added 2026-10-09 at the client's request. WPO is an Indian
+           Railways organisation with no mark of its own, so it carries
+           the Indian Railways roundel. IRCON's mark is its published
+           one (scripts/build-client-logos.mjs). K.D. has not said which
+           works were for either — PRE-LAUNCH.md asks. */
+        {
+          title: "WPO",
+          body: "Workshop Projects Organisation, Indian Railways",
+          logo: "indian-railways.png",
+        },
+        { title: "IRCON", body: "IRCON International Limited", logo: "ircon.png" },
       ],
     },
     {
@@ -733,6 +871,8 @@ export const clients: InfoPageCopy = {
           body: "Our earliest works, from 1973",
           logo: "maharashtra-pwd.png",
         },
+        /* Added 2026-10-09 at the client's request. */
+        { title: "FCI", body: "Food Corporation of India", logo: "fci.png" },
       ],
     },
   ],

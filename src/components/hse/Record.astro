@@ -78,9 +78,29 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
                     class:list={[
                       "relative overflow-hidden h-265",
                       wide ? "sm:col-span-2 sm:h-480" : "sm:h-360",
+                      m.pending && "border border-dashed border-kd-card-border-light bg-kd-mist",
                     ]}
+                    data-pending={m.pending ? "" : undefined}
                   >
-                    {m.video ? (
+                    {m.pending ? (
+                      <div class="absolute inset-0 p-24 flex flex-col justify-end">
+                        <span
+                          class="self-start text-badge uppercase text-kd-ink bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+                          data-edit={`${K}.${b}.media.${i}.pending`}
+                        >
+                          {m.pending}
+                        </span>
+                        <p class="text-meta-sm text-kd-slate-2 mt-16" data-edit={`${K}.${b}.media.${i}.where`}>
+                          {m.where}
+                        </p>
+                        <p class="font-display text-d8 text-kd-ink mt-6" data-edit={`${K}.${b}.media.${i}.title`}>
+                          {m.title}
+                        </p>
+                        <p class="text-body-sm text-kd-slate-2 mt-12" data-edit={`${K}.${b}.media.${i}.note`}>
+                          {m.note}
+                        </p>
+                      </div>
+                    ) : m.video ? (
                       <video
                         class="absolute inset-0 w-full h-full object-cover object-center"
                         poster={`/video/${m.video}.jpg`}
@@ -103,22 +123,26 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
                         class="absolute inset-0 w-full h-full object-cover object-center"
                       />
                     )}
-                    <div
-                      class="absolute inset-0"
-                      style={`background-image: var(${wide ? "--kd-scrim-lg" : "--kd-scrim-sm"})`}
-                      aria-hidden="true"
-                    />
-                    <div class:list={["absolute inset-x-0 bottom-0", wide ? "p-32" : "p-20"]}>
-                      <p class="text-meta-sm text-kd-fog" data-edit={`${K}.${b}.media.${i}.where`}>
-                        {m.where}
-                      </p>
-                      <p
-                        class:list={["font-display text-kd-mist mt-6", wide ? "text-d6" : "text-d8"]}
-                        data-edit={`${K}.${b}.media.${i}.title`}
-                      >
-                        {m.title}
-                      </p>
-                    </div>
+                    {!m.pending && (
+                      <div
+                        class="absolute inset-0"
+                        style={`background-image: var(${wide ? "--kd-scrim-lg" : "--kd-scrim-sm"})`}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {!m.pending && (
+                      <div class:list={["absolute inset-x-0 bottom-0", wide ? "p-32" : "p-20"]}>
+                        <p class="text-meta-sm text-kd-fog" data-edit={`${K}.${b}.media.${i}.where`}>
+                          {m.where}
+                        </p>
+                        <p
+                          class:list={["font-display text-kd-mist mt-6", wide ? "text-d6" : "text-d8"]}
+                          data-edit={`${K}.${b}.media.${i}.title`}
+                        >
+                          {m.title}
+                        </p>
+                      </div>
+                    )}
                   </li>
                 );
               })}

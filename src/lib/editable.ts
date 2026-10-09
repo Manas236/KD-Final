@@ -87,6 +87,7 @@ export const KNOWN_PATHS: readonly string[] = [
   "/careers",
   "/privacy",
   "/terms",
+  "/company",
 ];
 
 const KNOWN_PATH_SET = new Set(KNOWN_PATHS);

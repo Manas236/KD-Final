@@ -57,6 +57,7 @@ const PAGES = {
   "/clients": { module: "../src/data/pages.ts", exportName: "clients", prefix: "clients" },
   "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
   "/csr": { module: "../src/data/pages.ts", exportName: "csr", prefix: "csr" },
+  "/company": { module: "../src/data/pages.ts", exportName: "company", prefix: "company" },
   /* `runtime`: the job-posting cards come from the database, not the
      module (src/pages/careers.astro), so keys and copy under these
      paths are neither required on the page nor orphans when present. */
@@ -114,7 +115,11 @@ const pass = (msg) => console.log("  PASS  " + msg);
 /* Every leaf string in the copy object, with its path. `meta` is
    skipped: it renders into <head> and deliberately appears more than
    once there (description, og:description). */
+/* An object marked `retired: true` is kept only so later array indexes
+   (and their stored edit keys) do not move — a nav link taken off the
+   bar (home.ts). It renders nowhere, so none of its strings is expected. */
 function leaves(node, path = [], out = []) {
+  if (node && typeof node === "object" && node.retired === true) return out;
   if (typeof node === "string") {
     if (node !== "") out.push({ path: path.join("."), value: node });
     return out;
@@ -239,7 +244,7 @@ const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
    (both /hse, src/components/hse/Record.astro). `parent` is the href a
    nav link drops down from (home.ts nav.links). `embed` and `embedTitle`
    are /contact's map iframe src and title (pages.ts contact.map). */
-const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|id|video|tone|parent|embed|embedTitle)$/;
+const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|portrait|id|video|tone|parent|embed|embedTitle)$/;
 const runtime = route.runtime ?? [];
 /* Gallery captions are runtime data on every page since 3 Oct 2026:
    one caption per photograph, edited in /studio/gallery and replayed

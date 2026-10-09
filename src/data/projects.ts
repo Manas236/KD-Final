@@ -72,8 +72,9 @@ export interface ProjectEntry {
   readonly meta: string;
   readonly alt: string;
   /** True where K.D.Website_Details.md states structural steel for the
-      project — tonnage, or fabrication, launching and erection. Drives
-      the "Steel Fabrication & Erection" tab only; a boolean, so
+      project — tonnage, or fabrication, launching and erection. It drove
+      the "Steel Fabrication & Erection" tab until that became "Plants"
+      (2026-10-09) and is kept as a record; a boolean, so
       check-edit-keys.mjs never looks for a slot for it (see `live`). */
   readonly steel?: boolean;
 }
@@ -148,9 +149,10 @@ export const projects = {
      in Filters.astro. "Gallery" was added at the user's request and is
      not in the export; so was "Steel Fabrication & Erection"
      (OPEN-QUESTIONS.md #31), appended last so no existing tab's slot
-     key moves. */
+     key moves. On 2026-10-09 the client had that fifth tab replaced by
+     "Plants" — the Vindhane and Karjat plant cards. */
   filters: {
-    tabs: ["All Projects", "Ongoing", "Completed", "Gallery", "Steel Fabrication & Erection"] as readonly string[],
+    tabs: ["All Projects", "Ongoing", "Completed", "Gallery", "Plants"] as readonly string[],
   },
 
   /* One continuous ink band, tallest card first — not the 704/464
@@ -334,6 +336,20 @@ export const projects = {
           { title: "Harbour Line FOBs & Trespass-Control", figure: "4 Locations", label: "FOBs launched over running lines" },
         ] as readonly SteelLedgerRow[],
       },
+    },
+
+    /* The Karjat RMC plant's card, beside Vindhane's under the "Plants"
+       tab (2026-10-09). Same words as its own page, src/data/rmc-plant.ts;
+       `file` is the page's hero frame, resolved by Listing.astro. */
+    rmcPlant: {
+      badge: "Our Own Plant",
+      title: "RMC Plant — Karjat",
+      meta: "Karjat · Raigad",
+      body:
+        "Ready-mix concrete batched under cover on our own plant, for greater control over " +
+        "quality, consistency, availability and project scheduling.",
+      file: "rmc-plant-01.jpg",
+      alt: "The Karjat batching plant under its red steel cladding, aggregate stockpiles in front",
     },
 
     /* Not a project — the one non-photographic entry in the band, and

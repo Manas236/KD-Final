@@ -177,7 +177,9 @@ export const plant = {
         "24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.",
       ledgerHead: "Structural steel, by project",
       items: projects.listing.steel.ledger.items,
-      button: { label: "View Steel Projects", href: "/projects#steel" } as NavLink,
+      /* /projects (All): the steel ledger lists every steel project there.
+         The #steel tab became "Plants" on 2026-10-09. */
+      button: { label: "View Steel Projects", href: "/projects" } as NavLink,
     },
   },
 } as const;

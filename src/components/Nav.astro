@@ -24,8 +24,6 @@
    than one shared render function, matching how this codebase already
    repeats markup per instance instead of abstracting a one-off.
    ============================================================ */
-import { Image } from "astro:assets";
-import logo from "../assets/kd-logo-mint.jpg";
 import { home } from "../data/home";
 
 interface Props {
@@ -43,9 +41,14 @@ const here = Astro.url.pathname.replace(/(.)\/+$/, "$1");
 /* Links with a `parent` render in that link's drop-down instead of on
    the bar. `i` is kept alongside so the edit key stays the link's own
    array index. */
-const indexed = nav.links.map((link, i) => ({ link, i }));
+const indexed = nav.links
+  .map((link, i) => ({ link, i }))
+  .filter(({ link }) => !link.retired);
+/* A drop-down's links run in array order unless one sets `order`. */
 const childrenOf = (href: string) =>
-  indexed.filter(({ link }) => link.parent === href);
+  indexed
+    .filter(({ link }) => link.parent === href)
+    .sort((a, b) => (a.link.order ?? a.i) - (b.link.order ?? b.i));
 /* The bar's links, left to right by `order` — array order is edit-key
    order and cannot be changed (home.ts). */
 const topLevel = indexed
@@ -72,12 +75,13 @@ const isHere = (href: string) =>
     class="max-w-kd mx-auto px-24 sm:px-48 h-88 flex items-center justify-between gap-40"
   >
     <a href="/" class="block shrink-0" aria-label={nav.logoAlt}>
-      <Image
-        src={logo}
+      {/* Vector (public/kd-logo.svg, scripts/trace-logo.py): the raster
+          was cut to 102px and pixelated on high-density screens. */}
+      <img
+        src="/kd-logo.svg"
         alt={nav.logoAlt}
-        width={102}
-        height={68}
-        loading="eager"
+        width="102"
+        height="68"
         class="w-102 h-68 object-contain object-left"
       />
     </a>

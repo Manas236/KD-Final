@@ -151,10 +151,4 @@ const shareImg = galleryImage(firstPhoto.file);
   </main>
   <SiteFooter page={K} />
 
-  <!-- Edit mode: a link to the studio gallery manager, signed-in editors only. -->
-  <script>
-    if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
-      import("../scripts/gallery-manage-link.js");
-    }
-  </script>
 </BaseLayout>

@@ -39,6 +39,11 @@
    is a design element: every pending card is filled or deleted before
    go-live, and the gate fails while one remains.
 
+   PORTRAITS (/company). An item with `portrait` opens with a square
+   photograph, pulled through the card's padding like a logo well, and
+   a `role` label under its title (about/Board.astro's treatment). A
+   section with portraits runs four across on desktop.
+
    RUNTIME CARDS (/careers). An item with `slot` keys its copy under
    `<page>.<slot>` instead of its position, so a card added or removed
    at runtime does not shift the keys of the cards around it — the job
@@ -54,6 +59,7 @@ import Kicker from "./Kicker.astro";
 import Arrow from "./Arrow.astro";
 import type { InfoPageCopy } from "../data/pages";
 import { clientLogo, logoSize } from "../lib/client-logos";
+import { portrait } from "../lib/portraits";
 
 interface Props {
   /** First segment of every slot key, and the route name. */
@@ -64,6 +70,7 @@ interface Props {
 const { page, copy } = Astro.props;
 const { hero, sections, cta } = copy;
 const withLogos = sections.map((section) => section.items.some((item) => item.logo));
+const withPortraits = sections.map((section) => section.items.some((item) => item.portrait));
 ---
 
 <BaseLayout title={copy.meta.title} description={copy.meta.description}>
@@ -121,12 +128,17 @@ const withLogos = sections.map((section) => section.items.some((item) => item.lo
                 // No half-empty last row: an odd last card at two columns spans both, and
                 // a last row of two at three columns widens its final card to fill it.
                 // Pure CSS, so it holds for the careers cards added at runtime too.
-                section.items.length === 2 || section.items.length === 4
+                withPortraits[s]
+                  ? "lg:grid-cols-4"
+                  : section.items.length === 2 || section.items.length === 4
                   ? "sm:[&>li:last-child:nth-child(odd)]:col-span-2"
                   : [
                       "lg:grid-cols-3",
                       "sm:max-lg:[&>li:last-child:nth-child(odd)]:col-span-2",
                       "lg:[&>li:last-child:nth-child(3n+2)]:col-span-2",
+                      // A client section left with one card on its last row (seven
+                      // railway clients) runs it across the row, logo centred.
+                      withLogos[s] && "lg:[&>li:last-child:nth-child(3n+1)]:col-span-3",
                     ],
               ]}
             >
@@ -160,6 +172,19 @@ const withLogos = sections.map((section) => section.items.some((item) => item.lo
                       )}
                     </div>
                   )}
+                  {item.portrait && (
+                    <div class="-mx-32 -mt-32 mb-32 aspect-square overflow-hidden border-b border-b-kd-card-border-light bg-kd-mist">
+                      <Image
+                        src={portrait(item.portrait)}
+                        alt={`Portrait of ${item.title}`}
+                        width={400}
+                        height={400}
+                        densities={[1, 2]}
+                        loading="lazy"
+                        class="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  )}
                   {item.pending && (
                     <span
                       class="inline-block text-badge uppercase text-kd-ink bg-kd-badge-fill border border-kd-badge-border px-8 py-6 mb-16"
@@ -174,6 +199,14 @@ const withLogos = sections.map((section) => section.items.some((item) => item.lo
                   >
                     {item.title}
                   </h3>
+                  {item.role && (
+                    <p
+                      class="text-label uppercase text-kd-mint-2 mt-6"
+                      data-edit={`${k}.role`}
+                    >
+                      {item.role}
+                    </p>
+                  )}
                   {item.body && (
                     <p
                       class="text-body-sm text-kd-slate-2 mt-12"

@@ -40,25 +40,27 @@
    under All and Completed exactly as it does a card. Nothing here
    special-cases it.
 
-   THE FIFTH TAB, "steel" (OPEN-QUESTIONS.md #31), is a filter, not a
-   view swap: it shows every element carrying `data-project-steel` —
-   the listing cards the source doc gives structural steel for, plus
-   the Vindhane plant card and the steel ledger — and hides the rest,
-   the "Beyond the railway" band included. The plant and ledger carry
-   `data-project-status="steel"`, so the ordinary status match hides
-   them under Live and Completed with no special case. Like the gallery,
-   it writes its key to the URL, so /projects#steel opens on it.
+   THE FIFTH TAB, "plants", is a filter, not a view swap: it shows every
+   element carrying `data-project-plant` — K.D.'s two plants, Vindhane
+   (steel fabrication) and Karjat (RMC) — and hides the rest, the
+   "Beyond the railway" band included. It replaced "Steel Fabrication &
+   Erection" (OPEN-QUESTIONS.md #31) at the client's request on
+   2026-10-09; the steel ledger still shows under All. The plant cards
+   carry `data-project-status="plant"`, so the ordinary status match
+   hides them under Live and Completed with no special case. Like the
+   gallery, it writes its key to the URL, so /projects#plants opens on
+   it; the old #steel links land there too.
 
    EVERY TAB OPENS FROM THE URL since the nav's Projects drop-down
    (home.ts, 2026-10-06) links to each one: #all, #ongoing, #completed,
-   #gallery, #steel. "live" is still the status key on the cards; its
+   #gallery, #plants. "live" is still the status key on the cards; its
    hash is #ongoing because that is what the tab says. Clicking a tab
-   writes its hash only for gallery and steel, as before.
+   writes its hash only for gallery and plants.
    ============================================================ */
 import { projects } from "../../data/projects";
 
 const { filters } = projects;
-const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
+const FILTER_KEYS = ["all", "live", "completed", "gallery", "plants"] as const;
 ---
 
 <section class="bg-kd-mist py-24">
@@ -103,8 +105,8 @@ const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
     for (const card of cards) {
       const show =
         filter === "all" ||
-        (filter === "steel"
-          ? card.dataset.projectSteel !== undefined
+        (filter === "plants"
+          ? card.dataset.projectPlant !== undefined
           : card.dataset.projectStatus === filter);
       card.classList.toggle("hidden", !show);
     }
@@ -135,7 +137,7 @@ const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
     tab.addEventListener("click", () => {
       activate(tab);
       const key = tab.dataset.filterTab;
-      const hash = key === "gallery" || key === "steel" ? `#${key}` : "";
+      const hash = key === "gallery" || key === "plants" ? `#${key}` : "";
       history.replaceState(null, "", location.pathname + location.search + hash);
     });
   });
@@ -147,7 +149,8 @@ const FILTER_KEYS = ["all", "live", "completed", "gallery", "steel"] as const;
     ongoing: "live",
     completed: "completed",
     gallery: "gallery",
-    steel: "steel",
+    plants: "plants",
+    steel: "plants",
   };
   function openTabFromHash() {
     const key = HASH_KEYS[location.hash.slice(1)];

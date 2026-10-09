@@ -32,6 +32,7 @@ const MODULES = [
   { file: "../src/data/pages.ts", exportName: "clients", route: "/clients" },
   { file: "../src/data/pages.ts", exportName: "contact", route: "/contact" },
   { file: "../src/data/pages.ts", exportName: "csr", route: "/csr" },
+  { file: "../src/data/pages.ts", exportName: "company", route: "/company" },
   { file: "../src/data/pages.ts", exportName: "careers", route: "/careers" },
   { file: "../src/data/plant.ts", exportName: "plant", route: "/resources/vindhane-plant" },
   { file: "../src/data/rmc-plant.ts", exportName: "rmcPlant", route: "/resources/rmc-plant-karjat" },

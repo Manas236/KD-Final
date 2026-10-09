@@ -40,6 +40,10 @@ export interface NavLink {
   /** Nav only: a top-level link's position on the bar, left to right.
       Array order cannot be display order — the index is the edit key. */
   readonly order?: number;
+  /** Nav only: the link is off the nav but keeps its array slot, so no
+      later link's index (and stored edit key) moves. Nav.astro skips it
+      and check-edit-keys.mjs expects no slot for it. */
+  readonly retired?: boolean;
 }
 
 export interface Stat {
@@ -100,7 +104,12 @@ export const home = {
        2026-10-06 regroup: every page link that dropped from Projects
        moved under About, CSR left About for the bar, and Projects now
        drops down to its own page's tabs (appended entries 11–15, which
-       Filters.astro opens from the URL hash). */
+       Filters.astro opens from the URL hash).
+
+       2026-10-09 (client feedback): Gallery left About — it lives under
+       Projects only — so entry 8 is `retired`, not deleted. The Projects
+       tab "Steel Fabrication & Erection" became "Plants" (entry 15), and
+       "Company" (/company) was appended under About, first in its menu. */
     links: [
       { label: "About", href: "/about", order: 1 },
       { label: "Capabilities", href: "/capabilities", parent: "/about" },
@@ -110,14 +119,15 @@ export const home = {
       { label: "Clients", href: "/clients", parent: "/about" },
       { label: "Contact", href: "/contact", order: 3 },
       { label: "CSR", href: "/csr", order: 2.2 },
-      { label: "Gallery", href: "/gallery", parent: "/about" },
+      { label: "Gallery", href: "/gallery", parent: "/about", retired: true },
       { label: "Home", href: "/", order: 0 },
       { label: "Careers", href: "/careers", order: 2.5 },
       { label: "All Projects", href: "/projects#all", parent: "/projects" },
       { label: "Ongoing", href: "/projects#ongoing", parent: "/projects" },
       { label: "Completed", href: "/projects#completed", parent: "/projects" },
       { label: "Gallery", href: "/projects#gallery", parent: "/projects" },
-      { label: "Steel Fabrication & Erection", href: "/projects#steel", parent: "/projects" },
+      { label: "Plants", href: "/projects#plants", parent: "/projects" },
+      { label: "Company", href: "/company", parent: "/about", order: 0 },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },
@@ -294,6 +304,7 @@ export const home = {
           { label: "CSR", href: "/csr" },
           { label: "Gallery", href: "/gallery" },
           { label: "Careers", href: "/careers" },
+          { label: "Company", href: "/company" },
         ] as readonly NavLink[],
       },
       headquarters: {

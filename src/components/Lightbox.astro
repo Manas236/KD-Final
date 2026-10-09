@@ -26,6 +26,12 @@
    Keys: ArrowLeft / ArrowRight step through the clicked tile's group;
    Escape closes; so does a click anywhere that is not the photo or a
    button.
+
+   MANAGE PHOTOS. Every page with managed photographs renders this
+   component, so it also loads the edit-mode "Manage photos" link to
+   /studio/gallery (src/scripts/gallery-manage-link.js) for a signed-in
+   editor. It used to load from /gallery alone, and went out of reach
+   when Gallery left the About menu on 2026-10-09.
    ============================================================ */
 interface Props {
   labels: { readonly previous: string; readonly next: string; readonly close: string };
@@ -117,5 +123,12 @@ const ghost = "text-ui text-kd-mist border border-kd-ghost-outline px-24 py-12 c
     });
 
     dialog.addEventListener("close", () => image.removeAttribute("src"));
+  }
+</script>
+
+<!-- Edit mode: a link to the studio gallery manager, signed-in editors only. -->
+<script>
+  if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+    import("../scripts/gallery-manage-link.js");
   }
 </script>

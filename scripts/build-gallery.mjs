@@ -332,6 +332,8 @@ const PHOTOS = [
   { out: "hse-air-monitoring-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/air-quality-monitoring-mankhurd.jpg", crop: [0, 0.2, 1, 0.9] },
   { out: "hse-world-environment-day.jpg", src: "HSE Department/2026-09 EHS reports/world-environment-day-toolbox-talk.jpg" },
   { out: "hse-worker-recognition.jpg", src: "HSE Department/2026-09 EHS reports/worker-recognition-award.jpg" },
+  // added 2026-10-09 — the electrical-shock mock drill photo from the same batch
+  { out: "hse-electrical-shock-drill-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/electrical-shock-drill-mankhurd.jpg" },
   // sanpada-carshed
   { out: "sanpada-carshed-07.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.14 PM.jpeg" },
   { out: "sanpada-carshed-08.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.15 PM (1).jpeg" },
