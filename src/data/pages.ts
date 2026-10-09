@@ -32,6 +32,8 @@ export interface InfoItem {
   readonly portrait?: string;
   /** Rendered as a small label under the title — a director's role. */
   readonly role?: string;
+  /** Label / value rows under the body (/company's registration card). */
+  readonly facts?: readonly { readonly label: string; readonly value: string }[];
   /** REVIEW-ONLY. The card is a placeholder for content K.D. has not
       supplied: the value is the label it renders under ("To be added"),
       `title` names the missing thing and `body` says what is needed.
@@ -692,8 +694,8 @@ export const csr: InfoPageCopy = {
    Limited, August 2004; multi-disciplinary EPC from 2017); the board is the leadership
    slide of the 2026 annual deck — the same four names, roles and
    remits as about.ts's board, in the slide's order, with the slide's
-   portraits. Registration numbers (CIN, GSTIN) were never supplied, so
-   they are a pending card. */
+   portraits. The registration card is from the board outside the
+   office. */
 export const company: InfoPageCopy = {
   meta: {
     title: "Company — K.D. Constructions · Formation & Board of Directors",
@@ -739,12 +741,17 @@ export const company: InfoPageCopy = {
             "The company grew beyond core civil works into mechanical, electrical and track " +
             "engineering, with integrated resources, owned equipment and strengthened HSE practices.",
         },
+        /* Copied from the board outside K.D.'s office (supplied
+           2026-10-09). This company only — not Kailashchandra Prakashan
+           or the joint ventures listed on the same board. */
         {
-          pending: "To be added",
           title: "Registration details",
-          body:
-            "Corporate Identification Number (CIN), registered office address and GSTIN, as " +
-            "K.D. wishes them published.",
+          facts: [
+            { label: "Legal name", value: "Kailashchandra Dilipkumar Constructions Private Limited" },
+            { label: "CIN", value: "U45200MH2004PTC148260" },
+            { label: "GSTIN", value: "27AACCK5158J1ZA" },
+            { label: "Registered office", value: "1313, Real Tech Park, Sector 30A, Vashi, Navi Mumbai 400703" },
+          ],
         },
       ],
     },

@@ -215,6 +215,26 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
                       {item.body}
                     </p>
                   )}
+                  {item.facts && (
+                    <dl class="flex flex-col gap-12 mt-16">
+                      {item.facts.map((fact, f) => (
+                        <div>
+                          <dt
+                            class="text-label uppercase text-kd-mint-2"
+                            data-edit={`${k}.facts.${f}.label`}
+                          >
+                            {fact.label}
+                          </dt>
+                          <dd
+                            class="text-body-sm text-kd-ink mt-6 break-words"
+                            data-edit={`${k}.facts.${f}.value`}
+                          >
+                            {fact.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
                   {item.links && (
                     <ul class="flex flex-col items-start gap-8 mt-16">
                       {item.links.map((link, l) => (
