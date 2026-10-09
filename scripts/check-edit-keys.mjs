@@ -72,6 +72,8 @@ const PAGES = {
   "/resources/vindhane-plant": { module: "../src/data/plant.ts", exportName: "plant", prefix: "resources" },
   "/resources/rmc-plant-karjat": { module: "../src/data/rmc-plant.ts", exportName: "rmcPlant", prefix: "resources" },
   "/gallery": { module: "../src/data/gallery-page.ts", exportName: "galleryPage", prefix: "gallery" },
+  "/privacy": { module: "../src/data/legal.ts", exportName: "privacy", prefix: "privacy" },
+  "/terms": { module: "../src/data/legal.ts", exportName: "terms", prefix: "terms" },
   /* The 404 page. Loaded at its own address for the check; on the site
      it renders for any address that is not a page (src/pages/404.astro). */
   "/404": { module: "../src/data/not-found.ts", exportName: "notFound", prefix: "not-found" },

@@ -365,6 +365,12 @@ export const home = {
          the copy. OPEN-QUESTIONS.md #2. */
       legal: "Kailashchandra Dilipkumar Constructions Pvt. Ltd. All rights reserved.",
       founding: "Founded 1973 · Incorporated 2004 · EPC Infrastructure",
+      /* The two legal pages (src/data/legal.ts), linked from every page
+         as the convention is — in the bottom row, beside the copyright. */
+      links: [
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Use", href: "/terms" },
+      ] as readonly NavLink[],
     },
   },
 } as const;

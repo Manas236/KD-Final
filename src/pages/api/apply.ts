@@ -36,6 +36,7 @@ import {
   RESUME_TYPES,
   attachmentName,
   ensureTable,
+  purgeExpired,
   sniffResume,
   storeResume,
   validateApplicant,
@@ -180,6 +181,9 @@ export const POST: APIRoute = async (context) => {
     if (!emailed)
       return json({ error: "Something went wrong on our side. Please try again, or email your CV." }, 500);
   }
+
+  // The 24-month limit /privacy promises; runs in the background.
+  void purgeExpired();
 
   return json({ ok: true });
 };

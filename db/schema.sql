@@ -205,7 +205,9 @@ CREATE TABLE IF NOT EXISTS project_text_events (
 -- MEDIA_DIR/applications/ (not served by /media — editors download it
 -- from /studio/applications). `emailed` records whether the copy to HR
 -- was accepted by the mail server. The app creates this table on first
--- use if it is missing. APPEND-ONLY.
+-- use if it is missing. NOT append-only, unlike the tables above: the
+-- privacy policy (/privacy) promises deletion on request and after
+-- 24 months, so the app DELETEs rows (src/lib/applications.ts).
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS job_applications (
   id             INT AUTO_INCREMENT PRIMARY KEY,
@@ -228,12 +230,13 @@ CREATE TABLE IF NOT EXISTS job_applications (
 --
 --   USE kd_construction; SHOW TABLES;      -- expect content_edits, gallery_events, gallery_uploads, job_posting_events
 --
--- SELECT and INSERT are all the app ever uses — the table is
--- append-only, and a revert INSERTs a new row carrying the older text:
+-- SELECT and INSERT are all the app uses on the first four — they are
+-- append-only, and a revert INSERTs a new row carrying the older text.
+-- job_applications also needs DELETE (see its note above):
 --
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.gallery_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.gallery_uploads TO 'kd_app'@'localhost';
---   GRANT SELECT, INSERT ON kd_construction.job_applications TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT, DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';
 -- ============================================================

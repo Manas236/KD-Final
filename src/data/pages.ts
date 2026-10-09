@@ -895,6 +895,8 @@ export interface CareersCopy extends InfoPageCopy {
     /** The role list's last option, after the open postings. */
     readonly general: string;
     readonly consent: string;
+    /** Links the consent line to /privacy; rendered right after it. */
+    readonly consentLink: NavLink;
     readonly submit: string;
     readonly sending: string;
     readonly success: { readonly heading: string; readonly body: string };
@@ -1025,8 +1027,9 @@ export const careers: CareersCopy = {
     },
     general: "General application — any suitable role",
     consent:
-      "By sending this you agree that K.D. Constructions may keep your details and resume to " +
-      "consider you for current and future roles.",
+      "By sending this you agree that K.D. Constructions may keep your details and resume for up " +
+      "to 24 months to consider you for current and future roles, as described in our",
+    consentLink: { label: "Privacy Policy", href: "/privacy" },
     submit: "Send application",
     sending: "Sending…",
     success: {

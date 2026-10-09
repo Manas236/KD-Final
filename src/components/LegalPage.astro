@@ -1,0 +1,90 @@
+---
+/* ============================================================
+   LegalPage — the template for /privacy and /terms
+   ------------------------------------------------------------
+     nav (ink) → hero (ink) → one white band of text → footer (ink-deep)
+
+   Long-form reading, so not InfoPage: no cards, no alternating bands,
+   no CTA — a single column at the reading measure (max-w-720), an H2
+   per section, paragraphs and the odd list. The hero is InfoPage's,
+   with the "Last updated" line under the sub.
+
+   Copy and its shape are in src/data/legal.ts. Keys follow the data
+   path under the page prefix: `privacy.sections.3.body.0`,
+   `terms.sections.3.items.2`. Every paragraph and list item is its own
+   text leaf, so each one is editable in place.
+   ============================================================ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "./Nav.astro";
+import SiteFooter from "./SiteFooter.astro";
+import Kicker from "./Kicker.astro";
+import type { LegalPageCopy } from "../data/legal";
+
+interface Props {
+  /** First segment of every slot key, and the route name. */
+  page: string;
+  copy: LegalPageCopy;
+}
+
+const { page, copy } = Astro.props;
+const { hero, updated, sections } = copy;
+---
+
+<BaseLayout title={copy.meta.title} description={copy.meta.description}>
+  <Nav page={page} />
+  <main>
+    <section class="bg-kd-ink">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
+        <div class="w-896 max-w-full">
+          <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
+          <h1
+            class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16"
+            data-edit={`${page}.hero.title`}
+          >
+            {hero.title}
+          </h1>
+          <p class="text-body-lg text-kd-fog mt-24 max-w-720" data-edit={`${page}.hero.sub`}>
+            {hero.sub}
+          </p>
+          <p class="text-meta-sm text-kd-slate mt-24" data-edit={`${page}.updated`}>{updated}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-96">
+      <div class="max-w-kd mx-auto px-24 sm:px-48">
+        <div class="max-w-720 flex flex-col gap-56">
+          {
+            sections.map((section, s) => (
+              <div>
+                <h2 class="font-display text-d6 text-kd-ink" data-edit={`${page}.sections.${s}.heading`}>
+                  {section.heading}
+                </h2>
+                {section.body.map((para, p) => (
+                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${page}.sections.${s}.body.${p}`}>
+                    {para}
+                  </p>
+                ))}
+                {section.items && (
+                  <ul class="mt-16 flex flex-col gap-8 pl-24 list-disc marker:text-kd-mint-2">
+                    {section.items.map((item, i) => (
+                      <li class="text-body text-kd-slate-2" data-edit={`${page}.sections.${s}.items.${i}`}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {section.after?.map((para, p) => (
+                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${page}.sections.${s}.after.${p}`}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter page={page} />
+</BaseLayout>

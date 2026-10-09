@@ -111,8 +111,11 @@ Astro.response.headers.set("Cache-Control", "no-store");
             <input name="website" tabindex="-1" autocomplete="off" />
           </label>
 
-          <p class="text-meta-sm text-kd-slate-2 sm:col-span-2" data-edit="careers.form.consent">
-            {form.consent}
+          <p class="text-meta-sm text-kd-slate-2 sm:col-span-2">
+            <span data-edit="careers.form.consent">{form.consent}</span>{" "}
+            <a href={form.consentLink.href} class="text-kd-mint-2 underline"
+              ><span data-edit="careers.form.consentLink.label">{form.consentLink.label}</span></a
+            ><span data-no-edit>.</span>
           </p>
           <p class="apply-error text-body-sm text-kd-ink border-l-2 border-l-kd-ink pl-12 sm:col-span-2" role="alert" data-no-edit hidden></p>
           <div class="sm:col-span-2">

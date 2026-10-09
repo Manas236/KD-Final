@@ -11,10 +11,15 @@
    studio pages give (see the note at the top of studio/gallery.astro).
    Editor tooling, so its strings live here, not in a copy module, and
    it reuses the gallery manager's header styles.
+
+   DELETE: each row has a Delete button (two clicks: Delete, then
+   Confirm), which is how HR honours a deletion request under /privacy.
+   Opening the page also deletes anything past RETENTION_MONTHS, the
+   other promise that policy makes (src/lib/applications.ts).
    ============================================================ */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthed } from "../../lib/edit-auth";
-import { listApplications } from "../../lib/applications";
+import { RETENTION_MONTHS, listApplications, purgeExpired } from "../../lib/applications";
 import { careersInbox, mailConfigured } from "../../lib/mailer";
 
 export const prerender = false;
@@ -26,6 +31,7 @@ if (!isAuthed(Astro.request)) {
 Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
 Astro.response.headers.set("Cache-Control", "no-store");
 
+await purgeExpired();
 const apps = await listApplications();
 const mailOn = mailConfigured();
 const when = (d: Date) =>
@@ -70,6 +76,12 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
           </p>
         )
       }
+      <p>
+        Applications are deleted automatically {RETENTION_MONTHS} months after they arrive, as the{" "}
+        <a href="/privacy">privacy policy</a> says. If an applicant asks for their data to be removed, use{" "}
+        <strong>Delete</strong> on their row — it removes the details and the resume from this server. The copy
+        in the HR mailbox has to be deleted there by hand.
+      </p>
     </section>
 
     {apps === null && <div class="gm-banner" role="alert">Could not read the applications from the database.</div>}
@@ -94,6 +106,7 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
                 <th>Message</th>
                 <th>Resume</th>
                 <th>Email</th>
+                <th><span class="sr-only">Delete</span></th>
               </tr>
             </thead>
             <tbody>
@@ -115,6 +128,9 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
                     <span class="ja-dim">{a.file.split(".").pop()!.toUpperCase()} · {size(a.bytes)}</span>
                   </td>
                   <td class="ja-nowrap">{a.emailed ? "Sent" : <strong>Not emailed</strong>}</td>
+                  <td>
+                    <button type="button" class="ja-del" data-delete={a.id}>Delete</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -124,6 +140,45 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
     }
   </main>
 </BaseLayout>
+
+<script>
+  /* Two clicks: Delete arms the button, Confirm sends. The row goes
+     once the server says the row and the resume are gone. */
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-delete]")) {
+    btn.addEventListener("click", async () => {
+      if (btn.dataset.armed !== "1") {
+        btn.dataset.armed = "1";
+        btn.textContent = "Confirm delete";
+        setTimeout(() => {
+          if (btn.isConnected && !btn.disabled) {
+            btn.dataset.armed = "";
+            btn.textContent = "Delete";
+          }
+        }, 5000);
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = "Deleting…";
+      try {
+        const res = await fetch("/api/applications/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: Number(btn.dataset.delete) }),
+        });
+        if (res.ok || res.status === 404) {
+          btn.closest("tr")?.remove();
+          return;
+        }
+        const { error } = await res.json().catch(() => ({ error: "Could not delete." }));
+        btn.textContent = error || "Could not delete.";
+      } catch {
+        btn.textContent = "Could not delete — check the connection.";
+      }
+      btn.disabled = false;
+      btn.dataset.armed = "";
+    });
+  }
+</script>
 
 <style>
   .ja-wrap {
@@ -162,6 +217,20 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
   .ja-msg {
     max-width: 360px;
     white-space: pre-wrap;
+  }
+  .ja-del {
+    font: inherit;
+    color: var(--kd-ink);
+    background: none;
+    border: var(--kd-hairline) solid var(--kd-card-border-light);
+    padding: 4px var(--kd-gap-12);
+    cursor: pointer;
+    max-width: 220px;
+    text-align: left;
+  }
+  .ja-del[data-armed="1"] {
+    border-color: var(--kd-ink);
+    font-weight: 700;
   }
   .ja-dim {
     color: var(--kd-slate-2);

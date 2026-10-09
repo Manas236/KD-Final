@@ -19,7 +19,7 @@
 
    Server-only: database pool and node:fs.
    ============================================================ */
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
 import type { RowDataPacket } from "mysql2";
@@ -31,6 +31,11 @@ export const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 export const MAX_NAME = 100;
 export const MAX_ROLE = 160;
 export const MAX_MESSAGE = 1000;
+
+/* How long an application is kept, in months, before purgeExpired()
+   deletes it — row and resume. The privacy policy states this figure
+   (src/data/legal.ts, "How long we keep it"); change both together. */
+export const RETENTION_MONTHS = 24;
 
 /* Kept identical to db/schema.sql. */
 const CREATE_TABLE = `
@@ -194,5 +199,57 @@ export async function listApplications(limit = 500): Promise<Application[] | nul
   } catch (err) {
     console.error("Failed to read job applications:", err);
     return null;
+  }
+}
+
+/* ------------------------------------------------------------
+   Deleting them — the privacy policy's promises
+   ------------------------------------------------------------
+   /privacy tells applicants two things this has to make true: an
+   application is deleted on request (deleteApplication, from the Delete
+   button on /studio/applications), and nothing is kept longer than
+   RETENTION_MONTHS (purgeExpired, run whenever that page is opened and
+   whenever an application arrives — no cron needed).
+
+   Both remove the row AND the resume file. The copy emailed to HR is
+   in Google Workspace and out of reach from here; the studio page says
+   so next to the button.
+
+   Needs `GRANT DELETE ON kd_construction.job_applications` for the app
+   user (db/schema.sql). Without it a delete fails and says so; the
+   purge fails quietly into the log.
+   ------------------------------------------------------------ */
+async function removeResume(file: string): Promise<void> {
+  if (!RE_FILE.test(file)) return;
+  await rm(path.join(applicationsDir(), file), { force: true });
+}
+
+/** Delete one application and its resume. False if no such id. */
+export async function deleteApplication(id: number): Promise<boolean> {
+  await ensureTable();
+  const [rows] = await pool.query<RowDataPacket[]>(
+    "SELECT resume_file FROM job_applications WHERE id = ?",
+    [id]
+  );
+  if (!rows.length) return false;
+  await pool.query("DELETE FROM job_applications WHERE id = ?", [id]);
+  await removeResume(rows[0].resume_file);
+  return true;
+}
+
+/** Delete every application older than RETENTION_MONTHS. Never throws. */
+export async function purgeExpired(): Promise<void> {
+  try {
+    await ensureTable();
+    const [rows] = await pool.query<RowDataPacket[]>(
+      "SELECT id, resume_file FROM job_applications WHERE created_at < NOW() - INTERVAL ? MONTH",
+      [RETENTION_MONTHS]
+    );
+    for (const r of rows) {
+      await pool.query("DELETE FROM job_applications WHERE id = ?", [r.id]);
+      await removeResume(r.resume_file);
+    }
+  } catch (err) {
+    console.error("Failed to purge expired job applications:", err);
   }
 }
