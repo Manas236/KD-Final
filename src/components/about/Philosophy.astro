@@ -14,6 +14,12 @@
    The heading is the company's own philosophy quote, set as the H2 —
    the same "quote as heading" move Hse.astro makes with
    '"Everyone Goes Home."' one band down.
+
+   FOUR ACROSS FROM `lg`, TWO FROM `sm`, ONE BELOW (DESIGN-SYSTEM §10's
+   4-up rule). The left border is a column divider, so it follows the
+   columns: on cards 2-4 at four across, on the right-hand card of each
+   pair at two, and nowhere when the cards stack. Every card keeps its
+   own top border, which is the line between rows.
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -22,7 +28,7 @@ const { philosophy } = about;
 ---
 
 <section class="bg-kd-ink py-96">
-  <div class="max-w-kd mx-auto px-48">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
     <Kicker label={philosophy.kicker} editKey="about.philosophy.kicker" />
 
     <h2
@@ -32,14 +38,15 @@ const { philosophy } = about;
       {philosophy.heading}
     </h2>
 
-    <ul class="grid grid-cols-4 mt-56">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-56">
       {
         philosophy.cards.map((card, i) => (
           <li
             class:list={[
               "border-t-2 p-32",
               i === 0 ? "border-t-kd-mint" : "border-t-kd-nav-border",
-              i > 0 && "border-l border-l-kd-nav-border",
+              i > 0 && "lg:border-l lg:border-l-kd-nav-border",
+              i % 2 === 1 && "sm:max-lg:border-l sm:max-lg:border-l-kd-nav-border",
             ]}
           >
             <h3

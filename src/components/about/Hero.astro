@@ -27,6 +27,15 @@
        also put the text on the transparent half.
      · the vertical rule's slate/40 -> --kd-ghost-outline (mist/35%),
        the nearest alpha the palette actually contains.
+
+   BELOW `lg` THE QUOTE IS FLUID. At 72px its longest word is wider than
+   a phone, and the band clips what does not fit. Under 1024 the size
+   follows the viewport — a tenth of its width, never under `d5` and
+   never over `d1` — so the quote is back at the full 72 by 720 and a
+   word is never broken to make it fit. The line height is `d1`'s own
+   ratio (77.76 / 72). From `lg` up nothing here applies and the band is
+   the approved frame. Below `sm` the company and founding blocks stack,
+   so the rule that stood between them goes.
    ============================================================ */
 import { Image } from "astro:assets";
 import backdrop from "../../assets/about-mankhurd-workforce.jpg";
@@ -52,12 +61,12 @@ const { hero } = about;
     </div>
   </div>
 
-  <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+  <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
     <div class="w-896 max-w-full">
       <Kicker label={hero.kicker} editKey="about.hero.kicker" />
 
       <h1
-        class="font-display text-d1 text-kd-mist mt-16"
+        class="font-display text-d1 max-lg:text-[length:clamp(var(--text-d5),10vw,var(--text-d1))] max-lg:leading-[1.08] text-kd-mist mt-16"
         data-edit="about.hero.quote"
       >
         {hero.quote}
@@ -73,7 +82,7 @@ const { hero } = about;
           </p>
         </div>
 
-        <span class="block w-1 h-40 bg-kd-ghost-outline shrink-0" aria-hidden="true"
+        <span class="block max-sm:hidden w-1 h-40 bg-kd-ghost-outline shrink-0" aria-hidden="true"
         ></span>
 
         <div class="w-128">

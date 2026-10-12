@@ -22,6 +22,12 @@
 
    The band's own heading is a quotation set at 48/48, which is `d3` —
    the pull-quote token — and that is what it is.
+
+   FOUR ACROSS FROM `lg`, TWO FROM `sm`, ONE BELOW (DESIGN-SYSTEM §10's
+   4-up rule). The left border is a column divider, so it follows the
+   columns: on cards 2-4 at four across, on the right-hand card of each
+   pair at two, and nowhere when the cards stack. Every card keeps its
+   own top border, which is the line between rows.
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -30,7 +36,7 @@ const { hse } = about;
 ---
 
 <section class="bg-kd-ink py-96">
-  <div class="max-w-kd mx-auto px-48">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
     <Kicker label={hse.kicker} editKey="about.hse.kicker" />
 
     <h2
@@ -40,14 +46,15 @@ const { hse } = about;
       {hse.heading}
     </h2>
 
-    <ul class="grid grid-cols-4 mt-56">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-56">
       {
         hse.cards.map((card, i) => (
           <li
             class:list={[
               "border-t-2 p-32",
               i === 0 ? "border-t-kd-mint" : "border-t-kd-nav-border",
-              i > 0 && "border-l border-l-kd-nav-border",
+              i > 0 && "lg:border-l lg:border-l-kd-nav-border",
+              i % 2 === 1 && "sm:max-lg:border-l sm:max-lg:border-l-kd-nav-border",
             ]}
           >
             <h3

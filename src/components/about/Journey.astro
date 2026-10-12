@@ -34,6 +34,12 @@
    `CHAPTER I` labels, the bullet marks, and the Kicker — now uses
    `--kd-mint-2`. The teal ring stays; it was doing real work, and the
    darker fill only makes the marker read better inside it.
+
+   BELOW `lg` THE TIMELINE RUNS DOWN THE PAGE. Three columns need about
+   290px each to hold a chapter; under 1024 they do not have it. The
+   chapters stack, the rail turns to run down the left edge through the
+   same markers, and each chapter's copy is set in 40px from it. From
+   `lg` up it is the row described above, unchanged.
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -42,7 +48,7 @@ const { journey } = about;
 ---
 
 <section class="bg-kd-mist py-96">
-  <div class="max-w-kd mx-auto px-48">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
     <Kicker label={journey.kicker} editKey="about.journey.kicker" tone="light" />
 
     <h2
@@ -53,22 +59,23 @@ const { journey } = about;
     </h2>
 
     <div class="relative mt-56">
-      {/* Behind the columns, centred on the 16px markers. */}
+      {/* Behind the chapters, centred on the 16px markers: across the
+          row from `lg`, down the left edge below it. */}
       <span
-        class="absolute inset-x-0 top-8 h-1 bg-kd-divider-light"
+        class="absolute bg-kd-divider-light max-lg:inset-y-0 max-lg:left-8 max-lg:w-1 lg:inset-x-0 lg:top-8 lg:h-1"
         aria-hidden="true"></span>
 
-      <ol class="relative grid grid-cols-3 gap-32">
+      <ol class="relative grid grid-cols-1 gap-48 lg:grid-cols-3 lg:gap-32">
         {
           journey.chapters.map((chapter, i) => (
-            <li>
+            <li class="max-lg:relative max-lg:pl-40">
               <span
-                class="block size-16 bg-kd-mint-2 border-[3px] border-kd-mist outline-2 outline-kd-teal"
+                class="block max-lg:absolute max-lg:left-0 max-lg:top-0 size-16 bg-kd-mint-2 border-[3px] border-kd-mist outline-2 outline-kd-teal"
                 aria-hidden="true"
               />
 
               <p
-                class="text-num uppercase text-kd-mint-2 mt-32"
+                class="text-num uppercase text-kd-mint-2 lg:mt-32"
                 data-edit={`about.journey.chapters.${i}.chapter`}
               >
                 {chapter.chapter}

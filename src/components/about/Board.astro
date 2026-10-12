@@ -19,6 +19,10 @@
 
    RESOLVED, #1: this band is white, where `--kd-mint` is ~1.2:1. The
    head rule, the role labels, and the Kicker all use `--kd-mint-2`.
+
+   ONE DIRECTOR PER ROW BELOW `md`. The right border is the column
+   divider, so it exists only while there are two columns; the top
+   border every card already carries is the line between stacked cards.
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -27,7 +31,7 @@ const { board } = about;
 ---
 
 <section class="bg-white py-96">
-  <div class="max-w-kd mx-auto px-48">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
     <Kicker label={board.kicker} editKey="about.board.kicker" tone="light" />
 
     <h2
@@ -37,13 +41,13 @@ const { board } = about;
       {board.heading}
     </h2>
 
-    <ul class="grid grid-cols-2 mt-56">
+    <ul class="grid grid-cols-1 md:grid-cols-2 mt-56">
       {
         board.directors.map((director, i) => (
           <li
             class:list={[
               "border-t border-t-kd-card-border-light p-40",
-              i % 2 === 0 && "border-r border-r-kd-card-border-light",
+              i % 2 === 0 && "md:border-r md:border-r-kd-card-border-light",
             ]}
           >
             <span class="block w-32 h-1 bg-kd-mint-2" aria-hidden="true" />
