@@ -90,41 +90,34 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | G2 | Submit `https://<origin>/sitemap.xml` in **Google Search Console** (and Bing Webmaster Tools) after the first deploy | The sitemap is served from the site, so it is not "submitted" by building; someone has to hand the URL over once | Search Console shows the sitemap read, 28 URLs discovered (as of 2026-09-19 — fewer if any row 5 page is deleted) |
 | ~~G3~~ | ~~**Share card for the pages without a photograph**~~ | ~~They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only~~ | ✅ **Done 2026-10-12.** `public/share-card.png` — 1200×630, the logo and the company name on ink — is the `og:image` and `twitter:image` of every page that passes no photograph, with `og:image:width`, `:height` and `:alt`; `twitter:card` is `summary_large_image` on every page. That is thirteen pages, not six: capabilities, careers, clients, company, contact, CSR, HSE, privacy, resources, terms, the two Kharghar project pages still waiting for a photograph, and the 404. Pages with a hero keep theirs. The URL is built on `PUBLIC_SITE_URL` (G1), so it is only right once G1 is. Redraw it with `npm run share-card:build` |
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
-| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it. **Status on the test server, 2026-10-12: not verified** — see "Checking G5 and G8" below |
+| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
 | G6 | **`SITE_NOINDEX` removed** from the production `.env` | The test server on a bare IP runs with `SITE_NOINDEX=1` (src/lib/staging.ts): every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything. Copied to the real domain, the site never enters the index | `npm run check:site-url` passes (it fails while the switch is on); `curl -I https://<origin>/` shows no `X-Robots-Tag` |
 | G7 | **Careers email** — `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` — nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | Send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
-| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (also in `db/schema.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | Send a test application, open `/studio/applications`, Delete → Confirm delete; the row disappears and stays gone after a reload. **Status on the test server, 2026-10-12: not verified** — see "Checking G5 and G8" below |
+| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (also in `db/schema.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | Send a test application, open `/studio/applications`, Delete → Confirm delete; the row disappears and stays gone after a reload. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
 
-### Checking G5 and G8 on a server, without changing anything
+### G5 and G8 on the test server — in place, checked 2026-10-12
 
-Asked on 2026-10-12: does the test server's database already have these two
-permissions? **Not answered — it could not be checked from the development
-PC, and it has not been guessed.** That machine's own database is a different
-one (its `.env` points at `localhost`); the test server's MySQL is not open to
-the internet (port 3306 does not answer on 13.233.140.227), and the PC holds no
-SSH key for the server.
+Both permissions are already there on the test server. Checked read-only on
+2026-10-12 by the Claude Code session that runs on that server
+(`ip-172-26-8-71`), connected to `kd_construction` as the site's own database
+user, `kd_app@localhost`. Nothing was changed.
 
-The check has to run **on the server itself**. This one line reads the grants
-of the database user the site runs as and writes nothing — `SHOW GRANTS` and
-one `information_schema` lookup:
+| Check | Result |
+| --- | --- |
+| Table `job_posting_events` exists | Yes |
+| `kd_app` has SELECT and INSERT on `job_posting_events` (G5) | Yes |
+| `kd_app` has DELETE on `job_applications` (G8) | Yes |
 
-```
-cd /srv/kd-site && node -e 'require("dotenv").config({quiet:true});const mysql=require("mysql2/promise");(async()=>{const db=process.env.DB_NAME||"kd_construction";const c=await mysql.createConnection({host:process.env.DB_HOST||"localhost",port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER,password:process.env.DB_PASSWORD,database:db});const [rows]=await c.query("SHOW GRANTS");const grants=rows.map(r=>String(Object.values(r)[0]));const has=(table,priv)=>grants.some(line=>{const m=line.match(/^GRANT (.+) ON (.+) TO /);if(!m)return false;const on=m[2].split("`").join("").split(String.fromCharCode(92)).join("");const privs=m[1].toUpperCase().split(",").map(p=>p.trim());return (on==="*.*"||on===db+".*"||on===db+"."+table)&&(privs.includes("ALL PRIVILEGES")||privs.includes(priv))});const [t]=await c.query("SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema=? AND table_name=?",[db,"job_posting_events"]);const yn=v=>v?"YES":"NO";console.log("server: "+require("os").hostname()+"   database user: "+process.env.DB_USER);console.log("G5 job postings  - table job_posting_events exists: "+yn(t[0].n>0));console.log("G5 job postings  - SELECT granted: "+yn(has("job_posting_events","SELECT"))+"   INSERT granted: "+yn(has("job_posting_events","INSERT")));console.log("G8 applications  - DELETE granted on job_applications: "+yn(has("job_applications","DELETE")));console.log("raw grants:");grants.forEach(g=>console.log("  "+g));await c.end()})().catch(e=>{console.log("ERROR: "+e.message);process.exit(1)})'
-```
+G5 and G8 stay in the table above because they are written for the
+**production** database, which has to be given the same grants at go-live.
 
-- **Where:** the KD test server, in a terminal there. The prompt reads
-  `ip-172-26-8-71`, `hostname` prints the same, and `/srv/kd-site` exists. On
-  any other machine the command stops at `cd /srv/kd-site` and runs nothing.
-- **Granted:** the three `G5`/`G8` lines all end in `YES`.
-- **Missing:** a `NO` on any of them. `table … exists: NO` or a `NO` for
-  SELECT / INSERT is G5; `DELETE granted … NO` is G8. The fix is the matching
-  statement in `db/schema.sql`, run by a database administrator — not by the
-  site's own user.
-- **`ERROR:`** means the check itself did not run (the `.env` could not be
-  read, or the database refused the login). It says nothing about the grants.
-
-On the production server the same line applies with that server's site folder
-in place of `/srv/kd-site`.
+**How this check is run.** By the Claude Code session on the server, not by a
+command handed to a person. Anything that has to run on a server is written
+as a self-contained prompt for the session there, opening with a box check
+(stop unless `hostname` prints `ip-172-26-8-71`); the user relays the prompt
+and pastes the report back. The rule is in `CLAUDE.md`. The development PC
+cannot do it directly: the server's MySQL is not open to the internet and the
+PC holds no SSH key for it.
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

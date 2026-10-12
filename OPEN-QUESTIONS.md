@@ -2661,6 +2661,7 @@ this is what was decided along the way.
   some link previews may not draw. Not changed; worth a test once the site is
   on its real address.
 - **Still open:** a 320px-wide phone (the footer's bottom line is 14px too
-  wide on every page); `/projects` on a phone, which works but keeps desktop
-  gutters and a 72px title; and whether the test server's database has the
-  G5 and G8 grants, which could not be checked from this machine.
+  wide on every page); and `/projects` on a phone, which works but keeps
+  desktop gutters and a 72px title. (Whether the test server's database has
+  the G5 and G8 grants could not be checked from this machine; the Claude Code
+  session on the server confirmed both the same day — PRE-LAUNCH.md.)
