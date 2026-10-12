@@ -50,6 +50,16 @@
    postings are keyed `careers.jobs.<id>`. `posting` marks such a card
    for src/scripts/careers-editor.js, and a section `id` gives that
    script (and a visitor's link) a fixed place to find it.
+
+   THE HERO TITLE ON A PHONE. Below 900 the title is `d3`, and at 48px
+   one long word — "Kailashchandra" on /company, "Organisations" on
+   /clients — is wider than a phone and ran off the screen. Below `sm`
+   the size is fluid instead: a tenth of the viewport width, between
+   `d5` and `d3`, at `d3`'s own line-height ratio (55.2 / 48). It is
+   back at 48 by 480, so only phones change, and no word is broken to
+   fit. Every page that sets its hero title this way carries the same
+   rule: LegalPage, SocialProjectPage, /gallery, the two plant pages
+   and the 404.
    ============================================================ */
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -81,7 +91,7 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
         <div class="w-896 max-w-full">
           <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
           <h1
-            class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16"
+            class="font-display text-d3 max-sm:text-[length:clamp(var(--text-d5),10vw,var(--text-d3))] max-sm:leading-[1.15] min-[900px]:text-d1 text-kd-mist mt-16"
             data-edit={`${page}.hero.title`}
           >
             {hero.title}

@@ -64,7 +64,7 @@ const shareImg = galleryImage(firstPhoto.file);
       <div class="max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
         <div class="max-w-720">
           <Kicker label={hero.kicker} editKey={`${K}.hero.kicker`} />
-          <h1 class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16" data-edit={`${K}.hero.title`}>
+          <h1 class="font-display text-d3 max-sm:text-[length:clamp(var(--text-d5),10vw,var(--text-d3))] max-sm:leading-[1.15] min-[900px]:text-d1 text-kd-mist mt-16" data-edit={`${K}.hero.title`}>
             {hero.title}
           </h1>
           <p class="text-body-lg text-kd-fog mt-24" data-edit={`${K}.hero.sub`}>

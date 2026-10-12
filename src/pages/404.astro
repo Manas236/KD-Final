@@ -58,7 +58,7 @@ const { hero, button } = copy;
         <div class="w-896 max-w-full">
           <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
           <h1
-            class="font-display text-d3 min-[900px]:text-d1 text-kd-mist mt-16"
+            class="font-display text-d3 max-sm:text-[length:clamp(var(--text-d5),10vw,var(--text-d3))] max-sm:leading-[1.15] min-[900px]:text-d1 text-kd-mist mt-16"
             data-edit={`${page}.hero.title`}
           >
             {hero.title}
