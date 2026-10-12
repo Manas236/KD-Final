@@ -21,7 +21,9 @@
      numbers arrive (PRE-LAUNCH.md row 2). A credential with no
      identifier is weak; an unverifiable one is worse.
    - `geo` coordinates — the Maps share link in KD_INFO.md is not a
-     lat/long. Add when someone reads them off the pin.
+     lat/long. Add when someone reads them off the pin. (The office's
+     own block on /contact has carried the pin since 2026-10-12, read
+     from that page's map embed — src/pages/contact.astro.)
    - `founder` — the surname spelling is a PRE-LAUNCH.md sign-off (S1,
      Gindodia vs Gindodi). Structured data feeds the knowledge graph;
      a wrong spelling there outlives the page. Add after sign-off.

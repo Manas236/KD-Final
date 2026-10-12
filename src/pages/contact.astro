@@ -18,18 +18,68 @@
        DESIGN-SYSTEM (radius 0 everywhere).
    One section on this page means the cards are on white, so this band
    is mist — no two adjacent bands share a surface (DESIGN-SYSTEM §2).
+
+   STRUCTURED DATA. This page also tells a search engine that the office
+   is a place: a GeneralContractor block (schema.org's LocalBusiness for
+   a construction firm), which is what lets a search for the company
+   show the address, the phone numbers and the pin. docs/SEO.md asks for
+   it here and nowhere else. Every value is one the site already shows,
+   read from where the site keeps it rather than typed again:
+
+     name, address   src/data/organization.ts — the Headquarters card's
+                     address, already split into fields for the
+                     Organization block
+     telephone       every tel: link on this page's cards
+     geo             the ll= pair in the map's own embed URL; left out
+                     if that URL ever stops carrying one
+     url, logo       the site's origin, and the logo file the
+                     Organization block names
+
+   Nothing else: no opening hours, rating, price range or founding year
+   — none of them is on the site. It sits in the body because this page
+   reaches BaseLayout through InfoPage; a JSON-LD block is read wherever
+   it is, and the key check skips scripts.
    ============================================================ */
+import { getImage } from "astro:assets";
 import InfoPage from "../components/InfoPage.astro";
 import Kicker from "../components/Kicker.astro";
 import Arrow from "../components/Arrow.astro";
 import { contact } from "../data/pages";
+import { organization } from "../data/organization";
+import logo from "../assets/kd-logo-mint.jpg";
 
 export const prerender = false;
 
 const { map } = contact;
+
+/* "tel:02227815380" -> "+912227815380": the card writes the landline
+   the way it is dialled in India; schema wants the international form. */
+const telephone = contact.sections
+  .flatMap((section) => section.items)
+  .flatMap((item) => item.links ?? [])
+  .filter((link) => link.href.startsWith("tel:"))
+  .map((link) => link.href.slice(4).replace(/^0/, "+91"));
+
+const pin = map.embed.match(/[?&]ll=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+
+const officeLd = {
+  "@context": "https://schema.org",
+  "@type": "GeneralContractor",
+  "@id": new URL("/contact#office", Astro.site).href,
+  name: organization.name,
+  url: Astro.site?.href,
+  logo: new URL((await getImage({ src: logo, width: logo.width })).src, Astro.site).href,
+  telephone,
+  address: { "@type": "PostalAddress", ...organization.address },
+  ...(pin && {
+    geo: { "@type": "GeoCoordinates", latitude: Number(pin[1]), longitude: Number(pin[2]) },
+  }),
+};
 ---
 
 <InfoPage page="contact" copy={contact}>
+  <script type="application/ld+json" set:html={JSON.stringify(officeLd).replace(/<\//g, "<\\/")} />
+
   <section class="bg-kd-mist py-96">
     <div class="max-w-kd mx-auto px-24 sm:px-48">
       <Kicker label={map.kicker} editKey="contact.map.kicker" tone="light" />
