@@ -25,6 +25,7 @@
     "fonts:measure": "node scripts/measure-font-fallbacks.mjs",
     "logos:build": "node scripts/build-client-logos.mjs",
     "favicon:build": "node scripts/build-favicon.mjs",
+    "share-card:build": "node scripts/build-share-card.mjs",
     "media:scan": "node scripts/raw-media-manifest.mjs"
   },
   "dependencies": {
