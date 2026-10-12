@@ -35,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (err) {
     console.error("Failed to delete a job application:", err);
     return json(
-      { error: "Could not delete. The database user may lack DELETE permission on job_applications (db/schema.sql)." },
+      { error: "Could not delete. The database user may lack DELETE permission on job_applications (see db/migrate.sql)." },
       500
     );
   }

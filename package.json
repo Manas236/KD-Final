@@ -14,6 +14,7 @@
     "build:release": "npm run check:site-url && npm run check:placeholders && astro build",
     "check:site-url": "node scripts/check-site-url.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
+    "check:db-flows": "node scripts/check-db-flows.mjs",
     "check:keys": "node scripts/check-edit-keys.mjs",
     "check:keys:about": "node scripts/check-edit-keys.mjs \"\" /about",
     "check:keys:projects": "node scripts/check-edit-keys.mjs \"\" /projects",

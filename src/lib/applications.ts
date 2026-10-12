@@ -37,40 +37,11 @@ export const MAX_MESSAGE = 1000;
    (src/data/legal.ts, "How long we keep it"); change both together. */
 export const RETENTION_MONTHS = 24;
 
-/* Kept identical to db/schema.sql. */
-const CREATE_TABLE = `
-  CREATE TABLE IF NOT EXISTS job_applications (
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    name           VARCHAR(120)  NOT NULL,
-    email          VARCHAR(254)  NOT NULL,
-    phone          VARCHAR(30)   NOT NULL,
-    role           VARCHAR(160)  NOT NULL,
-    message        TEXT          NULL,
-    resume_file    VARCHAR(80)   NOT NULL,
-    original_name  VARCHAR(255)  NULL,
-    bytes          INT           NOT NULL,
-    emailed        TINYINT(1)    NOT NULL DEFAULT 0,
-    client_ip      VARCHAR(45)   NULL,
-    user_agent     VARCHAR(255)  NULL,
-    created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
-  ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-`;
-
-let ready: Promise<void> | null = null;
-
-/** Create the table once per process; a failure is retried next call. */
-export function ensureTable(): Promise<void> {
-  if (!ready) {
-    ready = pool
-      .query(CREATE_TABLE)
-      .then(() => undefined)
-      .catch((err) => {
-        ready = null;
-        throw err;
-      });
-  }
-  return ready;
-}
+/* The table is created by db/migrate.sql, which an administrator runs
+   before the app starts. The app never creates or alters it: its
+   database user has SELECT, INSERT and DELETE on job_applications and
+   nothing else — and MySQL refuses even CREATE TABLE IF NOT EXISTS on
+   a table that is already there to a user without CREATE. */
 
 export function applicationsDir(): string {
   return path.join(mediaDir(), "applications");
@@ -178,7 +149,6 @@ export interface Application extends Applicant {
 
 export async function listApplications(limit = 500): Promise<Application[] | null> {
   try {
-    await ensureTable();
     const [rows] = await pool.query<RowDataPacket[]>(
       `SELECT id, name, email, phone, role, message, resume_file, bytes, emailed, created_at
          FROM job_applications ORDER BY id DESC LIMIT ?`,
@@ -216,7 +186,8 @@ export async function listApplications(limit = 500): Promise<Application[] | nul
    so next to the button.
 
    Needs `GRANT DELETE ON kd_construction.job_applications` for the app
-   user (db/schema.sql). Without it a delete fails and says so; the
+   user (listed at the foot of db/migrate.sql). Without it a delete
+   fails and says so; the
    purge fails quietly into the log.
    ------------------------------------------------------------ */
 async function removeResume(file: string): Promise<void> {
@@ -226,7 +197,6 @@ async function removeResume(file: string): Promise<void> {
 
 /** Delete one application and its resume. False if no such id. */
 export async function deleteApplication(id: number): Promise<boolean> {
-  await ensureTable();
   const [rows] = await pool.query<RowDataPacket[]>(
     "SELECT resume_file FROM job_applications WHERE id = ?",
     [id]
@@ -240,7 +210,6 @@ export async function deleteApplication(id: number): Promise<boolean> {
 /** Delete every application older than RETENTION_MONTHS. Never throws. */
 export async function purgeExpired(): Promise<void> {
   try {
-    await ensureTable();
     const [rows] = await pool.query<RowDataPacket[]>(
       "SELECT id, resume_file FROM job_applications WHERE created_at < NOW() - INTERVAL ? MONTH",
       [RETENTION_MONTHS]

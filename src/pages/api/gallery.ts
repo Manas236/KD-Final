@@ -14,7 +14,7 @@
      { action: "caption", file, caption }
      { action: "undo",    ref }                      ref = an event id
 
-   gallery_events is APPEND-ONLY (db/schema.sql): every POST is one
+   gallery_events is APPEND-ONLY (db/migrate.sql): every POST is one
    INSERT, an undo is a row of its own, and nothing is UPDATEd or
    DELETEd. Each POST answers with the fresh state, so the manager
    repaints from what the server now holds rather than from a guess.

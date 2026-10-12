@@ -6,7 +6,7 @@
 
    Behind the same signed-cookie session as /api/content, checked before
    the body is read. job_posting_events is append-only: a removal is an
-   INSERT pointing at the posting it takes down (db/schema.sql). The
+   INSERT pointing at the posting it takes down (db/migrate.sql). The
    page reads the open postings itself when it renders, so there is no
    GET here. Validation lives in src/lib/job-postings.ts.
    ============================================================ */
@@ -15,7 +15,7 @@ import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
-import { OPEN_WHERE, ensureExpiryColumn, validatePosting } from "../../lib/job-postings";
+import { OPEN_WHERE, validatePosting } from "../../lib/job-postings";
 
 export const prerender = false;
 
@@ -77,7 +77,6 @@ export const POST: APIRoute = async (context) => {
   const ua = userAgentFrom(request);
 
   try {
-    await ensureExpiryColumn();
     if (body.action === "add") {
       const check = validatePosting(body);
       if (!check.ok) return json({ error: check.reason }, 400);

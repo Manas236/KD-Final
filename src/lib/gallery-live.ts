@@ -4,7 +4,7 @@
    gallery.ts is the BASELINE: the photographs, groups, order and
    captions the code ships with. The studio gallery manager
    (/studio/gallery) never edits that file. It appends rows to
-   gallery_events (db/schema.sql) and every page that shows a
+   gallery_events (db/migrate.sql) and every page that shows a
    photograph replays those rows over the baseline when it renders.
 
    Why replay instead of storing "the current gallery": the table is

@@ -35,7 +35,6 @@ import {
   MAX_RESUME_BYTES,
   RESUME_TYPES,
   attachmentName,
-  ensureTable,
   purgeExpired,
   sniffResume,
   storeResume,
@@ -132,7 +131,6 @@ export const POST: APIRoute = async (context) => {
 
   let file: string;
   try {
-    await ensureTable();
     file = await storeResume(buf, kind);
   } catch (err) {
     console.error("Failed to store a job application:", err);

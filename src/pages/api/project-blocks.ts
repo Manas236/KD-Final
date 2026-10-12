@@ -16,7 +16,6 @@ import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
 import {
-  ensureTable,
   isProjectSlug,
   replayBlocks,
   validateBlock,
@@ -80,8 +79,6 @@ export const POST: APIRoute = async (context) => {
   const ua = userAgentFrom(request);
 
   try {
-    await ensureTable();
-
     if (body.action === "add") {
       const check = validateBlock(body);
       if (!check.ok) return json({ error: check.reason }, 400);

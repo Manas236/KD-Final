@@ -90,10 +90,10 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | G2 | Submit `https://<origin>/sitemap.xml` in **Google Search Console** (and Bing Webmaster Tools) after the first deploy | The sitemap is served from the site, so it is not "submitted" by building; someone has to hand the URL over once | Search Console shows the sitemap read, 28 URLs discovered (as of 2026-09-19 — fewer if any row 5 page is deleted) |
 | ~~G3~~ | ~~**Share card for the pages without a photograph**~~ | ~~They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only~~ | ✅ **Done 2026-10-12.** `public/share-card.png` — 1200×630, the logo and the company name on ink — is the `og:image` and `twitter:image` of every page that passes no photograph, with `og:image:width`, `:height` and `:alt`; `twitter:card` is `summary_large_image` on every page. That is thirteen pages, not six: capabilities, careers, clients, company, contact, CSR, HSE, privacy, resources, terms, the two Kharghar project pages still waiting for a photograph, and the 404. Pages with a hero keep theirs. The URL is built on `PUBLIC_SITE_URL` (G1), so it is only right once G1 is. Redraw it with `npm run share-card:build` |
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
-| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
+| G5 | **The tables, and the app user's grants**, on the production database: `db/migrate.sql` run by a database administrator (see "Deploy and migration order" below), then `kd_app` given exactly the grants listed at the foot of that file — SELECT and INSERT on every table, no CREATE, no ALTER | Every write the site makes goes to one of these tables: job cards on `/careers`, applications, text added to project pages, gallery changes, in-page edits. The app no longer creates or changes a table itself, so a table the migration has not made is simply missing | `npm run check:db-flows` passes on the server. **Test server: grants in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
 | G6 | **`SITE_NOINDEX` removed** from the production `.env` | The test server on a bare IP runs with `SITE_NOINDEX=1` (src/lib/staging.ts): every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything. Copied to the real domain, the site never enters the index | `npm run check:site-url` passes (it fails while the switch is on); `curl -I https://<origin>/` shows no `X-Robots-Tag` |
 | G7 | **Careers email** — `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` — nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | Send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
-| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (also in `db/schema.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | Send a test application, open `/studio/applications`, Delete → Confirm delete; the row disappears and stays gone after a reload. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
+| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (listed at the foot of `db/migrate.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | `npm run check:db-flows` passes: it sends a test application, finds it on `/studio/applications`, deletes it and checks it is gone. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
 
 ### G5 and G8 on the test server — in place, checked 2026-10-12
 
@@ -118,6 +118,58 @@ as a self-contained prompt for the session there, opening with a box check
 and pastes the report back. The rule is in `CLAUDE.md`. The development PC
 cannot do it directly: the server's MySQL is not open to the internet and the
 PC holds no SSH key for it.
+
+## Deploy and migration order
+
+The same order on the test server now and on production at launch. The
+site's database user, `kd_app`, may only SELECT and INSERT (plus DELETE on
+`job_applications`), so the app cannot create or change a table: the schema
+has to be in place before the new code starts. Until 2026-10-12 the app ran
+`CREATE TABLE IF NOT EXISTS` and `ALTER TABLE` itself, which MySQL refuses to
+a user without CREATE and ALTER — even when the table already exists.
+Reproduced locally with `kd_app`'s exact grants: applications and project
+text blocks failed with "CREATE command denied". All schema statements now
+live in `db/migrate.sql`.
+
+1. **Back up the build.** Copy `dist/` to `dist.bak-<date-time>`. This is
+   the rollback: put it back and restart, and the old version runs again.
+2. **Pull.** `git pull --ff-only` in the site folder, as the user that owns
+   it. A server only pulls; it never commits (CLAUDE.md). Run `npm ci` only
+   if `package-lock.json` changed.
+3. **Migrate, as a database administrator — never as `kd_app`.** On an
+   Ubuntu server where MySQL's root signs in over the local socket:
+   `sudo mysql < db/migrate.sql`; otherwise `mysql -u <admin> -p <
+   db/migrate.sql`. Safe to run any number of times. It prints, table by
+   table, what it created or found already there, and whether a column had
+   to be added. It runs **before** the build because a failed migration
+   then leaves the running site untouched; the migrated schema works with
+   the old code too, since the migration only adds.
+4. **Build.** `npm run build` on the test server; on the real domain
+   `npm run build:release`, which also refuses to build while a placeholder
+   is left or `PUBLIC_SITE_URL` is wrong (G1). If the build fails, put the
+   `dist.bak` back and stop: the old process is still running from it.
+5. **Restart** the service (`kd-site` on the test server).
+6. **Check the five database flows.** `npm run check:db-flows`, run as the
+   user that can read `.env`, against the running site. It sends a test
+   application, finds and deletes it, adds and removes a paragraph on a
+   project page, and adds and removes a job posting — all five must PASS,
+   and it cleans up after itself. While it runs, a few seconds, the test
+   posting shows on `/careers` and the test paragraph on one project page.
+   Where email is set up (G7) it skips the application steps unless given
+   `--allow-email`, because the test application would then be emailed to
+   HR; on production, tell HR before using it.
+7. **Read the service log since the restart.** No line may say
+   "command denied".
+
+**First install only** (a new production server): run step 3 first, which
+creates the database and its tables; then create `kd_app` and give it
+exactly the grants at the foot of `db/migrate.sql` — a table-level grant
+needs the table to exist — and only then write `.env` and start the site.
+
+**When the schema changes later**, the change goes into `db/migrate.sql`
+(create if missing; alter only after an `information_schema` check), a new
+table gets its grant line at the foot of that file, and the next deploy runs
+it at step 3. The app itself never runs a schema statement (CLAUDE.md).
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

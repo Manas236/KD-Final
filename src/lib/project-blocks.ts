@@ -6,7 +6,7 @@
    text (src/scripts/project-blocks-editor.js → src/pages/api/project-blocks.ts).
    Added 8 Oct 2026 at the owner's request.
 
-   Stored in project_text_events (db/schema.sql), which is APPEND-ONLY
+   Stored in project_text_events (db/migrate.sql), which is APPEND-ONLY
    like every other table here:
 
      add     a row with action = 'add'; its own id IS the block id
@@ -20,10 +20,13 @@
    an ordinary editable element under the key projects.blocks.<id>, so
    its edits and their history live in content_edits.
 
-   The table is created on first use if it does not exist, so a deploy
-   needs no manual migration step. If that fails (no CREATE privilege),
-   run the statement in db/schema.sql by hand; until then the pages show
-   no blocks and adding one says so.
+   The table is created by db/migrate.sql, which an administrator runs
+   on every deploy before the app starts. The app never creates it: its
+   database user may only SELECT and INSERT here, and MySQL refuses even
+   CREATE TABLE IF NOT EXISTS to such a user. (Until 12 Oct 2026 the app
+   ran that statement on every page view, which failed for exactly this
+   reason.) If the table is missing, the pages show no blocks and adding
+   one says so.
 
    Server-only: this imports the database pool.
    ============================================================ */
@@ -42,40 +45,6 @@ export interface TextBlock {
 }
 
 export const MAX_HEADING = 160;
-
-/* Kept identical to db/schema.sql. */
-const CREATE_TABLE = `
-  CREATE TABLE IF NOT EXISTS project_text_events (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    action        ENUM('add', 'remove', 'move') NOT NULL,
-    page_slug     VARCHAR(160)  NOT NULL,
-    block_id      INT           NULL,
-    kind          ENUM('heading', 'paragraph') NULL,
-    text          TEXT          NULL,
-    position      INT           NULL,
-    client_ip     VARCHAR(45)   NULL,
-    user_agent    VARCHAR(255)  NULL,
-    created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_slug (page_slug)
-  ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-`;
-
-let ready: Promise<void> | null = null;
-
-/** Create the table once per process. A failure is retried on the next
-    call rather than remembered, in case it was the connection. */
-export function ensureTable(): Promise<void> {
-  if (!ready) {
-    ready = pool
-      .query(CREATE_TABLE)
-      .then(() => undefined)
-      .catch((err) => {
-        ready = null;
-        throw err;
-      });
-  }
-  return ready;
-}
 
 /** Whether `slug` is a project page this route serves. */
 export function isProjectSlug(slug: unknown): slug is string {
@@ -121,7 +90,6 @@ export function replayBlocks(rows: readonly Row[]): TextBlock[] {
     be read the page simply shows none, like /careers does. */
 export async function blocksFor(slug: string): Promise<TextBlock[]> {
   try {
-    await ensureTable();
     const [rows] = await pool.execute<RowDataPacket[]>(SELECT_EVENTS, [slug]);
     return replayBlocks(rows as Row[]);
   } catch (err) {

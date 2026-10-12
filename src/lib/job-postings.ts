@@ -4,7 +4,7 @@
    Each open role is a card on /careers linking to its LinkedIn and/or
    Indeed post. The cards are added and removed from the page itself, in
    edit mode (src/scripts/careers-editor.js → src/pages/api/careers.ts),
-   and stored in job_posting_events (db/schema.sql), which is
+   and stored in job_posting_events (db/migrate.sql), which is
    append-only: a removal is a row of its own, never a DELETE.
 
    EXPIRY (8 Oct 2026). A link on LinkedIn or Indeed can close while
@@ -13,7 +13,9 @@
    is given a life when it is added — open_days, 1 to 30, chosen in the
    add form — and the card simply stops being listed once
    created_at + open_days has passed. Postings added before the column
-   existed (open_days NULL) get the maximum, 30 days.
+   existed (open_days NULL) get the maximum, 30 days. db/migrate.sql
+   adds the column to a table created before 8 Oct 2026; the app used to
+   do that itself, but its database user has no ALTER.
 
    Server-only: this imports the database pool, so it must never reach
    a client bundle.
@@ -60,36 +62,10 @@ const SELECT_OPEN = `
    ORDER BY a.id DESC
 `;
 
-/* open_days was added after the table. The app adds it itself on first
-   use (needs ALTER on the table; db/schema.sql has the statement for a
-   database where the app user may only SELECT and INSERT). */
-let ready: Promise<void> | null = null;
-
-export function ensureExpiryColumn(): Promise<void> {
-  if (!ready) {
-    ready = (async () => {
-      const [rows] = await pool.query<RowDataPacket[]>(
-        `SELECT 1 FROM information_schema.columns
-          WHERE table_schema = DATABASE() AND table_name = 'job_posting_events'
-            AND column_name = 'open_days'`
-      );
-      if (!rows.length)
-        await pool.query(
-          "ALTER TABLE job_posting_events ADD COLUMN open_days TINYINT UNSIGNED NULL AFTER indeed_url"
-        );
-    })().catch((err) => {
-      ready = null;
-      throw err;
-    });
-  }
-  return ready;
-}
-
 /** The open postings, or null when the database cannot be reached — the
     page then shows its "no openings listed" card rather than failing. */
 export async function openPostings(): Promise<JobPosting[] | null> {
   try {
-    await ensureExpiryColumn();
     const [rows] = await pool.execute<RowDataPacket[]>(SELECT_OPEN);
     return rows.map((r) => ({
       id: r.id,

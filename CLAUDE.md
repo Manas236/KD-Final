@@ -21,6 +21,15 @@ A Claude Code session runs on the KD test server (hostname `ip-172-26-8-71`, sit
 
 **If you ARE on `ip-172-26-8-71`:** prompts relayed by the user from the development-PC session are how work reaches you. Run the box check they open with, stay inside what the prompt allows, and report back in the form it asks for.
 
+## The database schema comes from db/migrate.sql, never from the app
+
+The site's database user (`kd_app` on a server) has SELECT and INSERT on every table, plus DELETE on `job_applications`, and nothing else. App code must never run CREATE, ALTER, DROP or any other schema statement — MySQL refuses even `CREATE TABLE IF NOT EXISTS` on an existing table to a user without CREATE.
+
+- A new table or column goes into `db/migrate.sql`: idempotent, a table created only if missing, a column added only after an `information_schema` check.
+- A new table also gets its grant line at the foot of that file.
+- A new kind of write needs nothing beyond SELECT and INSERT (DELETE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants.
+- PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the five write flows work with `kd_app`'s rights.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
