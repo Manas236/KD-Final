@@ -33,6 +33,11 @@
    already down to 464 (1120 − 96 of padding − 560) and a 48px
    pull-quote has nowhere left to go.
 
+   Below `sm` the quote is fluid — a tenth of the viewport width, between
+   `d5` and `d3`, at `d3`'s own line-height ratio (55.2 / 48). At a fixed
+   48px its last word was wider than a 360-390px phone and pushed the
+   page sideways. It is back at 48 by 480.
+
    RESOLVED, for the stats: they are side by side (`grid grid-cols-2`)
    at every viewport width, not stacked — a phone screenshot of the
    stacked version was the complaint that reopened this. Their gap
@@ -57,7 +62,10 @@ const { about } = home;
     >
       <div class="min-[1120px]:flex-1 min-[1120px]:min-w-0">
         <blockquote class="max-w-560">
-          <p class="font-display text-d3 text-kd-ink" data-edit="home.about.quote">
+          <p
+            class="font-display text-d3 max-sm:text-[length:clamp(var(--text-d5),10vw,var(--text-d3))] max-sm:leading-[1.15] text-kd-ink"
+            data-edit="home.about.quote"
+          >
             {about.quote}
           </p>
         </blockquote>

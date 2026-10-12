@@ -135,7 +135,7 @@ const isOddOneOut = (i: number, count: number) =>
       )}
 
       <div class="absolute inset-x-0 bottom-0 p-32">
-        <div class="flex items-center gap-8">
+        <div class="flex flex-wrap items-center gap-8">
           {listing.featured.badges.map((badge, i) => (
             <span
               class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
@@ -194,7 +194,7 @@ const isOddOneOut = (i: number, count: number) =>
           )}
 
           <div class="absolute inset-x-0 bottom-0 p-32">
-            <div class="flex items-center gap-8">
+            <div class="flex flex-wrap items-center gap-8">
               {project.badges.map((badge, j) => (
                 <span
                   class="inline-block text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
@@ -239,7 +239,7 @@ const isOddOneOut = (i: number, count: number) =>
           />
           <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
           <div class="absolute inset-x-0 bottom-0 p-20">
-            <div class="flex items-center gap-6">
+            <div class="flex flex-wrap items-center gap-6">
               {project.badges.map((badge, j) => (
                 <span
                   class="inline-block text-badge-sm uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"

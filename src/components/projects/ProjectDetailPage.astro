@@ -39,6 +39,14 @@
    around a different shape (see OPEN-QUESTIONS.md #21) — so these
    pages are covered by the production build and a manual check, not
    by the automated copy/slot gate yet.
+
+   ON A PHONE. The title is `d1`, and at 72px "Redevelopment" or
+   "Maintenance" is wider than the screen; the hero clips whatever does
+   not fit, so the name of the project was cut off mid-word. Below `lg`
+   the title is fluid — a tenth of the viewport width, between `d5` and
+   `d1`, at `d1`'s own line-height ratio (77.76 / 72) — and the closing
+   headline the same against `d2`. The three containers take the site's
+   24px phone gutter below `sm`. From `lg` up nothing here applies.
    ============================================================ */
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -113,7 +121,7 @@ const breadcrumbs = [
         <div class="absolute inset-0" style="background-image: var(--kd-hero-overlay)"></div>
       </div>
 
-      <div class="relative max-w-kd mx-auto px-48 pt-144 pb-80">
+      <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
         <div class="w-568 max-w-full">
           <a
             href="/projects"
@@ -128,7 +136,7 @@ const breadcrumbs = [
           </div>
 
           <h1
-            class="font-display text-d1 text-kd-mist mt-16"
+            class="font-display text-d1 max-lg:text-[length:clamp(var(--text-d5),10vw,var(--text-d1))] max-lg:leading-[1.08] text-kd-mist mt-16"
             data-edit="projects.detail.title"
           >
             {project.title}
@@ -182,7 +190,7 @@ const breadcrumbs = [
     </section>
 
     <section class="bg-white py-96">
-      <div class="max-w-kd mx-auto px-48">
+      <div class="max-w-kd mx-auto px-24 sm:px-48">
         <Kicker
           label={detailChrome.overviewKicker}
           editKey="projects.detail.overviewKicker"
@@ -222,7 +230,7 @@ const breadcrumbs = [
     </section>
 
     <section class="bg-kd-ink py-96">
-      <div class="max-w-kd mx-auto px-48 flex flex-col items-center text-center">
+      <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col items-center text-center">
         <Kicker
           label={detailChrome.ctaKicker}
           editKey="projects.detail.ctaKicker"
@@ -230,7 +238,7 @@ const breadcrumbs = [
         />
 
         <h2
-          class="font-display text-d2 text-kd-mist mt-24"
+          class="font-display text-d2 max-lg:text-[length:clamp(var(--text-d5),10vw,var(--text-d2))] max-lg:leading-[1.25] text-kd-mist mt-24"
           data-edit="projects.detail.ctaHeadline"
         >
           {detailChrome.ctaHeadline}
