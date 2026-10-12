@@ -32,8 +32,8 @@ export const rmcPlant = {
   meta: {
     title: "Karjat RMC Plant — K.D. Constructions",
     description:
-      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad — concrete supply " +
-      "with greater control over quality, consistency, availability and project scheduling.",
+      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad — greater " +
+      "control over concrete quality, consistency, availability and scheduling.",
   },
   nav: home.nav,
   footer: home.footer,

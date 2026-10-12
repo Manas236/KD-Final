@@ -87,6 +87,11 @@ interface SocialDetailSource {
   /** Always four, so the 2×2 grid is full: Client · size · Scope of
       works · Year completed, in that order on every page. */
   readonly facts: readonly [FactTile, FactTile, FactTile, FactTile];
+  /** The page's meta description, where the first paragraph is too long
+      to be one: a search result stops near 160 characters, so this is
+      that paragraph cut to 155 at most, nothing added. Left out, the
+      first paragraph itself is used. */
+  readonly description?: string;
   readonly body: readonly string[];
   /** Cards above the paragraphs — the unconfirmed project's question,
       and Lush Meadows' portal-data check. */
@@ -117,6 +122,9 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
       { value: "2012", label: "Year completed" },
     ],
+    description:
+      "Spanning the six-lane Thane–Belapur Road, the Bonkode foot-over-bridge gives the " +
+      "people of Bonkode village a safe crossing to the TTC industrial belt.",
     body: [
       /* The deck's "eco-friendly" is dropped: nothing says what makes it
          so, the same call #28b made on "some of the biggest in India". */
@@ -151,6 +159,9 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
       { pending: TBA, title: "Year completed", body: "The year the building was handed over." },
     ],
+    description:
+      "A CIDCO urban health centre at Ulwe, Navi Mumbai — a 20,000 sq ft facility with " +
+      "fire-protection systems and stack parking, completed on schedule.",
     body: [
       "A CIDCO urban health centre at Ulwe, Navi Mumbai — a 20,000 sq ft facility with " +
         "fire-protection systems and stack parking, completed within its stipulated timeline.",
@@ -220,6 +231,9 @@ const SOURCES: readonly SocialDetailSource[] = [
         body: "The year K.D.'s package was handed over. The course reopened as 18 holes in April 2026 — say whether that is the work K.D. did.",
       },
     ],
+    description:
+      "CIDCO's Kharghar Valley Golf Course, across 103 hectares in Sector 22, Kharghar — " +
+      "upgraded from 9 to 18 international-standard holes, reopened April 2026.",
     body: [
       "Set across 103 hectares of green hills in Sector 22, opposite Kharghar's Central Park, " +
         "CIDCO's Kharghar Valley Golf Course has been upgraded from 9 to 18 international-" +
@@ -256,6 +270,9 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
       { pending: TBA, title: "Year completed", body: "The year the building was completed." },
     ],
+    description:
+      "Lush Meadows is a completed residential project at Kharghar, Navi Mumbai — 2 and " +
+      "3 BHK homes, landscaped green spaces, play areas and indoor recreation.",
     body: [
       "Lush Meadows is a completed residential project at Kharghar, Navi Mumbai, offering 2 and " +
         "3 BHK homes, with landscaped central green spaces, children's play areas and indoor " +
@@ -288,6 +305,9 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
       { pending: TBA, title: "Year completed", body: "The year K.D.'s works were handed over." },
     ],
+    description:
+      "Part of CIDCO's Football Maharashtra Centre of Excellence in Kharghar, the " +
+      "stadium is planned as a 40,000-capacity, FIFA-approved venue.",
     body: [
       "Part of the Football Maharashtra Centre of Excellence developed by CIDCO in Kharghar, " +
         "the stadium is planned as a 40,000-capacity, FIFA-approved venue anchoring one of the " +
@@ -359,7 +379,7 @@ function build(item: SocialProject) {
   return {
     meta: {
       title: `${item.title} — K.D. Constructions`,
-      description: src.body[0] ?? `${item.title}, ${place}.`,
+      description: src.description ?? src.body[0] ?? `${item.title}, ${place}.`,
     },
     nav: home.nav,
     footer: home.footer,

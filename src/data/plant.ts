@@ -54,9 +54,8 @@ export const plant = {
   meta: {
     title: "Vindhane Steel Fabrication Plant — K.D. Constructions",
     description:
-      "K.D. Constructions' in-house steel fabrication plant at Vindhane, Uran, Raigad — girders, " +
-      "trusses, FOBs, cover-over-platforms, roofing systems and industrial sheds, fabricated " +
-      "on welding, bending and cutting lines and erected by an owned crane fleet.",
+      "K.D. Constructions' own steel fabrication plant at Vindhane, Uran, Raigad — " +
+      "girders, trusses, FOBs, cover-over-platforms, roofing and industrial sheds.",
   },
   nav: home.nav,
   footer: home.footer,

@@ -64,6 +64,12 @@ export interface ProjectDetail {
   readonly badges: readonly string[];
   readonly live: boolean;
   readonly statusBadge: string;
+  /** The page's meta description — the line a search result prints
+      under the title. It was `body[0]` until 2026-10-12, but those
+      paragraphs run from 177 to 394 characters and a result stops near
+      160; this is the same paragraph cut to 155 at most, with nothing
+      in it that the page does not say. */
+  readonly description: string;
   readonly body: readonly string[];
   readonly stats: readonly DetailStat[];
   readonly image: ImageMetadata;
@@ -78,6 +84,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil"],
     live: true,
     statusBadge: "Ongoing — 90%+ Complete",
+    description:
+      "A 29.6 km double-line suburban corridor under MUTP-III, connecting Panvel with " +
+      "Karjat — station buildings, platforms, FOBs, subways, roads and earthwork.",
     body: [
       "A 29.6 km double-line suburban railway corridor forming part of " +
         "MUTP-III, connecting Panvel with Chikhale, Mohape, Chowk and " +
@@ -110,6 +119,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil", "Mechanical", "Electrical"],
     live: false,
     statusBadge: "",
+    description:
+      "Industrial sheds, administrative and training facilities at Matunga Railway " +
+      "Workshop, supporting a rise in bogie overhaul capacity from 350 to 575 a month.",
     body: [
       "At the historic Matunga Railway Workshop, K.D. Constructions " +
         "executed a multidisciplinary development programme comprising " +
@@ -150,6 +162,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil", "Mechanical", "Electrical"],
     live: false,
     statusBadge: "",
+    description:
+      "LHB coach maintenance facilities at Matunga — civil, structural, electrical and " +
+      "mechanical works, including 2,749 m of inspection pit and traverser track.",
     body: [
       "A major multidisciplinary development creating LHB coach " +
         "maintenance facilities at Matunga Workshop, integrating civil, " +
@@ -183,6 +198,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil"],
     live: false,
     statusBadge: "",
+    description:
+      "FOBs, cover-over-platforms, booking and service buildings and subways at Nhava " +
+      "Sheva and Uran, on the Nerul–Belapur–Seawood–Uran Railway Project.",
     body: [
       "As part of the Nerul–Belapur–Seawood–Uran Railway Project, K.D. " +
         "Constructions delivered FOBs, cover-over-platform structures, " +
@@ -213,6 +231,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil"],
     live: false,
     statusBadge: "",
+    description:
+      "A brownfield project across the Sewri–Panvel section of Mumbai's Harbour Line — " +
+      "FOBs, linkways/highwalks, subways, boundary walls and trespass control.",
     body: [
       "A brownfield railway infrastructure project across the " +
         "Sewri–Panvel section of Mumbai's Harbour Line, involving FOBs, " +
@@ -250,6 +271,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil"],
     live: true,
     statusBadge: "Ongoing — 60%+ Complete",
+    description:
+      "Brownfield station redevelopment at GTB Nagar, Chembur, Govandi and Mankhurd on " +
+      "an operational railway — FOBs, elevated decks, skywalks, service buildings.",
     body: [
       "A major brownfield station redevelopment programme across GTB " +
         "Nagar, Chembur, Govandi and Mankhurd, executed within an " +
@@ -285,6 +309,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil", "Mechanical", "Electrical"],
     live: false,
     statusBadge: "",
+    description:
+      "Railway maintenance infrastructure at Sanpada Carshed — an Inspection Shed with " +
+      "three pit lines, a Heavy Repair Shed, an Administration Building and more.",
     body: [
       "A comprehensive railway maintenance infrastructure development " +
         "at Sanpada Carshed, comprising an Inspection Shed with three " +
@@ -315,6 +342,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil", "Structural Steel"],
     live: false,
     statusBadge: "",
+    description:
+      "The Matunga Z-Bridge, the Matunga Workshop FOB — RCC construction, structural " +
+      "steel and girder fabrication, piling, roofing, side glazing and finishing.",
     body: [
       "The Matunga Z-Bridge — the Matunga Workshop FOB — is a " +
         "strategically located pedestrian infrastructure project at " +
@@ -355,6 +385,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Mechanical"],
     live: true,
     statusBadge: "Recently Awarded",
+    description:
+      "K.D. Constructions has been awarded the LoA to upgrade and develop the Solapur " +
+      "Coaching Depot into a Vande Bharat Train Maintenance Depot.",
     body: [
       "K.D. Constructions has been awarded the Letter of Acceptance " +
         "(LoA) for the Upgradation and Development of the Solapur " +
@@ -375,6 +408,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     badges: ["Civil"],
     live: true,
     statusBadge: "Recently Awarded",
+    description:
+      "A complex brownfield railway infrastructure project at Western Railway's Lower " +
+      "Parel Workshop, in a dense and operational urban environment.",
     body: [
       /* "Lower Parel Workshop" is the doc's own name for the site in its
          About paragraph and at-a-glance list; only the Recently Awarded

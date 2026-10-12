@@ -83,7 +83,7 @@ const gallery = livePhotoList.length
 const blocks = await blocksFor(project.slug);
 
 const title = `${project.title} — K.D. Constructions`;
-const description = project.body[0];
+const description = project.description;
 
 /* Share card and breadcrumb trail — see BaseLayout's Props. The middle
    crumb is the nav's own label for /projects, so a search result reads

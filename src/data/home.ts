@@ -21,14 +21,22 @@
    DESIGN-SYSTEM.md §9 and the long note in src/lib/editable.ts.
    ============================================================ */
 
-/* The hero's sub-paragraph is also the page's meta description. It is
-   named once and referenced twice rather than typed twice, so a change
-   to the approved wording cannot land in one place and not the other. */
+/* The hero's sub-paragraph. Until 2026-10-12 it was the page's meta
+   description as well, word for word. */
 const HERO_SUB =
   "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — a full-spectrum EPC " +
   "contractor spanning civil, structural steel fabrication & erection, " +
   "mechanical, electrical, signalling & telecommunication, and track " +
   "engineering across Indian Railways and public infrastructure.";
+
+/* The page's meta description: the hero sub-paragraph above, cut to what
+   a search result prints. That paragraph is 267 characters and a result
+   stops near 160, so the description is its own sentence — the same
+   claim, 155 characters at most, nothing in it the paragraph does not
+   say. Change one, read the other. */
+const META_DESCRIPTION =
+  "K.D. Constructions — a full-spectrum EPC contractor for Indian Railways and public " +
+  "infrastructure: civil, steel, mechanical, electrical, signalling, track.";
 
 export interface NavLink {
   readonly label: string;
@@ -83,7 +91,7 @@ export const home = {
      approved fragments rather than written fresh. */
   meta: {
     title: "K.D. Constructions — EPC Infrastructure · Vashi, Navi Mumbai",
-    description: HERO_SUB,
+    description: META_DESCRIPTION,
   },
 
   nav: {

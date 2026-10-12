@@ -75,9 +75,8 @@ export const capabilities: InfoPageCopy = {
   meta: {
     title: "Capabilities — K.D. Constructions",
     description:
-      "Civil, structural steel fabrication & erection, track, electrical, mechanical and " +
-      "signalling & telecommunication engineering, backed by in-house steel fabrication, RMC " +
-      "and a 50+ unit equipment fleet.",
+      "Civil, steel, track, electrical, mechanical and signalling & telecommunication " +
+      "engineering, backed by in-house steel fabrication, RMC and a 50+ unit fleet.",
   },
   ...chrome,
   hero: {
@@ -701,7 +700,7 @@ export const company: InfoPageCopy = {
     title: "Company — K.D. Constructions · Formation & Board of Directors",
     description:
       "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — founded in Dhule in 1973 as a " +
-      "partnership firm, incorporated as a Private Limited company in August 2004.",
+      "partnership, incorporated as a Private Limited company in August 2004.",
   },
   ...chrome,
   hero: {

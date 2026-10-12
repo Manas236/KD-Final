@@ -34,14 +34,22 @@
 import { home } from "./home.ts";
 import type { NavLink, Stat } from "./home.ts";
 
-/* The lead paragraph of the story band is also the page's meta
-   description — approved copy that says what the company is in one
-   sentence. Named once, referenced twice, so the two cannot drift. */
+/* The lead paragraph of the story band — approved copy that says what
+   the company is in one sentence. Until 2026-10-12 it was the page's
+   meta description as well, word for word. */
 const STORY_LEAD =
   "K.D. Constructions is an EPC (Engineering, Procurement, Construction) " +
   "infrastructure company headquartered in Vashi, Navi Mumbai, with over five " +
   "decades of engineering integrity, financial discipline, and quiet precision " +
   "behind it.";
+
+/* The page's meta description: the lead above, cut to what a search
+   result prints (155 characters at most; the lead is 231). The same
+   sentence with the parenthesis and two of its three virtues dropped —
+   nothing added. Change one, read the other. */
+const META_DESCRIPTION =
+  "K.D. Constructions is an EPC infrastructure company headquartered in Vashi, Navi " +
+  "Mumbai, with over five decades of engineering integrity behind it.";
 
 /** One block of the hero's meta row: a bold line and a muted line under it. */
 export interface MetaPair {
@@ -90,7 +98,7 @@ export const about = {
      written fresh — see OPEN-QUESTIONS.md #7. */
   meta: {
     title: "About — K.D. Constructions · Founded 1973, Incorporated 2004",
-    description: STORY_LEAD,
+    description: META_DESCRIPTION,
   },
 
   /* Shared chrome. Same strings as the homepage, different slot keys —

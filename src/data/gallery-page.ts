@@ -24,9 +24,8 @@ export const galleryPage = {
   meta: {
     title: "Gallery — K.D. Constructions",
     description:
-      "Photographs of K.D. Constructions' work — railway stations, sheds, foot overbridges and " +
-      "track, public buildings beyond the railway, and the company's own steel fabrication " +
-      "and ready-mix concrete plants.",
+      "Photographs of K.D. Constructions' work — railway stations, sheds, foot " +
+      "overbridges and track, public buildings, and its own steel and concrete plants.",
   },
   nav: home.nav,
   footer: home.footer,
