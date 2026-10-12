@@ -434,9 +434,9 @@ there precisely so it gets removed. OPEN-QUESTIONS.md #32.
 >
 > **Built, on this inference, for the homepage and the shared chrome** (`Nav`,
 > `SiteFooter`) — at the user's direction, after the homepage shipped visibly
-> broken on a phone. `/about`'s own sections (`Story`, `Journey`, `Board`,
-> `Hse`, `Cta`) are **not** built to this spec yet and remain fixed-desktop;
-> when they are, the rules below are what to build them against.
+> broken on a phone. `/about`'s own sections were built to it on 2026-10-12,
+> for the same reason; what that added is in the tables below. From `lg` up
+> `/about` is the approved frame, pixel for pixel.
 
 ### Breakpoints
 
@@ -453,6 +453,9 @@ Tailwind defaults: `sm 640` · `md 768` · `lg 1024`.
 | `/projects` listing | 2 cols (featured, pipeline, odd one out span both) | 1 col at 900 |
 | About band 624/560 | 2 cols (pull-quote / bordered block) | full-width stack at 1120 |
 | Footer | 4 cols | 2 cols at `md` → 1 col at `sm` |
+| `/about` Philosophy and HSE cards | 4 cols | 2 cols below `lg` → 1 col below `sm` |
+| `/about` Board, the ruled 2×2 | 2 cols | 1 col below `md` |
+| `/about` Journey timeline | 3 cols on a horizontal rail | 1 col below `lg`, the rail running down the left edge |
 
 The 900px project-grid step is not a Tailwind default — it is the width at which
 a 704px column stops fitting. Use an arbitrary variant: `min-[900px]:grid-cols-…`.
@@ -469,6 +472,16 @@ band's arithmetic.
   Those two sizes are `d3` and `d4`, which already exist. **Do not invent a
   size** — step down through the existing scale.
 - Closing CTA headline: `d2` → `d3` below 1024 → `d4` below 640.
+- **Everywhere else a large headline is fluid below a breakpoint, not
+  stepped** (2026-10-12, at the user's direction): a tenth of the viewport
+  width, floored at `d5` and capped at the heading's own token, at that
+  token's own line-height ratio. A step can still leave a long word wider than
+  the screen between two breakpoints; this cannot. Both ends are scale tokens,
+  so no size is invented at rest, and above the breakpoint the fluid rule does
+  not apply at all. Below `lg`: `/about`'s hero quote and closing headline,
+  and the railway project pages' title and closing headline. Below `sm`: the
+  `d3` hero title of `InfoPage`, `LegalPage`, `SocialProjectPage`, `/gallery`,
+  the two plant pages and the 404, and the homepage pull-quote.
 - Everything else holds its size. The body scale is already small.
 
 ### Container

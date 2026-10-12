@@ -18,7 +18,7 @@ K.D. confirms it does not exist — delete the item. Then run
 `npm run check:placeholders` and `npm run check:keys` for that page, and strike
 the row here.
 
-**Last updated:** 2026-09-29 · **34 placeholders on the site** (1 on the new `/careers` page, row 6) (22 of them on the eight "Beyond the railway" project pages, rows 5a–5h — down from 32 after the public-source research of 2026-09-28) · **9 sign-offs** · **8 go-live configuration rows**
+**Last updated:** 2026-10-12 · **36 placeholders on the site** — the number `npm run check:placeholders` prints; the 22 rows below cover them, several rows holding more than one (22 of the placeholders are on the eight "Beyond the railway" project pages, rows 5a–5h; 1 on `/careers`, row 6). This line said 34 until 2026-10-12 · **11 sign-offs** (S1–S11) · **8 go-live configuration rows, 7 still open** (G3 closed 2026-10-12)
 
 ---
 
@@ -88,12 +88,73 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | --- | --- | --- | --- |
 | G1 | **`PUBLIC_SITE_URL`** set in the production environment to the real https origin, e.g. `https://www.kdconstructions.net` — no path, no trailing slash | Every canonical, `og:url`, `og:image`, sitemap `<loc>` and the JSON-LD are written against it. Unset, they all say `http://localhost:4322`, which tells the crawler the real domain is a copy of a page it cannot reach | `npm run check:site-url` passes; `npm run build:release` runs it first and refuses otherwise |
 | G2 | Submit `https://<origin>/sitemap.xml` in **Google Search Console** (and Bing Webmaster Tools) after the first deploy | The sitemap is served from the site, so it is not "submitted" by building; someone has to hand the URL over once | Search Console shows the sitemap read, 28 URLs discovered (as of 2026-09-19 — fewer if any row 5 page is deleted) |
-| G3 | **Share card for the six pages without a photograph** — capabilities, resources, HSE, clients, contact, CSR | They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only. Pages with a hero already use it. Needs one designed 1200×630 card, or a decision to reuse the home hero | A `src/assets` card exists and `InfoPage`'s routes pass it to `BaseLayout` — or the client says text-only is fine (OPEN-QUESTIONS.md #7) |
+| ~~G3~~ | ~~**Share card for the pages without a photograph**~~ | ~~They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only~~ | ✅ **Done 2026-10-12.** `public/share-card.png` — 1200×630, the logo and the company name on ink — is the `og:image` and `twitter:image` of every page that passes no photograph, with `og:image:width`, `:height` and `:alt`; `twitter:card` is `summary_large_image` on every page. That is thirteen pages, not six: capabilities, careers, clients, company, contact, CSR, HSE, privacy, resources, terms, the two Kharghar project pages still waiting for a photograph, and the 404. Pages with a hero keep theirs. The URL is built on `PUBLIC_SITE_URL` (G1), so it is only right once G1 is. Redraw it with `npm run share-card:build` |
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
-| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it |
+| G5 | **`job_posting_events` table** created on the production database, with `GRANT SELECT, INSERT` for the app user — both statements are in `db/schema.sql` | The `/careers` job cards live in it. Without it the page still loads (it shows "No openings listed right now"), but adding a posting in edit mode fails with "Could not save" | Sign in, turn on Edit text on `/careers`, add a test posting, see it appear, remove it. **Status on the test server, 2026-10-12: not verified** — see "Checking G5 and G8" below |
 | G6 | **`SITE_NOINDEX` removed** from the production `.env` | The test server on a bare IP runs with `SITE_NOINDEX=1` (src/lib/staging.ts): every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything. Copied to the real domain, the site never enters the index | `npm run check:site-url` passes (it fails while the switch is on); `curl -I https://<origin>/` shows no `X-Robots-Tag` |
 | G7 | **Careers email** — `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` — nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | Send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
-| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (also in `db/schema.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | Send a test application, open `/studio/applications`, Delete → Confirm delete; the row disappears and stays gone after a reload |
+| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (also in `db/schema.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | Send a test application, open `/studio/applications`, Delete → Confirm delete; the row disappears and stays gone after a reload. **Status on the test server, 2026-10-12: not verified** — see "Checking G5 and G8" below |
+
+### Checking G5 and G8 on a server, without changing anything
+
+Asked on 2026-10-12: does the test server's database already have these two
+permissions? **Not answered — it could not be checked from the development
+PC, and it has not been guessed.** That machine's own database is a different
+one (its `.env` points at `localhost`); the test server's MySQL is not open to
+the internet (port 3306 does not answer on 13.233.140.227), and the PC holds no
+SSH key for the server.
+
+The check has to run **on the server itself**. This one line reads the grants
+of the database user the site runs as and writes nothing — `SHOW GRANTS` and
+one `information_schema` lookup:
+
+```
+cd /srv/kd-site && node -e 'require("dotenv").config({quiet:true});const mysql=require("mysql2/promise");(async()=>{const db=process.env.DB_NAME||"kd_construction";const c=await mysql.createConnection({host:process.env.DB_HOST||"localhost",port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER,password:process.env.DB_PASSWORD,database:db});const [rows]=await c.query("SHOW GRANTS");const grants=rows.map(r=>String(Object.values(r)[0]));const has=(table,priv)=>grants.some(line=>{const m=line.match(/^GRANT (.+) ON (.+) TO /);if(!m)return false;const on=m[2].split("`").join("").split(String.fromCharCode(92)).join("");const privs=m[1].toUpperCase().split(",").map(p=>p.trim());return (on==="*.*"||on===db+".*"||on===db+"."+table)&&(privs.includes("ALL PRIVILEGES")||privs.includes(priv))});const [t]=await c.query("SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema=? AND table_name=?",[db,"job_posting_events"]);const yn=v=>v?"YES":"NO";console.log("server: "+require("os").hostname()+"   database user: "+process.env.DB_USER);console.log("G5 job postings  - table job_posting_events exists: "+yn(t[0].n>0));console.log("G5 job postings  - SELECT granted: "+yn(has("job_posting_events","SELECT"))+"   INSERT granted: "+yn(has("job_posting_events","INSERT")));console.log("G8 applications  - DELETE granted on job_applications: "+yn(has("job_applications","DELETE")));console.log("raw grants:");grants.forEach(g=>console.log("  "+g));await c.end()})().catch(e=>{console.log("ERROR: "+e.message);process.exit(1)})'
+```
+
+- **Where:** the KD test server, in a terminal there. The prompt reads
+  `ip-172-26-8-71`, `hostname` prints the same, and `/srv/kd-site` exists. On
+  any other machine the command stops at `cd /srv/kd-site` and runs nothing.
+- **Granted:** the three `G5`/`G8` lines all end in `YES`.
+- **Missing:** a `NO` on any of them. `table … exists: NO` or a `NO` for
+  SELECT / INSERT is G5; `DELETE granted … NO` is G8. The fix is the matching
+  statement in `db/schema.sql`, run by a database administrator — not by the
+  site's own user.
+- **`ERROR:`** means the check itself did not run (the `.env` could not be
+  read, or the database refused the login). It says nothing about the grants.
+
+On the production server the same line applies with that server's site folder
+in place of `/srv/kd-site`.
+
+## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
+
+None of these was a placeholder or a sign-off; they were faults found by
+loading the site on a phone and in a search result. Recorded here so the next
+review does not look for them again.
+
+| # | What was wrong | Done | Commit |
+| --- | --- | --- | --- |
+| 1 | `/about` on a phone: hero quote cut off, the four-across Philosophy and HSE cards overlapping, directors squeezed two to a row | Phone and tablet layout built; desktop untouched | `a94c0c4` |
+| 2 | `/company` on a phone: "Kailashchandra" ran off the screen — and so did the `/clients` and `/careers` titles, the same heading | Hero titles scale down below 480px wherever that heading is used; no word is hyphenated or broken | `26b834b` |
+| — | Found by the same sweep: the title of all ten railway project pages was cut off mid-word on a phone; the homepage pull-quote pushed the page sideways at 360px; a badge was clipped on two `/projects` cards | Fixed the same way | `722103b` |
+| 3 | No preview image for a link to a page without a photograph | G3 above | `589f08b` |
+| 4 | Meta descriptions up to 394 characters; a search result cuts off near 160 | 22 rewritten to 155 or less, cut from the old wording with nothing added. All 34 pages now measure 78–155 | `ad9913b` |
+| 5 | Nothing told a search engine that the office is a place | `GeneralContractor` (schema.org's LocalBusiness for a construction firm) JSON-LD on `/contact`: name, address, both phone numbers, URL, logo and the map embed's own coordinates — nothing that is not already on the site | `10421ac` |
+
+**How it was checked.** Every route in the sitemap plus the 404 — 35 pages —
+loaded at 360, 390, 768 and 1280px wide: no horizontal scroll, no text wider
+than its box or clipped by a container, no text drawn over other text, no
+broken image, no script error (the 404's own "404" in the console is the page
+doing its job). At 1280, 1440 and 1920 every page is element-for-element the
+same as `09255e5` — position, size and computed style of all 14,517 elements —
+and `/about` and `/company` are pixel-identical at all three.
+
+**Left as found**, because they are outside what was asked: below 360px wide
+(a 320px phone) the footer's bottom line is 14px too wide on every page and
+three pages have a value that does not fit; `/projects` still has desktop
+gutters and a 72px title on a phone, which works but was never tuned; and the
+share image of a page *with* a photograph is served as WebP, which some link
+previews may not draw.
 
 ## Where the placeholder mechanism lives
 

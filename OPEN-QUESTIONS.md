@@ -90,6 +90,13 @@ site back to the Figma.
 No mobile frame exists. Every breakpoint rule in `DESIGN-SYSTEM.md` §10 is my
 inference and is marked as such in that document.
 
+**Update, 2026-10-12: `/about` now has its phone and tablet layout**, built at
+the user's direction after the page was found cut off and overlapping on a
+phone. Still inferred, not designed — §10 lists what was added (fluid hero
+quote and closing headline, the 4-up cards stepping to 2 and 1, one director
+per row, the timeline running down the page). From 1024px up the page is
+unchanged. The paragraphs below describe the page as it stood before that.
+
 **`/about` has since been built, and it ships with no responsive variants at
 all** — exactly like the homepage, and for the same reason: writing them would
 be building on an unsigned inference. Both pages are fixed-width desktop
@@ -2621,3 +2628,39 @@ name says what the picture is. `/hse` now lists its photos in
 
 **Check with the company:** the 3,00,000 safe man-hours figure is read off
 the Karjat banner ("as on January 2026") — confirm before go-live.
+
+---
+
+## 43. The phone pass of 2026-10-12 — fluid headlines, a share card, shorter descriptions
+
+At the user's direction, after `/about` and `/company` were found cut off on a
+phone. PRE-LAUNCH.md has the list of what was done and how it was checked;
+this is what was decided along the way.
+
+- **Large headlines are fluid below a breakpoint, not stepped.** A tenth of
+  the viewport width, floored at `d5` and capped at the heading's own token,
+  with that token's line-height ratio — `DESIGN-SYSTEM.md` §10. A step can
+  leave one long word ("Kailashchandra", "Redevelopment") wider than the
+  screen between two breakpoints; this cannot, and no word is hyphenated or
+  broken. The homepage hero and closing CTA still step (`d4` → `d3` → `d1`/`d2`):
+  they fit and were not part of the request. Two mechanisms for one job is a
+  loose end, not a decision.
+- **The check was "every page, nothing cut off", so the fix went beyond the
+  two pages named.** The same fault was on the ten railway project pages
+  (title clipped mid-word by the hero), the homepage pull-quote, and two
+  `/projects` cards. All fixed; all only below 1024px.
+- **The meta description is no longer page copy.** #7 made the homepage's
+  description the hero sub-paragraph, named once so the two could not drift,
+  and `/about` and the project pages followed. Those paragraphs run to 394
+  characters and a search result stops near 160, so each page now has a
+  description of its own, 155 at most, cut from the same wording. They can
+  drift now; the comment beside each says so.
+- **#7's "`og:image` — none" is closed** for pages without a photograph: a
+  designed card, `public/share-card.png`. A page with a photograph still
+  shares that photograph, as a WebP rendition from the image endpoint — which
+  some link previews may not draw. Not changed; worth a test once the site is
+  on its real address.
+- **Still open:** a 320px-wide phone (the footer's bottom line is 14px too
+  wide on every page); `/projects` on a phone, which works but keeps desktop
+  gutters and a 72px title; and whether the test server's database has the
+  G5 and G8 grants, which could not be checked from this machine.
