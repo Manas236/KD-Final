@@ -132,25 +132,44 @@ text blocks failed with "CREATE command denied". All schema statements now
 live in `db/migrate.sql`.
 
 **Backups go to `/srv/kd-backups/`, never inside `/srv/kd-site`.** That
-covers every copy taken on the server: the build backup of step 1, a copy of
-`.env` before it is edited (G1, G6, G7), a database dump and a schema
-snapshot. `/srv/kd-backups/` is owned by `kd`, mode 700; if it is missing,
-create it once with `sudo install -d -o kd -m 700 /srv/kd-backups`. The site
-folder is a git working tree and is not the place for them: a `.env` copy
-holds the database and SMTP passwords, and a dump holds applicants' personal
-data. `.gitignore` lists `.env.bak*`, `dist.bak-*/` and `db-backup-*.sql` so
-a stray one never reaches a commit, but that is a safety net, not leave to
-keep them there.
+covers every copy taken on the server, each named with the time it was taken
+(`$(date +%Y%m%d-%H%M)`): the build backup of step 1, `dist.bak-<date-time>`;
+a copy of `.env` before it is edited (G1, G6, G7), `.env.bak-<date-time>`; a
+database dump, `db-backup-<date-time>.sql`; and a schema snapshot,
+`kd-schema-<date-time>.sql`. Keep to those names: the pruning in step 1
+recognises only them, and dates each backup by its name.
+`/srv/kd-backups/` is owned by `kd`, mode 700; if it is missing, create it
+once with `sudo install -d -o kd -m 700 /srv/kd-backups`. The site folder is
+a git working tree and is not the place for them: a `.env` copy holds the
+database and SMTP passwords, and a dump holds applicants' personal data.
+`.gitignore` lists `.env.bak*`, `dist.bak-*/`, `db-backup-*.sql` and
+`kd-schema-*.sql` so a stray one never reaches a commit, but that is a
+safety net, not leave to keep them there.
 
-1. **Back up the build.** As `kd`, copy `dist/` to
+1. **Back up the build, then prune old backups.** As `kd`, copy `dist/` to
    `/srv/kd-backups/dist.bak-<date-time>`:
    `cp -a /srv/kd-site/dist /srv/kd-backups/dist.bak-$(date +%Y%m%d-%H%M)`.
    This is the rollback: copy it back over `dist/`
    (`rm -rf /srv/kd-site/dist && cp -a /srv/kd-backups/dist.bak-<date-time> /srv/kd-site/dist`)
    and restart, and the old version runs again. Copy, not move, so the backup
    is still there for a second attempt. If an earlier deploy left a
-   `dist.bak-*`, `.env.bak*` or `db-backup-*.sql` in `/srv/kd-site`, move it
-   to `/srv/kd-backups/` at the same time.
+   `dist.bak-*`, `.env.bak*`, `db-backup-*.sql` or `kd-schema-*.sql` in
+   `/srv/kd-site`, move it to `/srv/kd-backups/` at the same time.
+
+   **Only once that copy has succeeded**, prune, still as `kd`, from
+   `/srv/kd-site`: `bash scripts/prune-backups.sh /srv/kd-backups`. If the
+   copy failed, do not prune; stop and find out why. The script keeps the
+   newest 5 `dist.bak-*`, deletes `.env.bak*`, `db-backup-*.sql` and
+   `kd-schema-*.sql` older than 30 days but always keeps the newest of each
+   kind however old, so there is always a rollback point, and touches
+   nothing else — no symbolic link is followed, nothing outside the folder
+   is reached. It prints every file it deletes and every one it keeps
+   (`--dry-run` prints the same and deletes nothing), and refuses, deleting
+   nothing, if the folder is missing or is not `/srv/kd-backups`. The 30-day
+   limit keeps backups well inside the 24-month deletion promise in
+   `/privacy`: a dump holds job applications. On the deploy that first
+   brings the script it is not in the site folder yet at this step, so that
+   once, run it right after step 2's pull instead.
 2. **Pull.** `git pull --ff-only` in the site folder, as the user that owns
    it. A server only pulls; it never commits (CLAUDE.md). Run `npm ci` only
    if `package-lock.json` changed.

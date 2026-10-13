@@ -57,5 +57,6 @@ pnpm-debug.log*
 .env.bak*
 dist.bak-*/
 db-backup-*.sql
+kd-schema-*.sql
 .npm/
 .config/

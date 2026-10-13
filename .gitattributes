@@ -1,0 +1,2 @@
+# shell scripts run on the Linux server and in Git Bash: never CRLF
+*.sh text eol=lf
