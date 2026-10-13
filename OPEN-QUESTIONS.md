@@ -2665,3 +2665,128 @@ this is what was decided along the way.
   desktop gutters and a 72px title. (Whether the test server's database has
   the G5 and G8 grants could not be checked from this machine; the Claude Code
   session on the server confirmed both the same day — PRE-LAUNCH.md.)
+
+---
+
+## 44. Two more mock drills on /hse, and K.D.'s own list of completed works
+
+2026-10-13. The user supplied a folder, `Heat_Stress/`: ten WhatsApp
+photographs, a four-page mock drill report (PDF) and a screenshot of a table
+of completed works. The folder is raw client media — git-ignored like the
+rest, and in `raw-media.manifest.txt`.
+
+### The drills
+
+**The ten photographs** are one mock drill, 8 October 2026, 09:13 to 09:20
+by the phone's own date stamp: a workman on a scaffold tower, down on the
+deck, the alarm raised, carried clear, strapped to a stretcher, carried out,
+head count. **"Heat stress" is the folder's name** — nothing in the frames
+says so, and nothing names the site. The page says "heat-stress drill" and
+gives the date only; PRE-LAUNCH.md S13 asks for both (the HSE questions are
+for Amritanshu, K.D.'s HSE executive).
+
+**The report** is a different drill: Karjat, 17 April 2026, a medical
+emergency while working at height. Its scenario and three clock times are on
+the page (fall 14:53, alarm 14:55, casualty away 15:00). Its names
+(coordinators, signatures) and the scenario's "without a safety harness" are
+not.
+
+**On `/hse`, all in the Emergency Preparedness band**, appended so no stored
+edit key moves: four heat-stress photographs (media 3–6) and two cards
+(cards 3–4), both `wide`. Four tiles, not two or three, because an even
+number of additions keeps the count odd and the work-at-height clip keeps
+the lead (Record.astro). `Record.astro` itself is unchanged.
+
+**On `/gallery`, all ten** — #40's rule — after the September set in the
+"Safety on Site" group, as `hse-heat-stress-drill-01…10`, in the order taken.
+The foot of each is trimmed to drop the date stamp.
+
+**The report's own photographs** exist only as small images inside the PDF
+(574 px wide at most, some squeezed, some sideways). The report holds eight.
+Five are usable and are on `/gallery` as `hse-karjat-height-drill-01…05`, in
+the order of the drill: the crew at the casualty, lifted on the stretcher,
+carried to the vehicle, loaded in, head count. They were saved out of the
+PDF unchanged into `Heat_Stress/from the Karjat mock drill report (PDF)/`;
+`build-gallery.mjs` turns 01 upright (it is stored sideways — the script's
+new `turn` fix) and cuts the GPS-camera map and coordinates stamp from 01,
+03 and 05. None is on `/hse`: at that size a tile would be soft. **Left
+out, three:** a squeezed copy of 03, a 157 px wide strip of the workman
+climbing, and a 476 × 121 sideways strip of the safety officer walking. The
+originals would fix all of this — S13 asks.
+
+### The list of completed works
+
+Thirteen rows: department, description, value in lacs. **No value is on the
+site** — #19b, KD_INFO §7.1: contract values are dropped everywhere, the
+company's own decision of 2026-08-18.
+
+- **Rows 8, 9, 12 — Sanpada Carshed, three Central Railway contracts.** A
+  third paragraph on `/projects/sanpada-carshed`.
+- **Row 7 — the Bonkode skywalk; row 10 — the Kharghar golf course
+  clubhouse.** Each names the contract, which fills that page's "Scope of
+  works" tile (PRE-LAUNCH.md 5a closed, 5e halved). The golf course overview
+  now says K.D. built the clubhouse; the list does not say it built nothing
+  else.
+- **The other eight** had no place on the site. Decided by the client and
+  the user the same day: each is a **project** — a tile in the "Beyond the
+  railway" band on `/projects` (`projects.social.items` 8–15, appended) and
+  a page of its own under `/projects/<slug>` (`social-projects.ts`), the
+  pattern of the two Kharghar pages that have no photograph — and each is
+  **listed under its client's card on `/clients`**, as a link to that page
+  (`links` on the CIDCO and NMMC cards; their names and logos unchanged).
+  A first build put the eight in a "Civic Works" section of `/clients`
+  instead; that section was never committed.
+
+| Page | Client tile | Size tile | Scope tile |
+|---|---|---|---|
+| `/projects/ghansoli-roads-and-services` | CIDCO | 15 m & 20 m, Sectors 8 to 21 | Roads & services |
+| `/projects/kamothe-peripheral-roads` | CIDCO | 20 m, Sectors 19, 21 & 22 | Integrated development |
+| `/projects/vashi-station-approach-road` | CIDCO | 12 m | Balance work |
+| `/projects/ulwe-mass-housing-infrastructure` | CIDCO | *to be added* | Integrated development |
+| `/projects/ulwe-sector-8-infrastructure` | CIDCO | *to be added* | Integrated development |
+| `/projects/kharghar-33-kv-substation` | CIDCO | 33 kV | Civil works |
+| `/projects/rabale-skywalk` | *to be confirmed* | *to be added* | Construction |
+| `/projects/nmmc-school-no-54-and-55` | NMMC | 2 floors | Extension |
+
+Every one has "Year completed" to be added: the list gives no year.
+
+**Pictures.** There is no photograph of any of the eight. The client allows
+a **generic, representative image** for these works, to carry a small
+"Representative image" caption on the tile and on the page header. None has
+been made yet: each tile and each page carries an "Image to be added"
+placeholder (PRE-LAUNCH.md rows 3c and 7a–7h). The images are expected in
+`Civic_Works_AI/`, one per page, named by its slug. **A photograph of a
+different K.D. work is never used as a stand-in.** The caption is not built
+yet either — it goes in with the first image.
+
+**One question, three works — who the client was** (PRE-LAUNCH.md S12,
+**for Sir**). The list has CIDCO for the Bonkode skywalk and the Rabale
+skywalk, and NMMC for the golf course clubhouse. The site has NMMC for the
+Bonkode skywalk, from its architect's project page, and CIDCO for the golf
+course, which is CIDCO's own and outside NMMC's limits; Rabale, like
+Bonkode, is in NMMC's area. The column reads CIDCO down rows 1–7 and NMMC
+down rows 10–11, as a filled-down column would. So all three are treated
+the same until Sir answers: **none of the three is on a client card**; the
+Bonkode and golf course pages keep the client they had; the Rabale page
+names no client — its client tile is a "To be confirmed" placeholder.
+
+**The three HSE questions are for Amritanshu, K.D.'s HSE executive**
+(PRE-LAUNCH.md S13): whether the drill of 8 October was a heat-stress drill
+and at which site; whether the Karjat drill's clock times may be published;
+and the original photographs of the Karjat drill.
+
+**Also changed:** `scripts/raw-media-manifest.mjs` no longer lists `media/`
+— local studio uploads and test applications, not client originals.
+
+---
+
+## 45. /company: the directors' order, and two edit keys that moved
+
+2026-10-13, at the client's direction: the Board of Directors on `/company`
+reads Kailash, Sarita, Shiv, Mohanlal. The last two cards changed places, so
+`company.sections.1.items.2.*` is now Shiv's card and
+`company.sections.1.items.3.*` is Mohanlal's — index-based keys, swapped
+knowingly because no edit had been stored against either card. An edit made
+to one of those two cards before this date would now show on the other.
+`/about` keeps its own order (Mohanlal, Kailash, Shiv, Sarita); it was not
+part of the request.

@@ -148,6 +148,8 @@ heritage/commuter claims those files hold but could not confirm).
 
 - **Sanpada Carshed | Client: Central Railway**
   A comprehensive railway maintenance infrastructure development at **Sanpada Carshed**, comprising an **Inspection Shed with three pit lines, Heavy Repair Shed, Administration Building, Canteen, Time Office, Security Building, Battery Room and associated infrastructure**. The project involved substantial civil and structural execution, including **11,338 m³ of RCC and 1,412 MT of structural steel fabrication and erection**, along with **P-Way track laying works**, creating integrated facilities to support efficient railway maintenance and operations.
+  <!-- [2026-10-13] From K.D.'s own list of completed works (rows 8, 9 and 12 — see "Civic works" below; OPEN-QUESTIONS.md #44). The list's wording, tidied; its values are not used. -->
+  The work ran across **three Central Railway contracts**. Two were under **MUTP-II**: the extension of the **Heavy Repair Shed, Light Repair Shed and Inspection Shed over lines 4 to 8**, with a first floor for the Administration Building, laboratories, further buildings and the associated track modification; and a **second Heavy Repair Shed for EMU rakes**. The third delivered **Inspection Sheds with three and two pit lines and a Feeder Shed**.
 
 - **Matunga Railway Workshop | Client: Indian Railways**
   At the historic **Matunga Railway Workshop**, K.D. Constructions executed a multidisciplinary development programme comprising **industrial sheds, administrative and training facilities, traverser infrastructure, underground water tanks, roads, drainage, roofing and associated electrical works**. The project supported the **augmentation of Bogie Periodic Overhaul (POH) capacity from 350 to 575 bogies per month**, while strengthening the workshop's facilities for coach maintenance and railway operations. The project reflects our ability to deliver complex **workshop infrastructure through integrated civil, structural, electrical and railway-specific execution**.
@@ -210,14 +212,56 @@ the company's own profile deck, slide 10, not from this document's approved
 text: on the site as sign-offs PRE-LAUNCH.md S6–S7 until confirmed.
 -->
 
-- **Kharghar Golf Course** — Kharghar (clubhouse and greens; photographs in `Kharghar Golf Course/`). (Company Profile) The clubhouse: a modern building with premium finishes, in landscaped surroundings.
+- **Kharghar Golf Course** — Kharghar (clubhouse and greens; photographs in `Kharghar Golf Course/`). (Company Profile) The clubhouse: a modern building with premium finishes, in landscaped surroundings. (List of completed works, 2026-10-13) K.D.'s contract was the construction of the clubhouse.
 - **Kharghar Football Stadium** — Kharghar (no photograph on record). On /projects since 2026-09-18 as a "Photograph to be added" placeholder tile — PRE-LAUNCH.md 3a — and on its own page since 2026-09-19 (5g).
-- **Bonkode FOB** — Bonkode, Navi Mumbai (the "White House" FOB, a road skywalk with a glass lift tower; photographs in `Bonkode FOB/`). Not part of the Harbour Line FOB contract. (Company Profile) A 72 m × 3 m skywalk on the Thane–Belapur road, connecting Bonkode village to the TTC industrial belt.
+- **Bonkode FOB** — Bonkode, Navi Mumbai (the "White House" FOB, a road skywalk with a glass lift tower; photographs in `Bonkode FOB/`). Not part of the Harbour Line FOB contract. (Company Profile) A 72 m × 3 m skywalk on the Thane–Belapur road, connecting Bonkode village to the TTC industrial belt. (List of completed works, 2026-10-13) K.D.'s contract was the construction of the skywalk, listed as "at Khairane Bonkode".
 - **Ulwe Hospital** — Ulwe (photographs in `Ulwa Hospital/`; the approved spelling is Ulwe). (Company Profile) A CIDCO urban health centre: 20,000 sq ft, with fire systems and stack parking, completed within its stipulated timeline — attributed to Ulwe because the deck's photograph is `Ulwa Hospital/1.jpg`; the deck itself names no node.
 - **Ulwe CIDCO School** — Ulwe (photographs in `Ulwa CIDCO School/`)
 - **Karanjade Health Care** — Karanjade (photograph in `Karanjade Health Care/`)
 - **Lush Meadows** — Kharghar, residential (photographs in `Lush Meadows/`; K.D.'s own work, not a sister concern)
 - **Kharghar Centre of Excellence** — named in the at-a-glance list above, but not covered by the session and without photography. One yes/no closes it. On /projects since 2026-09-18 as a "To be confirmed" placeholder tile — PRE-LAUNCH.md 3b — and on its own page since 2026-09-19, which claims nothing until the yes (5h).
+
+## Civic works — from K.D.'s own list of completed works
+
+<!--
+[2026-10-13] Supplied as a screenshot of a table (Sr. No. · Name of Department ·
+Description of Works · Value of Work in lacs), 13 rows, kept with the raw media
+in `Heat_Stress/`. OPEN-QUESTIONS.md #44.
+
+NO VALUES HERE OR ON THE SITE. The table gives a value for every row; contract
+values are dropped site-wide (KD_INFO §7.1, the company's decision of
+2026-08-18), so they stay in the screenshot.
+
+Five of the 13 rows are projects that already have a page: row 7 is the Bonkode
+FOB (which fills that page's "Scope of works"), row 10 the Kharghar golf course
+clubhouse (the same), rows 8, 9 and 12 the three Sanpada Carshed contracts
+(above). The other eight are below, in the table's wording, tidied. On the
+site since 2026-10-13, as decided with the client that day: each has a tile in
+the "Beyond the railway" band on /projects and its own page, /projects/<slug>,
+and each is listed, as a link to that page, under its client's card on
+/clients. No photograph of any is on record; the client allows a generic,
+representative image for them, captioned "Representative image" — until one
+arrives the tile and the page carry an "Image to be added" placeholder
+(PRE-LAUNCH.md 3c, 7a–7h). Never a photograph of a different work.
+
+ONE QUESTION FOR SIR, THREE WORKS — PRE-LAUNCH.md S12: who the client was. The
+table gives CIDCO for both skywalks (rows 5 and 7) and NMMC for the golf course
+clubhouse (row 10). The Bonkode page says NMMC, from the architect's own
+project page; Rabale, like Bonkode, is in NMMC's area; the golf course is
+CIDCO's, in Kharghar, outside NMMC's limits. Until Sir answers, none of the
+three is on a client card, the Bonkode and golf course pages keep the client
+they had, and the Rabale page names none — which is why the Rabale line below
+has no client. The table spells the school's locality "Rabada".
+-->
+
+- **Ghansoli Roads & Services | Client: CIDCO** — 15 m and 20 m wide roads up to the first stage of asphalting, with storm-water drains, water supply and sewer lines, Sectors 8 to 21, Ghansoli.
+- **Kamothe Peripheral Roads | Client: CIDCO** — integrated development of the 20 m wide peripheral roads (balance half carriageway) in Sectors 19, 21 and 22 of the Phase II area, under the 12.5% scheme.
+- **Vashi Station Approach Road | Client: CIDCO** — balance work of the 12 m wide approach road connecting Sanpada to the south side of Vashi Railway Station.
+- **Ulwe Mass Housing Infrastructure | Client: CIDCO** — integrated development around the mass housing scheme at Sector 19A, Ulwe.
+- **Ulwe Sector 8 Infrastructure | Client: CIDCO** — integrated development of infrastructure works under the 12.5% scheme in Sector 8, Ulwe.
+- **Kharghar 33 kV Substation | Client: CIDCO** — completion of the civil works of the 33 kV electric substation in Sector 23, Central Park, Kharghar.
+- **Rabale Skywalk | Client: to be confirmed** — a skywalk on the Thane–Belapur Road at Rabale.
+- **NMMC School No. 54 & 55 | Client: NMMC** — extension of the first and second floors, at Rabale–Katkaripada.
 
 # CORPORATE SOCIAL RESPONSIBILITY (CSR)
 
