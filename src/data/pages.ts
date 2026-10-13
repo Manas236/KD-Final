@@ -935,10 +935,30 @@ export const clients: InfoPageCopy = {
           title: "CIDCO",
           body: "City and Industrial Development Corporation of Maharashtra Limited",
           logo: "cidco.png",
+        /* The works under CIDCO and NMMC are from K.D.'s own list of
+           completed works (2026-10-13, OPEN-QUESTIONS.md #44), each
+           linking to its page under /projects — the label is that
+           page's title. Three works on the list are on neither card
+           until K.D. says who the client was: the Bonkode skywalk, the
+           Rabale skywalk and the Kharghar golf course clubhouse
+           (PRE-LAUNCH.md S12). */
         },
-        { title: "NMMC", body: "Navi Mumbai Municipal Corporation", logo: "nmmc.png" },
         { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png" },
         { title: "Balbharati", logo: "balbharati.png" },
+          links: [
+            { label: "Ghansoli Roads & Services", href: "/projects/ghansoli-roads-and-services" },
+            { label: "Kamothe Peripheral Roads", href: "/projects/kamothe-peripheral-roads" },
+            { label: "Vashi Station Approach Road", href: "/projects/vashi-station-approach-road" },
+            { label: "Ulwe Mass Housing Infrastructure", href: "/projects/ulwe-mass-housing-infrastructure" },
+            { label: "Ulwe Sector 8 Infrastructure", href: "/projects/ulwe-sector-8-infrastructure" },
+            { label: "Kharghar 33 kV Substation", href: "/projects/kharghar-33-kv-substation" },
+          ],
+        },
+        {
+          title: "NMMC",
+          body: "Navi Mumbai Municipal Corporation",
+          logo: "nmmc.png",
+          links: [{ label: "NMMC School No. 54 & 55", href: "/projects/nmmc-school-no-54-and-55" }],
         {
           title: "Maharashtra PWD",
           body: "Our earliest works, from 1973",

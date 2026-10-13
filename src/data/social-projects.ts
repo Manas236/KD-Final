@@ -13,6 +13,15 @@
    `pending` tile on every page. Each entry notes its sources and the
    research's own caveats. What follows is the original record.
 
+   UPDATE 2026-10-13: K.D.'s own list of completed works arrived (a
+   screenshot of the table; OPEN-QUESTIONS.md #44). It names the
+   contract for two of these — the Bonkode skywalk and the golf course
+   clubhouse — which fills their scope tiles. Its department column
+   disagrees with the client on both pages; neither client was changed
+   (PRE-LAUNCH.md S12). The same day, at the client's direction, eight
+   more works from that list each gained a tile on /projects and a page
+   here — the last eight entries of SOURCES.
+
    WHAT IS KNOWN, AND FROM WHERE. For six of the eight, the source doc
    (K.D.Website_Details.md §Further Projects) gives a name, a location
    and a folder of photographs — nothing else; the company confirmed
@@ -96,9 +105,29 @@ interface SocialDetailSource {
   /** Cards above the paragraphs — the unconfirmed project's question,
       and Lush Meadows' portal-data check. */
   readonly notes?: readonly PendingNote[];
+  /** The card in the gallery block while the project has no picture, in
+      place of photoNote()'s "Photograph to be added" — for the works
+      whose picture will be a representative image. */
+  readonly photoNote?: PendingNote;
 }
 
 const TBA = "To be added";
+
+/* The eight works added on 2026-10-13 from K.D.'s own list of completed
+   works (OPEN-QUESTIONS.md #44). No photograph of any is on record, and
+   the client allows a generic, representative image for them, marked as
+   one on the tile and on the page header. Until each arrives the page
+   carries this card. Never a photograph of a different work. */
+const IMAGE_NOTE: PendingNote = {
+  pending: "Image to be added",
+  title: "Image",
+  body:
+    "No photograph of this work is on record. A representative image, marked as one, becomes " +
+    "this page's header and the project's tile on the Projects page.",
+};
+
+/* What every one of the eight still lacks. */
+const YEAR: FactTile = { pending: TBA, title: "Year completed", body: "The year the work was handed over." };
 
 const SOURCES: readonly SocialDetailSource[] = [
   {
@@ -358,6 +387,154 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
     ],
   },
+  /* ---- The eight works from K.D.'s own list of completed works ----
+     Added 2026-10-13 (OPEN-QUESTIONS.md #44). Client and scope are the
+     list's "Name of Department" and "Description of Works"; the size
+     tile is a figure the description itself gives, or a placeholder
+     where it gives none. NO VALUES: the list has one per work, and
+     contract values are dropped site-wide (docs/KD_INFO.md §7.1). The
+     list gives no year for any of them. */
+  {
+    title: "Ghansoli Roads & Services",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      { value: "15 m & 20 m", label: "Road widths, Sectors 8 to 21" },
+      { value: "Roads & services", label: "Scope of works" },
+      YEAR,
+    ],
+    description:
+      "15 m and 20 m wide roads across Sectors 8 to 21 of Ghansoli, Navi Mumbai, with " +
+      "storm-water drains, water supply lines and sewer lines.",
+    body: [
+      "15 m and 20 m wide roads across Sectors 8 to 21 of Ghansoli, Navi Mumbai, built up to the " +
+        "first stage of asphalting — with the storm-water drains, water supply lines and sewer " +
+        "lines that serve them.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    title: "Kamothe Peripheral Roads",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      { value: "20 m", label: "Road width, Sectors 19, 21 & 22" },
+      { value: "Integrated development", label: "Scope of works" },
+      YEAR,
+    ],
+    description:
+      "Integrated development of the 20 m wide peripheral roads in Sectors 19, 21 and 22 of " +
+      "Kamothe's Phase II area, Navi Mumbai, under the 12.5% scheme.",
+    body: [
+      "Integrated development of the 20 m wide peripheral roads — the balance half carriageway — " +
+        "in Sectors 19, 21 and 22 of Kamothe's Phase II area, under the 12.5% scheme.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    title: "Vashi Station Approach Road",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      { value: "12 m", label: "Road width" },
+      { value: "Balance work", label: "Scope of works" },
+      YEAR,
+    ],
+    body: [
+      "The balance work of the 12 m wide approach road connecting Sanpada to the south side of " +
+        "Vashi Railway Station, Navi Mumbai.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    title: "Ulwe Mass Housing Infrastructure",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      {
+        pending: TBA,
+        title: "Extent of works",
+        body: "Road length, area served, or the main quantities of the work.",
+      },
+      { value: "Integrated development", label: "Scope of works" },
+      YEAR,
+    ],
+    body: [
+      "Integrated development around the mass housing scheme at Sector 19A, Ulwe, Navi Mumbai.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    title: "Ulwe Sector 8 Infrastructure",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      {
+        pending: TBA,
+        title: "Extent of works",
+        body: "Road length, area served, or the main quantities of the work.",
+      },
+      { value: "Integrated development", label: "Scope of works" },
+      YEAR,
+    ],
+    body: [
+      "Integrated development of infrastructure works under the 12.5% scheme in Sector 8, Ulwe, " +
+        "Navi Mumbai.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    title: "Kharghar 33 kV Substation",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      { value: "33 kV", label: "Electric substation" },
+      { value: "Civil works", label: "Scope of works" },
+      YEAR,
+    ],
+    body: [
+      "Civil works completing the 33 kV electric substation in Sector 23, at Kharghar's Central " +
+        "Park, Navi Mumbai.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    /* NO CLIENT NAMED. The list gives CIDCO; Rabale is in NMMC's area,
+       like Bonkode, whose page says NMMC. One question covers this
+       skywalk, the Bonkode skywalk and the golf course clubhouse —
+       PRE-LAUNCH.md S12 — and until it is answered this page asks
+       rather than says. */
+    title: "Rabale Skywalk",
+    eyebrow: "Urban Infrastructure",
+    facts: [
+      {
+        pending: "To be confirmed",
+        title: "Client",
+        body: "Who the skywalk was built for.",
+      },
+      { pending: TBA, title: "Length & width", body: "The skywalk's length and width." },
+      { value: "Construction", label: "Scope of works" },
+      YEAR,
+    ],
+    body: ["A skywalk across the Thane–Belapur Road at Rabale, Navi Mumbai, built by K.D. Constructions."],
+    photoNote: IMAGE_NOTE,
+  },
+  {
+    /* The list spells the locality "Rabada- Katkaripada". */
+    title: "NMMC School No. 54 & 55",
+    eyebrow: "Education",
+    facts: [
+      { value: "NMMC", label: "Client" },
+      { value: "2 floors", label: "First and second floor" },
+      { value: "Extension", label: "Scope of works" },
+      YEAR,
+    ],
+    body: [
+      "Extension of the first and second floors of Navi Mumbai Municipal Corporation School " +
+        "No. 54 & 55 at Rabale–Katkaripada, Navi Mumbai.",
+    ],
+    photoNote: IMAGE_NOTE,
+  },
 ];
 
 /* Where a project has no photograph at all, the gallery block holds
@@ -403,7 +580,7 @@ function build(item: SocialProject) {
       body: src.body,
       galleryKicker: detailChrome.galleryKicker,
       gallery: photos,
-      photoNote: photos.length === 0 ? photoNote(item.title) : undefined,
+      photoNote: photos.length === 0 ? (src.photoNote ?? photoNote(item.title)) : undefined,
       /* Only rendered where there is something to open. */
       lightbox: photos.length > 0 ? detailChrome.lightbox : undefined,
       ctaKicker: detailChrome.ctaKicker,

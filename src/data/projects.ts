@@ -460,6 +460,76 @@ export const projects = {
           "Constructions' part in it is not yet confirmed, and no photograph is on record. " +
           "A yes and one photograph fill this tile; a no removes it.",
       },
+      /* Eight works from K.D.'s own list of completed works, appended
+         2026-10-13 at the client's direction — one tile and one page
+         each (OPEN-QUESTIONS.md #44). No photograph of any is on record.
+         The client allows a generic, representative image for these,
+         marked as one; until each arrives its tile is a `pending` tile
+         like the two above it. Never a photograph of a different work. */
+      {
+        title: "Ghansoli Roads & Services",
+        location: "Ghansoli · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Kamothe Peripheral Roads",
+        location: "Kamothe · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Vashi Station Approach Road",
+        location: "Sanpada · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Ulwe Mass Housing Infrastructure",
+        location: "Ulwe · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Ulwe Sector 8 Infrastructure",
+        location: "Ulwe · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Kharghar 33 kV Substation",
+        location: "Kharghar · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "Rabale Skywalk",
+        location: "Rabale · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
+      {
+        title: "NMMC School No. 54 & 55",
+        location: "Rabale · Navi Mumbai",
+        pending: "Image to be added",
+        note:
+          "No photograph of this work is on record. A representative image, marked as one, " +
+          "fills this tile.",
+      },
     ] as readonly SocialProject[],
   },
 
