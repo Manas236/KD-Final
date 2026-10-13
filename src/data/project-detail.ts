@@ -322,6 +322,18 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "alongside P-Way track laying works, creating integrated " +
         "facilities to support efficient railway maintenance and " +
         "operations.",
+      /* Added 2026-10-13 from K.D.'s own list of completed works, which
+         has Sanpada Carshed as three Central Railway contracts
+         (OPEN-QUESTIONS.md #44). Their values are not used: contract
+         values are dropped site-wide. */
+      "The work ran across three Central Railway contracts. Two were " +
+        "under MUTP-II: the extension of the Heavy Repair Shed, Light " +
+        "Repair Shed and Inspection Shed over lines 4 to 8, with a " +
+        "first floor for the Administration Building, laboratories, " +
+        "further buildings and the associated track modification; and " +
+        "a second Heavy Repair Shed for EMU rakes. The third delivered " +
+        "Inspection Sheds with three and two pit lines and a Feeder " +
+        "Shed.",
     ],
     /* Fourth tile: the doc's P-Way track laying — the Track Engineering
        evidence docs/KD_INFO.md §4.2 cites for this project — was in the

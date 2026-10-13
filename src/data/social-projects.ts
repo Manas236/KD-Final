@@ -107,7 +107,13 @@ const SOURCES: readonly SocialDetailSource[] = [
     /* Client, year, structure and access from the research the user
        supplied on 2026-09-28 (WorldArchitecture; the architect THE
        FIRM's own project page): NMMC — not CIDCO — designed 2010,
-       completed 2012. K.D.'s own scope is still not on record. */
+       completed 2012.
+       2026-10-13: K.D.'s own list of completed works (OPEN-QUESTIONS.md
+       #44) has this contract as "Construction of Skywalk at Khairane
+       Bonkode on Thane Belapur Road" — that is the scope tile. The same
+       list names the department as CIDCO, against the sources above; the
+       client tile is left as it was until K.D. says which is right
+       (PRE-LAUNCH.md S12). */
     facts: [
       { value: "NMMC", label: "Client" },
       /* Company Profile deck, slide 10, and WorldArchitecture agree. The
@@ -115,11 +121,7 @@ const SOURCES: readonly SocialDetailSource[] = [
          sits over the clubhouse text and "Premium Clubhouse" over this
          one — but the pictures under each heading settle which is which. */
       { value: "72 × 3 m", label: "Skywalk, Length × Width" },
-      {
-        pending: TBA,
-        title: "Scope of works",
-        body: "What K.D. Constructions delivered — foundations, steelwork, cladding, lifts and ramps, or part of that.",
-      },
+      { value: "Construction", label: "Scope of works" },
       { value: "2012", label: "Year completed" },
     ],
     description:
@@ -216,19 +218,22 @@ const SOURCES: readonly SocialDetailSource[] = [
        ₹50.35 cr (likely the original 9-hole build), and values are
        dropped site-wide in any case (docs/KD_INFO.md §7.1). The year
        stays open: April 2026 is when the course reopened, not
-       necessarily when K.D.'s package was handed over. */
+       necessarily when K.D.'s package was handed over.
+       2026-10-13: K.D.'s own list of completed works (OPEN-QUESTIONS.md
+       #44) has this contract as "Construction of Club House for golf
+       course at Kharghar" — so the scope tile is the clubhouse, and the
+       year asked for is the clubhouse's. The same list names the
+       department as NMMC; the course is CIDCO's and Kharghar is outside
+       NMMC's limits, so the client tile is left as it was until K.D.
+       says which is right (PRE-LAUNCH.md S12). */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "103 ha", label: "Course, 18 holes, par 72" },
-      {
-        pending: TBA,
-        title: "Scope of works",
-        body: "Whether K.D. Constructions built the clubhouse only, or the course works — greens, drainage, retention ponds — as well.",
-      },
+      { value: "Clubhouse", label: "Scope of works" },
       {
         pending: TBA,
         title: "Year completed",
-        body: "The year K.D.'s package was handed over. The course reopened as 18 holes in April 2026 — say whether that is the work K.D. did.",
+        body: "The year the clubhouse was handed over.",
       },
     ],
     description:
@@ -245,8 +250,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       /* Company Profile deck, slide 10 ("Premium Clubhouse") — the
          company's own description, kept as it words it; the detention
          pond is CIDCO's. */
-      "Its clubhouse is a modern building with premium finishes, set in landscaped grounds " +
-        "beside the greens, with a detention pond for flood control.",
+      "K.D. Constructions built its clubhouse: a modern building with premium finishes, set in " +
+        "landscaped grounds beside the greens, with a detention pond for flood control.",
     ],
   },
   {
