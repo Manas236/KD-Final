@@ -43,6 +43,34 @@ Gati Shakti/Roof members.jpeg	70156
 Gati Shakti/Z bridge approach from the West.jpeg	473437
 Gati Shakti/Z bridge granite and toughened glass.jpeg	115676
 Gati Shakti/Z bridge.jpeg	328871
+Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-crew-at-scaffold.jpg	108841
+Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-head-count.jpg	115370
+Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-loaded-into-car.jpg	73210
+Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher-to-car.jpg	110593
+Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher.jpg	88001
+Heat_Stress/MOCK DRILL REPORT KARJAT APRIL-2026..pdf	1039558
+Heat_Stress/Screenshot 2026-10-13 at 11.50.37 AM.png	341152
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM (1).jpeg	182702
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM (2).jpeg	148477
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM.jpeg	157717
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM (1).jpeg	165225
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM (2).jpeg	114895
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM.jpeg	142358
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM (1).jpeg	148076
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM (2).jpeg	158458
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM.jpeg	165234
+Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.42 PM.jpeg	158859
+HSE Department/2026-09 EHS reports/air-quality-monitoring-mankhurd.jpg	195701
+HSE Department/2026-09 EHS reports/electrical-shock-drill-mankhurd.jpg	200175
+HSE Department/2026-09 EHS reports/fire-extinguisher-drill-gtb-nagar-2.mp4	957292
+HSE Department/2026-09 EHS reports/fire-extinguisher-drill-gtb-nagar.mp4	1934623
+HSE Department/2026-09 EHS reports/lifting-training-govandi.jpeg	228293
+HSE Department/2026-09 EHS reports/medical-camp-mankhurd.jpeg	159757
+HSE Department/2026-09 EHS reports/national-safety-day-mankhurd.jpg	434642
+HSE Department/2026-09 EHS reports/safety-week-300000-safe-man-hours-karjat.jpg	270063
+HSE Department/2026-09 EHS reports/work-at-height-rescue-drill-gtb-nagar.mp4	27168030
+HSE Department/2026-09 EHS reports/worker-recognition-award.jpg	99857
+HSE Department/2026-09 EHS reports/world-environment-day-toolbox-talk.jpg	186878
 HSE Department/image20.jpg	936065
 HSE Department/Picture2.jpg	358696
 HSE Department/Picture3.jpg	431075
@@ -67,7 +95,9 @@ Kharghar Golf Course/Screenshot 2025-04-02 175812.png	1411368
 Logo/Balbharti.jpg	60151
 Logo/Central-Railway.jpg	21422
 Logo/CIDCO.png	10525
+Logo/FCI.png	308537
 Logo/Indian_railways.jpg	148627
+Logo/IRCON.png	20691
 Logo/JNPT.png	22108
 Logo/Maha_PWD.jpg	26808
 Logo/MRVC.png	37822

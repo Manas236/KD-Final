@@ -24,7 +24,9 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const OUT = join(ROOT, "raw-media.manifest.txt");
-const TOOLING = new Set(["node_modules", "dist", ".astro", ".git"]);
+/* `media` is MEDIA_DIR's local default — studio uploads and test
+   applications, not client originals. */
+const TOOLING = new Set(["node_modules", "dist", ".astro", ".git", "media"]);
 
 function isIgnored(name) {
   try {
