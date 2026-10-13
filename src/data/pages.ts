@@ -841,14 +841,10 @@ export const company: InfoPageCopy = {
             "Guides corporate strategy, financial strength, and governance — the quiet framework " +
             "behind sustainable growth.",
         },
-        {
-          title: "Mohanlal S. Gindodia",
-          role: "Director",
-          portrait: "mohanlal-s-gindodia.jpg",
-          body:
-            "Leads stakeholder engagement and government relations, unlocking the trust that " +
-            "complex infrastructure demands.",
-        },
+        /* Order set by the client on 2026-10-13: Kailash, Sarita, Shiv,
+           Mohanlal. The last two changed places, so items.2 and items.3
+           — and their edit keys — now name the other director
+           (OPEN-QUESTIONS.md #45). */
         {
           title: "Shiv K. Gindodia",
           role: "Director · Inducted 2017",
@@ -856,6 +852,14 @@ export const company: InfoPageCopy = {
           body:
             "Carries the firm into its modern era — advancing technology, sustainable " +
             "development, HSE excellence, and a broader EPC horizon.",
+        },
+        {
+          title: "Mohanlal S. Gindodia",
+          role: "Director",
+          portrait: "mohanlal-s-gindodia.jpg",
+          body:
+            "Leads stakeholder engagement and government relations, unlocking the trust that " +
+            "complex infrastructure demands.",
         },
       ],
     },
@@ -931,10 +935,6 @@ export const clients: InfoPageCopy = {
       kicker: "Public Sector",
       heading: "Civic, port and state clients.",
       items: [
-        {
-          title: "CIDCO",
-          body: "City and Industrial Development Corporation of Maharashtra Limited",
-          logo: "cidco.png",
         /* The works under CIDCO and NMMC are from K.D.'s own list of
            completed works (2026-10-13, OPEN-QUESTIONS.md #44), each
            linking to its page under /projects — the label is that
@@ -942,9 +942,10 @@ export const clients: InfoPageCopy = {
            until K.D. says who the client was: the Bonkode skywalk, the
            Rabale skywalk and the Kharghar golf course clubhouse
            (PRE-LAUNCH.md S12). */
-        },
-        { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png" },
-        { title: "Balbharati", logo: "balbharati.png" },
+        {
+          title: "CIDCO",
+          body: "City and Industrial Development Corporation of Maharashtra Limited",
+          logo: "cidco.png",
           links: [
             { label: "Ghansoli Roads & Services", href: "/projects/ghansoli-roads-and-services" },
             { label: "Kamothe Peripheral Roads", href: "/projects/kamothe-peripheral-roads" },
@@ -959,6 +960,9 @@ export const clients: InfoPageCopy = {
           body: "Navi Mumbai Municipal Corporation",
           logo: "nmmc.png",
           links: [{ label: "NMMC School No. 54 & 55", href: "/projects/nmmc-school-no-54-and-55" }],
+        },
+        { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png" },
+        { title: "Balbharati", logo: "balbharati.png" },
         {
           title: "Maharashtra PWD",
           body: "Our earliest works, from 1973",
