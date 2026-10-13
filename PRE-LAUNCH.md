@@ -131,8 +131,26 @@ Reproduced locally with `kd_app`'s exact grants: applications and project
 text blocks failed with "CREATE command denied". All schema statements now
 live in `db/migrate.sql`.
 
-1. **Back up the build.** Copy `dist/` to `dist.bak-<date-time>`. This is
-   the rollback: put it back and restart, and the old version runs again.
+**Backups go to `/srv/kd-backups/`, never inside `/srv/kd-site`.** That
+covers every copy taken on the server: the build backup of step 1, a copy of
+`.env` before it is edited (G1, G6, G7), a database dump and a schema
+snapshot. `/srv/kd-backups/` is owned by `kd`, mode 700; if it is missing,
+create it once with `sudo install -d -o kd -m 700 /srv/kd-backups`. The site
+folder is a git working tree and is not the place for them: a `.env` copy
+holds the database and SMTP passwords, and a dump holds applicants' personal
+data. `.gitignore` lists `.env.bak*`, `dist.bak-*/` and `db-backup-*.sql` so
+a stray one never reaches a commit, but that is a safety net, not leave to
+keep them there.
+
+1. **Back up the build.** As `kd`, copy `dist/` to
+   `/srv/kd-backups/dist.bak-<date-time>`:
+   `cp -a /srv/kd-site/dist /srv/kd-backups/dist.bak-$(date +%Y%m%d-%H%M)`.
+   This is the rollback: copy it back over `dist/`
+   (`rm -rf /srv/kd-site/dist && cp -a /srv/kd-backups/dist.bak-<date-time> /srv/kd-site/dist`)
+   and restart, and the old version runs again. Copy, not move, so the backup
+   is still there for a second attempt. If an earlier deploy left a
+   `dist.bak-*`, `.env.bak*` or `db-backup-*.sql` in `/srv/kd-site`, move it
+   to `/srv/kd-backups/` at the same time.
 2. **Pull.** `git pull --ff-only` in the site folder, as the user that owns
    it. A server only pulls; it never commits (CLAUDE.md). Run `npm ci` only
    if `package-lock.json` changed.
@@ -146,8 +164,9 @@ live in `db/migrate.sql`.
    the old code too, since the migration only adds.
 4. **Build.** `npm run build` on the test server; on the real domain
    `npm run build:release`, which also refuses to build while a placeholder
-   is left or `PUBLIC_SITE_URL` is wrong (G1). If the build fails, put the
-   `dist.bak` back and stop: the old process is still running from it.
+   is left or `PUBLIC_SITE_URL` is wrong (G1). If the build fails, copy
+   step 1's backup back from `/srv/kd-backups/` as described there and
+   stop: the old process is still running from it.
 5. **Restart** the service (`kd-site` on the test server).
 6. **Check the five database flows.** `npm run check:db-flows`, run as the
    user that can read `.env`, against the running site. It sends a test
@@ -161,10 +180,11 @@ live in `db/migrate.sql`.
 7. **Read the service log since the restart.** No line may say
    "command denied".
 
-**First install only** (a new production server): run step 3 first, which
-creates the database and its tables; then create `kd_app` and give it
-exactly the grants at the foot of `db/migrate.sql` — a table-level grant
-needs the table to exist — and only then write `.env` and start the site.
+**First install only** (a new production server): create `/srv/kd-backups/`
+as above; run step 3 first, which creates the database and its tables; then
+create `kd_app` and give it exactly the grants at the foot of
+`db/migrate.sql` — a table-level grant needs the table to exist — and only
+then write `.env` and start the site.
 
 **When the schema changes later**, the change goes into `db/migrate.sql`
 (create if missing; alter only after an `information_schema` check), a new

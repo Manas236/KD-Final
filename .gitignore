@@ -50,3 +50,12 @@ pnpm-debug.log*
 
 # studio uploads in local development (MEDIA_DIR default)
 /media/
+
+# server backups belong in /srv/kd-backups/, never in the site folder
+# (PRE-LAUNCH.md, "Deploy and migration order"); these keep a stray one out of
+# git. .npm/ and .config/ are per-user caches and settings that land there too
+.env.bak*
+dist.bak-*/
+db-backup-*.sql
+.npm/
+.config/
