@@ -393,6 +393,30 @@ export const hseReportPhotos: readonly GalleryPhoto[] = [
   { file: "hse-electrical-shock-drill-mankhurd.jpg", caption: "Electrical-shock mock drill at Mankhurd — the casualty is moved to a standby ambulance" },
 ];
 
+/* Two mock drills, supplied 2026-10-13 (OPEN-QUESTIONS.md #44): all ten
+   photographs of the heat-stress drill of 8 October 2026, in the order
+   they were taken, then the five usable frames from the report on the
+   Karjat work-at-height drill of 17 April 2026. Four of the first set
+   are also tiles on /hse (pages.ts). Listed after hseReportPhotos, so
+   no earlier photograph in the group moves. */
+export const hseDrillPhotos: readonly GalleryPhoto[] = [
+  { file: "hse-heat-stress-drill-01.jpg", caption: "Heat-stress mock drill — a workman in a full-body harness on the scaffold tower" },
+  { file: "hse-heat-stress-drill-02.jpg", caption: "Heat-stress mock drill — the casualty down on the deck" },
+  { file: "hse-heat-stress-drill-03.jpg", caption: "Heat-stress mock drill — the supervisor raises the alarm by phone" },
+  { file: "hse-heat-stress-drill-04.jpg", caption: "Heat-stress mock drill — the casualty is carried clear of the work area" },
+  { file: "hse-heat-stress-drill-05.jpg", caption: "Heat-stress mock drill — a responder checks the casualty on the stretcher" },
+  { file: "hse-heat-stress-drill-06.jpg", caption: "Heat-stress mock drill — the casualty is strapped to the stretcher" },
+  { file: "hse-heat-stress-drill-07.jpg", caption: "Heat-stress mock drill — the stretcher is lifted" },
+  { file: "hse-heat-stress-drill-08.jpg", caption: "Heat-stress mock drill — four men carry the stretcher out" },
+  { file: "hse-heat-stress-drill-09.jpg", caption: "Heat-stress mock drill — the stretcher team on the move" },
+  { file: "hse-heat-stress-drill-10.jpg", caption: "Heat-stress mock drill — head count and debrief with the crew" },
+  { file: "hse-karjat-height-drill-01.jpg", caption: "Work-at-height mock drill at Karjat — the crew attends the casualty at the foot of the scaffold" },
+  { file: "hse-karjat-height-drill-02.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is lifted on the stretcher" },
+  { file: "hse-karjat-height-drill-03.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is carried to a vehicle" },
+  { file: "hse-karjat-height-drill-04.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is loaded into the vehicle" },
+  { file: "hse-karjat-height-drill-05.jpg", caption: "Work-at-height mock drill at Karjat — head count after the drill" },
+];
+
 /* Health, Safety & Environment — the Mankhurd 75,000 safe man-hours
    celebration (Safety Department/, January 2026) and the HSE Department
    folder's site safety meetings and drills. Not a project, so it links
@@ -452,6 +476,7 @@ export const hseGalleries: readonly ProjectGallery[] = [
       { file: "hse-54.jpg", caption: "Site perimeter secured with sheet barricading" },
       { file: "hse-55.jpg", caption: "Sheet barricading around the site boundary" },
       ...hseReportPhotos,
+      ...hseDrillPhotos,
     ],
   },
 ];

@@ -386,6 +386,36 @@ export const hse: HseCopy = {
             title: "Electrical-shock rescue drill",
             where: "Mankhurd Station",
           },
+          /* The heat-stress mock drill of 8 October 2026 — four of the
+             ten photographs supplied 2026-10-13, in the order they were
+             taken; all ten are on /gallery (OPEN-QUESTIONS.md #44).
+             Appended in a pair of pairs, so the count stays odd and the
+             work-at-height clip keeps the lead. The site is not on
+             record: PRE-LAUNCH.md S13 asks. */
+          {
+            file: "hse-heat-stress-drill-02.jpg",
+            alt: "Heat-stress mock drill: a workman in a full-body harness lies on the deck at the foot of a scaffold tower",
+            title: "The casualty goes down at the scaffold tower",
+            where: "Heat-stress drill · 8 October 2026",
+          },
+          {
+            file: "hse-heat-stress-drill-06.jpg",
+            alt: "Heat-stress mock drill: a supervisor and two workers fasten the straps of an orange stretcher over the casualty",
+            title: "Checked, then strapped to the stretcher",
+            where: "Heat-stress drill · 8 October 2026",
+          },
+          {
+            file: "hse-heat-stress-drill-08.jpg",
+            alt: "Heat-stress mock drill: four men carry the casualty out on the stretcher",
+            title: "Carried out by a four-man team",
+            where: "Heat-stress drill · 8 October 2026",
+          },
+          {
+            file: "hse-heat-stress-drill-10.jpg",
+            alt: "Heat-stress mock drill: the crew, in helmets and harnesses, lined up in front of two supervisors for the head count",
+            title: "Head count and debrief",
+            where: "Heat-stress drill · 8 October 2026",
+          },
         ],
         cards: [
           {
@@ -412,6 +442,43 @@ export const hse: HseCopy = {
               "Sharp edges on cut column pieces are ground off or covered before they are moved.",
               "Hand gloves are mandatory when handling fabricated or cut steel.",
               "Correct handling and shifting methods followed for every piece.",
+            ],
+          },
+          /* Both appended 2026-10-13, and both `wide`, so the two paired
+             cards above keep their row (OPEN-QUESTIONS.md #44). The
+             heat-stress steps are what its ten photographs show, in
+             order; "heat stress" is the name the batch came under. */
+          {
+            wide: true,
+            title: "Heat-stress rescue drill",
+            where: "8 October 2026",
+            body:
+              "A mock drill for a worker overcome by heat while working at height, run on the live " +
+              "site with the crew's own stretcher and supervisors.",
+            points: [
+              "A workman at the scaffold tower is overcome and goes down.",
+              "The supervisor raises the alarm by phone.",
+              "The crew carries the casualty clear of the work area.",
+              "He is checked, then strapped to the stretcher.",
+              "A four-man team carries the stretcher out.",
+              "The whole crew assembles for a head count and debrief.",
+            ],
+          },
+          /* The site's own mock drill report of 17 April 2026: the
+             scenario and its three clock times, nothing else. No names —
+             the report lists the coordinators and is signed. */
+          {
+            wide: true,
+            title: "Medical emergency drill, working at height",
+            where: "Karjat · 17 April 2026",
+            body:
+              "The scenario: a workman falls from a scaffold while welding. Seven minutes pass " +
+              "between the fall and the casualty leaving for hospital.",
+            points: [
+              "14:53 — the workman falls from the scaffold.",
+              "14:55 — the supervisor alerts the project manager and the safety officer.",
+              "The safety officer checks pulse and condition; a medical emergency is declared.",
+              "15:00 — the evacuation team has the casualty in a vehicle, bound for hospital.",
             ],
           },
         ],

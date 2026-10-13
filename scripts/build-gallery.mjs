@@ -17,7 +17,10 @@
      video + at   a frame grab (seconds). Panvel–Karjat has no stills at
                   all — the Chowk folder is video only — so its gallery
                   is frames from the site's own 720p phone footage.
-   and four fixes:
+   and five fixes:
+     turn         degrees clockwise, for a frame stored sideways with no
+                  EXIF to say so (a photograph pasted into a report).
+                  Applied first, so the crops below are of the upright image.
      cropBottom   fraction to trim off the foot ("Shot on OnePlus").
      inset        px to trim off every edge (a Canva export's border).
      trim         remove letterbox bars matching the corner pixel.
@@ -334,6 +337,31 @@ const PHOTOS = [
   { out: "hse-worker-recognition.jpg", src: "HSE Department/2026-09 EHS reports/worker-recognition-award.jpg" },
   // added 2026-10-09 — the electrical-shock mock drill photo from the same batch
   { out: "hse-electrical-shock-drill-mankhurd.jpg", src: "HSE Department/2026-09 EHS reports/electrical-shock-drill-mankhurd.jpg" },
+  // hse — the heat-stress mock drill of 8 October 2026, supplied 2026-10-13
+  // in Heat_Stress/ (OPEN-QUESTIONS.md #44). All ten frames, in the order
+  // they were taken; the foot of each is trimmed to drop the phone's date stamp.
+  { out: "hse-heat-stress-drill-01.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM (2).jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-02.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.42 PM.jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-03.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM.jpeg", cropBottom: 0.03 },
+  { out: "hse-heat-stress-drill-04.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM (2).jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-05.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM (1).jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-06.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM (1).jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-07.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM.jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-08.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.39 PM (2).jpeg", cropBottom: 0.06 },
+  { out: "hse-heat-stress-drill-09.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.40 PM.jpeg", cropBottom: 0.03 },
+  { out: "hse-heat-stress-drill-10.jpg", src: "Heat_Stress/WhatsApp Image 2026-10-13 at 12.00.41 PM (1).jpeg", cropBottom: 0.06 },
+  // hse — the Karjat work-at-height mock drill of 17 April 2026. The only
+  // copies are the small frames embedded in the drill report (a PDF in the
+  // same folder), saved out of it unchanged, in the order of the drill. The
+  // crops cut the GPS-camera map and the coordinates stamp; 01 is stored
+  // sideways in the report. Left out: a squeezed copy of 03, and two strips
+  // too small to use (the workman climbing, 157 px wide; the safety officer
+  // walking, 476 x 121 and sideways).
+  { out: "hse-karjat-height-drill-01.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-crew-at-scaffold.jpg", turn: 270, crop: [0, 0.09, 1, 1] },
+  { out: "hse-karjat-height-drill-02.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher.jpg" },
+  { out: "hse-karjat-height-drill-03.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher-to-car.jpg", crop: [0, 0.16, 1, 1] },
+  { out: "hse-karjat-height-drill-04.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-loaded-into-car.jpg" },
+  { out: "hse-karjat-height-drill-05.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-head-count.jpg", crop: [0.095, 0, 0.85, 1] },
   // sanpada-carshed
   { out: "sanpada-carshed-07.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.14 PM.jpeg" },
   { out: "sanpada-carshed-08.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.15 PM (1).jpeg" },
@@ -485,6 +513,7 @@ for (const p of PHOTOS) {
   // Orientation first, as its own pass, so every crop below is measured
   // against the image the way it is actually seen.
   let buf = await sharp(input).rotate().toBuffer();
+  if (p.turn) buf = await sharp(buf).rotate(p.turn).toBuffer();
   if (p.trim) buf = await sharp(buf).trim({ threshold: 24 }).toBuffer();
 
   if (p.crop) {
