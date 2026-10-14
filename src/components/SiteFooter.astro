@@ -154,15 +154,19 @@ const year = new Date().getFullYear();
         >
           {disciplines.head}
         </h2>
+        {/* The dash before each discipline is the approved design's
+            marker, drawn by `.kd-dash` in global.css: the copy holds
+            no dash character (CLAUDE.md, no em dashes). The item sits
+            tight against its tags on purpose: whitespace before it would
+            render as a second word space after the marker, and an
+            in-page edit (which trims) would then take it away again. */}
         <ul class="mt-20 flex flex-col gap-12">
           {
             disciplines.items.map((item, i) => (
               <li
-                class="text-body-sm text-kd-slate"
+                class="kd-dash text-body-sm text-kd-slate"
                 data-edit={`${page}.footer.columns.disciplines.items.${i}`}
-              >
-                {item}
-              </li>
+              >{item}</li>
             ))
           }
         </ul>

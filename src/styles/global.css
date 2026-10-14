@@ -45,6 +45,29 @@
   }
 }
 
+/* Footer "Core Disciplines" list marker. The approved frame sets each
+   item after a dash; the client's no-em-dash rule (14 Oct 2026) took the
+   character out of the copy, so the dash is drawn here instead, to the
+   measure of the glyph it replaces: Inter's em dash at the item's 14px
+   is a full 1em long, and the word space after it is 0.28125em, so the
+   text starts where it always did. The stroke is 1.1px, which a screen
+   draws as one pixel: the design's 1px hairline does the same. Raised
+   4px off the baseline, a whole number on purpose: the glyph's row moves
+   with its baseline in whole pixels, and a fractional raise snapped a
+   pixel low on some items and not others. Measured against the glyph,
+   item by item, at 1x and 2x: same rows. Drawn in currentColor, so it is
+   slate like the text. Nothing in the copy, nothing for a screen reader
+   to announce, nothing for the editor to see. */
+.kd-dash::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: var(--kd-hairline);
+  margin-right: 0.28125em;
+  vertical-align: 4px;
+  background-color: currentColor;
+}
+
 /* Nav drop-down (Projects, About) while the bar is transparent over the
    homepage hero — Nav.astro sets data-transparent on the header only
    there, only at ≥1080px, and removes it once the hero scrolls out from
