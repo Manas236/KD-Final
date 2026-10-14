@@ -8,9 +8,10 @@
    MOTION ONLY. Nothing in this file may change where anything sits, how
    big it is, or what colour it rests at. Every rule animates opacity or
    transform from a starting point back to the element's own resting
-   style; the one exception is the easing of a link's EXISTING hover
-   colour. When an animation has finished, the page is the approved
-   page, element for element.
+   style; the exceptions are the easing of a link's EXISTING hover
+   colour and the nav menu panel's unroll, a clip-path that ends on
+   clipping nothing. When an animation has finished, the page is the
+   approved page, element for element.
 
    TIMING lives in one place, §0 just below: every duration, stagger,
    travel distance and curve, and the point at which the scroll reveal
@@ -37,7 +38,8 @@
    Hover adds `(hover: hover)`, so nothing happens on touch screens.
 
    Each `@keyframes` has a `from` and no `to`, so it always ends on the
-   element's own resting style, whatever that is. `backwards` holds the
+   element's own resting style, whatever that is (kd-unroll alone has a
+   `to`, see §1). `backwards` holds the
    starting frame only while an item waits out its delay, and leaves
    nothing behind once the animation has played. Where something both
    fades and moves, the two are separate animations so each can take
@@ -63,13 +65,22 @@
   --kd-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --kd-motion-ease-soft: cubic-bezier(0.5, 1, 0.89, 1);
 
-  /* §1 Nav menus (About, Projects). The panel fades; its items drop
-     into place one after another, five of them done by about 900ms.
-     Closing is always instant. */
+  /* §1 Nav menus (About, Projects). The panel fades in and unrolls
+     downward from the bar while its items drop into place one after
+     another, five of them done by about 900ms. Closing is always
+     instant. */
   --kd-motion-menu-panel: calc(250ms * var(--kd-motion-pace));
   --kd-motion-menu-item: calc(450ms * var(--kd-motion-pace));
   --kd-motion-menu-step: calc(110ms * var(--kd-motion-pace));
   --kd-motion-menu-travel: 10px;
+  /* The unroll. Its bottom edge reaches the foot of the panel this long
+     after the last item starts (690ms for the five items About and
+     Projects each hold now), on a near-even curve that only slows at the end,
+     so the edge stays about half an item ahead of the items and each
+     drops into space just opened. A box that arrived whole and then
+     filled read as rigid (the user, 14 Oct 2026). */
+  --kd-motion-menu-unroll-lead: calc(250ms * var(--kd-motion-pace));
+  --kd-motion-ease-unroll: cubic-bezier(0.33, 0.33, 0.5, 1);
   /* The phone drawer: the same panel and items, a closer step, and
      however long the list, its last link starts by this time. */
   --kd-motion-drawer-step: calc(70ms * var(--kd-motion-pace));
@@ -108,8 +119,11 @@
    group-focus-within). Going from none to block starts these
    animations each time a menu opens; going back to none ends them at
    once, so closing is instant and never staggered. Opacity and
-   transform never stop a link from taking a click or focus, so an item
-   is usable from the moment its menu opens. */
+   transform never stop a link from taking a click or focus. The
+   unroll's clip does, for the part of the panel not yet opened, but its
+   edge runs ahead of the items, so every item that can be seen can be
+   clicked. The pointer's way down is never cut: the wrapper Nav.astro
+   hangs the panel in is not clipped and keeps the menu open. */
 @keyframes kd-fade {
   from {
     opacity: 0;
@@ -123,11 +137,51 @@
   }
 }
 
+/* The panel unrolls from its top edge (the bar) down. The one keyframe
+   with a `to`: a clip-path cannot blend into `none`, only into another
+   inset(), so it ends on inset(0), which clips nothing. The animation
+   does not fill forwards, so once it has run the panel rests on its own
+   clip-path, none, as before. A clip never moves layout. */
+@keyframes kd-unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
 @media screen and (prefers-reduced-motion: no-preference) {
+  /* How many items the menu holds, for the unroll's length. Counted
+     with :has(), up to six like the stagger below. Without :has()
+     support the count stays at 1 and the panel simply unrolls faster. */
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu {
+    --kd-menu-n: 1;
+  }
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu:has(> li:nth-child(2)) {
+    --kd-menu-n: 2;
+  }
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu:has(> li:nth-child(3)) {
+    --kd-menu-n: 3;
+  }
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu:has(> li:nth-child(4)) {
+    --kd-menu-n: 4;
+  }
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu:has(> li:nth-child(5)) {
+    --kd-menu-n: 5;
+  }
+  :root.kd-motion:not([data-nt-mode]) .kd-nav-menu:has(> li:nth-child(6)) {
+    --kd-menu-n: 6;
+  }
+
   /* Declared only while a menu is open, so a closed menu carries no
-     animation at all. The panel, frosted or solid, only fades. */
+     animation at all. The panel, frosted or solid, fades in and unrolls
+     down until just after its last item has started. */
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu {
-    animation: kd-fade var(--kd-motion-menu-panel) var(--kd-motion-ease-soft) backwards;
+    animation:
+      kd-fade var(--kd-motion-menu-panel) var(--kd-motion-ease-soft) backwards,
+      kd-unroll calc((var(--kd-menu-n) - 1) * var(--kd-motion-menu-step) + var(--kd-motion-menu-unroll-lead))
+        var(--kd-motion-ease-unroll) backwards;
   }
 
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li {
