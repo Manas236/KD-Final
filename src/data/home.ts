@@ -24,7 +24,7 @@
 /* The hero's sub-paragraph. Until 2026-10-12 it was the page's meta
    description as well, word for word. */
 const HERO_SUB =
-  "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — a full-spectrum EPC " +
+  "Kailashchandra Dilipkumar Constructions Pvt. Ltd. is a full-spectrum EPC " +
   "contractor spanning civil, structural steel fabrication & erection, " +
   "mechanical, electrical, signalling & telecommunication, and track " +
   "engineering across Indian Railways and public infrastructure.";
@@ -35,7 +35,7 @@ const HERO_SUB =
    claim, 155 characters at most, nothing in it the paragraph does not
    say. Change one, read the other. */
 const META_DESCRIPTION =
-  "K.D. Constructions — a full-spectrum EPC contractor for Indian Railways and public " +
+  "K.D. Constructions. A full-spectrum EPC contractor for Indian Railways and public " +
   "infrastructure: civil, steel, mechanical, electrical, signalling, track.";
 
 export interface NavLink {
@@ -174,14 +174,14 @@ export const home = {
     quote: '"Fifty-three years is not time kept. It is trust, compounded."',
     body1:
       "What began in 1973 as a partnership firm delivering early Maharashtra " +
-      "PWD works has grown into a full-spectrum EPC delivery partner — " +
+      "PWD works has grown into a full-spectrum EPC delivery partner, " +
       "spanning civil, structural steel fabrication & erection, mechanical, " +
       "electrical, signalling & telecommunication, and track engineering, " +
       "with a growing footprint across Indian Railways infrastructure, " +
       "government bodies, and urban development.",
     body2:
       "Headquartered in Vashi, Navi Mumbai, K.D. Constructions has chosen, " +
-      "year after year, to endure, to evolve, and to lead — reinvesting " +
+      "year after year, to endure, to evolve, and to lead: reinvesting " +
       "retained earnings rather than distributing them, building a " +
       "zero-tolerance quality culture aligned with Railway Board standards, " +
       "and reinforced by ISO 9001:2015, ISO 14001:2015 and ISO 45001:2018 " +
@@ -202,14 +202,14 @@ export const home = {
         title: "Civil Engineering",
         body:
           "Railway stations, foot overbridges, bridges, workshops, depots, " +
-          "earthworks, and rail corridors — the foundation of our " +
+          "earthworks, and rail corridors: the foundation of our " +
           "integrated EPC delivery.",
       },
       {
         num: "02",
         title: "Mechanical Engineering",
         body:
-          "Inspection sheds, heavy repair sheds, and workshop systems — " +
+          "Inspection sheds, heavy repair sheds, and workshop systems, " +
           "plus specialised railway machinery sourced from OEMs and " +
           "supported through the DLP period.",
       },
@@ -226,7 +226,7 @@ export const home = {
         title: "Steel Fabrication & Erection",
         body:
           "Girders and trusses fabricated at our own plant in Vindhane, " +
-          "Raigad, then launched and erected on site — including FOBs " +
+          "Raigad, then launched and erected on site, including FOBs " +
           "over running railway lines.",
       },
     ] as readonly CapabilityCard[],
@@ -277,7 +277,7 @@ export const home = {
       {
         title: "Financial Discipline",
         body:
-          "Retained earnings reinvested — never distributed. A zero-tolerance " +
+          "Retained earnings reinvested, never distributed. A zero-tolerance " +
           "quality culture aligned with Railway Board standards.",
       },
       {
@@ -285,7 +285,7 @@ export const home = {
         body:
           "Civil, structural steel, mechanical, electrical, signalling & " +
           "telecom, and track engineering delivered in-house. Self-owned " +
-          "50+ unit equipment fleet — zero rental leakage.",
+          "50+ unit equipment fleet. Zero rental leakage.",
       },
     ] as readonly DifferentiatorCard[],
   },
@@ -329,12 +329,12 @@ export const home = {
       disciplines: {
         head: "Core Disciplines",
         items: [
-          "— Civil Engineering",
-          "— Steel Fabrication & Erection",
-          "— Track Engineering",
-          "— Electrical Engineering",
-          "— Mechanical Engineering",
-          "— Signalling & Telecommunication",
+          "Civil Engineering",
+          "Steel Fabrication & Erection",
+          "Track Engineering",
+          "Electrical Engineering",
+          "Mechanical Engineering",
+          "Signalling & Telecommunication",
         ] as readonly string[],
       },
     },

@@ -55,7 +55,7 @@ const chrome = { nav: home.nav, footer: home.footer };
 
 export const privacy: LegalPageCopy = {
   meta: {
-    title: "Privacy Policy — K.D. Constructions",
+    title: "Privacy Policy | K.D. Constructions",
     description:
       "What personal information the K.D. Constructions website collects, why, who sees it, how " +
       "long it is kept, and how to have it deleted.",
@@ -84,8 +84,8 @@ export const privacy: LegalPageCopy = {
       body: [
         "You can read every page of this website without telling us who you are. We do not use " +
           "analytics, advertising or tracking tools, and we do not build profiles of visitors.",
-        "Like any website, our server records technical details of each request — such as the IP " +
-          "address, the page asked for and the browser used — to keep the site running and secure. " +
+        "Like any website, our server records technical details of each request, such as the IP " +
+          "address, the page asked for and the browser used, to keep the site running and secure. " +
           "These records are not used to identify you.",
       ],
     },
@@ -98,12 +98,13 @@ export const privacy: LegalPageCopy = {
         "your name, email address and phone number;",
         "the role you are applying for, and any message you add;",
         "your resume, and anything it contains;",
-        "the IP address and browser your application was sent from, and the time it was sent — " +
-          "used only to protect the form from spam and abuse.",
+        "the IP address and browser your application was sent from, and the time it was sent: " +
+          "we use these only to protect the form from spam and abuse.",
       ],
       after: [
-        "We use this information only to consider you for roles at K.D. Constructions — now and, " +
-          "unless you tell us otherwise, for roles that open later — and to contact you about them. " +
+        "We use this information only to consider you for roles at K.D. Constructions and to " +
+          "contact you about them. That covers roles open now and, unless you tell us otherwise, " +
+          "roles that open later. " +
           "By sending the form you consent to this use. We do not use it for marketing, and we do " +
           "not sell it or share it with anyone outside the company.",
       ],
@@ -182,7 +183,7 @@ export const privacy: LegalPageCopy = {
 
 export const terms: LegalPageCopy = {
   meta: {
-    title: "Terms of Use — K.D. Constructions",
+    title: "Terms of Use | K.D. Constructions",
     description:
       "The terms on which the K.D. Constructions website and its content may be used.",
   },
@@ -241,7 +242,7 @@ export const terms: LegalPageCopy = {
       body: [
         "Sending an application through this site does not guarantee an interview or a job. How we " +
           "handle the information you send is set out in our Privacy Policy.",
-        "K.D. Constructions never asks candidates for money — no fee for an application, interview, " +
+        "K.D. Constructions never asks candidates for money: no fee for an application, interview, " +
           "training, uniform or offer letter. Genuine messages from us come from an " +
           "@kdconstructions.net email address. If anyone asks you for payment in our name, do not " +
           "pay, and tell us at hr@kdconstructions.net.",
@@ -250,7 +251,7 @@ export const terms: LegalPageCopy = {
     {
       heading: "Links to other websites",
       body: [
-        "This site links to other websites — such as LinkedIn, job portals and Google Maps — for " +
+        "This site links to other websites, such as LinkedIn, job portals and Google Maps, for " +
           "your convenience. We do not control them and are not responsible for their content or " +
           "their privacy practices.",
       ],

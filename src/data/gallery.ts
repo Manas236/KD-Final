@@ -382,15 +382,15 @@ export const plantGalleries: readonly ProjectGallery[] = [
    individual health screening, open corrective actions or signed audit
    sheets (OPEN-QUESTIONS.md #42). */
 export const hseReportPhotos: readonly GalleryPhoto[] = [
-  { file: "hse-national-safety-week-karjat.jpg", caption: "National Safety Week at Karjat — 3,00,000 safe man-hours without a lost-time injury" },
-  { file: "hse-national-safety-day-mankhurd.jpg", caption: "National Safety Day at Mankhurd Station — safety pledge and awards" },
+  { file: "hse-national-safety-week-karjat.jpg", caption: "National Safety Week at Karjat: 3,00,000 safe man-hours without a lost-time injury" },
+  { file: "hse-national-safety-day-mankhurd.jpg", caption: "National Safety Day at Mankhurd Station: safety pledge and awards" },
   { file: "hse-medical-camp-mankhurd.jpg", caption: "Free medical camp at Mankhurd for 88 workers and staff" },
   { file: "hse-lifting-training-govandi.jpg", caption: "Lifting procedure and tools-and-tackles training at Govandi" },
   { file: "hse-air-monitoring-mankhurd.jpg", caption: "Ambient air-quality monitoring on the Mankhurd site" },
   { file: "hse-world-environment-day.jpg", caption: "The site workforce marks World Environment Day" },
   { file: "hse-worker-recognition.jpg", caption: "Prize distribution for safe work on site" },
   /* Appended 2026-10-09, so no earlier caption key moves. */
-  { file: "hse-electrical-shock-drill-mankhurd.jpg", caption: "Electrical-shock mock drill at Mankhurd — the casualty is moved to a standby ambulance" },
+  { file: "hse-electrical-shock-drill-mankhurd.jpg", caption: "Electrical-shock mock drill at Mankhurd: the casualty is moved to a standby ambulance" },
 ];
 
 /* Two mock drills, supplied 2026-10-13 (OPEN-QUESTIONS.md #44): all ten
@@ -400,21 +400,21 @@ export const hseReportPhotos: readonly GalleryPhoto[] = [
    are also tiles on /hse (pages.ts). Listed after hseReportPhotos, so
    no earlier photograph in the group moves. */
 export const hseDrillPhotos: readonly GalleryPhoto[] = [
-  { file: "hse-heat-stress-drill-01.jpg", caption: "Heat-stress mock drill — a workman in a full-body harness on the scaffold tower" },
-  { file: "hse-heat-stress-drill-02.jpg", caption: "Heat-stress mock drill — the casualty down on the deck" },
-  { file: "hse-heat-stress-drill-03.jpg", caption: "Heat-stress mock drill — the supervisor raises the alarm by phone" },
-  { file: "hse-heat-stress-drill-04.jpg", caption: "Heat-stress mock drill — the casualty is carried clear of the work area" },
-  { file: "hse-heat-stress-drill-05.jpg", caption: "Heat-stress mock drill — a responder checks the casualty on the stretcher" },
-  { file: "hse-heat-stress-drill-06.jpg", caption: "Heat-stress mock drill — the casualty is strapped to the stretcher" },
-  { file: "hse-heat-stress-drill-07.jpg", caption: "Heat-stress mock drill — the stretcher is lifted" },
-  { file: "hse-heat-stress-drill-08.jpg", caption: "Heat-stress mock drill — four men carry the stretcher out" },
-  { file: "hse-heat-stress-drill-09.jpg", caption: "Heat-stress mock drill — the stretcher team on the move" },
-  { file: "hse-heat-stress-drill-10.jpg", caption: "Heat-stress mock drill — head count and debrief with the crew" },
-  { file: "hse-karjat-height-drill-01.jpg", caption: "Work-at-height mock drill at Karjat — the crew attends the casualty at the foot of the scaffold" },
-  { file: "hse-karjat-height-drill-02.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is lifted on the stretcher" },
-  { file: "hse-karjat-height-drill-03.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is carried to a vehicle" },
-  { file: "hse-karjat-height-drill-04.jpg", caption: "Work-at-height mock drill at Karjat — the casualty is loaded into the vehicle" },
-  { file: "hse-karjat-height-drill-05.jpg", caption: "Work-at-height mock drill at Karjat — head count after the drill" },
+  { file: "hse-heat-stress-drill-01.jpg", caption: "Heat-stress mock drill: a workman in a full-body harness on the scaffold tower" },
+  { file: "hse-heat-stress-drill-02.jpg", caption: "Heat-stress mock drill: the casualty down on the deck" },
+  { file: "hse-heat-stress-drill-03.jpg", caption: "Heat-stress mock drill: the supervisor raises the alarm by phone" },
+  { file: "hse-heat-stress-drill-04.jpg", caption: "Heat-stress mock drill: the casualty is carried clear of the work area" },
+  { file: "hse-heat-stress-drill-05.jpg", caption: "Heat-stress mock drill: a responder checks the casualty on the stretcher" },
+  { file: "hse-heat-stress-drill-06.jpg", caption: "Heat-stress mock drill: the casualty is strapped to the stretcher" },
+  { file: "hse-heat-stress-drill-07.jpg", caption: "Heat-stress mock drill: the stretcher is lifted" },
+  { file: "hse-heat-stress-drill-08.jpg", caption: "Heat-stress mock drill: four men carry the stretcher out" },
+  { file: "hse-heat-stress-drill-09.jpg", caption: "Heat-stress mock drill: the stretcher team on the move" },
+  { file: "hse-heat-stress-drill-10.jpg", caption: "Heat-stress mock drill: head count and debrief with the crew" },
+  { file: "hse-karjat-height-drill-01.jpg", caption: "Work-at-height mock drill at Karjat: the crew attends the casualty at the foot of the scaffold" },
+  { file: "hse-karjat-height-drill-02.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is lifted on the stretcher" },
+  { file: "hse-karjat-height-drill-03.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is carried to a vehicle" },
+  { file: "hse-karjat-height-drill-04.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is loaded into the vehicle" },
+  { file: "hse-karjat-height-drill-05.jpg", caption: "Work-at-height mock drill at Karjat: head count after the drill" },
 ];
 
 /* Health, Safety & Environment — the Mankhurd 75,000 safe man-hours

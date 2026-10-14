@@ -52,9 +52,9 @@ export type PlantListItem =
 
 export const plant = {
   meta: {
-    title: "Vindhane Steel Fabrication Plant — K.D. Constructions",
+    title: "Vindhane Steel Fabrication Plant | K.D. Constructions",
     description:
-      "K.D. Constructions' own steel fabrication plant at Vindhane, Uran, Raigad — " +
+      "K.D. Constructions' own steel fabrication plant at Vindhane, Uran, Raigad: " +
       "girders, trusses, FOBs, cover-over-platforms, roofing and industrial sheds.",
   },
   nav: home.nav,
@@ -95,8 +95,8 @@ export const plant = {
     overviewKicker: "The Plant",
     body: [
       "K.D. Constructions' in-house steel fabrication facility at Vindhane, Uran, Raigad, " +
-        "gives the company direct control over structural steel production — quality, " +
-        "cost and delivery schedules — for railway structures, bridges, FOBs, girders, " +
+        "gives the company direct control over the quality, cost and delivery schedules of " +
+        "structural steel production for railway structures, bridges, FOBs, girders, " +
         "cover-over-platforms, steel roofing systems, large-span industrial sheds and " +
         "other structural works.",
       "The plant is equipped with welding, bending and cutting machinery and fabricates " +
@@ -105,10 +105,10 @@ export const plant = {
       /* K.D.'s own LinkedIn posts, supplied by the user on 2026-09-28.
          No length is on record for the girder, so none is given. */
       "A 20-tonne EOT crane, now fully operational, makes heavy lifts safer and material " +
-        "handling faster — and the plant has recently fabricated the longest girder in its " +
+        "handling faster, and the plant has recently fabricated the longest girder in its " +
         "history.",
       "With fabrication in-house and an owned crane fleet for erection, K.D. controls the " +
-        "full chain from shop floor to final alignment — which matters most where a launch " +
+        "full chain from shop floor to final alignment, which matters most where a launch " +
         "happens within a live railway environment with overhead OHE.",
     ],
 
@@ -170,7 +170,7 @@ export const plant = {
       heading: "From shop floor to final alignment.",
       body:
         "Girders and trusses fabricated at Vindhane are launched and erected by K.D.'s own " +
-        "crane fleet — including over running railway lines with overhead OHE. At the Vashi " +
+        "crane fleet, including over running railway lines with overhead OHE. At the Vashi " +
         "FOB the structure was lifted into place with two 650-tonne telescopic cranes; on " +
         "the Harbour Line, FOBs were launched at four locations, with spans of 44.5 m + " +
         "24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.",

@@ -73,7 +73,7 @@ const chrome = { nav: home.nav, footer: home.footer };
 
 export const capabilities: InfoPageCopy = {
   meta: {
-    title: "Capabilities — K.D. Constructions",
+    title: "Capabilities | K.D. Constructions",
     description:
       "Civil, steel, track, electrical, mechanical and signalling & telecommunication " +
       "engineering, backed by in-house steel fabrication, RMC and a 50+ unit fleet.",
@@ -96,12 +96,12 @@ export const capabilities: InfoPageCopy = {
           title: "Civil Engineering",
           body:
             "Railway stations, foot overbridges, bridges, buildings, workshops, depots, earthworks " +
-            "and rail corridors — the foundation of our integrated EPC delivery.",
+            "and rail corridors: the foundation of our integrated EPC delivery.",
         },
         {
           title: "Steel Fabrication & Erection",
           body:
-            "Girders, trusses, FOBs, cover-over-platforms, steel roofing and large-span sheds — " +
+            "Girders, trusses, FOBs, cover-over-platforms, steel roofing and large-span sheds, " +
             "fabricated at our Vindhane plant or on site, then launched and erected, including " +
             "over running railway lines with overhead OHE.",
         },
@@ -121,7 +121,7 @@ export const capabilities: InfoPageCopy = {
           title: "Mechanical Engineering",
           body:
             "Railway sheds, inspection and heavy repair facilities, workshops and mechanical " +
-            "installations — plus OEM-sourced railway machinery with maintenance support through " +
+            "installations, plus OEM-sourced railway machinery with maintenance support through " +
             "the DLP period.",
         },
         {
@@ -161,7 +161,7 @@ export const capabilities: InfoPageCopy = {
       heading: "From the first foundation to final commissioning.",
       intro:
         "Together, these capabilities allow K.D. Constructions to deliver end-to-end turnkey " +
-        "infrastructure solutions — with greater control, accountability and reliability at " +
+        "infrastructure solutions, with greater control, accountability and reliability at " +
         "every stage.",
       items: [
         { title: "Engineering Expertise" },
@@ -180,7 +180,7 @@ export const capabilities: InfoPageCopy = {
 
 export const resources: InfoPageCopy = {
   meta: {
-    title: "Resources — K.D. Constructions",
+    title: "Resources | K.D. Constructions",
     description:
       "An in-house steel fabrication plant at Vindhane, an RMC plant at Karjat and 50+ " +
       "self-owned heavy equipment units.",
@@ -190,8 +190,8 @@ export const resources: InfoPageCopy = {
     kicker: "Resources",
     title: "Owned plant. Owned fleet.",
     sub:
-      "An integrated resource base — 50+ heavy equipment units, an in-house steel fabrication " +
-      "plant and an RMC plant — gives us control over supply, quality and delivery.",
+      "An integrated resource base of 50+ heavy equipment units, an in-house steel fabrication " +
+      "plant and an RMC plant gives us control over supply, quality and delivery.",
   },
   sections: [
     {
@@ -199,16 +199,16 @@ export const resources: InfoPageCopy = {
       heading: "Two plants under our own control.",
       items: [
         {
-          title: "Steel Fabrication Plant — Vindhane, Raigad",
+          title: "Steel Fabrication Plant, Vindhane, Raigad",
           body:
             "Welding, bending and cutting lines producing girders, trusses, roofing systems and " +
-            "sheds for railway structures, bridges and FOBs — with greater control over quality, " +
+            "sheds for railway structures, bridges and FOBs, with greater control over quality, " +
             "cost and delivery schedules.",
           /* The plant's own page — OPEN-QUESTIONS.md #33. */
           links: [{ label: "About the plant", href: "/resources/vindhane-plant" }],
         },
         {
-          title: "RMC Plant — Karjat",
+          title: "RMC Plant, Karjat",
           body:
             "Ready-mix concrete supply with greater control over quality, consistency, availability " +
             "and project scheduling, reducing dependence on external suppliers.",
@@ -285,9 +285,9 @@ export interface HseCopy extends InfoPageCopy {
 
 export const hse: HseCopy = {
   meta: {
-    title: "Health, Safety & Environment — K.D. Constructions",
+    title: "Health, Safety & Environment | K.D. Constructions",
     description:
-      "HSE is part of every priority at K.D. Constructions — certified to ISO 45001:2018 and " +
+      "HSE is part of every priority at K.D. Constructions, certified to ISO 45001:2018 and " +
       "ISO 14001:2015.",
   },
   ...chrome,
@@ -346,7 +346,7 @@ export const hse: HseCopy = {
           title: "Other certifications & certificate details",
           body:
             "Certificate numbers, validity dates and the certifying bodies for the three ISO " +
-            "standards, plus any further accreditation K.D. Constructions holds — RDSO " +
+            "standards, plus any further accreditation K.D. Constructions holds: RDSO " +
             "approvals, the Rail Chamber membership certificate, or others.",
         },
       ],
@@ -363,7 +363,7 @@ export const hse: HseCopy = {
         kicker: "Emergency Preparedness",
         heading: "Drilled until it is routine.",
         intro:
-          "Mock drills run on live sites, with the real equipment and the crews who would use it — " +
+          "Mock drills run on live sites, with the real equipment and the crews who would use it, " +
           "so the first minutes of a real emergency are ones everyone has already rehearsed.",
         media: [
           {
@@ -427,7 +427,7 @@ export const hse: HseCopy = {
             title: "Fire extinguishers kept in service",
             where: "Every site",
             body:
-              "Extinguishers are tracked and sent for refilling when due — seven 6 kg DCP units " +
+              "Extinguishers are tracked and sent for refilling when due: seven 6 kg DCP units " +
               "at Mankhurd this September.",
           },
           {
@@ -475,10 +475,10 @@ export const hse: HseCopy = {
               "The scenario: a workman falls from a scaffold while welding. Seven minutes pass " +
               "between the fall and the casualty leaving for hospital.",
             points: [
-              "14:53 — the workman falls from the scaffold.",
-              "14:55 — the supervisor alerts the project manager and the safety officer.",
+              "At 14:53 the workman falls from the scaffold.",
+              "At 14:55 the supervisor alerts the project manager and the safety officer.",
               "The safety officer checks pulse and condition; a medical emergency is declared.",
-              "15:00 — the evacuation team has the casualty in a vehicle, bound for hospital.",
+              "At 15:00 the evacuation team has the casualty in a vehicle, bound for hospital.",
             ],
           },
         ],
@@ -521,7 +521,7 @@ export const hse: HseCopy = {
           {
             file: "hse-medical-camp-mankhurd.jpg",
             alt: "Workers queue outside the Mankhurd site office beside the free medical camp banner and K.D. safety posters",
-            title: "Free medical camp — 88 workers and staff",
+            title: "Free medical camp for 88 workers and staff",
             where: "Mankhurd Station · 12 September 2026",
           },
         ],
@@ -567,7 +567,7 @@ export const hse: HseCopy = {
         ],
         statsNote:
           "Air and noise: Govandi Station FOB, 26 September 2026. Electrical audit: Chowk, " +
-          "September 2026 — overall result satisfactory.",
+          "September 2026, overall result satisfactory.",
         media: [
           {
             file: "hse-air-monitoring-mankhurd.jpg",
@@ -665,9 +665,9 @@ export const hse: HseCopy = {
    it; the resolution is the client's, and PRE-LAUNCH.md asks. */
 export const csr: InfoPageCopy = {
   meta: {
-    title: "Corporate Social Responsibility — K.D. Constructions",
+    title: "Corporate Social Responsibility | K.D. Constructions",
     description:
-      "K.D. Constructions extends its philosophy of care beyond the worksite — workforce " +
+      "K.D. Constructions extends its philosophy of care beyond the worksite: workforce " +
       "health, community impact and environmental responsibility.",
   },
   ...chrome,
@@ -687,12 +687,12 @@ export const csr: InfoPageCopy = {
           title: "Workforce Health & Safety",
           body:
             "Medical fitness screening, HIV/AIDS awareness programmes, and guaranteed clean " +
-            "water access for every worker on every site — not as compliance, but as culture.",
+            "water access for every worker on every site, not as compliance, but as culture.",
         },
         {
           title: "Community Impact",
           body:
-            "Our infrastructure work directly serves the public — from the Matunga Z-Bridge " +
+            "Our infrastructure work directly serves the public, from the Matunga Z-Bridge " +
             "restoring a daily commute for lakhs of residents, to station redevelopments " +
             "serving 45,000+ commuters a day. We see every project as a community investment.",
         },
@@ -717,7 +717,7 @@ export const csr: InfoPageCopy = {
           pending: "To be added",
           title: "Formal CSR programmes",
           body:
-            "Any structured CSR activity the company runs or funds — what it is, where, since " +
+            "Any structured CSR activity the company runs or funds: what it is, where, since " +
             "when, and the annual spend. If K.D. Constructions falls below the Companies Act " +
             "§135 threshold, \"not applicable\" is a complete answer.",
         },
@@ -725,7 +725,7 @@ export const csr: InfoPageCopy = {
           pending: "To be added",
           title: "Community partnerships",
           body:
-            "Local initiatives near project sites and offices — Dhule, Navi Mumbai, Raigad — " +
+            "Local initiatives near project sites and offices in Dhule, Navi Mumbai and Raigad, " +
             "and the NGOs, trusts, schools or civic bodies the company works with.",
         },
         {
@@ -764,9 +764,9 @@ export const csr: InfoPageCopy = {
    office. */
 export const company: InfoPageCopy = {
   meta: {
-    title: "Company — K.D. Constructions · Formation & Board of Directors",
+    title: "Company | K.D. Constructions · Formation & Board of Directors",
     description:
-      "Kailashchandra Dilipkumar Constructions Pvt. Ltd. — founded in Dhule in 1973 as a " +
+      "Kailashchandra Dilipkumar Constructions Pvt. Ltd. Founded in Dhule in 1973 as a " +
       "partnership, incorporated as a Private Limited company in August 2004.",
   },
   ...chrome,
@@ -787,7 +787,7 @@ export const company: InfoPageCopy = {
           title: "1973 · Partnership firm",
           body:
             "K.D. Constructions began in Dhule, Maharashtra, as a partnership firm undertaking " +
-            "early Maharashtra state PWD works — the years that set its engineering discipline " +
+            "early Maharashtra state PWD works, the years that set its engineering discipline " +
             "and financial prudence.",
         },
         {
@@ -830,7 +830,7 @@ export const company: InfoPageCopy = {
           role: "Founding Director",
           portrait: "kailash-s-gindodia.jpg",
           body:
-            "Five decades at the helm — the architect of the firm's enduring principles of " +
+            "Five decades at the helm, the architect of the firm's enduring principles of " +
             "precision, discipline, and engineering integrity.",
         },
         {
@@ -838,7 +838,7 @@ export const company: InfoPageCopy = {
           role: "Director",
           portrait: "sarita-k-gindodia.jpg",
           body:
-            "Guides corporate strategy, financial strength, and governance — the quiet framework " +
+            "Guides corporate strategy, financial strength, and governance: the quiet framework " +
             "behind sustainable growth.",
         },
         /* Order set by the client on 2026-10-13: Kailash, Sarita, Shiv,
@@ -850,7 +850,7 @@ export const company: InfoPageCopy = {
           role: "Director · Inducted 2017",
           portrait: "shiv-k-gindodia.jpg",
           body:
-            "Carries the firm into its modern era — advancing technology, sustainable " +
+            "Carries the firm into its modern era, advancing technology, sustainable " +
             "development, HSE excellence, and a broader EPC horizon.",
         },
         {
@@ -873,7 +873,7 @@ export const company: InfoPageCopy = {
 
 export const clients: InfoPageCopy = {
   meta: {
-    title: "Clients — K.D. Constructions",
+    title: "Clients | K.D. Constructions",
     description:
       "Trusted partner to Indian Railways, Central Railway, Western Railway, MRVC, IRCON, CIDCO, " +
       "NMMC, JNPT, the Food Corporation of India and Balbharati.",
@@ -999,9 +999,9 @@ export interface ContactCopy extends InfoPageCopy {
 
 export const contact: ContactCopy = {
   meta: {
-    title: "Contact — K.D. Constructions",
+    title: "Contact | K.D. Constructions",
     description:
-      "Contact K.D. Constructions at Real Tech Park, Vashi, Navi Mumbai — 022-2781 5380, " +
+      "Contact K.D. Constructions at Real Tech Park, Vashi, Navi Mumbai: 022-2781 5380, " +
       "infra@kdconstructions.net.",
   },
   ...chrome,
@@ -1142,9 +1142,9 @@ export interface CareersCopy extends InfoPageCopy {
 
 export const careers: CareersCopy = {
   meta: {
-    title: "Careers — K.D. Constructions",
+    title: "Careers | K.D. Constructions",
     description:
-      "Careers at K.D. Constructions — railway and public infrastructure across Maharashtra " +
+      "Careers at K.D. Constructions: railway and public infrastructure across Maharashtra " +
       "since 1973. See current openings and apply online with your resume.",
   },
   ...chrome,
@@ -1153,7 +1153,7 @@ export const careers: CareersCopy = {
     title: "Build what Maharashtra runs on.",
     sub:
       "Join the team delivering railway stations, foot overbridges, workshops and public " +
-      "infrastructure across Maharashtra — with five decades of engineering discipline behind " +
+      "infrastructure across Maharashtra, with five decades of engineering discipline behind " +
       "every project.",
   },
   sections: [
@@ -1191,7 +1191,7 @@ export const careers: CareersCopy = {
         {
           title: "Five decades of delivery",
           body:
-            "Building since 1973 — from Maharashtra PWD works in Dhule to railway workshops, " +
+            "Building since 1973, from Maharashtra PWD works in Dhule to railway workshops, " +
             "depots and stations across Mumbai.",
         },
         {
@@ -1222,7 +1222,7 @@ export const careers: CareersCopy = {
           title: "Apply on this page",
           body:
             "Fill in your details, choose the role and attach your resume. It goes straight to " +
-            "our HR team — no account needed.",
+            "our HR team. No account needed.",
           links: [{ label: "Go to the application form", href: "#apply" }],
         },
         {
@@ -1262,7 +1262,7 @@ export const careers: CareersCopy = {
       message: "Anything you would like to add",
       optional: "optional",
     },
-    general: "General application — any suitable role",
+    general: "General application: any suitable role",
     consent:
       "By sending this you agree that K.D. Constructions may keep your details and resume for up " +
       "to 24 months to consider you for current and future roles, as described in our",
@@ -1270,7 +1270,7 @@ export const careers: CareersCopy = {
     submit: "Send application",
     sending: "Sending…",
     success: {
-      heading: "Thank you — your application has been sent.",
+      heading: "Thank you. Your application has been sent.",
       body: "Our HR team has received your details and resume, and will be in touch if there is a match.",
     },
   },

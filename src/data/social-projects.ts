@@ -186,15 +186,15 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered — civil and structural works, finishes, fire systems, services, or part of that.",
+        body: "What K.D. Constructions delivered: civil and structural works, finishes, fire systems, services, or part of that.",
       },
       { pending: TBA, title: "Year completed", body: "The year the building was handed over." },
     ],
     description:
-      "A CIDCO urban health centre at Ulwe, Navi Mumbai — a 20,000 sq ft facility with " +
+      "A CIDCO urban health centre at Ulwe, Navi Mumbai: a 20,000 sq ft facility with " +
       "fire-protection systems and stack parking, completed on schedule.",
     body: [
-      "A CIDCO urban health centre at Ulwe, Navi Mumbai — a 20,000 sq ft facility with " +
+      "A CIDCO urban health centre at Ulwe, Navi Mumbai: a 20,000 sq ft facility with " +
         "fire-protection systems and stack parking, completed within its stipulated timeline.",
     ],
   },
@@ -205,13 +205,13 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Client",
-        body: "Who the school was built for — CIDCO, as its name suggests, or another body.",
+        body: "Who the school was built for: CIDCO, as its name suggests, or another body.",
       },
       { pending: TBA, title: "Built-up area", body: "Built-up area, floors and number of classrooms." },
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered — the whole building, or civil and structural works only.",
+        body: "What K.D. Constructions delivered: the whole building, or civil and structural works only.",
       },
       { pending: TBA, title: "Year completed", body: "The year the school was handed over." },
     ],
@@ -230,7 +230,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered — the whole building, or civil and structural works only.",
+        body: "What K.D. Constructions delivered: the whole building, or civil and structural works only.",
       },
       { pending: TBA, title: "Year completed", body: "The year the building was handed over." },
     ],
@@ -266,7 +266,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
     ],
     description:
-      "CIDCO's Kharghar Valley Golf Course, across 103 hectares in Sector 22, Kharghar — " +
+      "CIDCO's Kharghar Valley Golf Course, across 103 hectares in Sector 22, Kharghar: " +
       "upgraded from 9 to 18 international-standard holes, reopened April 2026.",
     body: [
       "Set across 103 hectares of green hills in Sector 22, opposite Kharghar's Central Park, " +
@@ -300,12 +300,12 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered — the whole building, or civil and structural works only.",
+        body: "What K.D. Constructions delivered: the whole building, or civil and structural works only.",
       },
       { pending: TBA, title: "Year completed", body: "The year the building was completed." },
     ],
     description:
-      "Lush Meadows is a completed residential project at Kharghar, Navi Mumbai — 2 and " +
+      "Lush Meadows is a completed residential project at Kharghar, Navi Mumbai: 2 and " +
       "3 BHK homes, landscaped green spaces, play areas and indoor recreation.",
     body: [
       "Lush Meadows is a completed residential project at Kharghar, Navi Mumbai, offering 2 and " +
@@ -335,7 +335,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered on the stadium — earthworks, pitch, stands, structure, or part of that.",
+        body: "What K.D. Constructions delivered on the stadium: earthworks, pitch, stands, structure, or part of that.",
       },
       { pending: TBA, title: "Year completed", body: "The year K.D.'s works were handed over." },
     ],
@@ -365,7 +365,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       {
         pending: TBA,
         title: "Scope of works",
-        body: "What K.D. Constructions delivered — the pitches, the buildings, site works, or part of that.",
+        body: "What K.D. Constructions delivered: the pitches, the buildings, site works, or part of that.",
       },
       { value: "2022", label: "Pitches inaugurated" },
     ],
@@ -408,7 +408,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       "storm-water drains, water supply lines and sewer lines.",
     body: [
       "15 m and 20 m wide roads across Sectors 8 to 21 of Ghansoli, Navi Mumbai, built up to the " +
-        "first stage of asphalting — with the storm-water drains, water supply lines and sewer " +
+        "first stage of asphalting, with the storm-water drains, water supply lines and sewer " +
         "lines that serve them.",
     ],
     photoNote: IMAGE_NOTE,
@@ -426,7 +426,7 @@ const SOURCES: readonly SocialDetailSource[] = [
       "Integrated development of the 20 m wide peripheral roads in Sectors 19, 21 and 22 of " +
       "Kamothe's Phase II area, Navi Mumbai, under the 12.5% scheme.",
     body: [
-      "Integrated development of the 20 m wide peripheral roads — the balance half carriageway — " +
+      "Integrated development of the balance half carriageway of the 20 m wide peripheral roads " +
         "in Sectors 19, 21 and 22 of Kamothe's Phase II area, under the 12.5% scheme.",
     ],
     photoNote: IMAGE_NOTE,
@@ -560,7 +560,7 @@ function build(item: SocialProject) {
 
   return {
     meta: {
-      title: `${item.title} — K.D. Constructions`,
+      title: `${item.title} | K.D. Constructions`,
       description: src.description ?? src.body[0] ?? `${item.title}, ${place}.`,
     },
     nav: home.nav,

@@ -22,9 +22,9 @@ import { railwayGalleries, socialGalleries, plantGalleries, hseGalleries } from 
 
 export const galleryPage = {
   meta: {
-    title: "Gallery — K.D. Constructions",
+    title: "Gallery | K.D. Constructions",
     description:
-      "Photographs of K.D. Constructions' work — railway stations, sheds, foot " +
+      "Photographs of K.D. Constructions' work: railway stations, sheds, foot " +
       "overbridges and track, public buildings, and its own steel and concrete plants.",
   },
   nav: home.nav,

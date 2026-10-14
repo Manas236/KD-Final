@@ -97,7 +97,7 @@ export const about = {
   /* Head only, and assembled from approved fragments rather than
      written fresh — see OPEN-QUESTIONS.md #7. */
   meta: {
-    title: "About — K.D. Constructions · Founded 1973, Incorporated 2004",
+    title: "About | K.D. Constructions · Founded 1973, Incorporated 2004",
     description: META_DESCRIPTION,
   },
 
@@ -129,14 +129,14 @@ export const about = {
     lead: STORY_LEAD,
     body1:
       "What began in 1973 as a partnership firm delivering early Maharashtra " +
-      "PWD works has grown into a full-spectrum EPC delivery partner — " +
+      "PWD works has grown into a full-spectrum EPC delivery partner, " +
       "spanning civil, structural steel fabrication & erection, mechanical, " +
       "electrical, signalling & telecommunication, and track engineering, " +
       "with a growing footprint across Indian Railways infrastructure, " +
       "government bodies, and urban development.",
     body2:
       "The company has chosen, year after year, to endure, to evolve, and to " +
-      "lead — reinvesting retained earnings rather than distributing them, " +
+      "lead: reinvesting retained earnings rather than distributing them, " +
       "and building a zero-tolerance quality culture aligned with Railway " +
       "Board standards, reinforced by ISO 9001:2015, ISO 14001:2015 and ISO " +
       "45001:2018 certifications and membership of the Chamber of Railway " +
@@ -147,14 +147,14 @@ export const about = {
       value: "₹220 Cr",
       label: "FY2025–26 Revenue",
       body:
-        "2.85× growth from ₹77.14 Cr in FY2020. Revenue reinvested — never " +
-        "distributed — compounding the company's structural capability.",
+        "2.85× growth from ₹77.14 Cr in FY2020. Revenue reinvested, never " +
+        "distributed, compounding the company's structural capability.",
     },
     stats: [
       { value: "₹500 Cr", label: "Vision 2030 Turnover Target" },
       { value: "50+", label: "Self-Owned Equipment Units" },
       { value: "11.2%", label: "Projected CAGR, Indian Construction" },
-      { value: "Zero", label: "Rental Leakage — Full Fleet Ownership" },
+      { value: "Zero", label: "Rental Leakage, Full Fleet Ownership" },
     ] as readonly Stat[],
   },
 
@@ -286,21 +286,21 @@ export const about = {
         name: "Kailash S. Gindodia",
         role: "Founding Director",
         bio:
-          "Five decades at the helm — the architect of the firm's enduring " +
+          "Five decades at the helm, the architect of the firm's enduring " +
           "principles of precision, discipline, and engineering integrity.",
       },
       {
         name: "Shiv K. Gindodia",
         role: "Director · Inducted 2017",
         bio:
-          "Carries the firm into its modern era — advancing technology, " +
+          "Carries the firm into its modern era, advancing technology, " +
           "sustainable development, HSE excellence, and a broader EPC horizon.",
       },
       {
         name: "Sarita K. Gindodia",
         role: "Director",
         bio:
-          "Guides corporate strategy, financial strength, and governance — " +
+          "Guides corporate strategy, financial strength, and governance: " +
           "the quiet framework behind sustainable growth.",
       },
     ] as readonly Director[],

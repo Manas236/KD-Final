@@ -120,7 +120,7 @@ export const projects = {
      the hero sub, which is the one sentence here that says what the
      page is. */
   meta: {
-    title: "Projects — K.D. Constructions · Portfolio",
+    title: "Projects | K.D. Constructions · Portfolio",
     description:
       "Five decades. Six disciplines. A growing national footprint across " +
       "Indian Railways, urban transit, and government infrastructure.",
@@ -161,7 +161,7 @@ export const projects = {
   listing: {
     featured: {
       live: true,
-      statusBadge: "Ongoing — 90%+ Complete",
+      statusBadge: "Ongoing, 90%+ Complete",
       badges: ["Civil"],
       steel: true,
       title: "Panvel–Karjat Railway Line",
@@ -209,7 +209,7 @@ export const projects = {
       },
       {
         live: true,
-        statusBadge: "Ongoing — 60%+ Complete",
+        statusBadge: "Ongoing, 60%+ Complete",
         badges: ["Civil"],
         title: "Mumbai Harbour Line Station Redevelopment",
         meta: "Mumbai Railway Vikas Corporation Ltd · 4 Stations",
@@ -343,7 +343,7 @@ export const projects = {
        `file` is the page's hero frame, resolved by Listing.astro. */
     rmcPlant: {
       badge: "Our Own Plant",
-      title: "RMC Plant — Karjat",
+      title: "RMC Plant, Karjat",
       meta: "Karjat · Raigad",
       body:
         "Ready-mix concrete batched under cover on our own plant, for greater control over " +
@@ -404,44 +404,44 @@ export const projects = {
     heading: "Beyond the railway.",
     body:
       "A hospital, a school, a health centre, a golf course, a residential " +
-      "tower and a road skywalk — K.D. Constructions' work across the public " +
+      "tower and a road skywalk: K.D. Constructions' work across the public " +
       "buildings and amenities of Navi Mumbai.",
     items: [
       {
         title: "Bonkode FOB",
         location: "Bonkode · Navi Mumbai",
         file: "social-bonkode-fob.jpg",
-        alt: "Bonkode FOB — glazed skywalk with a lift tower at each end, spanning a busy road with traffic passing beneath",
+        alt: "Bonkode FOB: glazed skywalk with a lift tower at each end, spanning a busy road with traffic passing beneath",
       },
       {
         title: "Ulwe Hospital",
         location: "Ulwe · Navi Mumbai",
         file: "social-ulwe-hospital.jpg",
-        alt: "Ulwe Hospital — the completed hospital building seen from its gate",
+        alt: "Ulwe Hospital: the completed hospital building seen from its gate",
       },
       {
         title: "Ulwe CIDCO School",
         location: "Ulwe · Navi Mumbai",
         file: "social-ulwe-cidco-school.jpg",
-        alt: "Ulwe CIDCO School — the completed school block, red-and-white elevation",
+        alt: "Ulwe CIDCO School: the completed school block, red-and-white elevation",
       },
       {
         title: "Karanjade Health Care",
         location: "Karanjade · Navi Mumbai",
         file: "social-karanjade-health-care.jpg",
-        alt: "Karanjade Health Care — the multi-storey health centre with its blue glazed stair column",
+        alt: "Karanjade Health Care: the multi-storey health centre with its blue glazed stair column",
       },
       {
         title: "Kharghar Golf Course",
         location: "Kharghar · Navi Mumbai",
         file: "social-kharghar-golf-course.jpg",
-        alt: "Kharghar Golf Course — the clubhouse seen across the green",
+        alt: "Kharghar Golf Course: the clubhouse seen across the green",
       },
       {
         title: "Lush Meadows",
         location: "Kharghar · Navi Mumbai",
         file: "social-lush-meadows.jpg",
-        alt: "Lush Meadows, Kharghar — the residential tower's entrance porch with the name lettering above it",
+        alt: "Lush Meadows, Kharghar: the residential tower's entrance porch with the name lettering above it",
       },
       {
         title: "Kharghar Football Stadium",
@@ -456,7 +456,7 @@ export const projects = {
         location: "Kharghar · Navi Mumbai",
         pending: "To be confirmed",
         note:
-          "CIDCO's football training centre, pitches inaugurated 2022 — but K.D. " +
+          "CIDCO's football training centre, pitches inaugurated 2022. But K.D. " +
           "Constructions' part in it is not yet confirmed, and no photograph is on record. " +
           "A yes and one photograph fill this tile; a no removes it.",
       },

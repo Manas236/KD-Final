@@ -83,10 +83,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     client: "Mumbai Railway Vikas Corporation Limited (MRVC)",
     badges: ["Civil"],
     live: true,
-    statusBadge: "Ongoing — 90%+ Complete",
+    statusBadge: "Ongoing, 90%+ Complete",
     description:
       "A 29.6 km double-line suburban corridor under MUTP-III, connecting Panvel with " +
-      "Karjat — station buildings, platforms, FOBs, subways, roads and earthwork.",
+      "Karjat: station buildings, platforms, FOBs, subways, roads and earthwork.",
     body: [
       "A 29.6 km double-line suburban railway corridor forming part of " +
         "MUTP-III, connecting Panvel with Chikhale, Mohape, Chowk and " +
@@ -95,7 +95,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "facilities, booking offices, OHE/PSI infrastructure, roads and " +
         "earthwork across the corridor.",
       "The scope includes subway construction by pushing RCC box " +
-        "sections beneath running railway lines with overhead OHE — a " +
+        "sections beneath running railway lines with overhead OHE, a " +
         "method chosen because the corridor stays live throughout. The " +
         "project is over 90% complete, demonstrating our capability to " +
         "deliver large-scale railway infrastructure in complex and " +
@@ -127,7 +127,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "executed a multidisciplinary development programme comprising " +
         "industrial sheds, administrative and training facilities, " +
         "traverser infrastructure, underground water tanks, roads, " +
-        "drainage, roofing and associated electrical works — supporting " +
+        "drainage, roofing and associated electrical works, supporting " +
         "the augmentation of Bogie Periodic Overhaul (POH) capacity from " +
         "350 to 575 bogies per month.",
       "The project reflects our ability to deliver complex workshop " +
@@ -138,8 +138,8 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
          fourth, long badge would overflow the medium card on /projects,
          and the homepage's "Civil · Mechanical · Electrical" is locked. */
       "The Matunga programme also carried K.D. Constructions' signalling " +
-        "& telecommunication works — the one contract in the portfolio " +
-        "to do so — integrating railway communication and control " +
+        "& telecommunication works, the one contract in the portfolio " +
+        "to do so, integrating railway communication and control " +
         "systems into the modernised workshop.",
     ],
     /* The doc gives this contract one measured outcome and no volumes.
@@ -163,7 +163,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     live: false,
     statusBadge: "",
     description:
-      "LHB coach maintenance facilities at Matunga — civil, structural, electrical and " +
+      "LHB coach maintenance facilities at Matunga: civil, structural, electrical and " +
       "mechanical works, including 2,749 m of inspection pit and traverser track.",
     body: [
       "A major multidisciplinary development creating LHB coach " +
@@ -171,8 +171,8 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "structural, electrical and mechanical works, including 2,749 m " +
         "of inspection pit and traverser track.",
       "The facility also incorporated a 6,000 kVA electrical system and " +
-        "specialised railway equipment — an 80-tonne CNC traverser, EOT " +
-        "cranes and CNC shot-blasting equipment — demonstrating our " +
+        "specialised railway equipment: an 80-tonne CNC traverser, EOT " +
+        "cranes and CNC shot-blasting equipment. This demonstrates our " +
         "capability to deliver integrated, technology-intensive railway " +
         "maintenance infrastructure.",
     ],
@@ -232,7 +232,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     live: false,
     statusBadge: "",
     description:
-      "A brownfield project across the Sewri–Panvel section of Mumbai's Harbour Line — " +
+      "A brownfield project across the Sewri–Panvel section of Mumbai's Harbour Line: " +
       "FOBs, linkways/highwalks, subways, boundary walls and trespass control.",
     body: [
       "A brownfield railway infrastructure project across the " +
@@ -249,7 +249,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
          is this contract's Vashi–Sanpada location (docs/KD_INFO.md
          §7.7) — the same structure the page's own photograph shows. */
       "At the Vashi FOB, the structure was lifted into place with two " +
-        "650-tonne telescopic cranes — an erection carried out over " +
+        "650-tonne telescopic cranes. The erection was carried out over " +
         "running railway lines, with the fabrication, launch and final " +
         "alignment all handled in-house.",
     ],
@@ -270,10 +270,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     client: "Mumbai Railway Vikas Corporation (MRVC)",
     badges: ["Civil"],
     live: true,
-    statusBadge: "Ongoing — 60%+ Complete",
+    statusBadge: "Ongoing, 60%+ Complete",
     description:
       "Brownfield station redevelopment at GTB Nagar, Chembur, Govandi and Mankhurd on " +
-      "an operational railway — FOBs, elevated decks, skywalks, service buildings.",
+      "an operational railway: FOBs, elevated decks, skywalks, service buildings.",
     body: [
       "A major brownfield station redevelopment programme across GTB " +
         "Nagar, Chembur, Govandi and Mankhurd, executed within an " +
@@ -310,7 +310,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     live: false,
     statusBadge: "",
     description:
-      "Railway maintenance infrastructure at Sanpada Carshed — an Inspection Shed with " +
+      "Railway maintenance infrastructure at Sanpada Carshed: an Inspection Shed with " +
       "three pit lines, a Heavy Repair Shed, an Administration Building and more.",
     body: [
       "A comprehensive railway maintenance infrastructure development " +
@@ -355,10 +355,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     live: false,
     statusBadge: "",
     description:
-      "The Matunga Z-Bridge, the Matunga Workshop FOB — RCC construction, structural " +
+      "The Matunga Z-Bridge, the Matunga Workshop FOB: RCC construction, structural " +
       "steel and girder fabrication, piling, roofing, side glazing and finishing.",
     body: [
-      "The Matunga Z-Bridge — the Matunga Workshop FOB — is a " +
+      "The Matunga Z-Bridge, the Matunga Workshop FOB, is a " +
         "strategically located pedestrian infrastructure project at " +
         "Matunga Workshop, involving RCC construction, structural steel " +
         "and girder fabrication, piling, roofing, side glazing and " +
@@ -376,7 +376,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
          line, so both searches land here (docs/SEO.md). */
       "The bridge restored " +
         "the daily link between Matunga East and West after more than a " +
-        "year with the original footbridge closed — a crossing relied on " +
+        "year with the original footbridge closed, a crossing relied on " +
         "by lakhs of commuters, students and residents.",
     ],
     stats: [

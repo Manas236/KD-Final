@@ -30,9 +30,9 @@ import type { PlantListItem, PlantStat } from "./plant.ts";
 
 export const rmcPlant = {
   meta: {
-    title: "Karjat RMC Plant — K.D. Constructions",
+    title: "Karjat RMC Plant | K.D. Constructions",
     description:
-      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad — greater " +
+      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad, for greater " +
       "control over concrete quality, consistency, availability and scheduling.",
   },
   nav: home.nav,
@@ -41,7 +41,7 @@ export const rmcPlant = {
   rmc: {
     backLabel: "Resources",
     eyebrow: "Our Own Plant",
-    title: "RMC Plant — Karjat",
+    title: "RMC Plant, Karjat",
     location: "Karjat · Raigad, Maharashtra",
     badges: ["Ready-Mix Concrete"],
     /* The hero is gallery frame rmc-plant-01.jpg, resolved by the page. */
@@ -65,7 +65,7 @@ export const rmcPlant = {
     body: [
       "K.D. Constructions' own ready-mix concrete plant at Karjat strengthens the company's " +
         "concrete supply, with greater control over quality, consistency, availability and " +
-        "project scheduling — reducing dependence on external suppliers.",
+        "project scheduling, reducing dependence on external suppliers.",
       /* From the company's labelled photographs, 2026-09-28 ("Covered RMC
          plant", "RMC plant coverage construction", "Silos", "TM loading"). */
       "The plant works fully under cover: batching, cement handling and transit-mixer " +

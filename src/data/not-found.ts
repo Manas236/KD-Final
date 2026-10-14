@@ -25,7 +25,7 @@ import type { NavLink } from "./home.ts";
 
 export const notFound = {
   meta: {
-    title: "Page not found — K.D. Constructions",
+    title: "Page not found | K.D. Constructions",
     description: "The address you asked for is not a page on this site.",
   },
   nav: home.nav,
