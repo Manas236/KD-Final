@@ -286,7 +286,10 @@ plausible.
 ### What all three share
 
 Square corners, no shadow, no hover lift, no background image. A card is a
-bordered region of the band it sits on, not an object floating above it.
+bordered region of the band it sits on, not an object floating above it. On
+a pointer device a card answers hover with a 2px rule in the band's accent
+drawn along its foot (`data-card` on the card, `motion.css` §3); nothing
+about the card itself moves.
 
 ---
 
@@ -515,7 +518,21 @@ Named so that nobody adds them back:
 
 - No rounded corners.
 - No drop shadows, no elevation, no glassmorphism.
-- No hover animation, no scroll reveal, no parallax, no counters that count up.
+- No parallax, no counters that count up, no motion that changes where
+  anything rests. One exception, by client request (14 Oct 2026): light
+  motion, all of it in `src/styles/motion.css`. The nav menus' items come in
+  one by one; blocks, cards, tiles and gallery photographs fade up 14px once
+  as they scroll into view (`src/scripts/reveal.js`); on pointer devices
+  photographs zoom 4% inside their own frame, a card draws a 2px accent rule
+  along its foot, arrows nudge, and links that already change colour ease
+  into it; the homepage hero's headline, sub-paragraph and buttons fade up
+  on load. Only opacity and transform ever move, never layout, and every
+  movement ends on the approved page exactly: on 14 Oct every route at 1280
+  was compared element by element with the build before it (box and computed
+  style), and nothing visible differed but the footer's dash markers. Off for reduced
+  motion, in edit mode and on /studio; with no script, nothing moves. Still
+  no hover lift (§4): a lifted card would break the shared dividers of a
+  gapless row.
 - No gradient text, no gradient borders. The only three gradients are the hero
   overlay and the two image scrims. One exception, by client request: the
   homepage on desktop (≥1080px) shows the hero photo at full strength with a

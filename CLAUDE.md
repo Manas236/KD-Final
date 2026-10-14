@@ -44,6 +44,16 @@ The client's rule, 14 Oct 2026: em dashes (—) read as AI-written. It overrides
 - **Check:** after `npm run build`, `grep -rn "—" dist/` may show comments only, plus one Astro framework error string in `dist/server/entry.mjs`. The rendered pages, sitemap.xml included, must have none at all.
 - A copy string that changes may have a saved override in the server's `content_edits` table that still holds the old text, and gallery captions and job postings are database rows too (`gallery_events`, `job_posting_events`). List the changed edit keys in the report so the server can be checked at the next deploy.
 
+## Motion moves things; it never changes where they rest
+
+Light motion was added on 14 Oct 2026 at the client's request: nav menu items one by one, scroll reveal, hover, the homepage hero's entrance. All of it is `src/styles/motion.css` plus `src/scripts/reveal.js`; DESIGN-SYSTEM.md §11 has the summary.
+
+- **Opacity and transform only.** Never animate width, height, margin, top/left or anything else that moves layout. A finished animation must leave the page exactly as it was without one; prove that with the element-by-element comparison (box and computed style of every element, every route, at 1280) against the commit before.
+- **Visible by default.** Nothing may be hidden by CSS alone. Hide-before-reveal (`data-reveal`) is set only by reveal.js, only on blocks below the fold, and only under `html.kd-motion`, which the inline head script in BaseLayout adds.
+- **Every rule keeps the gates:** `:root.kd-motion:not([data-nt-mode])`, inside `@media screen and (prefers-reduced-motion: no-preference)`; hover rules also inside `(hover: hover)`. Edit mode (`data-nt-mode`), reduced motion, /studio and no-script all mean no motion.
+- **New bands, cards and grids need nothing.** reveal.js walks every `main section > .max-w-kd` and takes `.grid` children as items. A block that rests with its own opacity or transform is skipped, so a block given one of those utilities will no longer reveal. A new card gets the hover rule with `data-card="light"` or `"dark"` (add `framed` if it has a 1px border all round).
+- **Do not fade the homepage hero's copy from zero.** The headline (the sub-paragraph on phones) is the page's LCP element, not the photograph, and text at opacity 0 does not count as painted. The fade starts at 35% so LCP stays at first paint.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
