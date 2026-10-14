@@ -30,6 +30,20 @@ The site's database user (`kd_app` on a server) has SELECT and INSERT on every t
 - A new kind of write needs nothing beyond SELECT and INSERT (DELETE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants.
 - PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the five write flows work with `kd_app`'s rights.
 
+## No em dashes in anything a visitor or a search engine can see
+
+The client's rule, 14 Oct 2026: em dashes (—) read as AI-written. It overrides the "client-approved wording, do not touch the punctuation" notes at the top of the copy modules.
+
+- **In scope:** every `<title>`, meta description, og/twitter tag, JSON-LD, page copy, director bio, card text, caption, alt text, button label, form and error message, the 404, /privacy and /terms, the studio screens, email subjects. Everything in `src/data/*.ts` and any copy written into `.astro` or `.js` files.
+- **Out of scope:** code comments, commit messages, `docs/*.md`. But a comment inside an `is:inline` script, and an HTML comment in a template, ship in the page's HTML, so keep em dashes out of those too.
+- **Rewrite, don't swap.** Use a comma, a colon, a full stop or "and", whichever makes that sentence read naturally. Never a spaced hyphen (" - "), which is the same tell. Do not change any meaning, fact or figure.
+- **Titles:** inner pages are `<Page> | K.D. Constructions`. The homepage tab title is exactly `K.D. Constructions` (its og:title keeps the longer line, `home.meta.ogTitle`).
+- **Keep** en dashes (–) in number and date ranges (711–852 sq ft, 14:53–15:00, FY2025–26) and in route names (Panvel–Karjat), and the middle dot (·) in kickers and meta lines ("Director · Inducted 2017").
+- Meta descriptions stay at 155 characters or less.
+- Composed strings join with ". " (GalleryGrid alt text, sitemap image titles), so a caption that has a colon never produces two.
+- **Check:** after `npm run build`, `grep -rn "—" dist/` may show comments only, plus one Astro framework error string in `dist/server/entry.mjs`. The rendered pages, sitemap.xml included, must have none at all.
+- A copy string that changes may have a saved override in the server's `content_edits` table that still holds the old text, and gallery captions and job postings are database rows too (`gallery_events`, `job_posting_events`). List the changed edit keys in the report so the server can be checked at the next deploy.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
