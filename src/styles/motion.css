@@ -1,0 +1,99 @@
+/* ============================================================
+   Motion: menus, scroll reveal, hover, the homepage hero
+   ------------------------------------------------------------
+   Added 14 Oct 2026 at the client's request: Sir asked for the About
+   menu's items to "flow one after the other", and for light motion
+   across the site. DESIGN-SYSTEM.md §11 records the exception.
+
+   MOTION ONLY. Nothing in this file may change where anything sits, how
+   big it is, or what colour it rests at. Every rule animates opacity or
+   transform from a starting point back to the element's own resting
+   style; the one exception is the easing of a link's EXISTING hover
+   colour. When an animation has finished, the page is the approved
+   page, element for element.
+
+   FOUR GATES, on every rule below:
+
+     · `kd-motion` on <html>. The inline script at the top of
+       BaseLayout's head adds it, before the body is parsed. No script,
+       no class, no motion: the site renders exactly as it did before.
+       It is left off on /studio/* and when the in-page editor is about
+       to restore edit mode.
+     · `:not([data-nt-mode])`. While the editor is on (inline-edit.js
+       sets data-nt-mode on <html>), nothing editable may be invisible,
+       moving or offset. Switching edit mode on mid-animation stops it
+       where it stands and shows everything.
+     · `prefers-reduced-motion: no-preference` on everything that moves.
+       With reduced motion on, content simply shows.
+     · `screen`, so a printed page never meets a hidden block.
+
+   Hover adds `(hover: hover)`, so nothing happens on touch screens.
+
+   Each `@keyframes` has a `from` and no `to`, so it always ends on the
+   element's own resting style, whatever that is. `backwards` holds the
+   starting frame only while an item waits out its delay, and leaves
+   nothing behind once the animation has played.
+   ============================================================ */
+
+/* ---------- 1. Nav menus ----------
+   The drop-downs (About, Projects) are display:none until hover,
+   keyboard focus or a tap opens them (Nav.astro, group-hover and
+   group-focus-within). Going from none to block starts these
+   animations each time a menu opens; going back to none ends them at
+   once, so closing is instant and never staggered. Opacity and
+   transform never stop a link from taking a click or focus, so an item
+   is usable from the moment its menu opens. */
+@keyframes kd-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* A few px of downward travel: items settle into place. */
+@keyframes kd-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  /* Declared only while a menu is open, so a closed menu carries no
+     animation at all. The panel, frosted or solid, only fades. */
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu {
+    animation: kd-fade 160ms ease-out backwards;
+  }
+
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li {
+    animation: kd-drop 240ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+  }
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(2) {
+    animation-delay: 35ms;
+  }
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(3) {
+    animation-delay: 70ms;
+  }
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(4) {
+    animation-delay: 105ms;
+  }
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(5) {
+    animation-delay: 140ms;
+  }
+  :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(n + 6) {
+    animation-delay: 175ms;
+  }
+
+  /* The phone drawer, while open: the same entrance, every link top to
+     bottom, the About and Projects sub-links in their place in the run.
+     Nav.astro's script numbers the links (--kd-i) the first time the
+     drawer opens; the cap keeps a long list inside a quarter of a
+     second. */
+  :root.kd-motion:not([data-nt-mode]) #nav-drawer:not(.hidden) {
+    animation: kd-fade 180ms ease-out backwards;
+  }
+
+  :root.kd-motion:not([data-nt-mode]) #nav-drawer:not(.hidden) a {
+    animation: kd-drop 260ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+    animation-delay: calc(min(var(--kd-i, 0), 10) * 25ms);
+  }
+}

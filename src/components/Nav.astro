@@ -125,7 +125,9 @@ const isHere = (href: string) =>
                 </a>
                 {/* pt-31 bridges the gap from the link to the header's
                     bottom edge, so the pointer never leaves the group on
-                    its way down and the menu hangs from the bar. */}
+                    its way down and the menu hangs from the bar. When it
+                    opens, the panel fades and its items come in one by
+                    one, top to bottom: motion.css §1. */}
                 {kids.length > 0 && (
                   <div class="absolute left-0 top-full pt-31 hidden group-hover:block group-focus-within:block">
                     {/* kd-nav-menu: frosted over the hero, see global.css. */}
@@ -269,7 +271,16 @@ const isHere = (href: string) =>
   const iconOpen = document.getElementById("nav-drawer-icon-open");
   const iconClose = document.getElementById("nav-drawer-icon-close");
 
+  /* The drawer's links come in one after another (motion.css §1), in
+     reading order: each gets its place in the run, sub-links included,
+     the first time the drawer opens. */
+  let numbered = false;
+
   const setOpen = (open: boolean) => {
+    if (open && !numbered && drawer) {
+      drawer.querySelectorAll("a").forEach((a, i) => a.style.setProperty("--kd-i", String(i)));
+      numbered = true;
+    }
     drawer?.classList.toggle("hidden", !open);
     iconOpen?.classList.toggle("hidden", open);
     iconClose?.classList.toggle("hidden", !open);

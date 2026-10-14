@@ -200,6 +200,18 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
    script followed by a MULTI-LINE HTML comment does not survive the
    Astro compiler — it reports "Unexpected token" and fails the build.
    Keep any comment down there to a single line. */
+
+/* ---------- Motion ----------
+   src/styles/motion.css has the whole of it.
+
+   1. An inline head script puts `kd-motion` on <html> before the body
+      is parsed. Every rule in motion.css hangs off that class, so with
+      no script the page renders exactly as it did before motion was
+      added, and the homepage hero's fade is in place from first paint
+      rather than flashing in after it. Left off on /studio/*, and when
+      a signed-in editor's last page was in edit mode (inline-edit.js
+      keeps that in sessionStorage as "kd-edit-mode" and restores it),
+      so editable copy is never hidden or moving under the editor. */
 ---
 
 <!doctype html>
@@ -240,6 +252,21 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
     <link rel="preload" as="font" type="font/woff2" href={interLatinExt} crossorigin />
 
     <link rel="stylesheet" href="/editor-ui.css" />
+
+    <!-- Motion switch: src/styles/motion.css plays only under html.kd-motion. See the note in the frontmatter. -->
+    <script is:inline>
+      (function () {
+        try {
+          var path = location.pathname;
+          if (path === "/studio" || path.indexOf("/studio/") === 0) return;
+          var editor = document.cookie.split("; ").indexOf("kd_edit_ui=1") !== -1;
+          if (editor && sessionStorage.getItem("kd-edit-mode") === "1") return;
+          document.documentElement.classList.add("kd-motion");
+        } catch (e) {
+          /* no class, no motion: the page is simply static */
+        }
+      })();
+    </script>
 
     <!-- In-page text editing, part 1 of 2. See the note in the frontmatter. -->
     <script is:inline define:vars={{ NT_CACHE_PREFIX: CACHE_PREFIX }}>
