@@ -521,18 +521,32 @@ Named so that nobody adds them back:
 - No parallax, no counters that count up, no motion that changes where
   anything rests. One exception, by client request (14 Oct 2026): light
   motion, all of it in `src/styles/motion.css`. The nav menus' items come in
-  one by one; blocks, cards, tiles and gallery photographs fade up 14px once
+  one by one; blocks, cards, tiles and gallery photographs fade up 28px once
   as they scroll into view (`src/scripts/reveal.js`); on pointer devices
   photographs zoom 4% inside their own frame, a card draws a 2px accent rule
-  along its foot, arrows nudge, and links that already change colour ease
-  into it; the homepage hero's headline, sub-paragraph and buttons fade up
-  on load. Only opacity and transform ever move, never layout, and every
-  movement ends on the approved page exactly: on 14 Oct every route at 1280
-  was compared element by element with the build before it (box and computed
-  style), and nothing visible differed but the footer's dash markers. Off for reduced
-  motion, in edit mode and on /studio; with no script, nothing moves. Still
-  no hover lift (§4): a lifted card would break the shared dividers of a
-  gapless row.
+  along its foot, arrows nudge 3px, and links that already change colour
+  ease into it; the homepage hero's headline, sub-paragraph and buttons fade
+  up 20px on load, from 35% opacity (never lower: the headline is the LCP
+  element). Calm, not snappy, as retuned the same day at the client's
+  request: menu panel 250ms, items 450ms each, 110ms apart, 10px of travel
+  (the phone drawer 70ms apart, its last link starting by 700ms); scroll
+  reveal 900ms, 130ms between blocks arriving together for up to 6 steps,
+  starting once 15% of a block is in view above the bottom 10% of the
+  window; hero 1000ms, 180ms apart; hover zoom 600ms, card rule 350ms, arrow
+  300ms, link colour 300ms. Movement eases out on
+  `cubic-bezier(0.22, 1, 0.36, 1)`, fades on the gentler
+  `cubic-bezier(0.5, 1, 0.89, 1)`. Those numbers are as tuned on 14 Oct:
+  every one of them is a custom property in motion.css §0, which is the
+  only place to change them and wins if this list is out of date, and
+  `--kd-motion-pace` there scales every duration at once. Only opacity and
+  transform ever move, never layout, and every movement ends on the
+  approved page exactly: on 14 Oct every route at 1280 was compared element
+  by element with the build before it (box and computed style), and nothing
+  visible differed but the footer's dash markers; the retune was checked the
+  same way on /, /about, /projects and /company. Off for reduced motion, in
+  edit mode and on /studio; with no script, nothing moves. Still no hover
+  lift (§4): a lifted card would break the shared dividers of a gapless
+  row.
 - No gradient text, no gradient borders. The only three gradients are the hero
   overlay and the two image scrims. One exception, by client request: the
   homepage on desktop (≥1080px) shows the hero photo at full strength with a

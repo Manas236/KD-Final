@@ -48,6 +48,7 @@ The client's rule, 14 Oct 2026: em dashes (—) read as AI-written. It overrides
 
 Light motion was added on 14 Oct 2026 at the client's request: nav menu items one by one, scroll reveal, hover, the homepage hero's entrance. All of it is `src/styles/motion.css` plus `src/scripts/reveal.js`; DESIGN-SYSTEM.md §11 has the summary.
 
+- **Timing lives in motion.css §0 and nowhere else.** Every duration, stagger, travel distance, curve and the reveal's trigger is a `--kd-motion-*` custom property there; rules only use `var()`, and reveal.js holds no numbers (it reads the trigger from §0 and waits on the browser's own transitions). `--kd-motion-pace` scales every duration at once. Never hard-code a timing in a rule or a script.
 - **Opacity and transform only.** Never animate width, height, margin, top/left or anything else that moves layout. A finished animation must leave the page exactly as it was without one; prove that with the element-by-element comparison (box and computed style of every element, every route, at 1280) against the commit before.
 - **Visible by default.** Nothing may be hidden by CSS alone. Hide-before-reveal (`data-reveal`) is set only by reveal.js, only on blocks below the fold, and only under `html.kd-motion`, which the inline head script in BaseLayout adds.
 - **Every rule keeps the gates:** `:root.kd-motion:not([data-nt-mode])`, inside `@media screen and (prefers-reduced-motion: no-preference)`; hover rules also inside `(hover: hover)`. Edit mode (`data-nt-mode`), reduced motion, /studio and no-script all mean no motion.

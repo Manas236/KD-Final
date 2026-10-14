@@ -28,20 +28,30 @@
    own entrance and is skipped, as is anything already carrying a
    transform or an opacity of its own.
 
+   WHEN. A block starts once a share of it is in view above a line a
+   little way up from the bottom of the window, so the motion happens
+   where the eye is rather than at the edge. A block too tall to ever
+   show that share at once starts as soon as it crosses the line.
+
    ONCE. Each element is unobserved the moment it starts. When its
    transition is over the attribute is removed again, leaving the
    element exactly as the page built it.
 
    THE STAGGER is by arrival, not by position in the list: the items
-   that come into view together are ordered top to bottom, left to
-   right, 70ms apart, and the steps stop growing after five. A gallery
-   of a hundred photographs fills as fast as it is scrolled.
+   that come into view together are numbered top to bottom, left to
+   right (--kd-reveal-i), and motion.css spaces them out, up to a cap.
+   A gallery of a hundred photographs fills as fast as it is scrolled.
+
+   NO NUMBERS HERE. Every timing, and the trigger's share and line, is
+   a custom property in motion.css §0. This file reads the trigger from
+   there, and learns that a block has come to rest from the browser's
+   own transitions, so retuning never touches it.
 
    OFF when motion.css is off: no `kd-motion` on <html> (no script,
    /studio, the editor restoring edit mode), reduced motion, or no
    IntersectionObserver. If the editor is switched on later, every
    element still waiting is shown at once, any fade under way is jumped
-   to its end, and the observer stops. (A running transition is not
+   to its end, and the observers stop. (A running transition is not
    stopped by its CSS rule ceasing to match: the element's own style is
    already the transition's end value, so the browser lets it run on.)
    ============================================================ */
@@ -49,12 +59,6 @@
 const root = document.documentElement;
 /* Elements whose fade is under way, until settle() lets them go. */
 const moving = new Set();
-
-const STEP_MS = 70;
-const MAX_STEPS = 5;
-/* motion.css: the transition is 560ms. A little over, so the attribute
-   is only removed once the element has come to rest. */
-const SETTLE_MS = 620;
 
 /* Blocks the walk never descends into or marks. */
 const SKIP = "script, style, template, dialog, [hidden], [data-hero-in], [data-nt-ui]";
@@ -114,58 +118,81 @@ function onScreen(el) {
   return r.width + r.height > 0 && r.bottom > 0 && r.top < innerHeight;
 }
 
+/* The reveal's own transitions on an element, and nothing else it
+   might be running. */
+function fades(el) {
+  return el
+    .getAnimations()
+    .filter((a) => a.transitionProperty === "opacity" || a.transitionProperty === "transform");
+}
+
 function settle(el) {
   moving.delete(el);
   el.removeAttribute("data-reveal");
-  el.style.removeProperty("--kd-reveal-delay");
+  el.style.removeProperty("--kd-reveal-i");
   if (el.getAttribute("style") === "") el.removeAttribute("style");
+}
+
+/* A value from motion.css §0. */
+function token(name) {
+  return getComputedStyle(root).getPropertyValue(name).trim();
 }
 
 function start() {
   if (!root.classList.contains("kd-motion")) return;
-  if (!("IntersectionObserver" in window)) return;
+  if (!("IntersectionObserver" in window) || !("getAnimations" in Element.prototype)) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   if (root.hasAttribute("data-nt-mode")) return;
 
   const waiting = new Set(targets().filter((el) => !onScreen(el)));
   if (!waiting.size) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const arriving = entries
-        .filter((entry) => entry.isIntersecting && waiting.has(entry.target))
-        .sort(
-          (a, b) =>
-            a.boundingClientRect.top - b.boundingClientRect.top ||
-            a.boundingClientRect.left - b.boundingClientRect.left,
-        );
-      arriving.forEach((entry, i) => {
-        const el = entry.target;
-        observer.unobserve(el);
-        waiting.delete(el);
-        const delay = Math.min(i, MAX_STEPS) * STEP_MS;
-        if (delay) el.style.setProperty("--kd-reveal-delay", `${delay}ms`);
-        el.setAttribute("data-reveal", "in");
-        moving.add(el);
-        setTimeout(() => settle(el), delay + SETTLE_MS);
-      });
-    },
-    /* A block starts once it is a little way up from the bottom edge,
-       so the fade is seen rather than finished off screen. */
-    { rootMargin: "0px 0px -8% 0px" },
-  );
+  const seen = parseFloat(token("--kd-motion-reveal-seen")) || 0;
+  const rootMargin = `0px 0px -${token("--kd-motion-reveal-line") || "0px"} 0px`;
+
+  const arrive = (entries, observer) => {
+    /* An observer reports a block as soon as any of it is inside the
+       line, so the share in view is checked here as well. */
+    const enough = observer.thresholds[0] - 0.001;
+    const arriving = entries
+      .filter((entry) => waiting.has(entry.target) && entry.isIntersecting && entry.intersectionRatio >= enough)
+      .sort(
+        (a, b) =>
+          a.boundingClientRect.top - b.boundingClientRect.top ||
+          a.boundingClientRect.left - b.boundingClientRect.left,
+      );
+    arriving.forEach(({ target: el }, i) => {
+      observer.unobserve(el);
+      waiting.delete(el);
+      if (i) el.style.setProperty("--kd-reveal-i", String(i));
+      el.setAttribute("data-reveal", "in");
+      moving.add(el);
+    });
+    /* One style pass for the whole batch, then each lets go when its
+       own fade is over, or was cut short. */
+    for (const { target: el } of arriving) {
+      Promise.allSettled(fades(el).map((fade) => fade.finished)).then(() => settle(el));
+    }
+  };
+
+  const observers = [
+    new IntersectionObserver(arrive, { rootMargin, threshold: seen }),
+    /* For a block so tall that `seen` of it would not fit in the window. */
+    new IntersectionObserver(arrive, { rootMargin, threshold: 0 }),
+  ];
 
   for (const el of waiting) {
+    const tall = el.getBoundingClientRect().height * seen > innerHeight * 0.5;
     el.setAttribute("data-reveal", "");
-    observer.observe(el);
+    observers[tall ? 1 : 0].observe(el);
   }
 
   /* The editor switched on: everything shows, now, and stays shown. */
   new MutationObserver(() => {
     if (!root.hasAttribute("data-nt-mode")) return;
-    observer.disconnect();
+    for (const observer of observers) observer.disconnect();
     for (const el of moving) {
-      for (const fade of el.getAnimations()) fade.finish();
+      for (const fade of fades(el)) fade.finish();
       settle(el);
     }
     for (const el of waiting) settle(el);

@@ -12,7 +12,14 @@
    colour. When an animation has finished, the page is the approved
    page, element for element.
 
-   FOUR GATES, on every rule below:
+   TIMING lives in one place, §0 just below: every duration, stagger,
+   travel distance and curve, and the point at which the scroll reveal
+   fires. The rules further down only ever say var(--kd-motion-…), and
+   reveal.js reads its trigger from §0 and holds no numbers of its own.
+   To make all of it faster or slower, change --kd-motion-pace and
+   nothing else.
+
+   FOUR GATES, on every rule below §0:
 
      · `kd-motion` on <html>. The inline script at the top of
        BaseLayout's head adds it, before the body is parsed. No script,
@@ -32,8 +39,68 @@
    Each `@keyframes` has a `from` and no `to`, so it always ends on the
    element's own resting style, whatever that is. `backwards` holds the
    starting frame only while an item waits out its delay, and leaves
-   nothing behind once the animation has played.
+   nothing behind once the animation has played. Where something both
+   fades and moves, the two are separate animations so each can take
+   its own curve.
    ============================================================ */
+
+/* ---------- 0. Timing ----------
+   Retune here and nowhere else. These are plain values: on their own
+   they do nothing, so this block needs no gates. */
+:root {
+  /* PACE scales every duration and stagger below at once: 1 as tuned,
+     0.8 a fifth quicker, 1.25 a quarter slower. Distances and curves
+     stay as they are. */
+  --kd-motion-pace: 1;
+
+  /* Curves. Movement decelerates long and soft into place. Fades,
+     colour and the hover responses take a gentler ease-out, so a fade
+     is seen across its whole length: on the movement curve a 900ms
+     fade is half done by about 120ms, as soon as the old 560ms one
+     was, and reads as the same blink. To put every fade on the
+     movement curve anyway, make the second value
+     var(--kd-motion-ease). */
+  --kd-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --kd-motion-ease-soft: cubic-bezier(0.5, 1, 0.89, 1);
+
+  /* §1 Nav menus (About, Projects). The panel fades; its items drop
+     into place one after another, five of them done by about 900ms.
+     Closing is always instant. */
+  --kd-motion-menu-panel: calc(250ms * var(--kd-motion-pace));
+  --kd-motion-menu-item: calc(450ms * var(--kd-motion-pace));
+  --kd-motion-menu-step: calc(110ms * var(--kd-motion-pace));
+  --kd-motion-menu-travel: 10px;
+  /* The phone drawer: the same panel and items, a closer step, and
+     however long the list, its last link starts by this time. */
+  --kd-motion-drawer-step: calc(70ms * var(--kd-motion-pace));
+  --kd-motion-drawer-last: calc(700ms * var(--kd-motion-pace));
+
+  /* §2 Scroll reveal. Blocks arriving together are `step` apart, and
+     the stagger stops growing after `steps` of them. */
+  --kd-motion-reveal: calc(900ms * var(--kd-motion-pace));
+  --kd-motion-reveal-travel: 28px;
+  --kd-motion-reveal-step: calc(130ms * var(--kd-motion-pace));
+  --kd-motion-reveal-steps: 6;
+  /* When it fires (reveal.js reads these two): once this share of a
+     block is in view above a line this far up from the window's
+     bottom edge, so the motion happens where the eye is. */
+  --kd-motion-reveal-seen: 0.15;
+  --kd-motion-reveal-line: 10%;
+
+  /* §3 Hover, pointer devices only. */
+  --kd-motion-zoom: calc(600ms * var(--kd-motion-pace));
+  --kd-motion-zoom-scale: 1.04;
+  --kd-motion-rule: calc(350ms * var(--kd-motion-pace));
+  --kd-motion-arrow: calc(300ms * var(--kd-motion-pace));
+  --kd-motion-arrow-travel: 3px;
+  --kd-motion-link: calc(300ms * var(--kd-motion-pace));
+
+  /* §4 Homepage hero: headline, sub-paragraph, buttons. Its starting
+     opacity is deliberately not a setting here: see §4. */
+  --kd-motion-hero: calc(1000ms * var(--kd-motion-pace));
+  --kd-motion-hero-travel: 20px;
+  --kd-motion-hero-step: calc(180ms * var(--kd-motion-pace));
+}
 
 /* ---------- 1. Nav menus ----------
    The drop-downs (About, Projects) are display:none until hover,
@@ -52,8 +119,7 @@
 /* A few px of downward travel: items settle into place. */
 @keyframes kd-drop {
   from {
-    opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(calc(-1 * var(--kd-motion-menu-travel)));
   }
 }
 
@@ -61,54 +127,58 @@
   /* Declared only while a menu is open, so a closed menu carries no
      animation at all. The panel, frosted or solid, only fades. */
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu {
-    animation: kd-fade 160ms ease-out backwards;
+    animation: kd-fade var(--kd-motion-menu-panel) var(--kd-motion-ease-soft) backwards;
   }
 
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li {
-    animation: kd-drop 240ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+    animation:
+      kd-fade var(--kd-motion-menu-item) var(--kd-motion-ease-soft) backwards,
+      kd-drop var(--kd-motion-menu-item) var(--kd-motion-ease) backwards;
   }
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(2) {
-    animation-delay: 35ms;
+    animation-delay: var(--kd-motion-menu-step);
   }
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(3) {
-    animation-delay: 70ms;
+    animation-delay: calc(2 * var(--kd-motion-menu-step));
   }
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(4) {
-    animation-delay: 105ms;
+    animation-delay: calc(3 * var(--kd-motion-menu-step));
   }
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(5) {
-    animation-delay: 140ms;
+    animation-delay: calc(4 * var(--kd-motion-menu-step));
   }
   :root.kd-motion:not([data-nt-mode]) .group:is(:hover, :focus-within) .kd-nav-menu > li:nth-child(n + 6) {
-    animation-delay: 175ms;
+    animation-delay: calc(5 * var(--kd-motion-menu-step));
   }
 
   /* The phone drawer, while open: the same entrance, every link top to
      bottom, the About and Projects sub-links in their place in the run.
      Nav.astro's script numbers the links (--kd-i) the first time the
-     drawer opens; the cap keeps a long list inside a quarter of a
-     second. */
+     drawer opens; past --kd-motion-drawer-last the rest start together. */
   :root.kd-motion:not([data-nt-mode]) #nav-drawer:not(.hidden) {
-    animation: kd-fade 180ms ease-out backwards;
+    animation: kd-fade var(--kd-motion-menu-panel) var(--kd-motion-ease-soft) backwards;
   }
 
   :root.kd-motion:not([data-nt-mode]) #nav-drawer:not(.hidden) a {
-    animation: kd-drop 260ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
-    animation-delay: calc(min(var(--kd-i, 0), 10) * 25ms);
+    animation:
+      kd-fade var(--kd-motion-menu-item) var(--kd-motion-ease-soft) backwards,
+      kd-drop var(--kd-motion-menu-item) var(--kd-motion-ease) backwards;
+    animation-delay: min(calc(var(--kd-i, 0) * var(--kd-motion-drawer-step)), var(--kd-motion-drawer-last));
   }
 }
 
 /* ---------- 2. Scroll reveal ----------
    src/scripts/reveal.js marks the blocks, cards, tiles and gallery
    items that start below the fold with data-reveal, then flips each to
-   "in" as it enters the viewport, once. When the transition has run it
+   "in" as it comes into view, once. When the transition has run it
    removes the attribute, so the element is back to its plain self. The
-   stagger along a row of cards is the script's --kd-reveal-delay. A
-   block that takes keyboard focus while still hidden shows at once. */
+   script numbers the blocks that arrive together (--kd-reveal-i) and
+   the stagger is worked out here. A block that takes keyboard focus
+   while still hidden shows at once. */
 @media screen and (prefers-reduced-motion: no-preference) {
   :root.kd-motion:not([data-nt-mode]) [data-reveal] {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(var(--kd-motion-reveal-travel));
   }
 
   :root.kd-motion:not([data-nt-mode]) [data-reveal="in"],
@@ -116,9 +186,9 @@
     opacity: 1;
     transform: none;
     transition:
-      opacity 560ms cubic-bezier(0.215, 0.61, 0.355, 1),
-      transform 560ms cubic-bezier(0.215, 0.61, 0.355, 1);
-    transition-delay: var(--kd-reveal-delay, 0ms);
+      opacity var(--kd-motion-reveal) var(--kd-motion-ease-soft),
+      transform var(--kd-motion-reveal) var(--kd-motion-ease);
+    transition-delay: calc(min(var(--kd-reveal-i, 0), var(--kd-motion-reveal-steps)) * var(--kd-motion-reveal-step));
   }
 }
 
@@ -129,8 +199,8 @@
 @media screen and (hover: hover) {
   :root.kd-motion:not([data-nt-mode]) a[class*="hover:"] {
     transition:
-      color 200ms ease-out,
-      border-color 200ms ease-out;
+      color var(--kd-motion-link) var(--kd-motion-ease-soft),
+      border-color var(--kd-motion-link) var(--kd-motion-ease-soft);
   }
 }
 
@@ -147,22 +217,22 @@
      child, so the zoom is clipped and nothing around it moves. The
      heroes hold theirs a level deeper and are left alone. */
   :root.kd-motion:not([data-nt-mode]) .overflow-hidden > img {
-    transition: transform 700ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform var(--kd-motion-zoom) var(--kd-motion-ease-soft);
   }
   :root.kd-motion:not([data-nt-mode]) .overflow-hidden:hover > img {
-    transform: scale(1.04);
+    transform: scale(var(--kd-motion-zoom-scale));
   }
 
   /* Arrows (Arrow.astro, and the text arrow on a back link) nudge the
      way they point. */
   :root.kd-motion:not([data-nt-mode]) [data-arrow] {
-    transition: transform 220ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform var(--kd-motion-arrow) var(--kd-motion-ease-soft);
   }
   :root.kd-motion:not([data-nt-mode]) :is(a, button):hover [data-arrow] {
-    transform: translateX(3px);
+    transform: translateX(var(--kd-motion-arrow-travel));
   }
   :root.kd-motion:not([data-nt-mode]) :is(a, button):hover [data-arrow="back"] {
-    transform: translateX(-3px);
+    transform: translateX(calc(-1 * var(--kd-motion-arrow-travel)));
   }
 
   /* Cards: a 2px rule in the band's accent draws along the foot of the
@@ -184,7 +254,7 @@
     height: 2px;
     background-color: var(--kd-mint-2);
     transform-origin: left center;
-    animation: kd-draw 320ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+    animation: kd-draw var(--kd-motion-rule) var(--kd-motion-ease-soft) backwards;
     pointer-events: none;
   }
   :root.kd-motion:not([data-nt-mode]) [data-card~="dark"]:hover::after {
@@ -205,25 +275,33 @@
    page's Largest Contentful Paint is not the photograph: Chrome treats
    an image that fills the window as a background and skips it, so the
    LCP element is the headline at 1280 and the sub-paragraph on a phone.
-   LCP ignores text at opacity 0, so a fade from zero reported it some
-   640ms late (the length of the fade) at every width. From 35% the copy
-   is on screen, legibly, in the first frame: LCP lands on first paint,
-   the same as before motion was added, and the fade is still seen. */
-@keyframes kd-rise {
+   LCP ignores text at opacity 0, so a fade from zero reported it late
+   by the length of the fade, at every width. From 35% the copy is on
+   screen, legibly, in the first frame: LCP lands on first paint, the
+   same as before motion was added, and the entrance is carried by the
+   travel and the length of the fade instead. Do not lower it. */
+@keyframes kd-hero-fade {
   from {
     opacity: 0.35;
-    transform: translateY(10px);
+  }
+}
+
+@keyframes kd-rise {
+  from {
+    transform: translateY(var(--kd-motion-hero-travel));
   }
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
   :root.kd-motion:not([data-nt-mode]) [data-hero-in] {
-    animation: kd-rise 640ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+    animation:
+      kd-hero-fade var(--kd-motion-hero) var(--kd-motion-ease-soft) backwards,
+      kd-rise var(--kd-motion-hero) var(--kd-motion-ease) backwards;
   }
   :root.kd-motion:not([data-nt-mode]) [data-hero-in="2"] {
-    animation-delay: 100ms;
+    animation-delay: var(--kd-motion-hero-step);
   }
   :root.kd-motion:not([data-nt-mode]) [data-hero-in="3"] {
-    animation-delay: 200ms;
+    animation-delay: calc(2 * var(--kd-motion-hero-step));
   }
 }
