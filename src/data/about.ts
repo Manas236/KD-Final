@@ -274,6 +274,12 @@ export const about = {
        place so each director keeps his index and his stored edit keys;
        the array is therefore not in the approved slide's order. See
        OPEN-QUESTIONS.md #25. */
+    /* The order the cards render in, as indexes into `directors`:
+       Kailash, Sarita, Shiv, Mohanlal, set by the client on 2026-10-14 to
+       match /company. Only the display moves; each card keeps its index,
+       so `about.board.directors.N.*` still names the same director.
+       OPEN-QUESTIONS.md #46. */
+    order: [1, 3, 2, 0] as const,
     directors: [
       {
         name: "Mohanlal S. Gindodia",

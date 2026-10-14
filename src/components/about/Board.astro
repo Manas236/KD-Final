@@ -23,6 +23,9 @@
    ONE DIRECTOR PER ROW BELOW `md`. The right border is the column
    divider, so it exists only while there are two columns; the top
    border every card already carries is the line between stacked cards.
+
+   CARDS RENDER IN `board.order`, not array order. `i` is the director's
+   index (his edit keys), `at` his place on the page (the column rule).
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -43,11 +46,11 @@ const { board } = about;
 
     <ul class="grid grid-cols-1 md:grid-cols-2 mt-56">
       {
-        board.directors.map((director, i) => (
+        board.order.map((i, at) => (
           <li
             class:list={[
               "border-t border-t-kd-card-border-light p-40",
-              i % 2 === 0 && "md:border-r md:border-r-kd-card-border-light",
+              at % 2 === 0 && "md:border-r md:border-r-kd-card-border-light",
             ]}
             data-card="light"
           >
@@ -57,21 +60,21 @@ const { board } = about;
               class="font-display text-d7 text-kd-ink mt-24"
               data-edit={`about.board.directors.${i}.name`}
             >
-              {director.name}
+              {board.directors[i].name}
             </h3>
 
             <p
               class="text-label uppercase text-kd-mint-2 mt-6"
               data-edit={`about.board.directors.${i}.role`}
             >
-              {director.role}
+              {board.directors[i].role}
             </p>
 
             <p
               class="text-body-sm text-kd-slate-2 mt-16"
               data-edit={`about.board.directors.${i}.bio`}
             >
-              {director.bio}
+              {board.directors[i].bio}
             </p>
           </li>
         ))

@@ -2789,4 +2789,18 @@ reads Kailash, Sarita, Shiv, Mohanlal. The last two cards changed places, so
 knowingly because no edit had been stored against either card. An edit made
 to one of those two cards before this date would now show on the other.
 `/about` keeps its own order (Mohanlal, Kailash, Shiv, Sarita); it was not
-part of the request.
+part of the request. (Superseded by #46.)
+
+---
+
+## 46. /about: the directors' order now matches /company
+
+2026-10-14, at the client's direction: the Board of Directors on `/about`
+reads Kailash, Sarita, Shiv, Mohanlal, the same order as `/company` (#45).
+
+Done without renumbering. `about.board.directors` is unchanged, so every
+`about.board.directors.N.*` key still names the same director (0 Mohanlal,
+1 Kailash, 2 Shiv, 3 Sarita); a new `about.board.order` of `[1, 3, 2, 0]`
+sets the order the cards render in. An edit saved against any of those keys
+stays on the right card, so the server has nothing to check. The column rule
+on the left-hand cards follows the place on the page, not the index.
