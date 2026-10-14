@@ -190,6 +190,7 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
                         ? "bg-kd-stat-fill border border-kd-stat-border"
                         : "border border-kd-card-border-light border-t-2 border-t-kd-mint-2",
                     ]}
+                    data-card={ink ? "dark framed" : "light framed"}
                   >
                     <p
                       class:list={["text-label-sm uppercase", ink ? "text-kd-mint" : "text-kd-mint-2"]}

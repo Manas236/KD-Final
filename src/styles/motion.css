@@ -121,3 +121,78 @@
     transition-delay: var(--kd-reveal-delay, 0ms);
   }
 }
+
+/* ---------- 3. Hover, pointer devices only ----------
+   Links that already change colour on hover (their class carries a
+   `hover:` utility) ease into it instead of switching. A colour fading
+   is not movement, so this one holds under reduced motion too. */
+@media screen and (hover: hover) {
+  :root.kd-motion:not([data-nt-mode]) a[class*="hover:"] {
+    transition:
+      color 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+}
+
+/* A card's accent rule, drawn from the left. */
+@keyframes kd-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media screen and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  /* Photographs zoom a little inside their own frame. Every photo tile
+     in the design is an overflow-hidden box with the <img> as its direct
+     child, so the zoom is clipped and nothing around it moves. The
+     heroes hold theirs a level deeper and are left alone. */
+  :root.kd-motion:not([data-nt-mode]) .overflow-hidden > img {
+    transition: transform 700ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  :root.kd-motion:not([data-nt-mode]) .overflow-hidden:hover > img {
+    transform: scale(1.04);
+  }
+
+  /* Arrows (Arrow.astro, and the text arrow on a back link) nudge the
+     way they point. */
+  :root.kd-motion:not([data-nt-mode]) [data-arrow] {
+    transition: transform 220ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  :root.kd-motion:not([data-nt-mode]) :is(a, button):hover [data-arrow] {
+    transform: translateX(3px);
+  }
+  :root.kd-motion:not([data-nt-mode]) :is(a, button):hover [data-arrow="back"] {
+    transform: translateX(-3px);
+  }
+
+  /* Cards: a 2px rule in the band's accent draws along the foot of the
+     card, from the left. Flat and square, no shadow, no lift: a lift
+     would break the shared dividers of the gapless card rows. The rule
+     exists only while the pointer is on the card, so a card at rest is
+     untouched. data-card is set in the card components: "light" or
+     "dark" for the band, plus "framed" on a card with a 1px border all
+     round, whose rule then covers the bottom one. */
+  :root.kd-motion:not([data-nt-mode]) [data-card]:hover {
+    position: relative;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-card]:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--kd-mint-2);
+    transform-origin: left center;
+    animation: kd-draw 320ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+    pointer-events: none;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-card~="dark"]:hover::after {
+    background-color: var(--kd-mint);
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-card~="framed"]:hover::after {
+    left: calc(-1 * var(--kd-hairline));
+    right: calc(-1 * var(--kd-hairline));
+    bottom: calc(-1 * var(--kd-hairline));
+  }
+}

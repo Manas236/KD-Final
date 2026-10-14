@@ -6,11 +6,14 @@
 
    Sized in `em` so it tracks whatever type token the label carries —
    the same component sits beside 14px `ui` and 15px `ui-lg` without
-   either one being told about the other. */
+   either one being told about the other.
+
+   `data-arrow` is the hook for its hover nudge (motion.css §3). */
 ---
 
 <svg
   class="w-[1em] h-[1em] shrink-0"
+  data-arrow
   viewBox="0 0 16 16"
   fill="none"
   stroke="currentColor"
