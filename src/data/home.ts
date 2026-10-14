@@ -90,7 +90,10 @@ export const home = {
      description — see OPEN-QUESTIONS.md #7. Both are assembled from
      approved fragments rather than written fresh. */
   meta: {
-    title: "K.D. Constructions — EPC Infrastructure · Vashi, Navi Mumbai",
+    /* The tab title is the company name and nothing else, set by the
+       client 2026-10-14. A shared link keeps the longer line. */
+    title: "K.D. Constructions",
+    ogTitle: "K.D. Constructions | EPC Infrastructure · Vashi, Navi Mumbai",
     description: META_DESCRIPTION,
   },
 

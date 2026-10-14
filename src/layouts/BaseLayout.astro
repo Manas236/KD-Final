@@ -34,6 +34,9 @@ import interLatinExt from "@fontsource-variable/inter/files/inter-latin-ext-wght
 
 interface Props {
   title: string;
+  /** The share title (og:title), for a page whose tab title is shorter
+      than what a shared link should say. Omitted, it is `title`. */
+  ogTitle?: string;
   description: string;
   /** Keep this page out of the search index. */
   noindex?: boolean;
@@ -51,7 +54,7 @@ interface Props {
   breadcrumbs?: readonly { name: string; path: string }[];
 }
 
-const { title, description, noindex = false, image, imageAlt, breadcrumbs } = Astro.props;
+const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -211,7 +214,7 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
