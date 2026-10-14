@@ -202,7 +202,8 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
    Keep any comment down there to a single line. */
 
 /* ---------- Motion ----------
-   src/styles/motion.css has the whole of it.
+   Two more tags, same split as the editor's. src/styles/motion.css has
+   the whole of it.
 
    1. An inline head script puts `kd-motion` on <html> before the body
       is parsed. Every rule in motion.css hangs off that class, so with
@@ -211,7 +212,12 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
       rather than flashing in after it. Left off on /studio/*, and when
       a signed-in editor's last page was in edit mode (inline-edit.js
       keeps that in sessionStorage as "kd-edit-mode" and restores it),
-      so editable copy is never hidden or moving under the editor. */
+      so editable copy is never hidden or moving under the editor.
+
+   2. A bundled script at the end of the body, src/scripts/reveal.js:
+      the scroll reveal. It runs after the page's own scripts, so on
+      /projects#gallery the filter has already opened its tab and
+      scrolled before the reveal looks at what is on screen. */
 ---
 
 <!doctype html>
@@ -476,6 +482,11 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
   </head>
   <body>
     <slot />
+
+    <!-- Scroll reveal: blocks below the fold fade up once as they arrive. See the frontmatter. -->
+    <script>
+      import "../scripts/reveal.js";
+    </script>
 
     <!-- In-page text editing, part 2 of 2: the editor, for signed-in browsers only. See the frontmatter. -->
     <script>
