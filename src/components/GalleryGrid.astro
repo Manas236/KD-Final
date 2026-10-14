@@ -50,7 +50,7 @@ const LIGHTBOX_WIDTH = 1600;
    same size and crop instead of through <Image>. */
 const tiles = await Promise.all(
   photos.map(async (photo) => {
-    const alt = `${project} — ${photo.caption}`;
+    const alt = `${project}. ${photo.caption}`;
     if (isUpload(photo.file)) {
       const urls = uploadUrls(photo.file);
       return { photo, image: null, tile: urls.tile, full: urls.full, alt };

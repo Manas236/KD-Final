@@ -118,7 +118,7 @@ async function projectImages(
   for (const photo of photos ?? []) {
     out.push({
       loc: await tileUrl(photo.file, origin),
-      title: `${title} — ${photo.caption}`,
+      title: `${title}. ${photo.caption}`,
     });
   }
   return out;
@@ -134,7 +134,7 @@ async function galleryPageImages(origin: URL, live: LiveState): Promise<SitemapI
       for (const photo of group.photos) {
         out.push({
           loc: await tileUrl(photo.file, origin),
-          title: `${group.project} — ${photo.caption}`,
+          title: `${group.project}. ${photo.caption}`,
         });
       }
     }
@@ -154,7 +154,7 @@ async function hseImages(origin: URL): Promise<SitemapImage[]> {
       const wide = media.length % 2 === 1 && i === 0;
       out.push({
         loc: await rendition(galleryImage(m.file), wide ? { width: 1232, height: 480 } : { width: 800, height: 480 }, origin),
-        title: `${hse.hero.kicker} — ${m.title}`,
+        title: `${hse.hero.kicker}. ${m.title}`,
       });
     }
   }

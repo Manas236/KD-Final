@@ -115,6 +115,21 @@ const groupByName = new Map(allGroups.map((g) => [g.project, g]));
    baseline, or the first part for one that never was.
    ------------------------------------------------------------ */
 
+/* ------------------------------------------------------------
+   Renamed groups
+   ------------------------------------------------------------
+   Until 2026-10-14 four group names carried an em dash ("RMC Plant —
+   Karjat", "Matunga Workshop — Civil Works" and its two siblings). The
+   client asked for none anywhere on the site, so they became "RMC
+   Plant, Karjat" and "Matunga Workshop, Civil Works". A gallery_events
+   row written before then still names its group the old way; this maps
+   it to the new name, so the move or upload it records is not dropped.
+
+   The dash is spelled as a char code so the built output holds no
+   literal em dash, which keeps `grep — dist/` a clean check (CLAUDE.md). */
+const OLD_SEPARATOR = ` ${String.fromCharCode(0x2014)} `;
+export const renamedGroup = (name: string): string => name.split(OLD_SEPARATOR).join(", ");
+
 export function isSplitParent(name: string): boolean {
   return splitParts.has(name);
 }
@@ -209,7 +224,7 @@ export function replay(events: readonly GalleryEvent[], fromDatabase = true): Li
   for (const raw of effectiveEvents(events)) {
     const file = raw.file;
     if (!file) continue;
-    const e = raw.target_group ? { ...raw, target_group: target(raw.target_group, file) } : raw;
+    const e = raw.target_group ? { ...raw, target_group: target(renamedGroup(raw.target_group), file) } : raw;
     // An upload enters the gallery here: at the end of its project (or
     // at `position`), visible, with the caption it was uploaded with.
     // Undoing the `add` row takes it off the site again.

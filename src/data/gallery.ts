@@ -236,9 +236,9 @@ export const socialGalleries: readonly ProjectGallery[] = [
    the lit stair and the reception ceiling; Civil is everything else,
    buildings, landscaping, boundary works and interiors. */
 export const MATUNGA_PARTS = {
-  civil: "Matunga Workshop — Civil Works",
-  mechanical: "Matunga Workshop — Mechanical Works",
-  electrical: "Matunga Workshop — Electrical Works",
+  civil: "Matunga Workshop, Civil Works",
+  mechanical: "Matunga Workshop, Mechanical Works",
+  electrical: "Matunga Workshop, Electrical Works",
 } as const;
 
 const matungaParts: readonly ProjectGallery[] = [
@@ -374,7 +374,7 @@ export const rmcPlantPhotos: readonly GalleryPhoto[] = [
 /* Titles are the plant pages' own H1s. */
 export const plantGalleries: readonly ProjectGallery[] = [
   { project: "Vindhane Steel Fabrication Plant", href: "/resources/vindhane-plant", photos: vindhanePlantPhotos },
-  { project: "RMC Plant — Karjat", href: "/resources/rmc-plant-karjat", photos: rmcPlantPhotos },
+  { project: "RMC Plant, Karjat", href: "/resources/rmc-plant-karjat", photos: rmcPlantPhotos },
 ];
 
 /* The EHS team's September 2026 site reports — also the photo band on
