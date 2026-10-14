@@ -196,3 +196,34 @@
     bottom: calc(-1 * var(--kd-hairline));
   }
 }
+
+/* ---------- 4. Homepage hero, on load ----------
+   Headline, sub-paragraph and buttons fade up once, a beat apart.
+   Never the photograph. Hero.astro numbers the three with data-hero-in.
+
+   THEY START AT 35%, NOT AT ZERO, and that is a measured decision. The
+   page's Largest Contentful Paint is not the photograph: Chrome treats
+   an image that fills the window as a background and skips it, so the
+   LCP element is the headline at 1280 and the sub-paragraph on a phone.
+   LCP ignores text at opacity 0, so a fade from zero reported it some
+   640ms late (the length of the fade) at every width. From 35% the copy
+   is on screen, legibly, in the first frame: LCP lands on first paint,
+   the same as before motion was added, and the fade is still seen. */
+@keyframes kd-rise {
+  from {
+    opacity: 0.35;
+    transform: translateY(10px);
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  :root.kd-motion:not([data-nt-mode]) [data-hero-in] {
+    animation: kd-rise 640ms cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-hero-in="2"] {
+    animation-delay: 100ms;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-hero-in="3"] {
+    animation-delay: 200ms;
+  }
+}

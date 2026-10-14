@@ -25,6 +25,12 @@
    sit on ink, and the nav is transparent over it (Nav.astro, `overlay`).
    Below 1080 the description above holds unchanged. `data-nav-overlay`
    is what the nav watches to know when to go solid again.
+
+   ON LOAD the headline, the sub-paragraph and the buttons fade up once,
+   in that order: `data-hero-in`, motion.css §4. The photograph is never
+   held back. The fade starts at 35%, not zero, because the headline (the
+   sub-paragraph on a phone) is the page's Largest Contentful Paint, and
+   text at zero opacity does not count as painted: see motion.css.
    ============================================================ */
 import { Image } from "astro:assets";
 import backdrop from "../assets/hero-nhava-sheva-station.jpg";
@@ -69,18 +75,18 @@ const { hero } = home;
           below is kept as a marker that the whitespace is deliberate;
           the config is what makes it work. Turn the compressor back on
           and this heading breaks. */}
-      <h1 class="font-display text-d4 sm:text-d3 lg:text-d1 text-kd-mist mt-16">
+      <h1 class="font-display text-d4 sm:text-d3 lg:text-d1 text-kd-mist mt-16" data-hero-in="1">
         <span data-edit="home.hero.headline.lead">{hero.headline.lead}</span>{" "}
         <span class="text-kd-mint" data-edit="home.hero.headline.accent"
           >{hero.headline.accent}</span
         >
       </h1>
 
-      <p class="text-body-lg text-kd-mist mt-24" data-edit="home.hero.sub">
+      <p class="text-body-lg text-kd-mist mt-24" data-edit="home.hero.sub" data-hero-in="2">
         {hero.sub}
       </p>
 
-      <div class="flex flex-wrap items-center gap-16 mt-32">
+      <div class="flex flex-wrap items-center gap-16 mt-32" data-hero-in="3">
         <a
           href={hero.buttons.primary.href}
           class="inline-flex items-center gap-8 text-ui bg-kd-mint text-kd-ink-deep px-24 py-12"
