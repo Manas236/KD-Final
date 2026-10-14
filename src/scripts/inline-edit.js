@@ -755,7 +755,7 @@ function setMode(on, quiet) {
   if (quiet) return;
   toast(
     state.editing
-      ? "Editing on — click any text to change it."
+      ? "Editing on. Click any text to change it."
       : "Editing off."
   );
 }
@@ -801,7 +801,7 @@ async function send(url, body) {
       return { ok: false, status: res.status, error: data.error || "Could not save." };
     return { ok: true, data };
   } catch (err) {
-    return { ok: false, status: 0, error: "No connection — the change was not saved." };
+    return { ok: false, status: 0, error: "No connection. The change was not saved." };
   }
 }
 

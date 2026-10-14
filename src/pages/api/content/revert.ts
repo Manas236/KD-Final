@@ -150,6 +150,6 @@ export const POST: APIRoute = async (context) => {
     return json({ ok: true, id: res.insertId, text: target });
   } catch (err) {
     console.error("Failed to revert content edit:", err);
-    return json({ error: "Could not undo — please try again." }, 500);
+    return json({ error: "Could not undo. Please try again." }, 500);
   }
 };

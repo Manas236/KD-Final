@@ -159,7 +159,7 @@ export const POST: APIRoute = async (context) => {
     `<p>The resume is attached. Reply to this email to answer ${escapeHtml(name)} directly.</p>`;
 
   const emailed = await sendToCareers({
-    subject: `Job application: ${role} — ${name}`,
+    subject: `Job application: ${role} | ${name}`,
     text,
     html,
     replyTo: `"${name.replace(/["\\]/g, "")}" <${email}>`,

@@ -79,7 +79,7 @@ if (!SECRET) {
   throw new Error(
     "EDIT_SECRET is not set. The in-page editor cannot sign or verify " +
       "sessions without it. Set EDIT_SECRET (32+ random bytes) in .env " +
-      "— see .env.example."
+      "(see .env.example)."
   );
 }
 

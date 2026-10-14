@@ -120,10 +120,10 @@ async function send(body) {
     });
     const data = await res.json().catch(() => ({}));
     if (res.status === 401)
-      return { ok: false, error: "Your editing session has ended — sign in again, then retry." };
+      return { ok: false, error: "Your editing session has ended. Sign in again, then retry." };
     if (!res.ok) return { ok: false, error: data.error || "Could not save." };
     return { ok: true, data };
   } catch {
-    return { ok: false, error: "No connection — nothing was saved." };
+    return { ok: false, error: "No connection. Nothing was saved." };
   }
 }

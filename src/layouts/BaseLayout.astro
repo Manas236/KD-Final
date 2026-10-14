@@ -241,7 +241,7 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
 
     <link rel="stylesheet" href="/editor-ui.css" />
 
-    <!-- In-page text editing, part 1 of 2 — see the note in the frontmatter. -->
+    <!-- In-page text editing, part 1 of 2. See the note in the frontmatter. -->
     <script is:inline define:vars={{ NT_CACHE_PREFIX: CACHE_PREFIX }}>
       window.__ntEdit = (function () {
         /* Written as escapes rather than literals: these characters are
@@ -321,7 +321,7 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
 
         function place(el, key, text, original) {
           /* The anchor is what the page said when the edit was made. It
-             is recorded, not matched on — see the frontmatter note. */
+             is recorded, not matched on. See the frontmatter note. */
           if (!el.dataset.ntOriginal) el.dataset.ntOriginal = original;
           el.dataset.ntKey = key;
           el.dataset.ntApplied = text;
@@ -413,7 +413,7 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
         }
 
         /* Resolves once the server's answer is ON the page, which needs
-           both the fetch and a parsed document — whichever lands second
+           both the fetch and a parsed document: whichever lands second
            does the work. The editor awaits this rather than `ready` so
            the text is applied in exactly one place. */
         var applied = ready.then(function (data) {

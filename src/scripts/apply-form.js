@@ -67,14 +67,14 @@ if (form && done) {
         }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) throw new Error(data.error || "Could not send — please try again.");
+      if (!res.ok || !data.ok) throw new Error(data.error || "Could not send. Please try again.");
       form.hidden = true;
       done.hidden = false;
       done.focus();
     } catch (err) {
       fail(
         err instanceof TypeError
-          ? "No connection — please check your internet and try again."
+          ? "No connection. Please check your internet and try again."
           : err.message
       );
     } finally {

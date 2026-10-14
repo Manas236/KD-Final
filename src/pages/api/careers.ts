@@ -105,6 +105,6 @@ export const POST: APIRoute = async (context) => {
     return json({ error: "Could not read the change." }, 400);
   } catch (err) {
     console.error("Failed to save job posting:", err);
-    return json({ error: "Could not save — please try again." }, 500);
+    return json({ error: "Could not save. Please try again." }, 500);
   }
 };

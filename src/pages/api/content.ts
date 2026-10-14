@@ -255,6 +255,6 @@ export const POST: APIRoute = async (context) => {
     return json({ ok: true, id: res.insertId, text: check.text });
   } catch (err) {
     console.error("Failed to save content edit:", err);
-    return json({ error: "Could not save — please try again." }, 500);
+    return json({ error: "Could not save. Please try again." }, 500);
   }
 };

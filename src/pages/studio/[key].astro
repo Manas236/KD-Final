@@ -76,7 +76,7 @@ const button = "inline-flex items-center text-ui px-24 py-12 transition";
 ---
 
 <BaseLayout
-  title="Sign in — K.D. Constructions"
+  title="Sign in | K.D. Constructions"
   description="Editor sign-in."
   noindex
 >
@@ -174,7 +174,7 @@ const button = "inline-flex items-center text-ui px-24 py-12 transition";
          replace, not assign: the secret URL must not be left in the
          address bar or sitting one Back press away in the history of a
          browser somebody else may pick up. That matters MORE on the way
-         out than on the way in — signing out is what you do on a shared
+         out than on the way in: signing out is what you do on a shared
          or borrowed machine, and it is the moment the slug is most
          likely to be left behind for the next person. */
       function goHome() {
@@ -190,7 +190,7 @@ const button = "inline-flex items-center text-ui px-24 py-12 transition";
               /* fetch only rejects on a network failure, so a 500 from
                  the server arrives here as a fulfilled promise. Without
                  this check the button would send you to the home page
-                 looking signed out while the cookie was still set —
+                 looking signed out while the cookie was still set,
                  the one lie a sign-out button must never tell. */
               if (res.ok) {
                 goHome();

@@ -46,7 +46,7 @@ const when = (d: Date) =>
 const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(b / 1024)} KB`);
 ---
 
-<BaseLayout title="Applications — K.D. Constructions" description="Job applications sent from the careers page." noindex>
+<BaseLayout title="Applications | K.D. Constructions" description="Job applications sent from the careers page." noindex>
   <link rel="stylesheet" href="/gallery-manager.css" />
   <main class="gm">
     <header class="gm-top">
@@ -66,7 +66,7 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
         mailOn ? (
           <p>
             Every application sent from the careers page is emailed to <strong>{careersInbox()}</strong> with the
-            resume attached, and also kept here. If one shows <strong>Not emailed</strong>, the email failed — the
+            resume attached, and also kept here. If one shows <strong>Not emailed</strong>, the email failed, but the
             application and resume are still here.
           </p>
         ) : (
@@ -79,7 +79,7 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
       <p>
         Applications are deleted automatically {RETENTION_MONTHS} months after they arrive, as the{" "}
         <a href="/privacy">privacy policy</a> says. If an applicant asks for their data to be removed, use{" "}
-        <strong>Delete</strong> on their row — it removes the details and the resume from this server. The copy
+        <strong>Delete</strong> on their row. It removes the details and the resume from this server. The copy
         in the HR mailbox has to be deleted there by hand.
       </p>
     </section>
@@ -172,7 +172,7 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
         const { error } = await res.json().catch(() => ({ error: "Could not delete." }));
         btn.textContent = error || "Could not delete.";
       } catch {
-        btn.textContent = "Could not delete — check the connection.";
+        btn.textContent = "Could not delete. Check the connection.";
       }
       btn.disabled = false;
       btn.dataset.armed = "";
