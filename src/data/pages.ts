@@ -951,33 +951,77 @@ export const clients: InfoPageCopy = {
       kicker: "Railways",
       heading: "Railway clients.",
       items: [
+        /* 15 Oct 2026: the works on these five cards were a `body` line
+           joined with "·"; each is now a link to its page under
+           /projects, like CIDCO's below. The labels keep the cards'
+           approved wording, which is not always the page's title
+           ("Panvel–Karjat Suburban Rail Corridor" opens "Panvel–Karjat
+           Railway Line"). Sir is to say whether they should read as the
+           page titles (OPEN-QUESTIONS.md #49). The Matunga LHB page is on
+           both the Indian Railways and the COFMOW card, as the text was. */
         {
           title: "Indian Railways",
-          body: "Matunga Railway Workshop · LHB Coach Maintenance Facilities, Matunga",
           logo: "indian-railways.png",
+          links: [
+            { label: "Matunga Railway Workshop", href: "/projects/matunga-workshop" },
+            {
+              label: "LHB Coach Maintenance Facilities, Matunga",
+              href: "/projects/matunga-lhb-coach-maintenance-facilities",
+            },
+          ],
         },
         {
           title: "Central Railway",
-          body:
-            "Matunga Z-Bridge · Sanpada Carshed · Nhava Sheva & Uran Railway Stations · " +
-            "Solapur Vande Bharat Maintenance Depot",
           logo: "central-railway.png",
+          links: [
+            { label: "Matunga Z-Bridge", href: "/projects/matunga-z-bridge" },
+            { label: "Sanpada Carshed", href: "/projects/sanpada-carshed" },
+            {
+              label: "Nhava Sheva & Uran Railway Stations",
+              href: "/projects/nhava-sheva-and-uran-railway-stations",
+            },
+            {
+              label: "Solapur Vande Bharat Maintenance Depot",
+              href: "/projects/solapur-vande-bharat-maintenance-depot",
+            },
+          ],
         },
         {
           title: "Western Railway",
-          body: "Lower Parel Railway Redevelopment",
           logo: "western-railway.png",
+          links: [
+            {
+              label: "Lower Parel Railway Redevelopment",
+              href: "/projects/lower-parel-railway-redevelopment",
+            },
+          ],
         },
         {
           title: "MRVC",
-          body:
-            "Panvel–Karjat Suburban Rail Corridor · Mumbai Harbour Line Station Redevelopment · " +
-            "Harbour Line FOBs",
           logo: "mrvc.png",
+          links: [
+            {
+              label: "Panvel–Karjat Suburban Rail Corridor",
+              href: "/projects/panvel-karjat-railway-line",
+            },
+            {
+              label: "Mumbai Harbour Line Station Redevelopment",
+              href: "/projects/mumbai-harbour-line-station-redevelopment",
+            },
+            { label: "Harbour Line FOBs", href: "/projects/harbour-line-fobs-and-trespass-control" },
+          ],
         },
         /* No COFMOW mark was supplied — InfoPage sets the name in the
            well instead. Add `logo` here when one arrives. */
-        { title: "COFMOW", body: "LHB Coach Maintenance Facilities at Matunga" },
+        {
+          title: "COFMOW",
+          links: [
+            {
+              label: "LHB Coach Maintenance Facilities at Matunga",
+              href: "/projects/matunga-lhb-coach-maintenance-facilities",
+            },
+          ],
+        },
         /* Added 2026-10-09 at the client's request. WPO is an Indian
            Railways organisation with no mark of its own, so it carries
            the Indian Railways roundel. IRCON's mark is its published

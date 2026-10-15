@@ -2994,3 +2994,41 @@ outside them (2,143, then 2,177) keeps the same box, colour, size and
 display. The CSS only gains the new position utilities. `check-edit-keys`
 passes on `/projects`, all eight pages and the Rabale and Bonkode pages; no
 em dash on any of them; no horizontal overflow at 390.
+
+## 49. /clients: the railway cards link their works
+
+2026-10-15. The user asked why the works on the CIDCO and NMMC cards are
+links and the ones on the railway cards are not. The CIDCO and NMMC links came
+with K.D.'s list of completed works (#44); the railway cards were older copy,
+each card's works one `body` line joined with "·". Every work named on them
+already had its page under `/projects`, so each is now a link, like CIDCO's:
+
+| Card | Label (the card's wording, unchanged) | Opens |
+| --- | --- | --- |
+| Indian Railways | Matunga Railway Workshop | `/projects/matunga-workshop` |
+| Indian Railways | LHB Coach Maintenance Facilities, Matunga | `/projects/matunga-lhb-coach-maintenance-facilities` |
+| Central Railway | Matunga Z-Bridge | `/projects/matunga-z-bridge` |
+| Central Railway | Sanpada Carshed | `/projects/sanpada-carshed` |
+| Central Railway | Nhava Sheva & Uran Railway Stations | `/projects/nhava-sheva-and-uran-railway-stations` |
+| Central Railway | Solapur Vande Bharat Maintenance Depot | `/projects/solapur-vande-bharat-maintenance-depot` |
+| Western Railway | Lower Parel Railway Redevelopment | `/projects/lower-parel-railway-redevelopment` |
+| MRVC | Panvel–Karjat Suburban Rail Corridor | `/projects/panvel-karjat-railway-line` |
+| MRVC | Mumbai Harbour Line Station Redevelopment | `/projects/mumbai-harbour-line-station-redevelopment` |
+| MRVC | Harbour Line FOBs | `/projects/harbour-line-fobs-and-trespass-control` |
+| COFMOW | LHB Coach Maintenance Facilities at Matunga | `/projects/matunga-lhb-coach-maintenance-facilities` |
+
+**For Sir, later (the user will ask).** On CIDCO and NMMC each label is the
+page's title. Here the labels keep the cards' approved wording, and five
+differ from the title of the page they open: "Matunga Railway Workshop" (page: Matunga
+Workshop), "LHB Coach Maintenance Facilities, Matunga" and "... at Matunga"
+(Matunga LHB Coach Maintenance Facilities), "Panvel–Karjat Suburban Rail
+Corridor" (Panvel–Karjat Railway Line) and "Harbour Line FOBs" (Harbour Line
+FOBs & Trespass-Control). Should they read as the page titles? WPO and IRCON
+still list no works: K.D. has not said which were theirs (PRE-LAUNCH.md asks).
+
+**Edit keys.** New: `clients.sections.0.items.{0..4}.links.N.label`. Gone:
+`clients.sections.0.items.{0..4}.body`, so an edit stored against one of
+those would no longer show; the next deploy report can list `content_edits`
+rows for them.
+
+---
