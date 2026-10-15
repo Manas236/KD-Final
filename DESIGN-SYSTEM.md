@@ -307,6 +307,16 @@ about the card itself moves.
   `object-position`. Never letterbox, never pad, never change the box.
 - Use `<Image>` from `astro:assets` with explicit `width`/`height`. `eager` for
   anything above the fold, `lazy` for everything below it.
+- **The homepage hero also has a video** (15 Oct 2026): a muted, silent loop
+  of the client's drone footage of Uran Railway Station, cut by
+  `scripts/build-hero-video.mjs`, which also writes the still beneath it (the
+  video's own first frame). It sits between that still and the overlay, at the
+  same opacity, and plays at 1080px and up only: phones keep the still unless
+  `HERO_VIDEO_ON_PHONES` in Hero.astro is switched on, which gives them the
+  720p file. The HTML carries no source and nothing autoplays; the script
+  loads it once the page has loaded (never with reduced motion, Save-Data,
+  edit mode or no script), fades it in once it is playing (motion.css §5)
+  and pauses it off screen. The headline stays the LCP element.
 
 ---
 

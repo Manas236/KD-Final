@@ -111,6 +111,12 @@
   --kd-motion-hero: calc(1000ms * var(--kd-motion-pace));
   --kd-motion-hero-travel: 20px;
   --kd-motion-hero-step: calc(180ms * var(--kd-motion-pace));
+
+  /* §5 Homepage hero video: once it is actually playing, it fades in
+     over the still, on an even curve, since the two start as the same
+     picture. */
+  --kd-motion-hero-video: calc(1200ms * var(--kd-motion-pace));
+  --kd-motion-ease-hero-video: cubic-bezier(0.37, 0, 0.63, 1);
 }
 
 /* ---------- 1. Nav menus ----------
@@ -357,5 +363,29 @@
   }
   :root.kd-motion:not([data-nt-mode]) [data-hero-in="3"] {
     animation-delay: calc(2 * var(--kd-motion-hero-step));
+  }
+}
+
+/* ---------- 5. Homepage hero video ----------
+   The drone loop behind the homepage hero (Hero.astro). Its script sets
+   the source, and the state on data-hero-video, only when the video is
+   wanted at all: 1080px and up, `kd-motion`, no edit mode, no reduced
+   motion, no Save-Data. "wait" while it loads, so the still under it
+   shows; "on" once the browser fires `playing`, when it fades in to its
+   resting opacity (the still's, from the class list). Without the
+   script there is no source and the empty video draws nothing, so the
+   still is all there is. */
+@keyframes kd-video-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  :root.kd-motion:not([data-nt-mode]) [data-hero-video="wait"] {
+    opacity: 0;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-hero-video="on"] {
+    animation: kd-video-in var(--kd-motion-hero-video) var(--kd-motion-ease-hero-video) backwards;
   }
 }

@@ -15,25 +15,40 @@
      · the image and its overlay came through absolutely positioned at
        pixel offsets. They are a stacked backdrop behind normal flow.
 
-   The backdrop is three layers, bottom to top: the photograph at 20%
-   opacity, the 90° ink gradient over it, then the content. The gradient
-   is opaque ink across the left 45%, which is exactly where the text
-   sits — so the photograph is chosen for what is in its RIGHT half.
+   The backdrop is four layers, bottom to top: the still at
+   --kd-hero-image-opacity, the drone video at the same opacity, the 90°
+   ink gradient over both, then the content. The gradient is near-opaque
+   ink across the left 45%, which is exactly where the text sits — so
+   the picture is chosen for what is in its centre and RIGHT half.
 
-   DESKTOP (≥1080px) IS DIFFERENT, by client request: the photograph
-   runs at full strength under `--kd-hero-overlay-photo`, the stat tiles
+   THE VIDEO is a loop cut from the client's drone footage of Uran
+   Railway Station by scripts/build-hero-video.mjs, which also writes the
+   still (hero-uran-poster.jpg, the video's own first frame). The HTML
+   carries no video source and nothing autoplays: the script at the foot
+   of this file loads and plays it once the page has loaded, and only at
+   1080px and up (phones keep the still unless HERO_VIDEO_ON_PHONES is
+   switched on, and then get the 720p file), and never with reduced
+   motion, Save-Data, edit mode or without `kd-motion`. It is invisible
+   until it is actually playing,
+   then fades in over the still (motion.css §5), and pauses while the
+   hero is off screen or the tab is hidden. If it cannot play, the
+   still simply stays. Neither layer is in the flow, so the layout is
+   the same whichever shows.
+
+   DESKTOP (≥1080px) IS DIFFERENT, by client request: the still and the
+   video run at full strength under `--kd-hero-overlay-photo`, the stat tiles
    sit on ink, and the nav is transparent over it (Nav.astro, `overlay`).
    Below 1080 the description above holds unchanged. `data-nav-overlay`
    is what the nav watches to know when to go solid again.
 
    ON LOAD the headline, the sub-paragraph and the buttons fade up once,
-   in that order: `data-hero-in`, motion.css §4. The photograph is never
+   in that order: `data-hero-in`, motion.css §4. The still is never
    held back. The fade starts at 35%, not zero, because the headline (the
    sub-paragraph on a phone) is the page's Largest Contentful Paint, and
    text at zero opacity does not count as painted: see motion.css.
    ============================================================ */
 import { Image } from "astro:assets";
-import backdrop from "../assets/hero-nhava-sheva-station.jpg";
+import backdrop from "../assets/hero-uran-poster.jpg";
 import { home } from "../data/home";
 import Arrow from "./Arrow.astro";
 import Kicker from "./Kicker.astro";
@@ -47,11 +62,22 @@ const { hero } = home;
       src={backdrop}
       alt={hero.backdropAlt}
       width={1551}
-      height={813}
+      height={872}
       loading="eager"
       fetchpriority="high"
       class="w-full h-full object-cover object-center [opacity:var(--kd-hero-image-opacity)] min-[1080px]:[opacity:1]"
     />
+    <video
+      class="absolute inset-0 w-full h-full object-cover object-center [opacity:var(--kd-hero-image-opacity)] min-[1080px]:[opacity:1]"
+      data-hero-video
+      muted
+      loop
+      playsinline
+      preload="none"
+      disablepictureinpicture
+      disableremoteplayback
+    >
+    </video>
     <div
       class="absolute inset-0 [background-image:var(--kd-hero-overlay)] min-[1080px]:[background-image:var(--kd-hero-overlay-photo)]"
     >
@@ -129,3 +155,95 @@ const { hero } = home;
     </div>
   </div>
 </section>
+
+<script>
+  /* The drone video behind the hero: see the note at the top of this file. */
+
+  /* Phones keep the still. Set this to true to give them the 720p file. */
+  const HERO_VIDEO_ON_PHONES = false;
+  const SOURCE = { desktop: "/video/hero-uran-1080.mp4", phone: "/video/hero-uran-720.mp4" };
+
+  const root = document.documentElement;
+  const video = document.querySelector<HTMLVideoElement>("video[data-hero-video]");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const desktop = matchMedia("(min-width: 1080px)");
+
+  /* Every condition, checked each time the video would start. */
+  const allowed = () =>
+    root.classList.contains("kd-motion") &&
+    !root.hasAttribute("data-nt-mode") &&
+    !reduce.matches &&
+    !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData &&
+    (desktop.matches || HERO_VIDEO_ON_PHONES);
+
+  if (video) {
+    /* `running`: a source is set and play() has succeeded. `failed`: the
+       browser refused to play, so the still stays for this visit. */
+    let running = false;
+    let failed = false;
+    let inView = true;
+
+    const state = (value: string) => video.setAttribute("data-hero-video", value);
+
+    /* Back to the still: no source, nothing loaded, nothing drawn. */
+    const stop = () => {
+      running = false;
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      state("");
+    };
+
+    /* Hidden ("wait") until it is actually playing, then "on" fades it
+       in over the still (motion.css §5). */
+    const start = () => {
+      state("wait");
+      video.muted = true;
+      video.src = desktop.matches ? SOURCE.desktop : SOURCE.phone;
+      video.play().then(
+        () => {
+          running = true;
+          sync();
+        },
+        () => {
+          if (video.getAttribute("data-hero-video") !== "wait") return;
+          failed = true;
+          stop();
+        },
+      );
+    };
+
+    /* Plays only while the hero is on screen and the tab is showing. */
+    const sync = () => {
+      if (!running) return;
+      if (inView && !document.hidden) video.play().catch(() => {});
+      else video.pause();
+    };
+
+    /* The editor switched on, or reduced motion asked for: the still.
+       Switched back: the video again. */
+    const recheck = () => {
+      if (allowed()) {
+        if (!running && !failed && video.getAttribute("data-hero-video") !== "wait") start();
+      } else if (video.hasAttribute("src")) {
+        stop();
+      }
+    };
+
+    video.addEventListener("playing", () => {
+      if (video.getAttribute("data-hero-video") === "wait") state("on");
+    });
+    new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      sync();
+    }).observe(video.closest("section") ?? video);
+    document.addEventListener("visibilitychange", sync);
+    new MutationObserver(recheck).observe(root, { attributes: true, attributeFilter: ["data-nt-mode"] });
+    reduce.addEventListener("change", recheck);
+
+    /* Not before the page has loaded, so the video's download never
+       competes with the fonts and the still for the first paint. */
+    if (document.readyState === "complete") recheck();
+    else addEventListener("load", recheck, { once: true });
+  }
+</script>
