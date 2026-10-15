@@ -1,0 +1,78 @@
+---
+/* ============================================================
+   HSE Tile — one photograph or clip, inside a box the caller draws
+   ------------------------------------------------------------
+   DESIGN-SYSTEM §5: object-cover filling the box, the scrim over it,
+   the caption at its foot. The caller owns the box (an `li` or `div`
+   with `relative overflow-hidden` and a height), so the <img> stays its
+   direct child and the hover zoom (motion.css §3) still reaches it.
+
+   Used by Record.astro twice over: for a band's own tiles, whose
+   caption is the tile's (`…media.N.where`), and for the head of a drill
+   card, whose caption is the card's (`…cards.N.where`). The keys are
+   passed in, so one tile never decides whose copy it shows.
+
+   VIDEO is silent and loops, and starts itself when it scrolls into
+   view; the script for that is Record.astro's. preload="none" keeps
+   the clip off the network until then.
+   ============================================================ */
+import { Image } from "astro:assets";
+import { galleryImage } from "../../lib/gallery-images";
+
+interface Props {
+  media: { readonly file?: string; readonly video?: string; readonly alt: string };
+  where: string;
+  title: string;
+  whereKey: string;
+  titleKey: string;
+  /** The large scrim, 32px in and a d6 title: a tile across the row. */
+  large?: boolean;
+  /** The size the photograph is requested at. */
+  width: number;
+  height: number;
+}
+
+const { media, where, title, whereKey, titleKey, large = false, width, height } = Astro.props;
+---
+
+{
+  media.video ? (
+    <video
+      class="absolute inset-0 w-full h-full object-cover object-center"
+      poster={`/video/${media.video}.jpg`}
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-label={media.alt}
+      data-hse-video
+    >
+      <source src={`/video/${media.video}.mp4`} type="video/mp4" />
+    </video>
+  ) : (
+    <Image
+      src={galleryImage(media.file!)}
+      alt={media.alt}
+      width={width}
+      height={height}
+      loading="lazy"
+      class="absolute inset-0 w-full h-full object-cover object-center"
+    />
+  )
+}
+<div
+  class="absolute inset-0"
+  style={`background-image: var(${large ? "--kd-scrim-lg" : "--kd-scrim-sm"})`}
+  aria-hidden="true"
+/>
+<div class:list={["absolute inset-x-0 bottom-0", large ? "p-32" : "p-20"]}>
+  <p class="text-meta-sm text-kd-fog" data-edit={whereKey}>
+    {where}
+  </p>
+  <p
+    class:list={["font-display text-kd-mist mt-6", large ? "text-d6" : "text-d8"]}
+    data-edit={titleKey}
+  >
+    {title}
+  </p>
+</div>

@@ -1,0 +1,123 @@
+---
+/* ============================================================
+   HSE Card — the text of one card on /hse's site bands
+   ------------------------------------------------------------
+   On a light band it is InfoPage's card (1px border, 2px mint top);
+   on ink it takes the stat tile's fill and border (§4.1), the only
+   card surface drawn on ink.
+
+   `head` false leaves out the place and title: a drill card shows them
+   over its photograph instead (Record.astro), so the text below starts
+   at the body and nothing is said twice.
+
+   STEPS. A card with `more` keeps its points behind a toggle labelled
+   with it, a native <details>, so they are in the page (for search and
+   for find-in-page, which opens it) without taking the height until
+   someone asks. `open` starts it open. In edit mode Record.astro opens
+   every one, so nothing editable is out of sight. The chevron is the
+   nav menus' own, turned over while open.
+
+   `spread` runs the points across the card in even columns, for a card
+   that has a whole row to itself (9 → 3×3, 4 → 4×1).
+   ============================================================ */
+import type { HseCard } from "../../data/pages";
+
+interface Props {
+  card: HseCard;
+  /** The card's key prefix: `hse.record.bands.B.cards.N`. */
+  k: string;
+  ink: boolean;
+  head?: boolean;
+  open?: boolean;
+  spread?: boolean;
+  as?: "li" | "div";
+  class?: string;
+}
+
+const { card: c, k, ink, head = true, open = false, spread = false, as: Tag = "li", class: extra } = Astro.props;
+const point = [
+  "text-body-sm py-10 border-t",
+  ink ? "text-kd-fog border-t-kd-stat-border" : "text-kd-slate-2 border-t-kd-card-border-light",
+];
+---
+
+<Tag
+  class:list={[
+    "p-32",
+    ink
+      ? "bg-kd-stat-fill border border-kd-stat-border"
+      : "border border-kd-card-border-light border-t-2 border-t-kd-mint-2",
+    extra,
+  ]}
+  data-card={ink ? "dark framed" : "light framed"}
+>
+  {head && (
+    <p
+      class:list={["text-label-sm uppercase", ink ? "text-kd-mint" : "text-kd-mint-2"]}
+      data-edit={`${k}.where`}
+    >
+      {c.where}
+    </p>
+  )}
+  {head && (
+    <h3
+      class:list={["font-display text-d8 mt-12", ink ? "text-kd-mist" : "text-kd-ink"]}
+      data-edit={`${k}.title`}
+    >
+      {c.title}
+    </h3>
+  )}
+  {c.body && (
+    <p
+      class:list={["text-body-sm", head && "mt-12", ink ? "text-kd-fog" : "text-kd-slate-2"]}
+      data-edit={`${k}.body`}
+    >
+      {c.body}
+    </p>
+  )}
+  {c.points && c.more && (
+    <details class="group mt-16" open={open} data-hse-steps>
+      <summary
+        class:list={[
+          "inline-flex items-center gap-8 text-ui cursor-pointer list-none [&::-webkit-details-marker]:hidden",
+          ink ? "text-kd-mint" : "text-kd-mint-2",
+        ]}
+      >
+        <span data-edit={`${k}.more`}>{c.more}</span>
+        <svg
+          class="w-10 h-10 group-open:rotate-180"
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M1.5 3.5L5 7l3.5-3.5" stroke-linecap="square" />
+        </svg>
+      </summary>
+      <ul class="mt-12">
+        {c.points.map((p, j) => (
+          <li class:list={point} data-edit={`${k}.points.${j}`}>
+            {p}
+          </li>
+        ))}
+      </ul>
+    </details>
+  )}
+  {c.points && !c.more && (
+    <ul
+      class:list={[
+        "mt-16",
+        spread && "sm:grid sm:grid-cols-2 sm:gap-x-24",
+        spread && (c.points.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-4"),
+      ]}
+    >
+      {c.points.map((p, j) => (
+        <li class:list={point} data-edit={`${k}.points.${j}`}>
+          {p}
+        </li>
+      ))}
+    </ul>
+  )}
+</Tag>

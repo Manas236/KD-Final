@@ -63,7 +63,15 @@ export interface InfoSection {
 export interface InfoPageCopy {
   readonly meta: { readonly title: string; readonly description: string };
   readonly nav: typeof home.nav;
-  readonly hero: { readonly kicker: string; readonly title: string; readonly sub: string };
+  readonly hero: {
+    readonly kicker: string;
+    readonly title: string;
+    readonly sub: string;
+    /** Stat tiles under the sub-paragraph (/hse's record at a glance).
+        A page without them renders exactly as before. */
+    readonly stats?: readonly { readonly value: string; readonly label: string }[];
+    readonly statsNote?: string;
+  };
   readonly sections: readonly InfoSection[];
   readonly cta: { readonly kicker: string; readonly headline: string; readonly button: NavLink };
   readonly footer: typeof home.footer;
@@ -264,8 +272,19 @@ export interface HseCard {
   readonly body?: string;
   readonly points?: readonly string[];
   /** Spans the whole row, under the paired cards — for the one card
-      whose copy is much longer than its neighbours'. */
+      whose copy is much longer than its neighbours'. Beside a drill
+      register (a band whose cards carry `media`), it spans two of the
+      register's three columns instead. */
   readonly wide?: boolean;
+  /** The photograph or clip of this same event, drawn at the head of
+      the card with the card's own `where` and `title` over it, so the
+      picture and its account are one block and nothing is said twice.
+      Attributes only: its text is the card's. */
+  readonly media?: { readonly file?: string; readonly video?: string; readonly alt: string };
+  /** On a card with `media`: the label of the toggle that opens
+      `points`. The first card of an odd-numbered register opens with
+      them shown. */
+  readonly more?: string;
 }
 
 export interface HseBand {
@@ -273,10 +292,20 @@ export interface HseBand {
   readonly kicker: string;
   readonly heading: string;
   readonly intro?: string;
+  /** A standalone link right-aligned against the heading (DESIGN-SYSTEM §6). */
+  readonly link?: NavLink;
   readonly media?: readonly HseMedia[];
+  /** The media tiles share the cards' row instead of a row of their
+      own, each tile as tall as the cards beside it. Three or more tiles
+      still lead with the first across the row. */
+  readonly side?: boolean;
   readonly stats?: readonly { readonly value: string; readonly label: string }[];
   readonly statsNote?: string;
   readonly cards?: readonly HseCard[];
+  /** Card indexes in the order they are shown. The keys follow the
+      array, never the order, so a card can move without its stored
+      edits moving off it (DESIGN-SYSTEM §9). */
+  readonly order?: readonly number[];
 }
 
 export interface HseCopy extends InfoPageCopy {
@@ -297,6 +326,17 @@ export const hse: HseCopy = {
     sub:
       "HSE is not a separate priority; it is part of every priority. We maintain the same " +
       "discipline, care and accountability on every project, at every site, every day.",
+    /* The record at a glance, 15 Oct 2026, each figure taken from the
+       page below it. The man-hours are read off the Karjat banner
+       (OPEN-QUESTIONS.md #42) and the drills are the register's seven:
+       both to be confirmed by the HSE team (PRE-LAUNCH.md S16). */
+    stats: [
+      { value: "3,00,000", label: "Safe man-hours without a lost-time injury" },
+      { value: "3", label: "ISO-certified management systems" },
+      { value: "7", label: "Site mock drills in 2026" },
+      { value: "88", label: "Workers and staff in one medical camp" },
+    ],
+    statsNote: "Safe man-hours at Karjat, as on January 2026.",
   },
   sections: [
     {
@@ -365,81 +405,38 @@ export const hse: HseCopy = {
         intro:
           "Mock drills run on live sites, with the real equipment and the crews who would use it, " +
           "so the first minutes of a real emergency are ones everyone has already rehearsed.",
-        media: [
-          {
-            video: "hse-work-at-height-rescue-drill",
-            alt: "A work-at-height rescue drill: responders attend a casualty, carry him on a stretcher and load him into an ambulance",
-            title: "Work-at-height medical emergency drill",
-            where: "GTB Nagar Station",
-          },
-          {
-            video: "hse-fire-extinguisher-drill",
-            alt: "Workers take turns putting out a test fire with a DCP extinguisher while the crew watches",
-            title: "Fire-extinguisher drill",
-            where: "GTB Nagar Station",
-          },
-          /* Client feedback 2026-10-09: images for the drills. The photo
-             came from the EHS team's September WhatsApp reports. */
-          {
-            file: "hse-electrical-shock-drill-mankhurd.jpg",
-            alt: "Electrical-shock mock drill: a supervisor directs the crew as the casualty is loaded into a standby ambulance",
-            title: "Electrical-shock rescue drill",
-            where: "Mankhurd Station",
-          },
-          /* The heat-stress mock drill of 8 October 2026 — four of the
-             ten photographs supplied 2026-10-13, in the order they were
-             taken; all ten are on /gallery (OPEN-QUESTIONS.md #44).
-             Appended in a pair of pairs, so the count stays odd and the
-             work-at-height clip keeps the lead. The site is not on
-             record: PRE-LAUNCH.md S13 asks. */
-          {
-            file: "hse-heat-stress-drill-02.jpg",
-            alt: "Heat-stress mock drill: a workman in a full-body harness lies on the deck at the foot of a scaffold tower",
-            title: "The casualty goes down at the scaffold tower",
-            where: "Heat-stress drill · 8 October 2026",
-          },
-          {
-            file: "hse-heat-stress-drill-06.jpg",
-            alt: "Heat-stress mock drill: a supervisor and two workers fasten the straps of an orange stretcher over the casualty",
-            title: "Checked, then strapped to the stretcher",
-            where: "Heat-stress drill · 8 October 2026",
-          },
-          {
-            file: "hse-heat-stress-drill-08.jpg",
-            alt: "Heat-stress mock drill: four men carry the casualty out on the stretcher",
-            title: "Carried out by a four-man team",
-            where: "Heat-stress drill · 8 October 2026",
-          },
-          {
-            file: "hse-heat-stress-drill-10.jpg",
-            alt: "Heat-stress mock drill: the crew, in helmets and harnesses, lined up in front of two supervisors for the head count",
-            title: "Head count and debrief",
-            where: "Heat-stress drill · 8 October 2026",
-          },
-          /* The fire drill at Mohape, 31 July 2026, supplied 2026-10-15
-             (OPEN-QUESTIONS.md #47): one of its fourteen photographs, then
-             the site's own clip of the fire being put out. A pair, so the
-             count stays odd and the work-at-height clip keeps the lead. The
-             snake-bite drill has no tile: its photographs are small or a
-             wide strip once the camera's stamps are cut (all on /gallery). */
-          {
-            file: "hse-mohape-fire-drill-10.jpg",
-            alt: "Fire mock drill at Mohape: the instructor, in a green helmet, crouches with an extinguisher beside a burning test fire while the crew watches",
-            title: "Shown how, beside a live test fire",
-            where: "Fire drill · Mohape · 31 July 2026",
-          },
-          {
-            video: "hse-mohape-fire-drill",
-            alt: "Fire mock drill at Mohape: a worker puts out the test fire with a powder extinguisher while the crew stands by",
-            title: "Then put out by one of the crew",
-            where: "Fire drill · Mohape · 31 July 2026",
-          },
-        ],
+        link: { label: "Every drill photograph, in the gallery", href: "/gallery#safety-on-site" },
+        /* THE DRILL REGISTER, 15 Oct 2026, at the user's direction: the
+           band had grown to a wall of nine tiles, then a wall of seven
+           cards telling the same drills again several screens further
+           down. Now each drill is one card, its photograph or clip at
+           the head with the card's own place and title over it, and its
+           steps behind a toggle (open on the lead).
+
+           The band's tile array (`media`) is gone, and with it every
+           `hse.record.bands.0.media.*` key: retired, never to be reused.
+           Its captions were the drills' titles again, or the heat-stress
+           steps one photograph at a time. The cards keep their indexes,
+           and so their keys; `order` sets where each is shown. Cards 7
+           and 8 are the two GTB Nagar clips, which had a tile and no
+           card. The photographs that left this page are all on /gallery
+           (Safety on Site), which the band now links to. */
+        order: [3, 7, 8, 0, 6, 5, 4, 1, 2],
         cards: [
+          /* Client feedback 2026-10-09: images for the drills. The photo
+             came from the EHS team's September WhatsApp reports. Its old
+             body only restated the title; it now says what the picture
+             shows. */
           {
             title: "Electrical-shock rescue drill",
             where: "Mankhurd Station",
-            body: "An emergency mock drill for an electrical-shock casualty, run on the live site.",
+            body:
+              "Run on the live site: a supervisor directs the crew as the casualty is loaded into a " +
+              "standby ambulance.",
+            media: {
+              file: "hse-electrical-shock-drill-mankhurd.jpg",
+              alt: "Electrical-shock mock drill: the casualty is loaded into a standby ambulance",
+            },
           },
           {
             title: "Fire extinguishers kept in service",
@@ -462,17 +459,22 @@ export const hse: HseCopy = {
               "Correct handling and shifting methods followed for every piece.",
             ],
           },
-          /* Both appended 2026-10-13, and both `wide`, so the two paired
-             cards above keep their row (OPEN-QUESTIONS.md #44). The
-             heat-stress steps are what its ten photographs show, in
-             order; "heat stress" is the name the batch came under. */
+          /* Appended 2026-10-13 (OPEN-QUESTIONS.md #44). The heat-stress
+             steps are what its ten photographs show, in order; "heat
+             stress" is the name the batch came under. The register's
+             lead: the newest drill, and the one told most fully. The
+             site is not on record: PRE-LAUNCH.md S13 asks. */
           {
-            wide: true,
             title: "Heat-stress rescue drill",
             where: "8 October 2026",
             body:
               "A mock drill for a worker overcome by heat while working at height, run on the live " +
               "site with the crew's own stretcher and supervisors.",
+            media: {
+              file: "hse-heat-stress-drill-08.jpg",
+              alt: "Heat-stress mock drill: four men carry the casualty out on the stretcher",
+            },
+            more: "Step by step",
             points: [
               "A workman at the scaffold tower is overcome and goes down.",
               "The supervisor raises the alarm by phone.",
@@ -486,12 +488,16 @@ export const hse: HseCopy = {
              scenario and its three clock times, nothing else. No names —
              the report lists the coordinators and is signed. */
           {
-            wide: true,
             title: "Medical emergency drill, working at height",
             where: "Karjat · 17 April 2026",
             body:
               "The scenario: a workman falls from a scaffold while welding. Seven minutes pass " +
               "between the fall and the casualty leaving for hospital.",
+            media: {
+              file: "hse-karjat-height-drill-02.jpg",
+              alt: "Work-at-height mock drill at Karjat: the crew attends the casualty on an orange stretcher",
+            },
+            more: "Minute by minute",
             points: [
               "At 14:53 the workman falls from the scaffold.",
               "At 14:55 the supervisor alerts the project manager and the safety officer.",
@@ -499,19 +505,25 @@ export const hse: HseCopy = {
               "At 15:00 the evacuation team has the casualty in a vehicle, bound for hospital.",
             ],
           },
-          /* Appended 2026-10-15, both `wide` (OPEN-QUESTIONS.md #47). The
-             fire drill's six points are the HSE team's own seven discussion
-             points, the last two joined. The snake-bite card is the site's
-             report of 27 August 2026 and the HSE team's RIGHT rule and
-             don'ts, given in Hindi, put into English: the rule across the
-             first row, the don'ts across the second. No names. */
+          /* Appended 2026-10-15 (OPEN-QUESTIONS.md #47). The fire drill's
+             six points are the HSE team's own seven discussion points, the
+             last two joined; its clip is the site's own, of the fire being
+             put out. The snake-bite card is the site's report of 27 August
+             2026 and the HSE team's RIGHT rule and don'ts, given in Hindi,
+             put into English. Its body no longer ends on a colon: the list
+             it led into is behind the toggle now, whose label names it.
+             No names. */
           {
-            wide: true,
             title: "Fire emergency drill",
             where: "Mohape · 31 July 2026",
             body:
               "A test fire lit on the Mohape site and put out with the site's own extinguishers, by " +
               "the crew who would have to face a real one.",
+            media: {
+              video: "hse-mohape-fire-drill",
+              alt: "Fire mock drill at Mohape: a worker puts out the test fire with a powder extinguisher while the crew stands by",
+            },
+            more: "What the drill covered",
             points: [
               "The alarm is raised with a shout of \"Fire, fire, fire\".",
               "The site supervisor and HSE officer are told; the response team moves at once.",
@@ -522,14 +534,17 @@ export const hse: HseCopy = {
             ],
           },
           {
-            wide: true,
             title: "Snake-bite emergency drill",
             where: "RMC Plant, Karjat · 27 August 2026",
             body:
               "The scenario: a worker at the plant is bitten by a snake during routine work. Nearby " +
               "workers alert the supervisor and safety officer, and the response team carries him " +
-              "by stretcher to a vehicle for hospital. Then the safety officer takes the crew " +
-              "through the RIGHT rule, and what never to do:",
+              "by stretcher to a vehicle for hospital. Then the safety officer briefs the crew.",
+            media: {
+              file: "hse-karjat-snake-bite-drill-02.jpg",
+              alt: "Snake-bite mock drill at Karjat: the casualty on the stretcher, his arm bandaged and kept still",
+            },
+            more: "The RIGHT rule, and what never to do",
             points: [
               "Reassure: keep the victim calm, so he does not panic.",
               "Immobilise: keep the bitten limb still, and do not let him walk.",
@@ -541,12 +556,35 @@ export const hse: HseCopy = {
               "Never try to catch or kill the snake.",
             ],
           },
+          /* The two GTB Nagar clips, which were tiles with no card. Each
+             body says what its clip shows (the clip's own alt until now). */
+          {
+            title: "Work-at-height medical emergency drill",
+            where: "GTB Nagar Station",
+            body: "Responders attend the casualty, carry him on a stretcher and load him into an ambulance.",
+            media: {
+              video: "hse-work-at-height-rescue-drill",
+              alt: "Work-at-height rescue drill at GTB Nagar Station",
+            },
+          },
+          {
+            title: "Fire-extinguisher drill",
+            where: "GTB Nagar Station",
+            body: "Workers take turns putting out a test fire with a DCP extinguisher while the crew watches.",
+            media: {
+              video: "hse-fire-extinguisher-drill",
+              alt: "Fire-extinguisher drill at GTB Nagar Station",
+            },
+          },
         ],
       },
       {
         tone: "mist",
         kicker: "Training",
         heading: "Taught on site, to the people doing the work.",
+        /* Two sessions, side by side (15 Oct 2026), not a photograph
+           with a long card a screen below it. */
+        side: true,
         media: [
           {
             file: "hse-lifting-training-govandi.jpg",
@@ -577,6 +615,12 @@ export const hse: HseCopy = {
         tone: "white",
         kicker: "Worker Health",
         heading: "Health checks brought to the site.",
+        /* The camp's photograph beside its card (15 Oct 2026). The card
+           was titled "Medical camp, Mankhurd" over "88 workers and staff
+           covered", the photograph's own caption again; it now says what
+           its list is. The two lists share three tests on purpose: one
+           is the 12 September camp, the other the routine checks. */
+        side: true,
         media: [
           {
             file: "hse-medical-camp-mankhurd.jpg",
@@ -587,8 +631,8 @@ export const hse: HseCopy = {
         ],
         cards: [
           {
-            title: "Medical camp, Mankhurd",
-            where: "88 workers and staff covered",
+            title: "What was checked",
+            where: "At the camp",
             points: [
               "Blood sugar",
               "Blood pressure",
@@ -667,6 +711,10 @@ export const hse: HseCopy = {
         tone: "white",
         kicker: "Recognition",
         heading: "Safe work is noticed, and rewarded.",
+        /* The awards card shares the second row with the two photographs
+           of the day (15 Oct 2026). Its title repeated the photograph's
+           caption beside it ("National Safety Day awards, Mankhurd"). */
+        side: true,
         media: [
           {
             file: "hse-national-safety-week-karjat.jpg",
@@ -689,7 +737,7 @@ export const hse: HseCopy = {
         ],
         cards: [
           {
-            title: "National Safety Day awards, Mankhurd",
+            title: "Awards on the day",
             where: "Every worker and staff member took the safety pledge",
             points: [
               "Best Drawing",

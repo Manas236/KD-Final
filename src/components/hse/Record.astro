@@ -4,33 +4,43 @@
    ------------------------------------------------------------
    Copy and shape: `hse.record` in src/data/pages.ts (OPEN-QUESTIONS.md
    #42). Each band is one surface (white / mist / ink, set in the data
-   so the rhythm stays readable there) holding, in order: kicker, H2,
-   intro, a media grid, stat tiles (ink only), then cards.
+   so the rhythm stays readable there) holding, in order: kicker, H2
+   (with a standalone link right-aligned against it, if it has one),
+   intro, then its content in one of three arrangements.
 
-   MEDIA follows DESIGN-SYSTEM §5: full-bleed object-cover in a fixed
-   box, a scrim, the caption at the foot. With an odd count the first
-   item spans the row, so three read as a lead and a pair.
+   1. TILES, THEN CARDS (the default). The media grid follows §5:
+      full-bleed object-cover in a fixed box, a scrim, the caption at
+      the foot. With an odd count the first tile spans the row, so
+      three read as a lead and a pair. Stat tiles (ink only) follow,
+      then the cards.
 
-   VIDEO is silent and loops, and starts itself when it scrolls into
-   view — no player chrome, nothing to press. It pauses off screen, and
-   under prefers-reduced-motion it never starts: the poster frame shows
-   instead. preload="none" keeps the clips off the network until then.
+   2. SIDE BY SIDE (`side`). Tiles and cards share one row, a tile as
+      tall as the cards beside it, so a photograph sits next to its
+      account rather than a screen above it. Three or more tiles still
+      lead with the first across a row of its own.
 
-   SYMMETRY. Every grid — media, stats, cards — uses the same 24px gap,
-   so a 2-column row's gutter lands on a 4-column row's middle gutter
-   and the edges line up down the band. Cards in one row stretch to one
-   height, so the copy is shaped to match: side-by-side cards carry
-   similar amounts, and a card much longer than its neighbours is
-   `wide` — it takes its own row beneath them, with its list run
-   across in even columns (as does a band's only card). Cards take as
-   many columns as there are narrow cards, up to three.
+   3. THE DRILL REGISTER (cards with `media`). Each card carries its
+      own photograph or clip at its head, with the card's place and
+      title over it, then the body and the steps behind a toggle
+      (Card.astro). Three across; with an odd number the first is the
+      lead and takes the whole row, picture over two columns and its
+      text, steps open, in the third. Cards without media follow in
+      the same three columns, a `wide` one over two of them.
 
-   Cards on light bands are InfoPage's card; on ink they take the stat
-   tile's fill and border (§4.1), the only card surface drawn on ink.
+   `order` sets the order cards are shown in; their keys stay on their
+   array index, so a card can move without its stored edits moving off
+   it (DESIGN-SYSTEM §9).
+
+   SYMMETRY. Every grid uses the same 24px gap, so the columns line up
+   down the band, and cards in one row stretch to one height.
+
+   VIDEO starts when it scrolls into view and pauses off screen; under
+   prefers-reduced-motion it never starts and the poster frame shows.
    ============================================================ */
-import { Image } from "astro:assets";
 import Kicker from "../Kicker.astro";
-import { galleryImage } from "../../lib/gallery-images";
+import Arrow from "../Arrow.astro";
+import Tile from "./Tile.astro";
+import Card from "./Card.astro";
 import type { HseBand, HseCard } from "../../data/pages";
 
 interface Props {
@@ -40,26 +50,67 @@ interface Props {
 const { bands } = Astro.props;
 const K = "hse.record.bands";
 const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as const;
+const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
 ---
 
 {
   bands.map((band, b) => {
     const ink = band.tone === "ink";
     const media = band.media ?? [];
-    const odd = media.length % 2 === 1;
     const cards = band.cards ?? [];
+    const shown = (band.order ?? cards.map((_, i) => i)).map((i) => ({ c: cards[i] as HseCard, i }));
+
+    /* 3. The drill register. */
+    const entries = shown.filter(({ c }) => c.media);
+    const plain = entries.length ? shown.filter(({ c }) => !c.media) : [];
+    const leadEntry = entries.length >= 3 && entries.length % 2 === 1;
+
+    /* 2. Side by side: [lead tile] + the rest of the tiles and the cards in one row. */
+    const side = band.side === true && !entries.length;
+    const leadTile = side && media.length >= 3 && media.length % 2 === 1;
+    const rowCount = side ? media.length - (leadTile ? 1 : 0) + cards.length : 0;
+
+    /* 1. Tiles, then cards. */
+    const odd = media.length % 2 === 1;
     const narrow = cards.filter((c) => !c.wide).length;
     const spans = (c: HseCard) => c.wide || cards.length === 1;
+
+    const tileKeys = (i: number) => ({ whereKey: `${K}.${b}.media.${i}.where`, titleKey: `${K}.${b}.media.${i}.title` });
+    const cardKeys = (i: number) => ({ whereKey: `${K}.${b}.cards.${i}.where`, titleKey: `${K}.${b}.cards.${i}.title` });
+
     return (
       <section class:list={["py-96", surface[band.tone]]}>
         <div class="max-w-kd mx-auto px-24 sm:px-48">
-          <Kicker label={band.kicker} editKey={`${K}.${b}.kicker`} tone={ink ? "dark" : "light"} />
-          <h2
-            class:list={["font-display text-d4 mt-16", ink ? "text-kd-mist" : "text-kd-ink"]}
-            data-edit={`${K}.${b}.heading`}
-          >
-            {band.heading}
-          </h2>
+          {band.link ? (
+            <div class="flex flex-wrap items-end justify-between gap-40">
+              <div>
+                <Kicker label={band.kicker} editKey={`${K}.${b}.kicker`} tone={ink ? "dark" : "light"} />
+                <h2
+                  class:list={["font-display text-d4 mt-16", ink ? "text-kd-mist" : "text-kd-ink"]}
+                  data-edit={`${K}.${b}.heading`}
+                >
+                  {band.heading}
+                </h2>
+              </div>
+              <a
+                href={band.link.href}
+                class:list={["inline-flex items-center gap-8 text-ui shrink-0", ink ? "text-kd-mint" : "text-kd-mint-2"]}
+              >
+                <span data-edit={`${K}.${b}.link.label`}>{band.link.label}</span>
+                <Arrow />
+              </a>
+            </div>
+          ) : (
+            <>
+              <Kicker label={band.kicker} editKey={`${K}.${b}.kicker`} tone={ink ? "dark" : "light"} />
+              <h2
+                class:list={["font-display text-d4 mt-16", ink ? "text-kd-mist" : "text-kd-ink"]}
+                data-edit={`${K}.${b}.heading`}
+              >
+                {band.heading}
+              </h2>
+            </>
+          )}
           {band.intro && (
             <p
               class:list={["text-body mt-20 max-w-720", ink ? "text-kd-fog" : "text-kd-slate-2"]}
@@ -69,7 +120,75 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
             </p>
           )}
 
-          {media.length > 0 && (
+          {entries.length > 0 && (
+            <ul class="grid gap-24 mt-48 sm:grid-cols-2 lg:grid-cols-3">
+              {entries.map(({ c, i }, n) => {
+                const k = `${K}.${b}.cards.${i}`;
+                const lead = leadEntry && n === 0;
+                return lead ? (
+                  <li class="flex flex-col sm:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-subgrid">
+                    <div class="relative overflow-hidden h-265 sm:h-360 lg:h-auto lg:min-h-480 lg:col-span-2">
+                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} large width={1040} height={667} />
+                    </div>
+                    <Card card={c} k={k} ink={ink} head={false} open as="div" class="flex-1" />
+                  </li>
+                ) : (
+                  <li class="flex flex-col">
+                    <div class="relative overflow-hidden h-240">
+                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} width={760} height={480} />
+                    </div>
+                    <Card card={c} k={k} ink={ink} head={false} as="div" class="flex-1" />
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {plain.length > 0 && (
+            <ul class="grid gap-24 mt-24 lg:grid-cols-3">
+              {plain.map(({ c, i }) => (
+                <Card card={c} k={`${K}.${b}.cards.${i}`} ink={ink} class={c.wide ? "lg:col-span-2" : undefined} />
+              ))}
+            </ul>
+          )}
+
+          {side && (
+            <ul class:list={["grid gap-24 mt-48 sm:grid-cols-2", lgCols[rowCount as 2 | 3]]}>
+              {media.map((m, i) => {
+                const lead = leadTile && i === 0;
+                /* Alone on its row at two columns: the last of an odd run after the lead. */
+                const last = !lead && i === media.length - 1 && cards.length === 0 && rowCount % 2 === 1;
+                return (
+                  <li
+                    class:list={[
+                      "relative overflow-hidden h-265",
+                      lead ? "sm:col-span-2 lg:col-span-full sm:h-480" : "sm:h-auto sm:min-h-360",
+                      last && "sm:max-lg:col-span-2",
+                    ]}
+                  >
+                    <Tile
+                      media={m}
+                      where={m.where}
+                      title={m.title}
+                      {...tileKeys(i)}
+                      large={lead}
+                      width={lead ? 1232 : 800}
+                      height={lead ? 480 : 760}
+                    />
+                  </li>
+                );
+              })}
+              {shown.map(({ c, i }, n) => (
+                <Card
+                  card={c}
+                  k={`${K}.${b}.cards.${i}`}
+                  ink={ink}
+                  class={n === cards.length - 1 && rowCount % 2 === 1 ? "sm:max-lg:col-span-2" : undefined}
+                />
+              ))}
+            </ul>
+          )}
+
+          {!side && !entries.length && media.length > 0 && (
             <ul class="grid gap-24 mt-48 sm:grid-cols-2">
               {media.map((m, i) => {
                 const wide = odd && i === 0;
@@ -100,48 +219,16 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
                           {m.note}
                         </p>
                       </div>
-                    ) : m.video ? (
-                      <video
-                        class="absolute inset-0 w-full h-full object-cover object-center"
-                        poster={`/video/${m.video}.jpg`}
-                        muted
-                        loop
-                        playsinline
-                        preload="none"
-                        aria-label={m.alt}
-                        data-hse-video
-                      >
-                        <source src={`/video/${m.video}.mp4`} type="video/mp4" />
-                      </video>
                     ) : (
-                      <Image
-                        src={galleryImage(m.file!)}
-                        alt={m.alt}
+                      <Tile
+                        media={m}
+                        where={m.where}
+                        title={m.title}
+                        {...tileKeys(i)}
+                        large={wide}
                         width={wide ? 1232 : 800}
-                        height={wide ? 480 : 480}
-                        loading="lazy"
-                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        height={480}
                       />
-                    )}
-                    {!m.pending && (
-                      <div
-                        class="absolute inset-0"
-                        style={`background-image: var(${wide ? "--kd-scrim-lg" : "--kd-scrim-sm"})`}
-                        aria-hidden="true"
-                      />
-                    )}
-                    {!m.pending && (
-                      <div class:list={["absolute inset-x-0 bottom-0", wide ? "p-32" : "p-20"]}>
-                        <p class="text-meta-sm text-kd-fog" data-edit={`${K}.${b}.media.${i}.where`}>
-                          {m.where}
-                        </p>
-                        <p
-                          class:list={["font-display text-kd-mist mt-6", wide ? "text-d6" : "text-d8"]}
-                          data-edit={`${K}.${b}.media.${i}.title`}
-                        >
-                          {m.title}
-                        </p>
-                      </div>
                     )}
                   </li>
                 );
@@ -171,7 +258,7 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
             </div>
           )}
 
-          {band.cards && (
+          {!side && !entries.length && cards.length > 0 && (
             <ul
               class:list={[
                 "grid gap-24 mt-48",
@@ -179,65 +266,15 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
                 narrow >= 3 && "sm:grid-cols-2 lg:grid-cols-3",
               ]}
             >
-              {band.cards.map((c, i) => {
-                const k = `${K}.${b}.cards.${i}`;
-                return (
-                  <li
-                    class:list={[
-                      "p-32",
-                      c.wide && "sm:col-span-full",
-                      ink
-                        ? "bg-kd-stat-fill border border-kd-stat-border"
-                        : "border border-kd-card-border-light border-t-2 border-t-kd-mint-2",
-                    ]}
-                    data-card={ink ? "dark framed" : "light framed"}
-                  >
-                    <p
-                      class:list={["text-label-sm uppercase", ink ? "text-kd-mint" : "text-kd-mint-2"]}
-                      data-edit={`${k}.where`}
-                    >
-                      {c.where}
-                    </p>
-                    <h3
-                      class:list={["font-display text-d8 mt-12", ink ? "text-kd-mist" : "text-kd-ink"]}
-                      data-edit={`${k}.title`}
-                    >
-                      {c.title}
-                    </h3>
-                    {c.body && (
-                      <p
-                        class:list={["text-body-sm mt-12", ink ? "text-kd-fog" : "text-kd-slate-2"]}
-                        data-edit={`${k}.body`}
-                      >
-                        {c.body}
-                      </p>
-                    )}
-                    {c.points && (
-                      <ul
-                        class:list={[
-                          "mt-16",
-                          // A row-wide card runs its list across the row, in
-                          // columns that divide it evenly (9 → 3×3, 4 → 4×1).
-                          spans(c) && "sm:grid sm:grid-cols-2 sm:gap-x-24",
-                          spans(c) && (c.points.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-4"),
-                        ]}
-                      >
-                        {c.points.map((point, j) => (
-                          <li
-                            class:list={[
-                              "text-body-sm py-10 border-t",
-                              ink ? "text-kd-fog border-t-kd-stat-border" : "text-kd-slate-2 border-t-kd-card-border-light",
-                            ]}
-                            data-edit={`${k}.points.${j}`}
-                          >
-                            {point}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                );
-              })}
+              {shown.map(({ c, i }) => (
+                <Card
+                  card={c}
+                  k={`${K}.${b}.cards.${i}`}
+                  ink={ink}
+                  spread={spans(c)}
+                  class={c.wide ? "sm:col-span-full" : undefined}
+                />
+              ))}
             </ul>
           )}
         </div>
@@ -260,4 +297,14 @@ const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as c
     { threshold: 0.25 }
   );
   videos.forEach((v) => seen.observe(v));
+
+  /* Edit mode: every drill's steps open, so no editable line is out of
+     sight behind a toggle the editor's click would not reach. */
+  const root = document.documentElement;
+  const openSteps = () => {
+    if (!root.hasAttribute("data-nt-mode")) return;
+    document.querySelectorAll<HTMLDetailsElement>("details[data-hse-steps]").forEach((d) => (d.open = true));
+  };
+  openSteps();
+  new MutationObserver(openSteps).observe(root, { attributes: true, attributeFilter: ["data-nt-mode"] });
 </script>

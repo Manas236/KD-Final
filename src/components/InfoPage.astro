@@ -103,6 +103,27 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
             {hero.sub}
           </p>
         </div>
+        {/* Stat tiles (/hse only): the project pages' hero stats, run
+            across the container in a row of four. */}
+        {hero.stats && (
+          <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 mt-56">
+            {hero.stats.map((stat, i) => (
+              <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                <dd class="font-display text-d5 text-kd-mint" data-edit={`${page}.hero.stats.${i}.value`}>
+                  {stat.value}
+                </dd>
+                <dt class="text-label uppercase text-kd-slate mt-8" data-edit={`${page}.hero.stats.${i}.label`}>
+                  {stat.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        )}
+        {hero.statsNote && (
+          <p class="text-meta-sm text-kd-fog mt-16" data-edit={`${page}.hero.statsNote`}>
+            {hero.statsNote}
+          </p>
+        )}
       </div>
     </section>
 
