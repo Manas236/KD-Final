@@ -1059,10 +1059,11 @@ export const clients: InfoPageCopy = {
             { label: "Harbour Line FOBs", href: "/projects/harbour-line-fobs-and-trespass-control" },
           ],
         },
-        /* No COFMOW mark was supplied — InfoPage sets the name in the
-           well instead. Add `logo` here when one arrives. */
+        /* COFMOW's mark arrived 15 Oct 2026; until then the well set
+           its name in type. */
         {
           title: "COFMOW",
+          logo: "cofmow.png",
           links: [
             {
               label: "LHB Coach Maintenance Facilities at Matunga",

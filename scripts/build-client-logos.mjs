@@ -68,6 +68,9 @@ const LOGOS = [
      India.svg") to 1280px transparent PNGs and saved in Logo/. */
   { out: "ircon.png", src: "IRCON.png", bg: "transparent" },
   { out: "fci.png", src: "FCI.png", bg: "transparent" },
+  /* Supplied 2026-10-15: the Indian Railways roundel on COFMOW's black
+     shield, its name beneath, on a white canvas. */
+  { out: "cofmow.png", src: "COFMOW.png", bg: "flood" },
 ];
 
 /* How far a pixel may sit from the canvas colour and still be canvas.

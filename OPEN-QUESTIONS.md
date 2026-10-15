@@ -1344,6 +1344,9 @@ padding so its hairline runs edge to edge, the mark centred in it.
   `gallery.ts`'s `file`; `check-edit-keys.mjs` skips it. Eight of the ten
   clients have one. **COFMOW has no mark on disk**, so its well sets the name
   in Fraunces instead, `aria-hidden` because the editable title follows.
+  *(15 Oct 2026: COFMOW's mark was supplied as `Logo/COFMOW.png` and is now
+  in the well; every client card has a mark. Card boxes on /clients are
+  unchanged at 1280 and 390.)*
 - The marks are shown in full colour, uncropped, unscrimmed. DESIGN-SYSTEM §5
   is written for photographs; another organisation's mark is not one, and two
   of these carry the State Emblem, so nothing is recoloured or redrawn.
@@ -1354,7 +1357,7 @@ padding so its hairline runs edge to edge, the mark centred in it.
   block, not the files. The files have now been used on the assumption that
   their being supplied in the project folder is that permission. If it is
   not, remove the `logo` field from the client in question — the card falls
-  back to the name in the well, as COFMOW's does.
+  back to the name in the well, as COFMOW's did until 15 Oct.
 - **Balbharati's "logo" is a textbook-cover illustration**, not a corporate
   mark — the two children reading, cut from its printed border. It is what
   was supplied. If a proper Balbharati mark exists, drop it in `Logo/`,
