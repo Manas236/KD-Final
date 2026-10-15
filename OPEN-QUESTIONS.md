@@ -3098,3 +3098,53 @@ on a colon), `hse.record.bands.2.cards.0.title` and `.where`,
 sets where each is shown. At the next deploy, list `content_edits` rows for
 the retired and changed keys: an edit stored on a retired key no longer
 shows, and one on a changed key hides the new text.
+
+---
+
+## 51. /resources/vindhane-plant: the plant's own clip beside the paragraphs
+
+2026-10-15. The user found a video of the Vindhane plant and put it in the
+raw folder (`Vindhane Plant/Vidhane_Factory.mp4`, listed in
+raw-media.manifest.txt). It is one 38-second phone shot: the camera walks
+the length of a painted girder set on a multi-axle trailer in the yard, a
+crane's chain on it and the fabrication shed behind. It is the same lift as
+gallery photograph 06 ("A painted girder lifted onto a trailer for
+dispatch").
+
+**On the page:** the clip sits beside the four paragraphs under "The Plant",
+captioned "Plant yard, Vindhane" and "A painted girder loaded for dispatch".
+It is drawn as an /hse clip tile (`src/components/hse/Tile.astro`): silent,
+looping, starting when it scrolls into view, the poster frame only under
+reduced motion. From 1024 px it takes the right-hand column of the lists'
+grid below; narrower, it follows the paragraphs at full width. Its box is the
+clip's own 640 × 368, so nothing is cropped.
+
+**Desktop (1280 and up):** the paragraphs, the lists, the gallery and the
+page length are unchanged to the pixel at 1280, 1440 and 1920 (measured with
+the band put back to its old shape in the same page). The clip, 576 × 331,
+fills the right half of the band, which was empty, and is shorter than the
+paragraphs (356 px). Below 1280 the page grows: 1024 +68 px (the paragraphs
+narrow to 448 px), 768 +419 px, 390 +229 px.
+
+**The file:** `public/video/vindhane-girder-dispatch.mp4`, all 38 s at the
+source's 640 × 368 and 30 fps, H.264 High at CRF 28 (SSIM 0.959 against the
+source), sound removed like every clip on the site, +faststart: 2.6 MB, read
+only once the clip scrolls into view (`preload="none"`). The poster,
+`vindhane-girder-dispatch.jpg` (43 KB), is its first frame:
+`ffmpeg -i Vidhane_Factory.mp4 -an -c:v libx264 -preset slow -crf 28
+-profile:v high -pix_fmt yuv420p -color_primaries bt709 -color_trc bt709
+-colorspace bt709 -movflags +faststart`. Not on /gallery, which shows
+photographs only, like the /hse clips.
+
+**Code:** the script that starts a clip in view moved from `Record.astro` to
+`Tile.astro`, so it comes with the tile to any page; the attribute is now
+`data-tile-video` (was `data-hse-video`). The three /hse clips still start
+in view.
+
+**For Sir (PRE-LAUNCH S17):** sign off the clip on the desktop page; say
+which girder this is, so the caption can name its project and link to it;
+and send the phone's original if there is one. This copy is 640 × 368,
+likely a forwarded copy, and is a little soft at the tile's 576 px on a
+sharp screen.
+
+**Edit keys** (new): `resources.plant.clip.where`, `resources.plant.clip.title`.
