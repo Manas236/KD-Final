@@ -328,6 +328,12 @@ Uran Railway Station/uran railway station 2.jpg	1055263
 Uran Railway Station/uran railway station.jpg	3187321
 Uran Railway Station/whatsappimage20240112at1217431.jpg	197498
 Uran Railway Station/Your paragraph text.png	6848150
+Uran_Drone_Footage/DJI_0569.MOV	64558800
+Uran_Drone_Footage/DJI_0570.MOV	314094076
+Uran_Drone_Footage/DJI_0575.MOV	447723206
+Uran_Drone_Footage/DJI_0580.MOV	378046486
+Uran_Drone_Footage/DJI_0588.MOV	244351442
+Uran_Drone_Footage/DJI_0604.MOV	212413812
 Vashi FOB/AX6A7041.CR2	32119014
 Vashi FOB/AX6A7042.JPG	8726439
 Vashi FOB/AX6A7043.JPG	2409773
