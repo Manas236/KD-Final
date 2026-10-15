@@ -11,8 +11,9 @@
 
      nav (ink) -> hero (ink + image, /projects/[slug]'s three-layer
      construction, back link, kicker, H1, stat tiles) -> overview
-     (white: Story.astro's kicker/paragraph shape, then two hairline
-     lists, then the gallery block exactly as [slug] draws it) ->
+     (white: Story.astro's kicker/paragraph shape with the plant's clip
+     beside it as an /hse clip tile, then two hairline lists, then the
+     gallery block exactly as [slug] draws it) ->
      erection & proof (ink: the steel ledger's rows, each linking to
      its project page, closing on a button) -> footer (ink-deep)
 
@@ -46,6 +47,7 @@ import Kicker from "../../components/Kicker.astro";
 import Arrow from "../../components/Arrow.astro";
 import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
+import Tile from "../../components/hse/Tile.astro";
 import heroImg from "../../assets/project-vindhane-plant.jpg";
 import { plant as copy } from "../../data/plant";
 import { slugify } from "../../lib/slug";
@@ -155,12 +157,30 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
       <div class="max-w-kd mx-auto px-24 sm:px-48">
         <Kicker label={plant.overviewKicker} editKey={`${K}.overviewKicker`} tone="light" />
 
-        <div class="mt-32 max-w-560 flex flex-col gap-20">
-          {plant.body.map((paragraph, i) => (
-            <p class="text-body-sm text-kd-slate-2" data-edit={`${K}.body.${i}`}>
-              {paragraph}
-            </p>
-          ))}
+        {/* The paragraphs, and from 1024px the plant's own clip beside
+            them, in the right-hand column of the lists' grid below so
+            the two halves line up down the band. Its box keeps the
+            clip's own 640 × 368, so nothing is cropped. Narrower, it
+            follows the paragraphs at full width. */}
+        <div class="mt-32 grid grid-cols-1 lg:grid-cols-2 gap-x-32 gap-y-32 items-start">
+          <div class="max-w-560 flex flex-col gap-20">
+            {plant.body.map((paragraph, i) => (
+              <p class="text-body-sm text-kd-slate-2" data-edit={`${K}.body.${i}`}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          <div class="relative overflow-hidden aspect-[640/368]">
+            <Tile
+              media={plant.clip}
+              where={plant.clip.where}
+              title={plant.clip.title}
+              whereKey={`${K}.clip.where`}
+              titleKey={`${K}.clip.title`}
+              width={640}
+              height={368}
+            />
+          </div>
         </div>
 
         {/* Two hairline lists, the steel ledger's row grammar on a light

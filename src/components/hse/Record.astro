@@ -36,6 +36,7 @@
 
    VIDEO starts when it scrolls into view and pauses off screen; under
    prefers-reduced-motion it never starts and the poster frame shows.
+   The script for that is Tile.astro's.
    ============================================================ */
 import Kicker from "../Kicker.astro";
 import Arrow from "../Arrow.astro";
@@ -284,20 +285,6 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
 }
 
 <script>
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const videos = document.querySelectorAll<HTMLVideoElement>("video[data-hse-video]");
-  const seen = new IntersectionObserver(
-    (entries) => {
-      for (const { target, isIntersecting } of entries) {
-        const video = target as HTMLVideoElement;
-        if (isIntersecting && !reduce.matches) video.play().catch(() => {});
-        else video.pause();
-      }
-    },
-    { threshold: 0.25 }
-  );
-  videos.forEach((v) => seen.observe(v));
-
   /* Edit mode: every drill's steps open, so no editable line is out of
      sight behind a toggle the editor's click would not reach. */
   const root = document.documentElement;

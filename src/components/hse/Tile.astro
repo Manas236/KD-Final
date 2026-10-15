@@ -12,9 +12,13 @@
    card, whose caption is the card's (`…cards.N.where`). The keys are
    passed in, so one tile never decides whose copy it shows.
 
+   Also the clip beside the paragraphs on /resources/vindhane-plant,
+   whose keys are that page's (`resources.plant.clip.*`).
+
    VIDEO is silent and loops, and starts itself when it scrolls into
-   view; the script for that is Record.astro's. preload="none" keeps
-   the clip off the network until then.
+   view; the script for that is at the foot of this file, so it comes
+   with the tile to any page that draws one (Astro adds it once per
+   page). preload="none" keeps the clip off the network until then.
    ============================================================ */
 import { Image } from "astro:assets";
 import { galleryImage } from "../../lib/gallery-images";
@@ -45,7 +49,7 @@ const { media, where, title, whereKey, titleKey, large = false, width, height } 
       playsinline
       preload="none"
       aria-label={media.alt}
-      data-hse-video
+      data-tile-video
     >
       <source src={`/video/${media.video}.mp4`} type="video/mp4" />
     </video>
@@ -76,3 +80,19 @@ const { media, where, title, whereKey, titleKey, large = false, width, height } 
     {title}
   </p>
 </div>
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const videos = document.querySelectorAll<HTMLVideoElement>("video[data-tile-video]");
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        const video = target as HTMLVideoElement;
+        if (isIntersecting && !reduce.matches) video.play().catch(() => {});
+        else video.pause();
+      }
+    },
+    { threshold: 0.25 }
+  );
+  videos.forEach((v) => seen.observe(v));
+</script>

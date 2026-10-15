@@ -111,6 +111,19 @@ export const plant = {
         "full chain from shop floor to final alignment, which matters most where a launch " +
         "happens within a live railway environment with overhead OHE.",
     ],
+    /* The plant's own video, received 2026-10-15 (Vindhane Plant/
+       Vidhane_Factory.mp4): the camera walks the length of a painted
+       girder set on a trailer by crane, the lift gallery photograph 06
+       shows. Drawn beside the paragraphs above as an /hse clip tile:
+       public/video/<video>.mp4 with a .jpg poster, silent, looping. */
+    clip: {
+      video: "vindhane-girder-dispatch",
+      alt:
+        "A long painted steel girder on a multi-axle trailer in the Vindhane plant yard, " +
+        "held on a crane's chain, the fabrication shed behind",
+      where: "Plant yard, Vindhane",
+      title: "A painted girder loaded for dispatch",
+    },
 
     products: {
       head: "What the plant makes",
