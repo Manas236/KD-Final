@@ -35,6 +35,13 @@
    `data-pending` is for scripts/check-placeholders.mjs; every one is
    filled or removed before go-live (PRE-LAUNCH.md 5a–5h).
 
+   REPRESENTATIVE IMAGES (OPEN-QUESTIONS.md #48). Where the hero is a
+   generated picture, not a photograph, `detail.representative` puts its
+   caption in the hero's bottom-right corner, the same chip as on the
+   /projects tile, and the page's share card stays the site's own. Such a
+   page has no photographs, so it has no gallery block either: the block
+   shows only with photographs or a pending card to put there.
+
    Keys are `projects.detail.*`, as on the railway project pages —
    plain, because every page is its own path. These pages are in
    scripts/check-edit-keys.mjs, one route per slug.
@@ -65,10 +72,14 @@ const { detail } = page;
 const K = "projects.detail";
 
 const heroImage = detail.file ? galleryImage(detail.file) : undefined;
+/* A representative image is not the share card: a link preview shows the
+   picture without its caption. Such a page gets the site's own card. */
+const shareImage = detail.representative ? undefined : heroImage;
 
 /* Live photographs: gallery.ts with the studio gallery manager's
    changes. A project with none in the baseline can gain some from the
-   studio, so the lightbox labels fall back to the shared chrome. */
+   studio, so the lightbox labels fall back to the shared chrome, and so
+   does the gallery kicker below. */
 const photos = livePhotos(await liveState(), detail.title);
 const lightbox = photos.length > 0 ? (detail.lightbox ?? detailChrome.lightbox) : undefined;
 
@@ -90,8 +101,8 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
 <BaseLayout
   title={page.meta.title}
   description={page.meta.description}
-  image={heroImage}
-  imageAlt={heroImage ? detail.alt : undefined}
+  image={shareImage}
+  imageAlt={shareImage ? detail.alt : undefined}
   breadcrumbs={breadcrumbs}
 >
   <Nav page="projects" />
@@ -160,6 +171,15 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
           </dl>
         </div>
       </div>
+
+      {heroImage && detail.representative && (
+        <span
+          class="absolute right-24 sm:right-48 bottom-24 inline-block text-badge-sm uppercase text-kd-mist bg-kd-ink px-8 py-6"
+          data-edit={`${K}.representative`}
+        >
+          {detail.representative}
+        </span>
+      )}
     </section>
 
     <section class="bg-white py-96">
@@ -188,33 +208,35 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
           <TextBlocks slug={slug} blocks={blocks} />
         </div>
 
-        <div class="mt-56 pt-56 border-t border-kd-divider-light">
-          <Kicker label={detail.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
-          <div class="mt-32">
-            {photos.length > 0 ? (
-              <GalleryGrid project={detail.title} photos={photos} group={slug} />
-            ) : (
-              detail.photoNote && (
-                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
-                  <li
-                    class="h-265 border border-dashed border-kd-card-border-light p-20 flex flex-col"
-                    data-pending
-                  >
-                    <span class:list={[chip, "self-start text-kd-ink"]} data-edit={`${K}.photoNote.pending`}>
-                      {detail.photoNote.pending}
-                    </span>
-                    <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.photoNote.title`}>
-                      {detail.photoNote.title}
-                    </h3>
-                    <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.photoNote.body`}>
-                      {detail.photoNote.body}
-                    </p>
-                  </li>
-                </ul>
-              )
-            )}
+        {(photos.length > 0 || detail.photoNote) && (
+          <div class="mt-56 pt-56 border-t border-kd-divider-light">
+            <Kicker label={detail.galleryKicker ?? detailChrome.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
+            <div class="mt-32">
+              {photos.length > 0 ? (
+                <GalleryGrid project={detail.title} photos={photos} group={slug} />
+              ) : (
+                detail.photoNote && (
+                  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+                    <li
+                      class="h-265 border border-dashed border-kd-card-border-light p-20 flex flex-col"
+                      data-pending
+                    >
+                      <span class:list={[chip, "self-start text-kd-ink"]} data-edit={`${K}.photoNote.pending`}>
+                        {detail.photoNote.pending}
+                      </span>
+                      <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.photoNote.title`}>
+                        {detail.photoNote.title}
+                      </h3>
+                      <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.photoNote.body`}>
+                        {detail.photoNote.body}
+                      </p>
+                    </li>
+                  </ul>
+                )
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
 

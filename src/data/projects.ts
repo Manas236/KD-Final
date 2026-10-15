@@ -104,6 +104,13 @@ export interface SocialProject {
       scripts/check-placeholders.mjs fails while any exists. */
   readonly pending?: string;
   readonly note?: string;
+  /** Set when `file` is a REPRESENTATIVE image, a generated picture and
+      not a photograph of the work, which the client allows for works
+      with no photograph on record (OPEN-QUESTIONS.md #44, #48). The
+      value is the caption shown on the tile and on the page header. Such
+      a picture never goes in a gallery group, on the share card or in
+      the image sitemap, where the caption cannot follow it. */
+  readonly representative?: string;
 }
 
 /** One row of the steel ledger — see `listing.steel` below. `title` is
@@ -443,13 +450,16 @@ export const projects = {
         file: "social-lush-meadows.jpg",
         alt: "Lush Meadows, Kharghar: the residential tower's entrance porch with the name lettering above it",
       },
+      /* Confirmed work, no photograph on record. Since 2026-10-15 its tile
+         is a representative image the user supplied, like the civic works
+         below it (OPEN-QUESTIONS.md #48; PRE-LAUNCH.md S15 asks Sir). A
+         real photograph replaces it. */
       {
         title: "Kharghar Football Stadium",
         location: "Kharghar · Navi Mumbai",
-        pending: "Photograph to be added",
-        note:
-          "Confirmed as K.D. Constructions' own work; no photograph is on record. One " +
-          "landscape photograph of the stadium fills this tile.",
+        file: "representative-kharghar-football-stadium.jpg",
+        alt: "Kharghar Football Stadium, representative image: a football pitch with floodlights and a covered stand, wooded hills behind",
+        representative: "Representative image",
       },
       {
         title: "Kharghar Centre of Excellence",
@@ -465,7 +475,10 @@ export const projects = {
          each (OPEN-QUESTIONS.md #44). No photograph of any is on record.
          The client allows a generic, representative image for these,
          marked as one; until each arrives its tile is a `pending` tile
-         like the two above it. Never a photograph of a different work. */
+         like the one above them. Never a photograph of a different work.
+         2026-10-15: five arrived (OPEN-QUESTIONS.md #48), each tile now
+         `file` + `representative`; Ghansoli, Ulwe Sector 8 and Rabale
+         are still waiting. */
       {
         title: "Ghansoli Roads & Services",
         location: "Ghansoli · Navi Mumbai",
@@ -477,26 +490,23 @@ export const projects = {
       {
         title: "Kamothe Peripheral Roads",
         location: "Kamothe · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-kamothe-peripheral-roads.jpg",
+        alt: "Kamothe Peripheral Roads, representative image: a divided city road lined with trees, traffic both ways, at sunset",
+        representative: "Representative image",
       },
       {
         title: "Vashi Station Approach Road",
         location: "Sanpada · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-vashi-station-approach-road.jpg",
+        alt: "Vashi Station Approach Road, representative image: a busy road leading to Vashi railway station at sunset",
+        representative: "Representative image",
       },
       {
         title: "Ulwe Mass Housing Infrastructure",
         location: "Ulwe · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-ulwe-mass-housing-infrastructure.jpg",
+        alt: "Ulwe Mass Housing Infrastructure, representative image: a divided road between residential towers, a bus and autorickshaws on it",
+        representative: "Representative image",
       },
       {
         title: "Ulwe Sector 8 Infrastructure",
@@ -509,10 +519,9 @@ export const projects = {
       {
         title: "Kharghar 33 kV Substation",
         location: "Kharghar · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-kharghar-33-kv-substation.jpg",
+        alt: "Kharghar 33 kV Substation, representative image: an outdoor substation of transformers and gantries behind its name wall and gate",
+        representative: "Representative image",
       },
       {
         title: "Rabale Skywalk",
@@ -525,10 +534,9 @@ export const projects = {
       {
         title: "NMMC School No. 54 & 55",
         location: "Rabale · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-nmmc-school-no-54-and-55.jpg",
+        alt: "NMMC School No. 54 & 55, representative image: two school buildings with sports courts between them, behind the entrance gate",
+        representative: "Representative image",
       },
     ] as readonly SocialProject[],
   },

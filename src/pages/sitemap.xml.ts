@@ -236,7 +236,9 @@ export const GET: APIRoute = async ({ site }) => {
   for (const [slug, { detail }] of Object.entries(socialPages)) {
     entries.push({
       loc: new URL(`/projects/${slug}`, site).href,
-      images: detail.file
+      /* A representative image is not listed: an image search shows it
+         without its caption (OPEN-QUESTIONS.md #48). */
+      images: detail.file && !detail.representative
         ? await projectImages(detail.title, galleryImage(detail.file), detail.alt ?? detail.title, livePhotos(live, detail.title), site)
         : [],
     });

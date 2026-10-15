@@ -132,6 +132,20 @@ const PHOTOS = [
   { out: "kharghar-golf-course-02.jpg", src: "Kharghar Golf Course/GOLF COURSE.jpg", cropBottom: 0.28 },
   { out: "kharghar-golf-course-03.jpg", src: "Kharghar Golf Course/476809854_2089582004810785_7377283002968379122_n.jpg" },
 
+  // Representative images: GENERATED pictures, not photographs, for the
+  // Beyond the railway works that have no photograph on record
+  // (OPEN-QUESTIONS.md #48). Supplied 2026-10-15, one folder per work,
+  // named by the work. Each is only that work's /projects tile and page
+  // header, captioned "Representative image" on both, and never goes in a
+  // gallery group. The `representative-` prefix is so nobody takes one
+  // for a photograph.
+  { out: "representative-kharghar-football-stadium.jpg", src: "Kharghar Football Stadium/KhargharFootballStadium.png" },
+  { out: "representative-kamothe-peripheral-roads.jpg", src: "Kamothe Peripheral Roads/Kamothe_Roads.png" },
+  { out: "representative-vashi-station-approach-road.jpg", src: "Vashi Station Approach Road/Vashi_RoAD.png" },
+  { out: "representative-ulwe-mass-housing-infrastructure.jpg", src: "Ulwe Mass Housing Infrastructure/uLWE.png" },
+  { out: "representative-kharghar-33-kv-substation.jpg", src: "Kharghar 33 kV Substation/Kharghar33kVSubstation.png" },
+  { out: "representative-nmmc-school-no-54-and-55.jpg", src: "NMMC School No. 54 & 55/NMMCSchool.png" },
+
   // Vindhane steel fabrication plant — /resources/vindhane-plant
   // (OPEN-QUESTIONS.md #33). The two confirmed frames, PHOTOS.md B19 and
   // B20, both recovered from the 2026 Annual PPT at web-export size. B21

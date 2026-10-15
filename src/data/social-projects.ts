@@ -117,7 +117,9 @@ const TBA = "To be added";
    works (OPEN-QUESTIONS.md #44). No photograph of any is on record, and
    the client allows a generic, representative image for them, marked as
    one on the tile and on the page header. Until each arrives the page
-   carries this card. Never a photograph of a different work. */
+   carries this card. Never a photograph of a different work. Five of the
+   eight had one by 2026-10-15 (OPEN-QUESTIONS.md #48); build() drops the
+   card for those. */
 const IMAGE_NOTE: PendingNote = {
   pending: "Image to be added",
   title: "Image",
@@ -574,13 +576,21 @@ function build(item: SocialProject) {
          no photograph: the hero is then plain ink. */
       file: item.file,
       alt: item.alt,
+      /* The caption on the hero when that picture is a representative
+         image, not a photograph (OPEN-QUESTIONS.md #48). */
+      representative: item.representative,
       facts: src.facts,
       overviewKicker: detailChrome.overviewKicker,
       notes: src.notes ?? [],
       body: src.body,
-      galleryKicker: detailChrome.galleryKicker,
+      /* No gallery block on a representative-image page with no
+         photographs (see photoNote below), so no kicker for one. */
+      galleryKicker: photos.length > 0 || !item.representative ? detailChrome.galleryKicker : undefined,
       gallery: photos,
-      photoNote: photos.length === 0 ? (src.photoNote ?? photoNote(item.title)) : undefined,
+      /* A representative image closes the "Image to be added" card: the
+         page then has no gallery block until real photographs exist. */
+      photoNote:
+        photos.length === 0 && !item.representative ? (src.photoNote ?? photoNote(item.title)) : undefined,
       /* Only rendered where there is something to open. */
       lightbox: photos.length > 0 ? detailChrome.lightbox : undefined,
       ctaKicker: detailChrome.ctaKicker,
