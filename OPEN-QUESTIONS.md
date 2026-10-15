@@ -3032,3 +3032,69 @@ those would no longer show; the next deploy report can list `content_edits`
 rows for them.
 
 ---
+
+## 50. /hse rearranged: one card per drill, photographs beside their cards, the record at a glance
+
+At the user's direction, 2026-10-15: the page read as "bloated, just filled
+with text, not arranged", but HSE detail helps K.D. win larger tenders, so
+nothing could simply go. Measured on the dev server before and after:
+
+| | Before | After |
+|---|---|---|
+| Page height at 1280 | 12,458 px | 9,519 px |
+| Emergency Preparedness at 1280 | 4,221 px | 2,162 px |
+| Page height at 390 | 18,634 px | 17,202 px (the stat tiles stack; see below) |
+| Words shown before any toggle is opened | 1,165 | 976 |
+
+**Duplicates went first.** Emergency Preparedness was nine tiles, then
+seven cards telling most of the same drills again, several screens lower.
+The four heat-stress tiles narrated the card's steps one photograph at a
+time; the electrical-shock card only restated its tile; the medical camp
+card's place line repeated the camp photograph's caption, and the National
+Safety Day awards card repeated its photograph's.
+
+**The drill register.** Each drill is one card: its photograph or clip at
+the head with the card's own place and title over it (§5: scrim, caption at
+the foot), then the body, then the steps behind a toggle (a native
+`<details>`; in the page for search and find-in-page; all opened in edit
+mode). Three across. Seven drills, so the newest, the heat-stress drill,
+leads across the row with its steps open. The two GTB Nagar clips, which had
+no card, are cards 7 and 8; each body says what its clip shows. The
+extinguisher and first-aid cards follow in the same three columns.
+`src/components/hse/Record.astro`, `Tile.astro`, `Card.astro`.
+
+**Side by side** (`side`): Training, Worker Health and Recognition put their
+photographs in the cards' row, each as tall as the cards beside it.
+Environment & Audits is unchanged.
+
+**Stat tiles under the hero**, the only change outside the bands: 3,00,000
+safe man-hours without a lost-time injury, 3 ISO-certified systems, 7 site
+mock drills in 2026, 88 workers and staff in one medical camp. Each figure is
+already on the page; PRE-LAUNCH.md S16 asks the HSE team to confirm them.
+`InfoPage.astro` draws them only where `hero.stats` exists: the other six
+InfoPage routes rendered the same markup before and after (compared with the
+stylesheet set aside; the difference is three blank lines between tags). On a
+phone they stack (§10, hero stats one column below 640), which is why the
+phone page shrank least.
+
+**Photographs that left /hse:** heat-stress 02, 06 and 10, and Mohape 10.
+All are on /gallery under Safety on Site, which the band now links to. Two
+small photographs joined /hse at the head of their cards, a little enlarged:
+the Karjat work-at-height drill (574 px wide) and the snake-bite drill
+(712 px). S13 and S14 ask for originals.
+
+**Kept apart on purpose:** the camp's list and the routine check-ups share
+three tests (blood pressure, blood sugar, HIV) because they are two
+programmes, the 12 September camp and the routine checks.
+
+**Edit keys** (DESIGN-SYSTEM §9). Retired, never to be reused:
+`hse.record.bands.0.media.0`–`8` (`.where`, `.title`). New:
+`hse.hero.stats.0`–`3` (`.value`, `.label`), `hse.hero.statsNote`,
+`hse.record.bands.0.link.label`, `hse.record.bands.0.cards.{3,4,5,6}.more`,
+`hse.record.bands.0.cards.{7,8}` (`.where`, `.title`, `.body`). Same key,
+new text: `hse.record.bands.0.cards.0.body`, `….cards.6.body` (no longer ends
+on a colon), `hse.record.bands.2.cards.0.title` and `.where`,
+`hse.record.bands.4.cards.0.title`. The cards kept their indexes; `order`
+sets where each is shown. At the next deploy, list `content_edits` rows for
+the retired and changed keys: an edit stored on a retired key no longer
+shows, and one on a changed key hides the new text.
