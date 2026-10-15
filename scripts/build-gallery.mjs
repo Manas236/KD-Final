@@ -145,6 +145,8 @@ const PHOTOS = [
   { out: "representative-ulwe-mass-housing-infrastructure.jpg", src: "Ulwe Mass Housing Infrastructure/uLWE.png" },
   { out: "representative-kharghar-33-kv-substation.jpg", src: "Kharghar 33 kV Substation/Kharghar33kVSubstation.png" },
   { out: "representative-nmmc-school-no-54-and-55.jpg", src: "NMMC School No. 54 & 55/NMMCSchool.png" },
+  { out: "representative-ghansoli-roads-and-services.jpg", src: "Ghansoli Roads & Services/GhansoliRoads&Services.png" },
+  { out: "representative-ulwe-sector-8-infrastructure.jpg", src: "Ulwe Sector 8 Infrastructure/UlweSector8Infrastructure.png" },
 
   // Vindhane steel fabrication plant — /resources/vindhane-plant
   // (OPEN-QUESTIONS.md #33). The two confirmed frames, PHOTOS.md B19 and

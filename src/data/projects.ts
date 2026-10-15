@@ -476,16 +476,14 @@ export const projects = {
          The client allows a generic, representative image for these,
          marked as one; until each arrives its tile is a `pending` tile
          like the one above them. Never a photograph of a different work.
-         2026-10-15: five arrived (OPEN-QUESTIONS.md #48), each tile now
-         `file` + `representative`; Ghansoli, Ulwe Sector 8 and Rabale
-         are still waiting. */
+         2026-10-15: seven arrived (OPEN-QUESTIONS.md #48), each tile now
+         `file` + `representative`; Rabale is still waiting. */
       {
         title: "Ghansoli Roads & Services",
         location: "Ghansoli · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-ghansoli-roads-and-services.jpg",
+        alt: "Ghansoli Roads & Services, representative image: a wide divided road with traffic signals, a bus and autorickshaws, residential towers behind",
+        representative: "Representative image",
       },
       {
         title: "Kamothe Peripheral Roads",
@@ -511,10 +509,9 @@ export const projects = {
       {
         title: "Ulwe Sector 8 Infrastructure",
         location: "Ulwe · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "representative-ulwe-sector-8-infrastructure.jpg",
+        alt: "Ulwe Sector 8 Infrastructure, representative image: a wet divided road with a planted median, a bus, and towers rising behind",
+        representative: "Representative image",
       },
       {
         title: "Kharghar 33 kV Substation",

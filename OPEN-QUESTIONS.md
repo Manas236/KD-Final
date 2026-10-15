@@ -2758,7 +2758,7 @@ placeholder (PRE-LAUNCH.md rows 3c and 7a–7h). The images are expected in
 `Civic_Works_AI/`, one per page, named by its slug. **A photograph of a
 different K.D. work is never used as a stand-in.** The caption is not built
 yet either — it goes in with the first image.
-**Update 2026-10-15:** five of the eight arrived, and the caption is built
+**Update 2026-10-15:** seven of the eight arrived, and the caption is built
 (#48).
 
 **One question, three works — who the client was** (PRE-LAUNCH.md S12,
@@ -2910,28 +2910,33 @@ none removed, each with the same x, width, height and style, only moved down
 `/projects`. No em dash in any served page or the sitemap. The clip plays
 when scrolled to and stays on its poster under reduced motion.
 
+
 ---
 
-## 48. Representative images on six Beyond the railway tiles
+## 48. Representative images on eight Beyond the railway tiles
 
 2026-10-15. The user saw the blank tiles at the foot of the Beyond the
 railway band on `/projects`, made an image for six of them, and put each in
-a folder at the project root named by the work:
+a folder at the project root named by the work; two more followed an hour
+later:
 
 | Folder (git-ignored, in `raw-media.manifest.txt`) | Derivative in `src/assets/gallery/` | Tile |
 | --- | --- | --- |
 | `Kharghar Football Stadium/KhargharFootballStadium.png` | `representative-kharghar-football-stadium.jpg` | 7 |
+| `Ghansoli Roads & Services/GhansoliRoads&Services.png` | `representative-ghansoli-roads-and-services.jpg` | 9 |
 | `Kamothe Peripheral Roads/Kamothe_Roads.png` | `representative-kamothe-peripheral-roads.jpg` | 10 |
 | `Vashi Station Approach Road/Vashi_RoAD.png` | `representative-vashi-station-approach-road.jpg` | 11 |
 | `Ulwe Mass Housing Infrastructure/uLWE.png` | `representative-ulwe-mass-housing-infrastructure.jpg` | 12 |
+| `Ulwe Sector 8 Infrastructure/UlweSector8Infrastructure.png` | `representative-ulwe-sector-8-infrastructure.jpg` | 13 |
 | `Kharghar 33 kV Substation/Kharghar33kVSubstation.png` | `representative-kharghar-33-kv-substation.jpg` | 14 |
 | `NMMC School No. 54 & 55/NMMCSchool.png` | `representative-nmmc-school-no-54-and-55.jpg` | 16 |
 
-All six are **generated images, not photographs**: 1672 × 941 (the school
-1536 × 1024) PNGs with no camera metadata, photoreal, with generated signs
-(the work's name on a wall or gate, CIDCO, NMMC and MSEDCL "Mahavitaran"
-emblems, Marathi road boards). They are the "generic, representative image"
-Sir allowed on 2026-10-13 (#44), and they are treated as one:
+All eight are **generated images, not photographs**: PNGs with no camera
+metadata (1672 × 941; the school 1536 × 1024; Ghansoli and Ulwe Sector 8
+1448 × 1086), photoreal, with generated signs (the work's name on a wall or
+gate, CIDCO, NMMC and MSEDCL "Mahavitaran" emblems, NMMC road boards, brand
+hoardings, Marathi road boards). They are the "generic, representative
+image" Sir allowed on 2026-10-13 (#44), and they are treated as one:
 
 - **Caption.** Each tile and each page header carries a small chip reading
   "Representative image": the tile's top left (where a pending tile has its
@@ -2946,37 +2951,46 @@ Sir allowed on 2026-10-13 (#44), and they are treated as one:
   gallery block** (kicker included) rather than an empty one; real
   photographs, from gallery.ts or the studio, bring it back.
 - **Not where the caption cannot follow.** The share card (`og:image`) of
-  these six pages is the site's own card, not the picture, and the image
-  sitemap does not list them: a link preview or an image search would show
-  the picture with no caption. Their dHash is in `gallery-hashes.json`, so
-  the studio warns if one is uploaded as a photograph.
+  these pages is the site's own card, not the picture, and the image sitemap
+  does not list them: a link preview or an image search would show the
+  picture with no caption. Their dHash is in `gallery-hashes.json`, so the
+  studio warns if one is uploaded as a photograph.
 - **Named `representative-<slug>.jpg`** so nobody reuses one as a photograph.
 
-What it closed: rows 3a and five of the eight in 3c on `/projects`, and the
-image card on six pages (5g, 7b, 7c, 7d, 7f, 7h). 62 placeholders became 50.
-Still blank: Ghansoli Roads & Services, Ulwe Sector 8 Infrastructure and
-Rabale Skywalk (3c), and Kharghar Centre of Excellence (3b, which waits on a
-yes first).
+What it closed: row 3a and seven of the eight in 3c on `/projects`, and the
+image card on eight pages (5g, 7a–7f, 7h). 62 placeholders became 50 with
+the first six, 46 with the last two. Still blank: Rabale Skywalk (3c), and
+Kharghar Centre of Excellence (3b, which waits on a yes first).
 
 **The football stadium was not in Sir's allowance.** It is confirmed work,
 not one of the eight, and its tile asked for a real photograph (row 3a). It
-is on the site with its representative image because the user supplied one;
-PRE-LAUNCH.md **S15** asks Sir, along with whether the generated signs are
-acceptable. A no restores the `pending` tile from the commit before this one.
+is on the site with its representative image because the user supplied one.
 
-**Edit keys.** New: `projects.social.items.{6,9,10,11,13,15}.representative`
-on `/projects` and `projects.detail.representative` on the six pages. Gone:
-`projects.social.items.{6,9,10,11,13,15}.pending` and `.note`, and
-`projects.detail.photoNote.*` and `projects.detail.galleryKicker` on the six
+**Two images contradict their pages.** Ghansoli's shows a board reading
+"NMMC · Ghansoli Roads & Services" and "Navi Mumbai Municipal Corporation"
+road signs; Ulwe Sector 8's an NMMC road sign. Both pages give the client as
+CIDCO, from K.D.'s own list, and Ulwe is a CIDCO node, not in NMMC's area.
+They are on the site as supplied, captioned like the rest. PRE-LAUNCH.md
+**S15** puts both questions to Sir: the stadium, and whether the generated
+signs are acceptable or the images should be made again without them (at
+the least these two). A no on the stadium restores its `pending` tile from
+the commit before 571df0b.
+
+**Edit keys.** New: `projects.social.items.{6,8,9,10,11,12,13,15}.representative`
+on `/projects` and `projects.detail.representative` on the eight pages. Gone:
+`projects.social.items.{6,8,9,10,11,12,13,15}.pending` and `.note`, and
+`projects.detail.photoNote.*` and `projects.detail.galleryKicker` on the eight
 pages. An edit stored against a gone key no longer shows; nothing suggests
 one exists, but the next deploy report can list `content_edits` rows for those
 keys.
 
-**Verified** on a build of HEAD against a build with these changes (both
-served locally): the HTML of 36 of the 43 routes (every sitemap route and the
-404) is identical; the 7 that differ are `/projects` and the six pages. On
-`/projects` the HTML outside the six tiles is identical, and at 1280, 1440 and
-390 all 2,143 elements outside them keep the same box, colour, size and
+**Verified**, each batch on a build of the commit before it against a build
+with the change (both served locally). First six: the HTML of 36 of the 43
+routes (every sitemap route and the 404) is identical, and the 7 that differ
+are `/projects` and the six pages. Last two: 40 identical, the 3 that differ
+are `/projects` and the two pages. Each time, on `/projects` the HTML outside
+the changed tiles is identical, and at 1280, 1440 and 390 every element
+outside them (2,143, then 2,177) keeps the same box, colour, size and
 display. The CSS only gains the new position utilities. `check-edit-keys`
-passes on `/projects`, the six pages and two unchanged ones; no em dash on any
-of them; no horizontal overflow at 390.
+passes on `/projects`, all eight pages and the Rabale and Bonkode pages; no
+em dash on any of them; no horizontal overflow at 390.

@@ -117,7 +117,7 @@ const TBA = "To be added";
    works (OPEN-QUESTIONS.md #44). No photograph of any is on record, and
    the client allows a generic, representative image for them, marked as
    one on the tile and on the page header. Until each arrives the page
-   carries this card. Never a photograph of a different work. Five of the
+   carries this card. Never a photograph of a different work. Seven of the
    eight had one by 2026-10-15 (OPEN-QUESTIONS.md #48); build() drops the
    card for those. */
 const IMAGE_NOTE: PendingNote = {
