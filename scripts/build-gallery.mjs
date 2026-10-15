@@ -17,10 +17,13 @@
      video + at   a frame grab (seconds). Panvel–Karjat has no stills at
                   all — the Chowk folder is video only — so its gallery
                   is frames from the site's own 720p phone footage.
-   and five fixes:
+   and six fixes:
      turn         degrees clockwise, for a frame stored sideways with no
                   EXIF to say so (a photograph pasted into a report).
                   Applied first, so the crops below are of the upright image.
+     aspect       the frame's true width / height, for a photograph squeezed
+                  to fit a report's grid. The squeezed side is stretched
+                  back (the other is never shrunk); applied after turn.
      cropBottom   fraction to trim off the foot ("Shot on OnePlus").
      inset        px to trim off every edge (a Canva export's border).
      trim         remove letterbox bars matching the corner pixel.
@@ -362,6 +365,42 @@ const PHOTOS = [
   { out: "hse-karjat-height-drill-03.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher-to-car.jpg", crop: [0, 0.16, 1, 1] },
   { out: "hse-karjat-height-drill-04.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-loaded-into-car.jpg" },
   { out: "hse-karjat-height-drill-05.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-head-count.jpg", crop: [0.095, 0, 0.85, 1] },
+  // hse — the fire mock drill at Mohape, 31 July 2026, supplied 2026-10-15
+  // in Fire_Mock_Drill/ (OPEN-QUESTIONS.md #47). All fourteen frames, in the
+  // order of the GPS camera's own clock (14:16 to 14:23). The crop cuts its
+  // coordinates stamp (bottom left) and map (top right): the sides go, so
+  // the test fire at the foot stays. The last, a group photograph, keeps
+  // its sides and loses the foot instead, so nobody at the edge is cut.
+  { out: "hse-mohape-fire-drill-01.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.04 PM (1).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-02.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.03 PM (1).jpeg", crop: [0.222, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-03.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.04 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-04.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.01 PM (1).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-05.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.02 PM (1).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-06.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.03 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-07.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.14.59 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-08.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.00 PM (1).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-09.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.01 PM (2).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-10.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.02 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-11.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.01 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-12.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.00 PM (2).jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-13.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.00 PM.jpeg", crop: [0.206, 0, 0.873, 1] },
+  { out: "hse-mohape-fire-drill-14.jpg", src: "Fire_Mock_Drill/WhatsApp Image 2026-10-14 at 5.15.04 PM (2).jpeg", crop: [0, 0, 0.873, 0.685] },
+  // hse — the snake-bite mock drill at the RMC plant, Karjat, 27 August
+  // 2026. The only copies are the small frames in the drill report (a PDF in
+  // the same folder), saved out of it unchanged, in the order of the drill.
+  // Four were squeezed into the report's grid; `aspect` stretches them back,
+  // measured against the folder's collage, which holds crops of the same
+  // frames at their true shape (01 and 03 matched it unchanged). The crops
+  // cut the GPS camera's map and coordinates stamp. Not used: the folder's
+  // poster and collage, which are made of these same photographs (the poster
+  // also names four of the team).
+  { out: "hse-karjat-snake-bite-drill-01.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-crew-at-the-spot.jpg" },
+  { out: "hse-karjat-snake-bite-drill-02.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-casualty-on-stretcher.jpg", aspect: 1.48 },
+  { out: "hse-karjat-snake-bite-drill-03.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-stretcher-to-vehicle.jpg" },
+  { out: "hse-karjat-snake-bite-drill-04.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-briefing.jpg", aspect: 1600 / 718, crop: [0.205, 0.28, 1, 1] },
+  { out: "hse-karjat-snake-bite-drill-05.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-safety-officer-explains.jpg", aspect: 718 / 1600, crop: [0, 0.13, 1, 0.87] },
+  { out: "hse-karjat-snake-bite-drill-06.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-first-aid-on-the-arm.jpg", aspect: 718 / 1600, crop: [0, 0.13, 1, 0.87] },
+  { out: "hse-karjat-snake-bite-drill-07.jpg", src: "Snake_Bite_Drill/from the snake bite drill report (PDF)/snake-bite-drill-head-count.jpg", crop: [0.206, 0.28, 1, 1] },
   // sanpada-carshed
   { out: "sanpada-carshed-07.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.14 PM.jpeg" },
   { out: "sanpada-carshed-08.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 6.15.15 PM (1).jpeg" },
@@ -514,6 +553,12 @@ for (const p of PHOTOS) {
   // against the image the way it is actually seen.
   let buf = await sharp(input).rotate().toBuffer();
   if (p.turn) buf = await sharp(buf).rotate(p.turn).toBuffer();
+  if (p.aspect) {
+    const m = await sharp(buf).metadata();
+    const width = Math.max(m.width, Math.round(m.height * p.aspect));
+    const height = Math.max(m.height, Math.round(m.width / p.aspect));
+    buf = await sharp(buf).resize(width, height, { fit: "fill" }).toBuffer();
+  }
   if (p.trim) buf = await sharp(buf).trim({ threshold: 24 }).toBuffer();
 
   if (p.crop) {

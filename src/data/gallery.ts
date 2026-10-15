@@ -415,6 +415,32 @@ export const hseDrillPhotos: readonly GalleryPhoto[] = [
   { file: "hse-karjat-height-drill-03.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is carried to a vehicle" },
   { file: "hse-karjat-height-drill-04.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is loaded into the vehicle" },
   { file: "hse-karjat-height-drill-05.jpg", caption: "Work-at-height mock drill at Karjat: head count after the drill" },
+  /* Two more, supplied 2026-10-15 (OPEN-QUESTIONS.md #47), appended so no
+     earlier caption key moves: all fourteen photographs of the fire drill
+     at Mohape, 31 July 2026, in the order taken, then the seven in the
+     report on the snake-bite drill at the Karjat RMC plant, 27 August
+     2026. The tenth fire photograph is also a tile on /hse (pages.ts). */
+  { file: "hse-mohape-fire-drill-01.jpg", caption: "Fire mock drill at Mohape: the instructor aims the extinguisher's hose at the test fire" },
+  { file: "hse-mohape-fire-drill-02.jpg", caption: "Fire mock drill at Mohape: a worker holds the extinguisher ready beside the burning tray" },
+  { file: "hse-mohape-fire-drill-03.jpg", caption: "Fire mock drill at Mohape: a supervisor readies the extinguisher at the test fire" },
+  { file: "hse-mohape-fire-drill-04.jpg", caption: "Fire mock drill at Mohape: the instructor explains the extinguisher to the crew" },
+  { file: "hse-mohape-fire-drill-05.jpg", caption: "Fire mock drill at Mohape: the instructor holds up the extinguisher for the crew to see" },
+  { file: "hse-mohape-fire-drill-06.jpg", caption: "Fire mock drill at Mohape: the crew gathers round the instructor and the extinguisher" },
+  { file: "hse-mohape-fire-drill-07.jpg", caption: "Fire mock drill at Mohape: the instructor turns the extinguisher towards the fire" },
+  { file: "hse-mohape-fire-drill-08.jpg", caption: "Fire mock drill at Mohape: the instructor shows the hold, hose in hand" },
+  { file: "hse-mohape-fire-drill-09.jpg", caption: "Fire mock drill at Mohape: the instructor crouches at the fire with the extinguisher" },
+  { file: "hse-mohape-fire-drill-10.jpg", caption: "Fire mock drill at Mohape: the crew leans in as the instructor reaches the fire" },
+  { file: "hse-mohape-fire-drill-11.jpg", caption: "Fire mock drill at Mohape: the powder jet hits the fire" },
+  { file: "hse-mohape-fire-drill-12.jpg", caption: "Fire mock drill at Mohape: a supervisor puts the fire out, and the tray smokes under the powder" },
+  { file: "hse-mohape-fire-drill-13.jpg", caption: "Fire mock drill at Mohape: a worker takes his turn with the extinguisher" },
+  { file: "hse-mohape-fire-drill-14.jpg", caption: "Fire mock drill at Mohape: the crew and supervisors after the drill" },
+  { file: "hse-karjat-snake-bite-drill-01.jpg", caption: "Snake-bite mock drill at Karjat: nearby workers attend at the spot" },
+  { file: "hse-karjat-snake-bite-drill-02.jpg", caption: "Snake-bite mock drill at Karjat: the casualty on the stretcher, his arm bandaged and kept still" },
+  { file: "hse-karjat-snake-bite-drill-03.jpg", caption: "Snake-bite mock drill at Karjat: the stretcher is brought to a vehicle for the run to hospital" },
+  { file: "hse-karjat-snake-bite-drill-04.jpg", caption: "Snake-bite mock drill at Karjat: the crew gathers for the safety officer's briefing" },
+  { file: "hse-karjat-snake-bite-drill-05.jpg", caption: "Snake-bite mock drill at Karjat: the safety officer talks a worker through the response" },
+  { file: "hse-karjat-snake-bite-drill-06.jpg", caption: "Snake-bite mock drill at Karjat: the safety officer demonstrates first aid on a worker's arm" },
+  { file: "hse-karjat-snake-bite-drill-07.jpg", caption: "Snake-bite mock drill at Karjat: head count at the end of the drill" },
 ];
 
 /* Health, Safety & Environment — the Mankhurd 75,000 safe man-hours

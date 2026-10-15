@@ -416,6 +416,24 @@ export const hse: HseCopy = {
             title: "Head count and debrief",
             where: "Heat-stress drill · 8 October 2026",
           },
+          /* The fire drill at Mohape, 31 July 2026, supplied 2026-10-15
+             (OPEN-QUESTIONS.md #47): one of its fourteen photographs, then
+             the site's own clip of the fire being put out. A pair, so the
+             count stays odd and the work-at-height clip keeps the lead. The
+             snake-bite drill has no tile: its photographs are small or a
+             wide strip once the camera's stamps are cut (all on /gallery). */
+          {
+            file: "hse-mohape-fire-drill-10.jpg",
+            alt: "Fire mock drill at Mohape: the instructor, in a green helmet, crouches with an extinguisher beside a burning test fire while the crew watches",
+            title: "Shown how, beside a live test fire",
+            where: "Fire drill · Mohape · 31 July 2026",
+          },
+          {
+            video: "hse-mohape-fire-drill",
+            alt: "Fire mock drill at Mohape: a worker puts out the test fire with a powder extinguisher while the crew stands by",
+            title: "Then put out by one of the crew",
+            where: "Fire drill · Mohape · 31 July 2026",
+          },
         ],
         cards: [
           {
@@ -479,6 +497,48 @@ export const hse: HseCopy = {
               "At 14:55 the supervisor alerts the project manager and the safety officer.",
               "The safety officer checks pulse and condition; a medical emergency is declared.",
               "At 15:00 the evacuation team has the casualty in a vehicle, bound for hospital.",
+            ],
+          },
+          /* Appended 2026-10-15, both `wide` (OPEN-QUESTIONS.md #47). The
+             fire drill's six points are the HSE team's own seven discussion
+             points, the last two joined. The snake-bite card is the site's
+             report of 27 August 2026 and the HSE team's RIGHT rule and
+             don'ts, given in Hindi, put into English: the rule across the
+             first row, the don'ts across the second. No names. */
+          {
+            wide: true,
+            title: "Fire emergency drill",
+            where: "Mohape · 31 July 2026",
+            body:
+              "A test fire lit on the Mohape site and put out with the site's own extinguishers, by " +
+              "the crew who would have to face a real one.",
+            points: [
+              "The alarm is raised with a shout of \"Fire, fire, fire\".",
+              "The site supervisor and HSE officer are told; the response team moves at once.",
+              "The right extinguisher is chosen and used correctly on the fire.",
+              "Fire warden, first aider and response team each carry out their role.",
+              "No injuries and no unsafe acts during the drill.",
+              "The crew is briefed on what was learned; corrective actions follow.",
+            ],
+          },
+          {
+            wide: true,
+            title: "Snake-bite emergency drill",
+            where: "RMC Plant, Karjat · 27 August 2026",
+            body:
+              "The scenario: a worker at the plant is bitten by a snake during routine work. Nearby " +
+              "workers alert the supervisor and safety officer, and the response team carries him " +
+              "by stretcher to a vehicle for hospital. Then the safety officer takes the crew " +
+              "through the RIGHT rule, and what never to do:",
+            points: [
+              "Reassure: keep the victim calm, so he does not panic.",
+              "Immobilise: keep the bitten limb still, and do not let him walk.",
+              "Get to hospital: the nearest one, at once.",
+              "Tell the doctor: when and where the bite happened, and every symptom.",
+              "Never cut the wound or try to suck it.",
+              "Never apply ice, soil, herbs or any home remedy.",
+              "Never tie a tight tourniquet.",
+              "Never try to catch or kill the snake.",
             ],
           },
         ],
