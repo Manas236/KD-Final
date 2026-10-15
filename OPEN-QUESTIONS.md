@@ -2804,3 +2804,106 @@ Done without renumbering. `about.board.directors` is unchanged, so every
 sets the order the cards render in. An edit saved against any of those keys
 stays on the right card, so the server has nothing to check. The column rule
 on the left-hand cards follows the place on the page, not the index.
+
+---
+
+## 47. Two more drills on /hse: fire at Mohape, snake bite at Karjat
+
+2026-10-15. The user supplied two folders, `Fire_Mock_Drill/` and
+`Snake_Bite_Drill/`, and pasted the HSE team's notes on each drill in chat
+(the snake-bite notes partly in Hindi). Both folders are raw client media,
+git-ignored like the rest and listed in `raw-media.manifest.txt`.
+
+### The fire drill, Mohape, 31 July 2026
+
+Fourteen photographs and a 27-second video. The site is the user's ("Fire
+Mockdrill at Mohape site"); the date, and the site again, are off the GPS
+camera's stamp on every frame (31 July 2026, 14:16 to 14:23, "Poyanje
+(Mohope), Station Road").
+
+**On `/hse`**, appended to Emergency Preparedness so no stored edit key moves:
+- **Media 7–8**, a pair (so the count stays odd and the work-at-height clip
+  keeps the lead): photograph 10, the instructor crouched at the live test
+  fire; then the site's own clip of a worker putting the fire out,
+  `public/video/hse-mohape-fire-drill.mp4` with a poster, silent and looping
+  like the other two. The clip is 13 s of the 27 (8.5 to 21.6 s: the worker
+  ready with the extinguisher, the discharge, the fire out), 640 × 346 H.264,
+  0.6 MB. The video is stored sideways; it is turned upright, and the
+  camera's stamp and map inset are cut by taking the left 26% and the top
+  28.5% off, so the crew's helmets touch the top edge while the camera tilts
+  down to the discharge.
+- **Card 5**, `wide`: the HSE team's seven discussion points as six (the
+  last two, "observations discussed" and "everyone briefed", joined).
+
+**On `/gallery`, all fourteen** (#40's rule), `hse-mohape-fire-drill-01…14`,
+in the order of the camera's clock; eight share the minute 14:18, and their
+order within it is read from the action. The crop takes the sides off
+(20.6% to 87.3% of the width), which drops the stamp at bottom left and the
+map at top right and keeps the test fire at the foot; 02 loses a little more
+on the left, to drop a sliver of a man. 14, the group photograph, keeps its
+sides and loses the foot (below the knees) instead, so nobody in the line is
+cut. In 01 and 13 a man at the edge is cut, as in the original.
+
+The captions call the man in the green helmet who demonstrates the
+extinguisher "the instructor" and the men in white helmets "supervisors".
+Neither role is on record (PRE-LAUNCH.md S14).
+
+### The snake-bite drill, RMC Plant, Karjat, 27 August 2026
+
+The folder holds the site's mock drill report (a five-page PDF), a poster and
+a collage made for WhatsApp. The report gives the place, the date and 17:15,
+the scenario, the response step by step, the safety officer's RIGHT rule and
+a conclusion; it also lists thirteen coordinators by name and is signed.
+
+**On `/hse`: card 6**, `wide`. The scenario in two sentences, then the RIGHT
+rule across the first row (Reassure, Immobilise, Get to hospital, Tell the
+doctor) and the four don'ts across the second (never cut or suck the wound;
+no ice, soil, herbs or home remedy; no tight tourniquet; never try to catch
+or kill the snake). The rule and the don'ts are the HSE team's Hindi, put
+into English; the page is English throughout, and the user can ask for the
+Hindi. The three "do" lines are left out: they repeat the rule. No name.
+
+**No tile.** The report's photographs are 416 to 541 px wide, too soft for a
+tile (the Karjat drill of #44 has none either), and its one full-size frame,
+the head count (1,600 × 718), is a 2.5 : 1 strip once the stamps are cut: a
+tile would cut off the men at both ends of the line.
+
+**On `/gallery`: the report's seven photographs**,
+`hse-karjat-snake-bite-drill-01…07`, in the order of the drill: the crew at
+the spot, the casualty on the stretcher, the stretcher at the vehicle, the
+briefing (17:20), the safety officer talking a worker through the response
+(17:23), first aid on a worker's arm (17:25), the head count (17:28). They are
+saved out of the PDF unchanged into
+`Snake_Bite_Drill/from the snake bite drill report (PDF)/`.
+
+**Four were squeezed** to fit the report's grid: 02 (to 1.48 : 1), 04 (to the
+camera's 20 : 9), 05 and 06 (to 9 : 20, portrait). `build-gallery.mjs` has a
+new `aspect` fix that stretches the squeezed side back (it never shrinks the
+other). Each proportion was measured by matching the report's copy against
+the folder's collage, which holds crops of the same frames at their true
+shape, and the method was checked on the camera's map inset, which is
+square: 2.43 and 0.50 measured against 2.43 and 0.495 expected. 01 and 03
+matched unchanged. The four stay soft; the originals would fix it (S14).
+The crops cut the camera's stamp and map from 04, 05, 06 and 07; 04 loses
+the two men at the left of the line with them.
+
+**Not used:** the poster (a layout of these same photographs, and it names
+four of the team), the collage (crops of the same frames), and the report's
+MRVC and Rodic logos and signature block.
+
+### What did not change
+
+`Record.astro` is unchanged, and every addition is appended: media 7–8 and
+cards 5–6 in band 0, and the 21 photographs at the end of `hseDrillPhotos`,
+so no stored edit key or caption key moves and the server has nothing to
+check in `content_edits`. The placeholder count is still 62.
+
+**Verified** on a build of HEAD against a build of HEAD plus these changes
+(both outside the working tree): 40 routes element for element at 1280 (every other route in the sitemap, and the 404),
+with motion and reduced, identical; on `/hse`, `/gallery` and `/projects`
+all 517, 1,756 and 2,055 existing elements are matched in the new build,
+none removed, each with the same x, width, height and style, only moved down
+(and the grids that hold the additions taller). No horizontal overflow at
+390, 768 or 1280. `check-edit-keys` passes on `/hse`, `/gallery`,
+`/projects`. No em dash in any served page or the sitemap. The clip plays
+when scrolled to and stays on its poster under reduced motion.
