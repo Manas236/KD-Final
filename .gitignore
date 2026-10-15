@@ -27,6 +27,7 @@ pnpm-debug.log*
 # The site uses the resized derivatives in src/assets/, which ARE committed.
 /Bonkode FOB/
 /Chowk/
+/Fire_Mock_Drill/
 /HSE Department/
 /Heat_Stress/
 /Karanjade Health Care/
@@ -37,6 +38,7 @@ pnpm-debug.log*
 /Nave Sheva/
 /Safety Department/
 /Sanpada Carshed/
+/Snake_Bite_Drill/
 /Ulwa CIDCO School/
 /Ulwa Hospital/
 /Uran Railway Station/
