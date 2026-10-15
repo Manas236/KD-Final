@@ -93,7 +93,10 @@ HSE Department/Picture4.jpg	519489
 HSE Department/Picture5.jpg	251939
 HSE Department/WhatsApp Image 2025-04-30 at 9.44.56 PM.jpeg	254545
 HSE Department/WhatsApp Image 2025-04-30 at 9.44.57 PM.jpeg	115916
+Kamothe Peripheral Roads/Kamothe_Roads.png	2921161
 Karanjade Health Care/Karanjale Health Care.jpg	1975867
+Kharghar 33 kV Substation/Kharghar33kVSubstation.png	3121265
+Kharghar Football Stadium/KhargharFootballStadium.png	2772372
 Kharghar Golf Course/476809854_2089582004810785_7377283002968379122_n.jpg	223988
 Kharghar Golf Course/AX6A7025.CR2	31414772
 Kharghar Golf Course/AX6A7028.CR2	30691369
@@ -228,6 +231,7 @@ Nave Sheva/Nhava Sheva 10.JPG	3953672
 Nave Sheva/Nhava Sheva 12.JPG	6146155
 Nave Sheva/Nhava Sheva.JPG	3738582
 Nave Sheva/NHAVA SHIVA RAILWAY STATION.jpg	863899
+NMMC School No. 54 & 55/NMMCSchool.png	2707563
 RMC Plant Karjat/Cement Bulker unloading.jpeg	148130
 RMC Plant Karjat/Covered RMC plant.jpeg	66619
 RMC Plant Karjat/New tippers for RMC plant.jpeg	80203
@@ -347,6 +351,7 @@ Ulwa CIDCO School/school.jpg	1988582
 Ulwa CIDCO School/ULWE CIDCO SCHOOL.jpg	1970493
 Ulwa Hospital/1.jpg	1816847
 Ulwa Hospital/ULWE HOSPITAL.jpg	1983980
+Ulwe Mass Housing Infrastructure/uLWE.png	2955716
 Uran Railway Station/unnamed (1).jpg	43223
 Uran Railway Station/unnamed (2).jpg	87045
 Uran Railway Station/uran railway station 2.jpg	1055263
@@ -384,6 +389,7 @@ Vashi FOB/VASHI FOB1.JPG	4893561
 Vashi FOB/VASHI FOB2.jpg	581939
 Vashi FOB/WhatsApp Image 2025-04-02 at 1.41.57 PM.jpeg	1806284
 Vashi FOB/WhatsApp Image 2025-04-02 at 1.41.58 PM.jpeg	1089060
+Vashi Station Approach Road/Vashi_RoAD.png	2884195
 Vindhane Plant/20T crane installation.jpeg	239314
 Vindhane Plant/DG powered facory.jpeg	59954
 Vindhane Plant/Drain construction.jpeg	256530
