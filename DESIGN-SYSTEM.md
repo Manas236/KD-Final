@@ -437,6 +437,18 @@ fails while any exists, and `PRE-LAUNCH.md` says what closes each. None may
 exist at go-live. The dashed border is not in the approved design and is
 there precisely so it gets removed. OPEN-QUESTIONS.md #32.
 
+### Representative images — a caption, not a placeholder
+
+A Beyond the railway work with no photograph may show a generated,
+representative image (client's allowance, 13 Oct 2026). Its tile and page
+header are the ordinary photographed ones plus one chip reading
+"Representative image": `text-badge-sm` uppercase, mist on solid `kd-ink`,
+`px-8 py-6`; top left of the /projects tile (20px in, where a pending tile's
+badge sits), bottom right of the page hero (24px in, 48px from `sm`). The
+chip is its own slot (`…items.N.representative`, `…detail.representative`)
+and stays at go-live. Such a picture is never a gallery photograph, a share
+card or a sitemap image. OPEN-QUESTIONS.md #48.
+
 ---
 
 ## 10. Mobile — **INFERRED, NOT DESIGNED**

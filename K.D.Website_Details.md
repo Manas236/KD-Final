@@ -242,7 +242,10 @@ and each is listed, as a link to that page, under its client's card on
 /clients. No photograph of any is on record; the client allows a generic,
 representative image for them, captioned "Representative image" — until one
 arrives the tile and the page carry an "Image to be added" placeholder
-(PRE-LAUNCH.md 3c, 7a–7h). Never a photograph of a different work.
+(PRE-LAUNCH.md 3c, 7a–7h). Never a photograph of a different work. Five had
+one by 2026-10-15 (Kamothe, Vashi, Ulwe Mass Housing, the 33 kV substation,
+the NMMC school), and so did the Kharghar football stadium; Ghansoli, Ulwe
+Sector 8 and Rabale are still waiting (OPEN-QUESTIONS.md #48).
 
 ONE QUESTION FOR SIR, THREE WORKS — PRE-LAUNCH.md S12: who the client was. The
 table gives CIDCO for both skywalks (rows 5 and 7) and NMMC for the golf course
