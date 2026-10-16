@@ -126,19 +126,25 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
               {entries.map(({ c, i }, n) => {
                 const k = `${K}.${b}.cards.${i}`;
                 const lead = leadEntry && n === 0;
+                /* A placeholder (`pending`): its badge beside the place, the card dashed. */
+                const pending = { pending: c.pending, pendingKey: `${k}.pending` };
+                const text = c.pending ? "flex-1 border-dashed" : "flex-1";
                 return lead ? (
-                  <li class="flex flex-col sm:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-subgrid">
+                  <li
+                    class="flex flex-col sm:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-subgrid"
+                    data-pending={c.pending ? "" : undefined}
+                  >
                     <div class="relative overflow-hidden h-265 sm:h-360 lg:h-auto lg:min-h-480 lg:col-span-2">
-                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} large width={1040} height={667} />
+                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} {...pending} large width={1040} height={667} />
                     </div>
-                    <Card card={c} k={k} ink={ink} head={false} open as="div" class="flex-1" />
+                    <Card card={c} k={k} ink={ink} head={false} open as="div" class={text} />
                   </li>
                 ) : (
-                  <li class="flex flex-col">
+                  <li class="flex flex-col" data-pending={c.pending ? "" : undefined}>
                     <div class="relative overflow-hidden h-240">
-                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} width={760} height={480} />
+                      <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} {...pending} width={760} height={480} />
                     </div>
-                    <Card card={c} k={k} ink={ink} head={false} as="div" class="flex-1" />
+                    <Card card={c} k={k} ink={ink} head={false} as="div" class={text} />
                   </li>
                 );
               })}

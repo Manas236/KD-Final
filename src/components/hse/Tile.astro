@@ -34,9 +34,14 @@ interface Props {
   /** The size the photograph is requested at. */
   width: number;
   height: number;
+  /** A placeholder's label (a drill card's `pending`), drawn as the
+      badge chip beside `where`, mist on the scrim (DESIGN-SYSTEM
+      "Placeholders"). */
+  pending?: string;
+  pendingKey?: string;
 }
 
-const { media, where, title, whereKey, titleKey, large = false, width, height } = Astro.props;
+const { media, where, title, whereKey, titleKey, large = false, width, height, pending, pendingKey } = Astro.props;
 ---
 
 {
@@ -70,9 +75,23 @@ const { media, where, title, whereKey, titleKey, large = false, width, height } 
   aria-hidden="true"
 />
 <div class:list={["absolute inset-x-0 bottom-0", large ? "p-32" : "p-20"]}>
-  <p class="text-meta-sm text-kd-fog" data-edit={whereKey}>
-    {where}
-  </p>
+  {
+    pending ? (
+      <p class="flex flex-wrap items-center gap-8 text-meta-sm text-kd-fog">
+        <span data-edit={whereKey}>{where}</span>
+        <span
+          class="text-badge uppercase text-kd-mist bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
+          data-edit={pendingKey}
+        >
+          {pending}
+        </span>
+      </p>
+    ) : (
+      <p class="text-meta-sm text-kd-fog" data-edit={whereKey}>
+        {where}
+      </p>
+    )
+  }
   <p
     class:list={["font-display text-kd-mist mt-6", large ? "text-d6" : "text-d8"]}
     data-edit={titleKey}

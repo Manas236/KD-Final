@@ -281,6 +281,12 @@ export interface HseCard {
       picture and its account are one block and nothing is said twice.
       Attributes only: its text is the card's. */
   readonly media?: { readonly file?: string; readonly video?: string; readonly alt: string };
+  /** REVIEW-ONLY, as on InfoItem, on a card with `media`: one fact of
+      the card K.D. has not given, its date. Record.astro draws the card
+      dashed and this badge beside `where`, in the caption over the
+      picture, where the date would be; scripts/check-placeholders.mjs
+      fails while one remains. */
+  readonly pending?: string;
   /** On a card with `media`: the label of the toggle that opens
       `points`. The first card of an odd-numbered register opens with
       them shown. */
@@ -327,16 +333,18 @@ export const hse: HseCopy = {
       "HSE is not a separate priority; it is part of every priority. We maintain the same " +
       "discipline, care and accountability on every project, at every site, every day.",
     /* The record at a glance, 15 Oct 2026, each figure taken from the
-       page below it. The man-hours are read off the Karjat banner
-       (OPEN-QUESTIONS.md #42) and the drills are the register's seven:
-       both to be confirmed by the HSE team (PRE-LAUNCH.md S16). */
+       page below it. Confirmed by K.D.'s HSE executive on 16 Oct 2026
+       (OPEN-QUESTIONS.md #53): the man-hours are the Karjat site's, as
+       of 7 March 2026, not a company-wide figure; the drills are "8+"
+       for 2026 so far (the register shows seven of them); the camp was
+       50 workers and staff, not 88. */
     stats: [
-      { value: "3,00,000", label: "Safe man-hours without a lost-time injury" },
+      { value: "3,00,000", label: "Safe man-hours at Karjat site (as of March 2026)" },
       { value: "3", label: "ISO-certified management systems" },
-      { value: "7", label: "Site mock drills in 2026" },
-      { value: "88", label: "Workers and staff in one medical camp" },
+      { value: "8+", label: "Site mock drills so far in 2026" },
+      { value: "50", label: "Workers and staff in one medical camp" },
     ],
-    statsNote: "Safe man-hours at Karjat, as on January 2026.",
+    statsNote: "Safe man-hours without a lost-time injury, Karjat site, as of 7 March 2026.",
   },
   sections: [
     {
@@ -460,19 +468,20 @@ export const hse: HseCopy = {
             ],
           },
           /* Appended 2026-10-13 (OPEN-QUESTIONS.md #44). The heat-stress
-             steps are what its ten photographs show, in order; "heat
-             stress" is the name the batch came under. The register's
-             lead: the newest drill, and the one told most fully. The
-             site is not on record: PRE-LAUNCH.md S13 asks. */
+             steps are what its ten photographs show, in order. The
+             register's lead: the newest drill, and the one told most
+             fully. Its type, site and date are as K.D.'s HSE executive
+             gave them on 16 Oct 2026 (#53): Emergency Mock Drill, Heat
+             Stress (Heat Stroke); Karjat site; 08/10/2026. */
           {
-            title: "Heat-stress rescue drill",
-            where: "8 October 2026",
+            title: "Emergency mock drill, heat stress (heat stroke)",
+            where: "Karjat site · 8 October 2026",
             body:
               "A mock drill for a worker overcome by heat while working at height, run on the live " +
               "site with the crew's own stretcher and supervisors.",
             media: {
               file: "hse-heat-stress-drill-08.jpg",
-              alt: "Heat-stress mock drill: four men carry the casualty out on the stretcher",
+              alt: "Heat-stress mock drill at Karjat: four men carry the casualty out on the stretcher",
             },
             more: "Step by step",
             points: [
@@ -512,10 +521,17 @@ export const hse: HseCopy = {
              2026 and the HSE team's RIGHT rule and don'ts, given in Hindi,
              put into English. Its body no longer ends on a colon: the list
              it led into is behind the toggle now, whose label names it.
-             No names. */
+             No names.
+
+             The fire drill's site is confirmed (Mohape site) and its date
+             is not (16 Oct 2026, #53): "31 July 2026" was read off the
+             camera's stamp on the photographs, and no document in the
+             repo gives it. So the date is a placeholder, drawn as a chip
+             beside the site over the clip, until the HSE team gives it. */
           {
             title: "Fire emergency drill",
-            where: "Mohape · 31 July 2026",
+            where: "Mohape site",
+            pending: "To be added",
             body:
               "A test fire lit on the Mohape site and put out with the site's own extinguishers, by " +
               "the crew who would have to face a real one.",
@@ -616,16 +632,18 @@ export const hse: HseCopy = {
         kicker: "Worker Health",
         heading: "Health checks brought to the site.",
         /* The camp's photograph beside its card (15 Oct 2026). The card
-           was titled "Medical camp, Mankhurd" over "88 workers and staff
-           covered", the photograph's own caption again; it now says what
-           its list is. The two lists share three tests on purpose: one
-           is the 12 September camp, the other the routine checks. */
+           was titled "Medical camp, Mankhurd" over the head count, the
+           photograph's own caption again; it now says what its list is.
+           The two lists share three tests on purpose: one is the 12
+           September camp, the other the routine checks. The camp was 50
+           workers and staff, per K.D.'s HSE executive (16 Oct 2026, #53);
+           the 88 the site said until then was wrong. */
         side: true,
         media: [
           {
             file: "hse-medical-camp-mankhurd.jpg",
             alt: "Workers queue outside the Mankhurd site office beside the free medical camp banner and K.D. safety posters",
-            title: "Free medical camp for 88 workers and staff",
+            title: "Free medical camp for 50 workers and staff",
             where: "Mankhurd Station · 12 September 2026",
           },
         ],

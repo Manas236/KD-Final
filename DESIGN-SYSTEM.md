@@ -438,8 +438,11 @@ Rules:
 An item with `pending: "<label>"` in its copy module is content K.D. has not
 supplied. It renders as the ordinary card or tile with two marks a client
 cannot miss: a **dashed** border and the project cards' teal badge chip
-carrying the label (ink text on a light band, mist on ink). Nothing else
-changes: no new colour, no new type step, no new token. The label is its own
+carrying the label (ink text on a light band, mist on ink). One fact missing
+from a card whose place and title sit over its picture (an /hse drill's date)
+is the badge beside the place in that caption, mist on the scrim, with the
+card dashed (OPEN-QUESTIONS.md #53). Nothing else changes: no new colour, no
+new type step, no new token. The label is its own
 slot (`…items.3.pending`), so the copy gate is unchanged. Every pending
 element carries `data-pending`; `npm run check:placeholders` lists them and
 fails while any exists, and `PRE-LAUNCH.md` says what closes each. None may

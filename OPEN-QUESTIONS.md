@@ -2631,6 +2631,8 @@ name says what the picture is. `/hse` now lists its photos in
 
 **Check with the company:** the 3,00,000 safe man-hours figure is read off
 the Karjat banner ("as on January 2026") — confirm before go-live.
+**Answered 2026-10-16 (#53):** it is the Karjat site's figure as of 7 March
+2026; and the camp below was 50 workers and staff, not 88.
 
 ---
 
@@ -2686,7 +2688,8 @@ deck, the alarm raised, carried clear, strapped to a stretcher, carried out,
 head count. **"Heat stress" is the folder's name** — nothing in the frames
 says so, and nothing names the site. The page says "heat-stress drill" and
 gives the date only; PRE-LAUNCH.md S13 asks for both (the HSE questions are
-for Amritanshu, K.D.'s HSE executive).
+for Amritanshu, K.D.'s HSE executive). **Answered 2026-10-16 (#53):** an
+Emergency Mock Drill, Heat Stress (Heat Stroke), at the Karjat site.
 
 **The report** is a different drill: Karjat, 17 April 2026, a medical
 emergency while working at height. Its scenario and three clock times are on
@@ -2851,7 +2854,10 @@ cut. In 01 and 13 a man at the edge is cut, as in the original.
 
 The captions call the man in the green helmet who demonstrates the
 extinguisher "the instructor" and the men in white helmets "supervisors".
-Neither role is on record (PRE-LAUNCH.md S14).
+Neither role is on record (PRE-LAUNCH.md S14). **2026-10-16 (#53):** the man
+in the green helmet is K.D.'s HSE executive, and the captions now say so;
+the site, Mohape, is confirmed and the date is not, so the card's date is a
+placeholder.
 
 ### The snake-bite drill, RMC Plant, Karjat, 27 August 2026
 
@@ -3324,3 +3330,94 @@ road as the subject, and keep the "Representative image" chip.
 
 None new, none retired, no copy changed in this pass. The button hover is an
 attribute and four utilities; the drawer fix is three utilities.
+
+---
+
+## 53. /hse: the drill facts confirmed by K.D.'s HSE executive
+
+2026-10-16. The user relayed ten facts confirmed that day by K.D.'s HSE
+executive, answering PRE-LAUNCH.md S13, most of S14 and the tile questions of
+S16. Applied in the copy modules only (`src/data/pages.ts`, `gallery.ts`); no
+stored edit was read, changed or removed.
+
+| # | Fact | Was on the site | Now |
+| --- | --- | --- | --- |
+| 1 | The 8 Oct drill: Emergency Mock Drill, Heat Stress (Heat Stroke); Karjat site; 08/10/2026 | Card 3: "Heat-stress rescue drill", "8 October 2026" | "Emergency mock drill, heat stress (heat stroke)", "Karjat site · 8 October 2026"; the picture's alt and its ten /gallery captions say "at Karjat" |
+| 2 | Karjat, 17 April: 14:53, 14:55 and 15:00 are correct; no new originals | Card 4, as is | Unchanged; its photographs stay as they are |
+| 3 | Snake bite: Karjat site, 27 Aug 2026; not Mohape, not 31 July | Card 6: "RMC Plant, Karjat · 27 August 2026"; seven captions "at Karjat" | Unchanged: nothing on the site said otherwise (below) |
+| 4 | Fire extinguisher drill: Mohape site; date not confirmed | Card 5: "Mohape · 31 July 2026" | "Mohape site" and a "To be added" badge where the date was; PRE-LAUNCH.md row 2b |
+| 5 | The man in the green helmet leading the fire drill is K.D.'s HSE executive; role only, no name | Eight fire captions: "the instructor" | "K.D.'s HSE executive" |
+| 6 | 3,00,000 safe man-hours is the Karjat site's figure as of 7 March 2026 | Tile: "Safe man-hours without a lost-time injury"; note: "Safe man-hours at Karjat, as on January 2026." | Tile: "Safe man-hours at Karjat site (as of March 2026)"; note: "Safe man-hours without a lost-time injury, Karjat site, as of 7 March 2026." |
+| 7 | Drills: "8+" for 2026 so far | Tile: "7", "Site mock drills in 2026" | "8+", "Site mock drills so far in 2026" |
+| 8 | Medical camp: 50 workers, not 88 | Tile "88"; Worker Health photograph "Free medical camp for 88 workers and staff"; /gallery caption "...for 88 workers and staff" | 50 in all three |
+| 9 | ISO certificate numbers, validity, certifying bodies | Placeholder (PRE-LAUNCH.md row 2) | Stays a placeholder. **The certificates are to be collected from the Vashi office.** |
+| 10 | Snake-bite photographs | The seven from the report | Stay as they are for now. **The originals are coming later** (S14 stays open for them). |
+
+**The fire drill's date.** "31 July 2026" came off the GPS camera's stamp on
+the fourteen photographs (#47; `Fire_Mock_Drill/`, raw media, git-ignored). No
+document in the repo gives the date (the snake-bite and Karjat drills each
+have a report; the fire drill has none), so the date went back to the
+standard placeholder. The card is in the drill register, its place and title
+over its clip, so the badge sits in that caption beside "Mohape site", mist
+on the scrim, and the card's border is dashed (DESIGN-SYSTEM.md,
+Placeholders). `HseCard` has a `pending` field for it; `Tile.astro` draws the
+badge (`pending`, `pendingKey`); `Record.astro` passes both and marks the
+card `data-pending`. Placeholders: 46 before, 47 after. When the HSE team
+gives a date: `where: "Mohape site · <date>"`, delete `pending`.
+
+**Nothing paired the snake-bite drill with Mohape or 31 July.** Card 6's
+place and date are the report's own (`Snake_Bite_Drill/MOCK DRILL REPORT
+AUGUST 2026..pdf`: "Location RMC PLANT KARJAT", "27/08/2026"); the seven
+captions and the alt say Karjat; and /gallery has one group for every HSE
+photograph ("Health, Safety & Environment"), so no group name names either
+drill. The 21 photographs were looked at side by side: the fourteen fire
+frames are all one covered floor and test-fire tray, the seven snake-bite
+frames the plant; none is in the other set, and the fire card's clip is the
+fire drill's. Nothing was moved.
+
+**Not changed, on purpose.** The Recognition band's photograph of National
+Safety Week at Karjat is titled "3,00,000 safe man-hours without a lost-time
+injury" (`hse.record.bands.4.media.0`), and its /gallery caption is "National
+Safety Week at Karjat: 3,00,000 safe man-hours...". Both already read as the
+Karjat site's figure (National Safety Week is in March), and band 4 is where
+Sir's saved edit is (#52), so neither was touched. The snake-bite captions
+call the HSE executive "the safety officer", a role, as the report does; fact
+5 was about the fire drill, so they stay.
+
+**Saved edits.** The server's 15 Oct deploy report listed six on /hse: the
+hero, two section texts, one award text and the closing headline. Their exact
+keys are not known here. The step 3 list (#52) has the one in view, the
+Recognition band (`hse.record.bands.4.*`), and nothing in it was changed; nor
+was anything under `hse.hero.kicker`, `.title`, `.sub`, `hse.sections.*` or
+`hse.cta.*`. The hero tiles' keys were created by that same deploy (#50), so
+no edit older than it can be on them. At the next deploy, before pulling, the
+server lists `content_edits` rows for `/hse` on these keys; a row on one of
+them hides the corrected text and goes to Sir, it is not changed:
+
+- `hse.hero.stats.0.label`, `hse.hero.stats.2.value`, `hse.hero.stats.2.label`,
+  `hse.hero.stats.3.value`, `hse.hero.statsNote`
+- `hse.record.bands.0.cards.3.title`, `hse.record.bands.0.cards.3.where`,
+  `hse.record.bands.0.cards.5.where`
+- `hse.record.bands.2.media.0.title`
+
+and `gallery_events` caption rows for the 19 photographs whose baseline
+caption changed (`hse-heat-stress-drill-01…10`, `hse-mohape-fire-drill-01`,
+`04…10`, `hse-medical-camp-mankhurd`), since a caption set in the studio
+replaces the baseline.
+
+**Edit keys.** New: `hse.record.bands.0.cards.5.pending`. Same key, new text:
+the nine above. None retired, none moved.
+
+**Verified** on a build of HEAD against a build with the change, both served
+locally. At 1280, 1440 and 1920 every element of the other 41 routes is
+unchanged; on /hse the only differences are the drill tile's label, now two
+lines like its neighbours (the row of tiles keeps its height), and the fire
+card's caption, which gains the badge inside the clip's box; on /gallery one
+caption over a photograph takes a fourth line inside it. The page height is
+unchanged from 768 up; at 1024 the heat-stress title takes a second line
+inside its picture. At 360 and 390 the note under the tiles takes a second
+line, so the page below it moves down 16px. `check-edit-keys` passes on
+/hse, /gallery, / and /projects; edit mode opens every changed slot,
+the badge included, with no write; CLS 0 on /hse and /gallery; no em dash on
+any of the 43 served pages; no name of anyone in the drill reports on any of
+them.

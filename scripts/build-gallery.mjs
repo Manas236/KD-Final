@@ -381,8 +381,9 @@ const PHOTOS = [
   { out: "hse-karjat-height-drill-03.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-stretcher-to-car.jpg", crop: [0, 0.16, 1, 1] },
   { out: "hse-karjat-height-drill-04.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-loaded-into-car.jpg" },
   { out: "hse-karjat-height-drill-05.jpg", src: "Heat_Stress/from the Karjat mock drill report (PDF)/karjat-drill-head-count.jpg", crop: [0.095, 0, 0.85, 1] },
-  // hse — the fire mock drill at Mohape, 31 July 2026, supplied 2026-10-15
-  // in Fire_Mock_Drill/ (OPEN-QUESTIONS.md #47). All fourteen frames, in the
+  // hse — the fire mock drill at the Mohape site, supplied 2026-10-15 in
+  // Fire_Mock_Drill/ (OPEN-QUESTIONS.md #47; its date, 31 July 2026 on the
+  // camera's stamp, is not confirmed, #53). All fourteen frames, in the
   // order of the GPS camera's own clock (14:16 to 14:23). The crop cuts its
   // coordinates stamp (bottom left) and map (top right): the sides go, so
   // the test fire at the foot stays. The last, a group photograph, keeps

@@ -384,7 +384,7 @@ export const plantGalleries: readonly ProjectGallery[] = [
 export const hseReportPhotos: readonly GalleryPhoto[] = [
   { file: "hse-national-safety-week-karjat.jpg", caption: "National Safety Week at Karjat: 3,00,000 safe man-hours without a lost-time injury" },
   { file: "hse-national-safety-day-mankhurd.jpg", caption: "National Safety Day at Mankhurd Station: safety pledge and awards" },
-  { file: "hse-medical-camp-mankhurd.jpg", caption: "Free medical camp at Mankhurd for 88 workers and staff" },
+  { file: "hse-medical-camp-mankhurd.jpg", caption: "Free medical camp at Mankhurd for 50 workers and staff" },
   { file: "hse-lifting-training-govandi.jpg", caption: "Lifting procedure and tools-and-tackles training at Govandi" },
   { file: "hse-air-monitoring-mankhurd.jpg", caption: "Ambient air-quality monitoring on the Mankhurd site" },
   { file: "hse-world-environment-day.jpg", caption: "The site workforce marks World Environment Day" },
@@ -394,22 +394,23 @@ export const hseReportPhotos: readonly GalleryPhoto[] = [
 ];
 
 /* Two mock drills, supplied 2026-10-13 (OPEN-QUESTIONS.md #44): all ten
-   photographs of the heat-stress drill of 8 October 2026, in the order
-   they were taken, then the five usable frames from the report on the
+   photographs of the heat-stress drill of 8 October 2026 at the Karjat
+   site (its site confirmed on 16 Oct 2026, #53), in the order they were
+   taken, then the five usable frames from the report on the
    Karjat work-at-height drill of 17 April 2026. Four of the first set
    are also tiles on /hse (pages.ts). Listed after hseReportPhotos, so
    no earlier photograph in the group moves. */
 export const hseDrillPhotos: readonly GalleryPhoto[] = [
-  { file: "hse-heat-stress-drill-01.jpg", caption: "Heat-stress mock drill: a workman in a full-body harness on the scaffold tower" },
-  { file: "hse-heat-stress-drill-02.jpg", caption: "Heat-stress mock drill: the casualty down on the deck" },
-  { file: "hse-heat-stress-drill-03.jpg", caption: "Heat-stress mock drill: the supervisor raises the alarm by phone" },
-  { file: "hse-heat-stress-drill-04.jpg", caption: "Heat-stress mock drill: the casualty is carried clear of the work area" },
-  { file: "hse-heat-stress-drill-05.jpg", caption: "Heat-stress mock drill: a responder checks the casualty on the stretcher" },
-  { file: "hse-heat-stress-drill-06.jpg", caption: "Heat-stress mock drill: the casualty is strapped to the stretcher" },
-  { file: "hse-heat-stress-drill-07.jpg", caption: "Heat-stress mock drill: the stretcher is lifted" },
-  { file: "hse-heat-stress-drill-08.jpg", caption: "Heat-stress mock drill: four men carry the stretcher out" },
-  { file: "hse-heat-stress-drill-09.jpg", caption: "Heat-stress mock drill: the stretcher team on the move" },
-  { file: "hse-heat-stress-drill-10.jpg", caption: "Heat-stress mock drill: head count and debrief with the crew" },
+  { file: "hse-heat-stress-drill-01.jpg", caption: "Heat-stress mock drill at Karjat: a workman in a full-body harness on the scaffold tower" },
+  { file: "hse-heat-stress-drill-02.jpg", caption: "Heat-stress mock drill at Karjat: the casualty down on the deck" },
+  { file: "hse-heat-stress-drill-03.jpg", caption: "Heat-stress mock drill at Karjat: the supervisor raises the alarm by phone" },
+  { file: "hse-heat-stress-drill-04.jpg", caption: "Heat-stress mock drill at Karjat: the casualty is carried clear of the work area" },
+  { file: "hse-heat-stress-drill-05.jpg", caption: "Heat-stress mock drill at Karjat: a responder checks the casualty on the stretcher" },
+  { file: "hse-heat-stress-drill-06.jpg", caption: "Heat-stress mock drill at Karjat: the casualty is strapped to the stretcher" },
+  { file: "hse-heat-stress-drill-07.jpg", caption: "Heat-stress mock drill at Karjat: the stretcher is lifted" },
+  { file: "hse-heat-stress-drill-08.jpg", caption: "Heat-stress mock drill at Karjat: four men carry the stretcher out" },
+  { file: "hse-heat-stress-drill-09.jpg", caption: "Heat-stress mock drill at Karjat: the stretcher team on the move" },
+  { file: "hse-heat-stress-drill-10.jpg", caption: "Heat-stress mock drill at Karjat: head count and debrief with the crew" },
   { file: "hse-karjat-height-drill-01.jpg", caption: "Work-at-height mock drill at Karjat: the crew attends the casualty at the foot of the scaffold" },
   { file: "hse-karjat-height-drill-02.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is lifted on the stretcher" },
   { file: "hse-karjat-height-drill-03.jpg", caption: "Work-at-height mock drill at Karjat: the casualty is carried to a vehicle" },
@@ -417,19 +418,20 @@ export const hseDrillPhotos: readonly GalleryPhoto[] = [
   { file: "hse-karjat-height-drill-05.jpg", caption: "Work-at-height mock drill at Karjat: head count after the drill" },
   /* Two more, supplied 2026-10-15 (OPEN-QUESTIONS.md #47), appended so no
      earlier caption key moves: all fourteen photographs of the fire drill
-     at Mohape, 31 July 2026, in the order taken, then the seven in the
-     report on the snake-bite drill at the Karjat RMC plant, 27 August
-     2026. The tenth fire photograph is also a tile on /hse (pages.ts). */
-  { file: "hse-mohape-fire-drill-01.jpg", caption: "Fire mock drill at Mohape: the instructor aims the extinguisher's hose at the test fire" },
+     at the Mohape site (its date not confirmed, #53), in the order taken,
+     then the seven in the report on the snake-bite drill at the Karjat
+     RMC plant, 27 August 2026. The tenth fire photograph is also a tile
+     on /hse (pages.ts). */
+  { file: "hse-mohape-fire-drill-01.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive aims the extinguisher's hose at the test fire" },
   { file: "hse-mohape-fire-drill-02.jpg", caption: "Fire mock drill at Mohape: a worker holds the extinguisher ready beside the burning tray" },
   { file: "hse-mohape-fire-drill-03.jpg", caption: "Fire mock drill at Mohape: a supervisor readies the extinguisher at the test fire" },
-  { file: "hse-mohape-fire-drill-04.jpg", caption: "Fire mock drill at Mohape: the instructor explains the extinguisher to the crew" },
-  { file: "hse-mohape-fire-drill-05.jpg", caption: "Fire mock drill at Mohape: the instructor holds up the extinguisher for the crew to see" },
-  { file: "hse-mohape-fire-drill-06.jpg", caption: "Fire mock drill at Mohape: the crew gathers round the instructor and the extinguisher" },
-  { file: "hse-mohape-fire-drill-07.jpg", caption: "Fire mock drill at Mohape: the instructor turns the extinguisher towards the fire" },
-  { file: "hse-mohape-fire-drill-08.jpg", caption: "Fire mock drill at Mohape: the instructor shows the hold, hose in hand" },
-  { file: "hse-mohape-fire-drill-09.jpg", caption: "Fire mock drill at Mohape: the instructor crouches at the fire with the extinguisher" },
-  { file: "hse-mohape-fire-drill-10.jpg", caption: "Fire mock drill at Mohape: the crew leans in as the instructor reaches the fire" },
+  { file: "hse-mohape-fire-drill-04.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive explains the extinguisher to the crew" },
+  { file: "hse-mohape-fire-drill-05.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive holds up the extinguisher for the crew to see" },
+  { file: "hse-mohape-fire-drill-06.jpg", caption: "Fire mock drill at Mohape: the crew gathers round K.D.'s HSE executive and the extinguisher" },
+  { file: "hse-mohape-fire-drill-07.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive turns the extinguisher towards the fire" },
+  { file: "hse-mohape-fire-drill-08.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive shows the hold, hose in hand" },
+  { file: "hse-mohape-fire-drill-09.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive crouches at the fire with the extinguisher" },
+  { file: "hse-mohape-fire-drill-10.jpg", caption: "Fire mock drill at Mohape: the crew leans in as K.D.'s HSE executive reaches the fire" },
   { file: "hse-mohape-fire-drill-11.jpg", caption: "Fire mock drill at Mohape: the powder jet hits the fire" },
   { file: "hse-mohape-fire-drill-12.jpg", caption: "Fire mock drill at Mohape: a supervisor puts the fire out, and the tray smokes under the powder" },
   { file: "hse-mohape-fire-drill-13.jpg", caption: "Fire mock drill at Mohape: a worker takes his turn with the extinguisher" },
