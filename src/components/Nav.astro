@@ -205,10 +205,14 @@ const isHere = (href: string) =>
       every key to be unique on the page, so this copy is marked
       data-no-edit rather than given a second key that would drift from
       the one definition in home.ts. Same treatment as the footer's
-      generated year in SiteFooter.astro. */}
+      generated year in SiteFooter.astro.
+
+      It scrolls on its own below the bar: open, it is taller than most
+      phones (about 880px), and the bar is fixed, so without its own
+      scroll its last links and the button could not be reached. */}
   <nav
     id="nav-drawer"
-    class="hidden min-[1080px]:hidden border-t border-t-kd-nav-border bg-kd-ink"
+    class="hidden min-[1080px]:hidden border-t border-t-kd-nav-border bg-kd-ink max-[1080px]:max-h-[calc(100dvh-var(--kd-nav-h))] max-[1080px]:overflow-y-auto max-[1080px]:overscroll-contain"
     aria-label="Primary, mobile"
   >
     <ul class="flex flex-col px-24 py-24 gap-24">
