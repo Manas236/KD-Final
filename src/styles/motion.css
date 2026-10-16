@@ -255,7 +255,9 @@
 /* ---------- 3. Hover, pointer devices only ----------
    Links that already change colour on hover (their class carries a
    `hover:` utility) ease into it instead of switching. A colour fading
-   is not movement, so this one holds under reduced motion too. */
+   is not movement, so this one holds under reduced motion too. The
+   same easing carries a link's focus-visible: colour, which uses the
+   same utilities. */
 @media screen and (hover: hover) {
   :root.kd-motion:not([data-nt-mode]) a[class*="hover:"] {
     transition:
@@ -324,6 +326,61 @@
     left: calc(-1 * var(--kd-hairline));
     right: calc(-1 * var(--kd-hairline));
     bottom: calc(-1 * var(--kd-hairline));
+  }
+}
+
+/* Buttons with no arrow to nudge (added 16 Oct 2026). A mint button
+   carrying data-button="rule" (Nav.astro's "Get in Touch", in the bar
+   and the drawer, and the homepage's closing button) draws the light
+   surface's accent rule along its foot, from the left: 2px of
+   --kd-mint-2, exactly as a card on a light band does. The ghost
+   button ("About Us", Hero.astro) needs nothing here: its label and
+   outline turn mint through hover: and focus-visible: utilities, and
+   the colour rule at the top of this section eases them.
+
+   Keyboard focus shows the same rule on any device, beside the
+   browser's own focus ring, which stays. The rule is a state, not
+   movement, so it holds under reduced motion like a link's colour;
+   only drawing it from the left waits for no-preference, below. Like
+   a card's, it exists only while the button is hovered or focused, so
+   a button at rest is untouched. */
+@media screen {
+  :root.kd-motion:not([data-nt-mode]) [data-button="rule"]:focus-visible {
+    position: relative;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-button="rule"]:focus-visible::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--kd-mint-2);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+}
+
+@media screen and (hover: hover) {
+  :root.kd-motion:not([data-nt-mode]) [data-button="rule"]:hover {
+    position: relative;
+  }
+  :root.kd-motion:not([data-nt-mode]) [data-button="rule"]:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--kd-mint-2);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  :root.kd-motion:not([data-nt-mode]) [data-button="rule"]:is(:hover, :focus-visible)::after {
+    animation: kd-draw var(--kd-motion-rule) var(--kd-motion-ease-soft) backwards;
   }
 }
 
