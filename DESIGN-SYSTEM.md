@@ -331,6 +331,15 @@ about the card itself moves.
 - Padding is `px-24 py-12` on a standard button, `px-32 py-16` on the large CTA.
 - An arrow is an inline SVG **after** the label, `gap-8`, `aria-hidden`, sized
   in `em` so it tracks the label.
+- **Hover and keyboard focus** (16 Oct 2026; nothing changes at rest). A
+  button with an arrow nudges it (§11). A primary button with no arrow (the
+  nav's "Get in Touch", in the bar and the drawer, and the homepage's closing
+  button) carries `data-button="rule"` and draws a 2px `--kd-mint-2` rule
+  along its foot from the left, as a card on a light band does
+  (`motion.css` §3). A ghost button turns its label and outline mint:
+  `hover:text-kd-mint hover:border-kd-mint` and the same two with
+  `focus-visible:`. Keyboard focus shows the hover state beside the browser's
+  own focus ring, on any device. A new button takes one of the two.
 - **Nav links**: `text-nav` — 14px, 0.28px tracking, Inter 500, `text-kd-mist`.
   The **active** link is `text-kd-mint` with a **1px mint bottom border**. That
   border is the only underline in the design; never use `text-decoration`.
@@ -515,8 +524,12 @@ Gutters step `px-48` → `px-24` at 640. The 1280px cap is unchanged.
 
 ### Nav
 
-Collapses to a drawer **below 900**. The logo stays; the links and the
-`Get in Touch` button move into the drawer.
+Collapses to a drawer **below 1080** (`min-[1080px]:hidden` in Nav.astro). The
+logo stays; the links and the `Get in Touch` button move into the drawer.
+The drawer scrolls on its own below the fixed bar, at most the window's
+height less the bar's (16 Oct 2026): open, it is about 880px tall, more than
+most phones, and before that its last links and the button could not be
+reached.
 
 ### ⚠️ The divider trap
 
@@ -548,7 +561,8 @@ Named so that nobody adds them back:
   as they scroll into view (`src/scripts/reveal.js`); on pointer devices
   photographs zoom 4% inside their own frame, a card draws a 2px accent rule
   along its foot, arrows nudge 3px, and links that already change colour
-  ease into it; the homepage hero's headline, sub-paragraph and buttons fade
+  ease into it (since 16 Oct a primary button with no arrow draws a card's
+  rule along its own foot and a ghost button eases to mint, §6); the homepage hero's headline, sub-paragraph and buttons fade
   up 20px on load, from 35% opacity (never lower: the headline is the LCP
   element). Calm, not snappy, as retuned the same day at the client's
   request: menu panel 250ms, items 450ms each, 110ms apart, 10px of travel,

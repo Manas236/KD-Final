@@ -3151,3 +3151,176 @@ likely a forwarded copy, and is a little soft at the tile's 576 px on a
 sharp screen.
 
 **Edit keys** (new): `resources.plant.clip.where`, `resources.plant.clip.title`.
+
+---
+
+## 52. The 16 Oct pass: button hovers, the phone menu, the /hse keys, the hero video, official records
+
+2026-10-16, one pass at the user's direction. Nothing was deployed.
+
+### Hover on the buttons that had none
+
+"Get in Touch" (the nav, in the bar and in the phone drawer) and "About Us"
+(the homepage hero) did nothing under the pointer: the 14 Oct hover nudges a
+button's arrow, and these two have no arrow. The homepage's closing button,
+"View Our Projects", is the same kind and had none either, so it has the same
+treatment. Nothing changes at rest; DESIGN-SYSTEM §6 has the rule.
+
+- **Mint button, no arrow** (`data-button="rule"`): a 2px `--kd-mint-2` rule
+  draws along its foot from the left, the rule a card on a light band draws,
+  on the same `--kd-motion-rule` timing (`motion.css` §3).
+- **Ghost button**: its label and outline turn mint
+  (`hover:` and `focus-visible:` `text-kd-mint border-kd-mint`), eased by the
+  link-colour rule in §3 on `--kd-motion-link`.
+- **Keyboard**: `:focus-visible` shows the same state on any device, beside
+  the browser's own focus ring, which stays.
+- **Gates**: hover on pointer devices only; drawing the rule waits for no
+  reduced-motion preference (with it, the rule simply appears, as a link's
+  colour does); in edit mode, on /studio and without script, nothing.
+
+Checked in Chrome at 1280: no element on the page moves on hover; edit mode
+still opens all three labels for editing and a click there does not follow
+the link; a touch screen gets no hover. Not given a hover, for a later
+decision: the /projects filter tabs, the /gallery jump links and the
+lightbox's Close, Previous and Next.
+
+### The phone menu could not reach its last links
+
+Open, the drawer is about 880px tall, and it hangs from the fixed bar, so on
+a phone (measured at 360 × 640, 360 × 800 and 390 × 844) its last links and
+"Get in Touch" sat below the screen: scrolling moved the page underneath, not
+the menu. The test server has it so today (it runs 6d2b7d1). The drawer now
+scrolls on its own below the bar, at most the window's height
+less the bar's (`max-[1080px]:` utilities on `#nav-drawer`, Nav.astro), and
+holds its scroll so the page does not move behind it. From 1080px it is
+hidden as before, and its computed style there is unchanged.
+
+### The QA sweep
+
+Every sitemap route (42) and the 404, at 360, 390, 768 and 1280: 172 page
+loads in Chrome, each scrolled to its foot so lazy images and the scroll
+reveal ran, on the build with this pass's changes.
+
+| Check | Result |
+| --- | --- |
+| Internal links | 42 distinct internal paths linked from the pages; every one answers 200 |
+| Images | none missing or broken; no same-origin request failed |
+| Horizontal scroll | none, at any width |
+| Overlapping or clipped text | none (the /careers form's honeypot field is off screen on purpose) |
+| Console errors | none, apart from the 404 page's own 404 status |
+| Layout shift (CLS) | 0 on every page at every width |
+| Em dashes in served HTML | 0 on every page; none in sitemap.xml, robots.txt or the web manifest |
+| Nav | phone drawer fixed (above): all 17 links and the button reachable at 360 × 640, 360 × 800, 390 × 844 and 768 × 1024, and the page behind stays put; at 1280 both drop-downs open on hover and on keyboard focus, every item clickable |
+
+The links to `/projects#all`, `#ongoing`, `#completed`, `#gallery` and
+`#plants` point at no element id; Filters.astro opens the tab from the hash,
+by design, and each works.
+
+Desktop is unchanged at rest: every element of all 43 routes at 1280, 1440
+and 1920 (52,119 elements) has the same box and computed style as the build
+before this pass. At 390 and 768 the one difference on each page is the
+drawer's own scroll setting.
+
+**One finding is data, not code.** The development PC's own database has a
+saved edit (content_edits row 8) on `projects.detail.body.1` of
+`/projects/panvel-karjat-railway-line` whose text keeps an em dash
+("overhead OHE — a method chosen") and drops the second sentence; the page
+shows it once the saved edits load. The served HTML has none. It was not
+touched, as no saved edit ever is. It is local only: the server reported no
+saved edits on any project page at the 15 Oct deploy.
+
+### /hse: where the Recognition title's key went (nothing changed)
+
+Edit keys are index-based, so the /hse rearrangement of 15 Oct (#50) was
+checked key by key: the page rendered at d0e18eb (live until 15 Oct), at
+55aaae6 (the commit before the rearrangement) and at HEAD, every `data-edit`
+key and its text compared.
+
+| Key | d0e18eb and 55aaae6 | HEAD |
+| --- | --- | --- |
+| `hse.record.bands.4.kicker` | Recognition | Recognition (unchanged) |
+| `hse.record.bands.4.heading` | Safe work is noticed, and rewarded. | unchanged |
+| `hse.record.bands.4.cards.0.title` | National Safety Day awards, Mankhurd | Awards on the day (same key, same card, new default text) |
+| `hse.record.bands.4.cards.0.where`, `.points.0–3`, `bands.4.media.0–2.*` | | unchanged |
+
+No Recognition key moved or changed meaning: the band is still index 4 and
+its card still index 0. A saved edit on any of them still shows, on the same
+element. If the saved "award text" the server reported on 15 Oct is on
+`hse.record.bands.4.cards.0.title`, it shows in place of the new default,
+which is what a saved edit is for; nothing in `content_edits` needs touching.
+
+Elsewhere on /hse: retired, `hse.record.bands.0.media.0`–`8` (`.where`,
+`.title`; Emergency Preparedness, not Recognition); same key, new default
+text, `hse.record.bands.0.cards.0.body`, `hse.record.bands.2.cards.0.title`
+("Medical camp, Mankhurd" to "What was checked") and `.where` ("88 workers
+and staff covered" to "At the camp"); the drill cards in band 0 kept their
+indexes and only their display order changed (`order`). At the next deploy
+the server can list the `content_edits` rows for `/hse` whose keys start
+`hse.record.bands.4.` and `hse.record.bands.0.media.`.
+
+### The homepage hero video, measured (no change)
+
+| | Desktop file | Phone file |
+| --- | --- | --- |
+| File | `public/video/hero-uran-1080.mp4` | `public/video/hero-uran-720.mp4` |
+| Size | 7.06 MB | 3.14 MB |
+| Picture | 1920 × 1080, 30 fps | 1280 × 720, 30 fps |
+| Codec | H.264 High, yuv420p, no audio track | same |
+| Bit rate | 2.30 Mbit/s | 1.02 Mbit/s |
+| Length | 24.5 s (735 frames) | same |
+| Index | at the front (faststart); served with byte ranges | same |
+
+The still under it is the video's first frame (`src/assets/hero-uran-poster.jpg`,
+1920 × 1080, 361 KB), served as a 1551 px WebP of 136 KB, eager and at high
+fetch priority. It is the poster: the `<video>` has no `poster` attribute
+because it is transparent until it plays, and a second copy of the frame
+would be a second download. `preload="none"`, `muted`, `playsinline`, and the
+script sets `muted` again before `play()`, which is what iOS and Android ask
+for to play inline without a tap. The source is set only after the page's
+`load` event, only at 1080px and up, and never under reduced motion,
+Save-Data, edit mode or without script; if `play()` is refused (iOS Low
+Power Mode), the still stays. Measured: nothing is fetched at 390 or 768,
+under reduced motion, with Save-Data or without script; at 1280, 1920 and a
+1180px touch tablet the 1080p file plays. Phones get the still
+(`HERO_VIDEO_ON_PHONES` is off), so the 720p file is unused.
+
+Homepage LCP, cold cache, 9 Mbit/s and 40 ms, five runs each: at 1280 the H1,
+median 448 ms (the commit before: 464 ms); at 390 the sub-paragraph, 436 ms
+(436 ms). CLS 0 in every run. The video is never the LCP element. At about
+2.3 Mbit/s for 1080p aerial footage, encoded at CRF 27 on the slow preset, the
+file is not oversized for a muted loop, so it was not re-encoded. One option
+for later, not a defect: a 1280px laptop at 1x could take the 720p file
+instead (3.1 MB rather than 7.1 MB), at some softness where the hero is
+taller than 16:9.
+
+### Open facts against official public records (none filled)
+
+The open facts on the Beyond the railway pages and the plants were searched
+for in official sources only (CIDCO, NMMC, MahaRERA, Indian Railways and
+other government sites, and their tender or award documents), by the trading
+name and by the registered name, Kailashchandra Dilipkumar Constructions
+Pvt. Ltd. None was found that names K.D. and states a year completed, an
+area, a length, an extent or a scope for any of these works; MahaRERA's
+public project search returns nothing for Lush Meadows. Directory and
+aggregator listings turned up, and do not count. So no placeholder was
+filled: 46 before, 46 after. Not searched, as they wait on Sir: contract
+values, the client for Bonkode FOB, Rabale Skywalk and the Kharghar golf
+clubhouse, the Kharghar football stadium and Centre of Excellence, WPO, and
+the directors.
+
+### Ghansoli and Ulwe Sector 8: replacement images not received
+
+The user is replacing the two representative images that show NMMC boards
+on CIDCO pages (#48, PRE-LAUNCH S15) with versions without lettering. On
+16 Oct no new file had arrived: `Civic_Works_AI/_new/` does not exist, and
+`Ghansoli Roads & Services/` and `Ulwe Sector 8 Infrastructure/` still hold
+only the 15 Oct PNGs in use. When they come: keep the current derivatives as
+dated copies, cut the new ones with `scripts/build-gallery.mjs` (its two
+`representative-` lines already name these folders) to 1600 × 900, the 16:9
+frame five of the other six use (the 15 Oct pair are 1448 × 1086), keep the
+road as the subject, and keep the "Representative image" chip.
+
+### Edit keys
+
+None new, none retired, no copy changed in this pass. The button hover is an
+attribute and four utilities; the drawer fix is three utilities.
