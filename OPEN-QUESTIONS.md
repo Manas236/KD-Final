@@ -2983,7 +2983,8 @@ They are on the site as supplied, captioned like the rest. PRE-LAUNCH.md
 **S15** puts both questions to Sir: the stadium, and whether the generated
 signs are acceptable or the images should be made again without them (at
 the least these two). A no on the stadium restores its `pending` tile from
-the commit before 571df0b.
+the commit before 571df0b. **2026-10-16: both replaced** with images that
+carry no lettering (#54).
 
 **Edit keys.** New: `projects.social.items.{6,8,9,10,11,12,13,15}.representative`
 on `/projects` and `projects.detail.representative` on the eight pages. Gone:
@@ -3324,7 +3325,8 @@ only the 15 Oct PNGs in use. When they come: keep the current derivatives as
 dated copies, cut the new ones with `scripts/build-gallery.mjs` (its two
 `representative-` lines already name these folders) to 1600 × 900, the 16:9
 frame five of the other six use (the 15 Oct pair are 1448 × 1086), keep the
-road as the subject, and keep the "Representative image" chip.
+road as the subject, and keep the "Representative image" chip. **They came
+later the same day, as new files in those two folders; #54.**
 
 ### Edit keys
 
@@ -3421,3 +3423,37 @@ line, so the page below it moves down 16px. `check-edit-keys` passes on
 the badge included, with no write; CLS 0 on /hse and /gallery; no em dash on
 any of the 43 served pages; no name of anyone in the drill reports on any of
 them.
+
+---
+
+## 54. Ghansoli and Ulwe Sector 8: representative images without lettering
+
+2026-10-16. The user made the two images again and put the new files beside
+the old ones: `Ghansoli Roads & Services/Ghansoli.png` and
+`Ulwe Sector 8 Infrastructure/Ulwe_Sec_8.png`, both 1672 × 941, the frame of
+five of the other six. Neither shows any board, sign, emblem or lettering, so
+neither contradicts its page's client (CIDCO) any more (#48, PRE-LAUNCH.md
+S15). Both are generated, like the other six, and keep the "Representative
+image" chip.
+
+| Work | Was (15 Oct) | Now |
+| --- | --- | --- |
+| Ghansoli Roads & Services | `GhansoliRoads&Services.png`, 1448 × 1086: a divided road, traffic signals, a bus, an "NMMC" board | `Ghansoli.png` → 1600 × 900: a concrete road, paved footpath with drain covers along its edge, street lights, young trees, parked cars, towers both sides. Fits the scope (roads with storm-water drains) |
+| Ulwe Sector 8 Infrastructure | `UlweSector8Infrastructure.png`, 1448 × 1086: a wet divided road, a bus, an NMMC road sign | `Ulwe_Sec_8.png` → 1600 × 900: a new concrete road being finished, two workers in helmets and vests setting kerbs, a backhoe loader and a roller, towers going up, hills behind |
+
+What changed: the two `src` lines in `scripts/build-gallery.mjs` (the output
+names stay, so nothing else points anywhere new), the two derivatives in
+`src/assets/gallery/`, their dHash in `gallery-hashes.json`, the two alt texts
+on the tiles in `src/data/projects.ts` (the page header reads the same alt),
+and two new lines in `raw-media.manifest.txt`. The 15 Oct PNGs stay in their
+folders, unused; the 15 Oct derivatives are in git at 8b34b5b.
+
+**Edit keys.** None new, none retired, no copy changed. The alt texts are not
+edit slots.
+
+**Verified** on a build of HEAD against a build with the change, both served
+locally: 40 of the 43 routes (every sitemap route and the 404) are identical,
+and on the other three (`/projects` and the two pages) the only line that
+differs is each picture's `<img>`: the new file and the new alt. Both pictures
+load on the tile and the page header at 1280 and 390. Placeholders unchanged
+(47).

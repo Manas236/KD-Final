@@ -138,15 +138,17 @@ const PHOTOS = [
   // named by the work. Each is only that work's /projects tile and page
   // header, captioned "Representative image" on both, and never goes in a
   // gallery group. The `representative-` prefix is so nobody takes one
-  // for a photograph.
+  // for a photograph. Ghansoli and Ulwe Sector 8 were made again on
+  // 2026-10-16 without lettering (the 15 Oct pair showed NMMC boards on
+  // two CIDCO works); the old PNGs stay in their folders, unused.
   { out: "representative-kharghar-football-stadium.jpg", src: "Kharghar Football Stadium/KhargharFootballStadium.png" },
   { out: "representative-kamothe-peripheral-roads.jpg", src: "Kamothe Peripheral Roads/Kamothe_Roads.png" },
   { out: "representative-vashi-station-approach-road.jpg", src: "Vashi Station Approach Road/Vashi_RoAD.png" },
   { out: "representative-ulwe-mass-housing-infrastructure.jpg", src: "Ulwe Mass Housing Infrastructure/uLWE.png" },
   { out: "representative-kharghar-33-kv-substation.jpg", src: "Kharghar 33 kV Substation/Kharghar33kVSubstation.png" },
   { out: "representative-nmmc-school-no-54-and-55.jpg", src: "NMMC School No. 54 & 55/NMMCSchool.png" },
-  { out: "representative-ghansoli-roads-and-services.jpg", src: "Ghansoli Roads & Services/GhansoliRoads&Services.png" },
-  { out: "representative-ulwe-sector-8-infrastructure.jpg", src: "Ulwe Sector 8 Infrastructure/UlweSector8Infrastructure.png" },
+  { out: "representative-ghansoli-roads-and-services.jpg", src: "Ghansoli Roads & Services/Ghansoli.png" },
+  { out: "representative-ulwe-sector-8-infrastructure.jpg", src: "Ulwe Sector 8 Infrastructure/Ulwe_Sec_8.png" },
 
   // Vindhane steel fabrication plant — /resources/vindhane-plant
   // (OPEN-QUESTIONS.md #33). The two confirmed frames, PHOTOS.md B19 and

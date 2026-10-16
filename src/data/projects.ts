@@ -482,7 +482,7 @@ export const projects = {
         title: "Ghansoli Roads & Services",
         location: "Ghansoli · Navi Mumbai",
         file: "representative-ghansoli-roads-and-services.jpg",
-        alt: "Ghansoli Roads & Services, representative image: a wide divided road with traffic signals, a bus and autorickshaws, residential towers behind",
+        alt: "Ghansoli Roads & Services, representative image: a concrete road with a paved footpath, drain covers along its edge, street lights and young trees, residential towers on both sides",
         representative: "Representative image",
       },
       {
@@ -510,7 +510,7 @@ export const projects = {
         title: "Ulwe Sector 8 Infrastructure",
         location: "Ulwe · Navi Mumbai",
         file: "representative-ulwe-sector-8-infrastructure.jpg",
-        alt: "Ulwe Sector 8 Infrastructure, representative image: a wet divided road with a planted median, a bus, and towers rising behind",
+        alt: "Ulwe Sector 8 Infrastructure, representative image: a new concrete road being finished, two workers setting kerbs beside it, a backhoe loader and a roller, towers under construction and hills behind",
         representative: "Representative image",
       },
       {
