@@ -22,6 +22,9 @@
    separate band would have had to be ink (breaking Overview/CTA
    alternation with two ink bands) or light (two light bands running
    together). Lightbox is rendered only when there is a gallery to open.
+   GalleryManageLink always is, with `data-gallery-project` on <main>,
+   so a signed-in editor has the "Manage photos" link to this project's
+   box in /studio/gallery before it has a photograph too.
 
    Hero -> Overview -> CTA -> CTA is not a rhythm violation: there is
    only one CTA band here, ink, immediately before the ink-deep footer
@@ -56,6 +59,7 @@ import Kicker from "../../components/Kicker.astro";
 import Arrow from "../../components/Arrow.astro";
 import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
+import GalleryManageLink from "../../components/GalleryManageLink.astro";
 import { detailChrome } from "../../data/project-detail";
 import type { ProjectDetail } from "../../data/project-detail";
 import GalleryParts from "../../components/GalleryParts.astro";
@@ -105,7 +109,7 @@ const breadcrumbs = [
   breadcrumbs={breadcrumbs}
 >
   <Nav page="projects" />
-  <main>
+  <main data-gallery-project={project.title}>
     <section class="relative bg-kd-ink overflow-hidden">
       <div class="absolute inset-0" aria-hidden="true">
         <Image
@@ -255,6 +259,7 @@ const breadcrumbs = [
     </section>
 
     {gallery && <Lightbox labels={detailChrome.lightbox} keyPrefix="projects.detail.lightbox" />}
+    <GalleryManageLink />
   </main>
   <SiteFooter page="projects" />
 </BaseLayout>

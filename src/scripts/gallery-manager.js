@@ -11,6 +11,8 @@
    that full list before it is sent.
    ============================================================ */
 
+import { anchorOf } from "./gallery-anchor.js";
+
 const boot = JSON.parse(document.getElementById("gm-boot").textContent);
 const $ = (id) => document.getElementById(id);
 
@@ -141,22 +143,34 @@ function render() {
   const visible = data.groups.reduce((n, g) => n + g.photos.filter((p) => !p.hidden).length, 0);
   const hidden = data.groups.reduce((n, g) => n + g.photos.filter((p) => p.hidden).length, 0);
   const projects = data.groups.filter((g) => g.photos.some((p) => !p.hidden)).length;
+  const waiting = data.groups.filter((g) => !g.photos.length).length;
   statsEl.replaceChildren(
     stat(visible, "on the site"),
     stat(hidden, "hidden"),
-    stat(projects, "projects with photos")
+    stat(projects, "projects with photos"),
+    ...(waiting ? [stat(waiting, "without photos yet")] : [])
   );
 
-  const shown = data.groups.filter((g) => g.photos.length);
-  jumpEl.replaceChildren(
-    el("option", { value: "", text: "Choose a project" }),
-    ...shown.map((g) => el("option", { value: anchorOf(g.project), text: g.project }))
-  );
-
+  /* Every project with a page is drawn, photographs or not. One with
+     none yet (a new project, or Solapur) is where its first photographs
+     are uploaded, so it needs its box and its "Upload here" as much as
+     any other; until 17 Oct 2026 only projects with photos were drawn,
+     and the new ones could be reached only through the upload dialog's
+     list. */
+  jumpEl.replaceChildren(el("option", { value: "", text: "Choose a project" }));
   const frag = document.createDocumentFragment();
   for (const section of SECTION_ORDER) {
-    const groups = shown.filter((g) => g.section === section);
+    const groups = data.groups.filter((g) => g.section === section);
     if (!groups.length) continue;
+    jumpEl.append(
+      el(
+        "optgroup",
+        { label: sectionLabel(section) },
+        groups.map((g) =>
+          el("option", { value: anchorOf(g.project), text: g.photos.length ? g.project : `${g.project} (no photos yet)` })
+        )
+      )
+    );
     frag.append(el("h2", { class: "gm-section", text: sectionLabel(section) }));
     for (const g of groups) frag.append(renderGroup(g));
   }
@@ -168,24 +182,21 @@ function stat(n, label) {
   return el("span", { class: "gm-stat" }, [el("strong", { text: String(n) }), " " + label]);
 }
 
-function anchorOf(project) {
-  return "g-" + project.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
 function renderGroup(group) {
   const visible = group.photos.filter((p) => !p.hidden);
   const hidden = group.photos.filter((p) => p.hidden);
+  const none = !group.photos.length;
 
   const grid = el("div", { class: "gm-grid" });
   visible.forEach((p, i) => grid.append(tile(group, p, visible, i)));
-  grid.append(endZone(group));
+  grid.append(endZone(group, visible.length ? "Drop here to put it last" : "Drop a photo here to move it into this project"));
 
   const box = el("section", { class: "gm-group", id: anchorOf(group.project) }, [
     el("header", { class: "gm-group-head" }, [
       el("h3", { text: group.project }),
       el("span", {
         class: "gm-count",
-        text: `${visible.length} on the site${hidden.length ? ` · ${hidden.length} hidden` : ""}`,
+        text: none ? "No photos yet" : `${visible.length} on the site${hidden.length ? ` · ${hidden.length} hidden` : ""}`,
       }),
       el("button", {
         type: "button",
@@ -194,7 +205,15 @@ function renderGroup(group) {
         onclick: () => openUpload(group.project),
       }),
     ]),
-    visible.length ? grid : el("p", { class: "gm-empty", text: "No photos on the site for this project." }),
+    visible.length
+      ? null
+      : el("p", {
+          class: "gm-empty",
+          text: none
+            ? "Add the first with “Upload here”, or bring one in with “Move to” on a photo in another project. It shows on the project page and the Gallery page straight away."
+            : "No photos on the site for this project.",
+        }),
+    grid,
   ]);
 
   if (hidden.length) {
@@ -315,8 +334,8 @@ function isAfter(card, e) {
 
 /** The dashed box at the end of a group: drop here to put a photo
     last, including one dragged in from another project. */
-function endZone(group) {
-  const zone = el("div", { class: "gm-end", text: "Drop here to put it last" });
+function endZone(group, text) {
+  const zone = el("div", { class: "gm-end", text });
   zone.addEventListener("dragover", (e) => {
     if (!dragging) return;
     e.preventDefault();
@@ -511,7 +530,7 @@ function preview(photo) {
 
 jumpEl.addEventListener("change", () => {
   const target = jumpEl.value && document.getElementById(jumpEl.value);
-  if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (target) scrollToGroup(target, "smooth");
   jumpEl.value = "";
 });
 
@@ -828,4 +847,27 @@ goButton.addEventListener("click", async () => {
   }
   data = first;
   render();
+  scrollToLinked();
+  window.addEventListener("hashchange", scrollToLinked);
 })();
+
+/* A project page's "Manage photos" link ends in that project's box id
+   (gallery-manage-link.js). The boxes are drawn after the page loads,
+   too late for the browser to find the anchor itself, so the first
+   render scrolls there. A split project's page (Matunga Workshop) names
+   the project, whose photographs live in its parts: the first part. */
+function scrollToLinked() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!id.startsWith("g-")) return;
+  const target = document.getElementById(id) || groupsEl.querySelector(`[id^="${CSS.escape(id)}-"]`);
+  if (target) scrollToGroup(target, "auto");
+}
+
+/* Just below the sticky header, whose height changes as it wraps (one
+   row on a wide screen, five on a phone), so a fixed scroll margin left
+   the project's name under it. */
+function scrollToGroup(target, behavior) {
+  const header = document.querySelector(".gm-top");
+  const top = target.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 16;
+  window.scrollTo({ top, behavior });
+}

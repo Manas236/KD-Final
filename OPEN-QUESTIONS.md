@@ -3457,3 +3457,53 @@ and on the other three (`/projects` and the two pages) the only line that
 differs is each picture's `<img>`: the new file and the new alt. Both pictures
 load on the tile and the page header at 1280 and 390. Placeholders unchanged
 (47).
+
+## 55. Studio gallery manager: every project has a box, photographs or not
+
+2026-10-17. The user asked why the new projects were missing from the
+gallery, and said an editor would have a hard time adding their pictures.
+
+**Why they were missing.** `/studio/gallery` drew a box only for a project
+that already had a photograph (`gallery-manager.js` filtered on
+`photos.length`). The 13 projects with none (Matunga LHB, Solapur, Lower
+Parel, and the ten Beyond the Railway works from Kharghar Football Stadium
+to NMMC School No. 54 & 55) had no box, no "Upload here" and no entry under
+"Jump to". The server accepted them all along: they were reachable only by
+picking them in the "Upload photos" dialog's list or a photo's "Move to". And
+a project page with no photographs renders no Lightbox, which is what loads
+the edit-mode "Manage photos" link, so those pages had no way in either.
+
+**Now.**
+
+- Every project with a page has a box, in its section, in site order. One
+  with no photographs says "No photos yet" with a line on how to add the
+  first, and keeps "Upload here" and a drop zone. "Jump to" lists every
+  project, grouped by section, the empty ones marked "(no photos yet)". The
+  counts at the top add "13 without photos yet".
+- Both kinds of project page carry `data-gallery-project="<title>"` on
+  `<main>` and always render the new `GalleryManageLink.astro` (the loader
+  that used to sit in Lightbox, which now renders it too). "Manage photos"
+  opens `/studio/gallery#g-<project>`, and the manager scrolls to that box
+  once it has drawn. Matunga Workshop's link lands on its first part, Civil
+  Works.
+- Jumping to a box now stops below the sticky header at any width. The fixed
+  110px margin left the project's name under the 133px header at 1280, and
+  under the 275px header on a phone.
+
+The public `/gallery` is unchanged: it lists only projects with photographs,
+and a project joins it, and gets a gallery block on its own page, as soon as
+its first photograph is added. A project with a representative image keeps
+that image as its page header and /projects tile when real photographs
+arrive; they show in its gallery block below.
+
+**Edit keys.** None new, none retired, no copy changed.
+
+**Verified.** Visitor view, a build of HEAD against a build with the change:
+40,758 elements (box and computed style) across all 26 project pages,
+/projects, /gallery, /hse and both plant pages at 1280, 1440 and 390, none
+different. Signed in: each project page's link points at its own box and
+lands there below the header (1280 and 390); 31 boxes, all 13 empty ones with
+"Upload here", a note and a drop zone; "Upload here" on an empty project opens
+the dialog on that project; no sideways scroll at 390. On the local database,
+moving a hidden photograph into Ghansoli Roads & Services put a gallery block
+on its page and the project on /gallery; undoing the move took both off again.

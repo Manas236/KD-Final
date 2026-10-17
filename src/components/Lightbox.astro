@@ -28,11 +28,13 @@
    button.
 
    MANAGE PHOTOS. Every page with managed photographs renders this
-   component, so it also loads the edit-mode "Manage photos" link to
-   /studio/gallery (src/scripts/gallery-manage-link.js) for a signed-in
-   editor. It used to load from /gallery alone, and went out of reach
-   when Gallery left the About menu on 2026-10-09.
+   component, so it also renders GalleryManageLink, the edit-mode
+   "Manage photos" link to /studio/gallery for a signed-in editor. It
+   used to load from /gallery alone, and went out of reach when Gallery
+   left the About menu on 2026-10-09.
    ============================================================ */
+import GalleryManageLink from "./GalleryManageLink.astro";
+
 interface Props {
   labels: { readonly previous: string; readonly next: string; readonly close: string };
   /** Label keys are `${keyPrefix}.previous` / `.next` / `.close`. */
@@ -127,8 +129,4 @@ const ghost = "text-ui text-kd-mist border border-kd-ghost-outline px-24 py-12 c
 </script>
 
 <!-- Edit mode: a link to the studio gallery manager, signed-in editors only. -->
-<script>
-  if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
-    import("../scripts/gallery-manage-link.js");
-  }
-</script>
+<GalleryManageLink />

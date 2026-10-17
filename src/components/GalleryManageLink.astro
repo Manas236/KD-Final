@@ -1,0 +1,23 @@
+---
+/* ============================================================
+   GalleryManageLink — the edit-mode "Manage photos" link
+   ------------------------------------------------------------
+   Loads src/scripts/gallery-manage-link.js for a signed-in editor (the
+   kd_edit_ui hint cookie) and renders nothing. Lightbox renders it, so
+   every page with managed photographs has the link; the two project
+   pages also render it themselves, because a project with no
+   photographs yet has no Lightbox and is exactly where an editor needs
+   the way in. Astro includes a component's script once per page, so
+   rendering it twice is harmless.
+
+   A page about one project marks its <main> with
+   `data-gallery-project="<title>"`, and the link then opens the manager
+   at that project's box.
+   ============================================================ */
+---
+
+<script>
+  if (document.cookie.split("; ").some((c) => c === "kd_edit_ui=1")) {
+    import("../scripts/gallery-manage-link.js");
+  }
+</script>

@@ -42,6 +42,11 @@
    page has no photographs, so it has no gallery block either: the block
    shows only with photographs or a pending card to put there.
 
+   MANAGE PHOTOS. `data-gallery-project` on <main> and GalleryManageLink
+   give a signed-in editor the "Manage photos" link to this project's
+   box in /studio/gallery even before it has a photograph (no Lightbox
+   then), which is where the first one is uploaded.
+
    Keys are `projects.detail.*`, as on the railway project pages —
    plain, because every page is its own path. These pages are in
    scripts/check-edit-keys.mjs, one route per slug.
@@ -54,6 +59,7 @@ import Kicker from "../Kicker.astro";
 import Arrow from "../Arrow.astro";
 import GalleryGrid from "../GalleryGrid.astro";
 import Lightbox from "../Lightbox.astro";
+import GalleryManageLink from "../GalleryManageLink.astro";
 import type { SocialPageCopy } from "../../data/social-projects";
 import { galleryImage } from "../../lib/gallery-images";
 import { home } from "../../data/home";
@@ -106,7 +112,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
   breadcrumbs={breadcrumbs}
 >
   <Nav page="projects" />
-  <main>
+  <main data-gallery-project={detail.title}>
     <section class="relative bg-kd-ink overflow-hidden">
       {heroImage && (
         <div class="absolute inset-0" aria-hidden="true">
@@ -259,6 +265,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
     </section>
 
     {lightbox && <Lightbox labels={lightbox} keyPrefix={`${K}.lightbox`} />}
+    <GalleryManageLink />
   </main>
   <SiteFooter page="projects" />
 </BaseLayout>
