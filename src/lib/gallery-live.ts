@@ -34,6 +34,7 @@ import {
 } from "../data/gallery";
 import { galleryLibrary } from "../data/gallery-library";
 import { projectDetails } from "../data/project-detail";
+import { projects } from "../data/projects";
 import { socialPages } from "../data/social-projects";
 
 export type Section = "railway" | "social" | "plant" | "hse";
@@ -126,9 +127,21 @@ const groupByName = new Map(allGroups.map((g) => [g.project, g]));
    it to the new name, so the move or upload it records is not dropped.
 
    The dash is spelled as a char code so the built output holds no
-   literal em dash, which keeps `grep — dist/` a clean check (CLAUDE.md). */
+   literal em dash, which keeps `grep — dist/` a clean check (CLAUDE.md).
+
+   A project folded into another has no group either (projects.ts,
+   `foldedInto`: since 2026-10-19 the Kharghar Centre of Excellence is
+   part of the Kharghar Football Stadium). An event that named it lands
+   in the project it became part of, for the same reason. */
 const OLD_SEPARATOR = ` ${String.fromCharCode(0x2014)} `;
-export const renamedGroup = (name: string): string => name.split(OLD_SEPARATOR).join(", ");
+const foldedGroups = new Map<string, string>();
+for (const item of projects.social.items) {
+  if (item.retired && item.foldedInto) foldedGroups.set(item.title, item.foldedInto);
+}
+export const renamedGroup = (name: string): string => {
+  const plain = name.split(OLD_SEPARATOR).join(", ");
+  return foldedGroups.get(plain) ?? plain;
+};
 
 export function isSplitParent(name: string): boolean {
   return splitParts.has(name);
