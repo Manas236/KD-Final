@@ -119,11 +119,13 @@ export const capabilities: InfoPageCopy = {
             "Permanent-way construction and associated railway track systems, integrated with " +
             "civil works and broader railway operations.",
         },
+        /* The licence sentence is Sir's, 19 Oct 2026 (OPEN-QUESTIONS.md #56). */
         {
           title: "Electrical Engineering",
           body:
             "Railway and building electrical works, integrating power and electrical systems with " +
-            "civil and mechanical execution, including within operational railway environments.",
+            "civil and mechanical execution, including within operational railway environments. " +
+            "K.D. Constructions holds an electrical licence from the PWD to execute electrical works.",
         },
         {
           title: "Mechanical Engineering",
@@ -392,14 +394,25 @@ export const hse: HseCopy = {
            ask to the company: "Please give more details on
            Certifications: ISO certifications or any other certifications
            that your company has achieved". Nothing came back, so the ask
-           is on the page where the client will see it. PRE-LAUNCH.md #2. */
+           is on the page where the client will see it. PRE-LAUNCH.md #2.
+           19 Oct 2026: the PWD licence's number and validity joined the
+           list (OPEN-QUESTIONS.md #56). */
         {
           pending: "To be added",
           title: "Other certifications & certificate details",
           body:
             "Certificate numbers, validity dates and the certifying bodies for the three ISO " +
-            "standards, plus any further accreditation K.D. Constructions holds: RDSO " +
-            "approvals, the Rail Chamber membership certificate, or others.",
+            "standards, the number and validity of the PWD electrical licence, and any further " +
+            "accreditation K.D. Constructions holds: RDSO approvals, the Rail Chamber " +
+            "membership certificate, or others.",
+        },
+        /* Sir, 19 Oct 2026: K.D. holds an electrical licence from the PWD
+           to execute electrical works. Appended after the pending card, not
+           inserted, so no stored key moves (OPEN-QUESTIONS.md #56). No
+           number or validity until K.D. supplies them (the card above). */
+        {
+          title: "PWD electrical licence",
+          body: "Licensed by the Public Works Department to execute electrical works.",
         },
       ],
     },
