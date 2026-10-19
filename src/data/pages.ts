@@ -337,14 +337,18 @@ export const hse: HseCopy = {
        (OPEN-QUESTIONS.md #53): the man-hours are the Karjat site's, as
        of 7 March 2026, not a company-wide figure; the drills are "8+"
        for 2026 so far (the register shows seven of them); the camp was
-       50 workers and staff, not 88. */
+       50 workers and staff, not 88. The note under the tiles is Sir's
+       own wording, 19 Oct 2026, character for character (his curly
+       apostrophe included); OPEN-QUESTIONS.md #56. */
     stats: [
       { value: "3,00,000", label: "Safe man-hours at Karjat site (as of March 2026)" },
       { value: "3", label: "ISO-certified management systems" },
       { value: "8+", label: "Site mock drills so far in 2026" },
       { value: "50", label: "Workers and staff in one medical camp" },
     ],
-    statsNote: "Safe man-hours without a lost-time injury, Karjat site, as of 7 March 2026.",
+    statsNote:
+      "Thanks to the commitment of every worker at Karjat, we’ve reached 3,00,000 safe " +
+      "man-hours as of March 2026. Safety first, always.",
   },
   sections: [
     {
