@@ -115,14 +115,18 @@ export const plant = {
        Vidhane_Factory.mp4): the camera walks the length of a painted
        girder set on a trailer by crane, the lift gallery photograph 06
        shows. Drawn beside the paragraphs above as an /hse clip tile:
-       public/video/<video>.mp4 with a .jpg poster, silent, looping. */
+       public/video/<video>.mp4 with a .jpg poster, silent, looping.
+       2026-10-19, Sir: the girder is for the Mankhurd foot-over-bridge
+       (on the Mumbai Harbour Line Station Redevelopment page). The
+       caption names it but does not link there: Tile.astro has no link
+       (OPEN-QUESTIONS.md #56). */
     clip: {
       video: "vindhane-girder-dispatch",
       alt:
-        "A long painted steel girder on a multi-axle trailer in the Vindhane plant yard, " +
-        "held on a crane's chain, the fabrication shed behind",
+        "A long painted steel girder for the Mankhurd FOB on a multi-axle trailer in the " +
+        "Vindhane plant yard, held on a crane's chain, the fabrication shed behind",
       where: "Plant yard, Vindhane",
-      title: "A painted girder loaded for dispatch",
+      title: "A girder for the Mankhurd FOB, loaded for dispatch",
     },
 
     products: {
