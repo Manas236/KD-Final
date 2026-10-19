@@ -111,6 +111,16 @@ export interface SocialProject {
       a picture never goes in a gallery group, on the share card or in
       the image sitemap, where the caption cannot follow it. */
   readonly representative?: string;
+  /** The tile is off the band and its page is gone, but it keeps its
+      array slot, so no later tile's index (and stored edit keys) moves:
+      the nav's `retired` link (home.ts), applied here. Social.astro skips
+      it, social-projects.ts builds no page for it, and check-edit-keys.mjs
+      expects no slot for it. Never reuse the slot. */
+  readonly retired?: boolean;
+  /** On a retired tile: the title of the project it became part of. Its
+      old URL answers 301 to that project's page (social-projects.ts,
+      `socialRedirects`). */
+  readonly foldedInto?: string;
 }
 
 /** One row of the steel ledger — see `listing.steel` below. `title` is
@@ -403,6 +413,8 @@ export const projects = {
      list — appended, so the six photographed tiles keep their edit
      keys — after the owner asked that every missing item be visible on
      the site during review (OPEN-QUESTIONS.md #32, PRE-LAUNCH.md #3).
+     On 2026-10-19 the Centre of Excellence was folded into the stadium,
+     one project per Sir: its tile is `retired`, its slot kept.
      The spellings are the approved ones (Ulwe, Karanjade), not the
      source folders' (Ulwa, Karanjale). Every entry has a place in
      K.D.Website_Details.md §Further Projects. */
@@ -452,8 +464,9 @@ export const projects = {
       },
       /* Confirmed work, no photograph on record. Since 2026-10-15 its tile
          is a representative image the user supplied, like the civic works
-         below it (OPEN-QUESTIONS.md #48; PRE-LAUNCH.md S15 asks Sir). A
-         real photograph replaces it. */
+         below it (OPEN-QUESTIONS.md #48). Sir allowed it on 2026-10-19
+         (PRE-LAUNCH.md S15, OPEN-QUESTIONS.md #56). A real photograph
+         replaces it. */
       {
         title: "Kharghar Football Stadium",
         location: "Kharghar · Navi Mumbai",
@@ -461,14 +474,19 @@ export const projects = {
         alt: "Kharghar Football Stadium, representative image: a football pitch with floodlights and a covered stand, wooded hills behind",
         representative: "Representative image",
       },
+      /* RETIRED 2026-10-19. Sir: the Kharghar Football Stadium and the
+         Kharghar Centre of Excellence are ONE project. The centre's facts
+         moved to the stadium's page, and /projects/kharghar-centre-of-
+         excellence answers 301 to it. The slot stays so tiles 8 to 15
+         keep their keys; projects.social.items.7.* (pending, note, title,
+         location) are retired with it, never to be reused
+         (OPEN-QUESTIONS.md #56). Until then it was a "To be confirmed"
+         tile (PRE-LAUNCH.md 3b). */
       {
         title: "Kharghar Centre of Excellence",
         location: "Kharghar · Navi Mumbai",
-        pending: "To be confirmed",
-        note:
-          "CIDCO's football training centre, pitches inaugurated 2022. But K.D. " +
-          "Constructions' part in it is not yet confirmed, and no photograph is on record. " +
-          "A yes and one photograph fill this tile; a no removes it.",
+        retired: true,
+        foldedInto: "Kharghar Football Stadium",
       },
       /* Eight works from K.D.'s own list of completed works, appended
          2026-10-13 at the client's direction — one tile and one page
