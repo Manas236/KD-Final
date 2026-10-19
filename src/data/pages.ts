@@ -1116,11 +1116,15 @@ export const clients: InfoPageCopy = {
            Railways organisation with no mark of its own, so it carries
            the Indian Railways roundel. IRCON's mark is its published
            one (scripts/build-client-logos.mjs). K.D. has not said which
-           works were for either — PRE-LAUNCH.md asks. */
+           works were for IRCON — PRE-LAUNCH.md S10 asks. WPO's is the
+           Matunga Workshop contract (Sir's mail of 2026-10-19,
+           OPEN-QUESTIONS.md #56); the Indian Railways card keeps its
+           link to it until Sir says whether it moves. */
         {
           title: "WPO",
           body: "Workshop Projects Organisation, Indian Railways",
           logo: "indian-railways.png",
+          links: [{ label: "Matunga Railway Workshop", href: "/projects/matunga-workshop" }],
         },
         { title: "IRCON", body: "IRCON International Limited", logo: "ircon.png" },
       ],

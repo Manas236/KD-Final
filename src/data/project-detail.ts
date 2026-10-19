@@ -114,22 +114,31 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     title: "Matunga Workshop",
     eyebrow: "Signature Project",
     /* COFMOW is the LHB facility's co-client, not this contract's — see
-       the entry below, and OPEN-QUESTIONS.md #24. */
-    client: "Indian Railways",
+       the entry below, and OPEN-QUESTIONS.md #24.
+       2026-10-19: Sir's mail, OCR'd from the contract's completion
+       certificate (cut off at the end), names the Workshop Projects
+       Organisation of Indian Railways: the same 350 to 575 bogies and
+       the same scope as this page. The client line, the three building
+       areas below and the scope added to the first paragraph are from
+       it; it gives no year (OPEN-QUESTIONS.md #56). */
+    client: "Workshop Projects Organisation (WPO), Indian Railways",
     badges: ["Civil", "Mechanical", "Electrical"],
     live: false,
     statusBadge: "",
     description:
-      "Industrial sheds, administrative and training facilities at Matunga Railway " +
-      "Workshop, supporting a rise in bogie overhaul capacity from 350 to 575 a month.",
+      "Industrial sheds, admin and training buildings at Matunga Railway Workshop for " +
+      "Indian Railways' WPO, taking bogie overhauls from 350 to 575 a month.",
     body: [
       "At the historic Matunga Railway Workshop, K.D. Constructions " +
         "executed a multidisciplinary development programme comprising " +
         "industrial sheds, administrative and training facilities, " +
-        "traverser infrastructure, underground water tanks, roads, " +
-        "drainage, roofing and associated electrical works, supporting " +
+        "traverser infrastructure, underground and overhead water tanks, " +
+        "roads, drainage and associated electrical works, supporting " +
         "the augmentation of Bogie Periodic Overhaul (POH) capacity from " +
-        "350 to 575 bogies per month.",
+        "350 to 575 bogies per month. The programme also took in an RCC " +
+        "store building, a painting shed and concrete roads, the " +
+        "replacement of industrial flooring and roof sheets in the " +
+        "shops, and miscellaneous track works.",
       "The project reflects our ability to deliver complex workshop " +
         "infrastructure through integrated civil, structural, electrical " +
         "and railway-specific execution.",
@@ -145,8 +154,15 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     /* The doc gives this contract one measured outcome and no volumes.
        The RCC, steel and kVA figures that used to sit here are the LHB
        facility's, and have gone with it to its own entry rather than
-       being counted twice. */
-    stats: [{ value: "350 → 575", label: "Bogies/Month POH Capacity" }],
+       being counted twice. The three building areas were appended on
+       2026-10-19, from the completion certificate (above): 23,761.11,
+       32,333.8 and 5,138 sq ft, rounded to the square foot. */
+    stats: [
+      { value: "350 → 575", label: "Bogies/Month POH Capacity" },
+      { value: "23,761 sq ft", label: "G+2 Admin Building" },
+      { value: "32,334 sq ft", label: "G+2 Basic Training Centre" },
+      { value: "5,138 sq ft", label: "RCC Store Building" },
+    ],
     image: matungaImg,
     alt: "Architectural rendering of the Matunga Workshop administrative building",
   },
