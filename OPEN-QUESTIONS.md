@@ -3650,3 +3650,81 @@ On a build of `d0bc209` against a build of this pass, both served locally.
 - The Matunga Workshop card on `/projects` and on the homepage still reads
   "Indian Railways · POH 350 → 575 Bogies/Month". WPO is part of Indian
   Railways, so it is not wrong; the homepage is locked.
+
+---
+
+## 57. Edit mode: links stop navigating, Ctrl/Cmd + click and "Open" buttons go there
+
+2026-10-19, at the user's direction. In edit mode the text inside a project
+tile could not be edited: the tile's link is an empty `<a class="absolute
+inset-0">` laid over the whole card, so every click went to the link. And a
+click on any part of a link that is not keyed text (an arrow, the padding)
+still followed it.
+
+**How edit mode works here** (read, not assumed). Signing in at
+`/studio/<slug>` sets two cookies: `kd_edit` (signed, HttpOnly, the one the
+write routes check) and `kd_edit_ui=1` (a hint). BaseLayout downloads the
+editor, `src/scripts/inline-edit.js`, only when the hint is set. The mode is
+the "Edit text" / "Done editing" button: it puts `data-nt-mode` on `<html>`
+and keeps `kd-edit-mode=1` in sessionStorage across pages. **Keys are
+declared**: the editor reads each element's `data-edit` attribute
+(`keyFor()`), never a positional path, so nothing added to the page can move
+one. Its click handler (capture phase) already entered a keyed run inside a
+link; it never checked `defaultPrevented` or bailed on anchors.
+
+**Now, with the mode on, and only then** (all in `inline-edit.js`, which a
+visitor never downloads; the styles in `public/editor-ui.css`, all under
+`:root[data-nt-mode]`):
+
+- **No link navigates.** One capture-phase click listener calls
+  `preventDefault()` on a click inside any `a[href]`, nav, drop-downs, footer
+  and `#hash` links included, and nothing else, so the editor still enters
+  the text. The stretched overlays let clicks through (`pointer-events:
+  none`), so a tile's name and place can be clicked and edited.
+- **Ctrl/Cmd (or Shift) + click** opens a link in a new tab, as the browser
+  does; the editor's click handler now steps aside for it (the one change to
+  the ported gestures). On a tile, whose overlay is click-through, the same
+  gesture opens the tile's page. Right-click and middle-click are not blocked.
+- **"Open" buttons**, `<kd-open>` (a tag nothing else uses, `data-nt-ui` so
+  the editor skips it), added after the keys are marked and the saved edits
+  applied, only inside `<main>`, only for links to another page of the site.
+  Same tab, still in edit mode. Title "Open page (or Ctrl/Cmd + click)".
+  Square, Inter, mint on ink. Where: every tile with a stretched link (the
+  homepage's 3 project tiles; on `/projects` the 10 listing cards, the 2
+  plant cards and the 15 Beyond the railway tiles), in their top right
+  corner; beside each work linked on a `/clients` card (22), each "About the
+  plant" on `/resources` (2) and the careers link on `/contact` (1); at the
+  right end of each steel ledger row on `/projects` (6) and the erection
+  ledger on `/resources/vindhane-plant` (6), in 64 px made for it. Not on
+  buttons, back links, the gallery's group headings, the nav or the footer:
+  those take Ctrl/Cmd + click.
+- **Left alone:** the editor's own furniture (the bar, the version menu,
+  "Manage photos", the job-posting and text-block tools), any link into
+  `/studio`, and every `/studio` page, the gallery manager and sign-out
+  included.
+
+There was no other script navigation to guard: `location` is only set on
+`/studio/<slug>` (sign in and out), and the gallery manager's `onclick`s are
+buttons on `/studio`.
+
+**Also:** `.gitignore` gains `*.bak.*`, for the dated copies taken next to a
+file before editing it.
+
+**Edit keys.** None new, none retired, no copy changed.
+
+**Verified** on a build of `34e6d5d` against a build with the change, both
+local, with the local database.
+
+| Check | Result |
+| --- | --- |
+| Every `data-edit` key, in edit mode, on every sitemap route and the 404 (42 pages, 3,929 keys): key, editable, text, order | identical before and after |
+| Plain click in edit mode: Beyond the railway tile (title, and a pending tile's place), featured, medium and ledger cards on `/projects`; the four `/clients` links added today and an older one; the homepage tiles; the nav bar, a drop-down item, a footer link; `#apply` on `/careers` | URL unchanged, the text enters editing |
+| Plain click on a tile's picture or a button's arrow | URL unchanged, nothing editing |
+| Save inside a tile (`projects.social.items.0.location`), reload | persists; "Undo last change" puts it back. Rows 9 and 10 (and 11 and 12, a second run) in the local `content_edits` |
+| Ctrl + click on a tile's title, its picture, the nav's Projects | a new tab at the page; this tab unchanged |
+| Open on a tile, and beside a `/clients` link | same tab, the page, still in edit mode |
+| Done editing; sign out on `/studio/<slug>` | links navigate again; sign-out lands on `/` with both cookies gone and no editor on the page |
+| `/studio/gallery` in edit mode | 30 boxes, 354 photographs, no Open button, no script error, as before |
+| Visitor (no cookie): served HTML of all 42 routes | identical but for one hash: the editor loader's file name, since the chunk it imports changed. `inline-edit.js` never requested; no `<kd-open>`; tile, nav and client links navigate |
+| Visitor layout, every element (box and computed style) of all 42 routes at 360, 390 and 1280 | identical; no sideways scroll |
+| Em dashes in served HTML | 0 |

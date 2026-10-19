@@ -399,3 +399,66 @@
   box-shadow: 0 4px 16px rgba(30, 43, 48, 0.28);
   text-decoration: none;
 }
+
+/* ---- Links in edit mode (added 19 Oct 2026, src/scripts/inline-edit.js) ----
+   With the mode on no link navigates, so the copy in it can be clicked
+   and edited. A card's stretched link (an empty <a class="absolute
+   inset-0"> over the whole card) lets clicks through to the text under
+   it, and a linked card or list item gets a small "Open" button,
+   <kd-open>, for following the link on purpose. Square, Inter, ink with
+   mint, so it reads the same on a dark band, a light one or a photograph.
+   Nothing here applies with the mode off. */
+:root[data-nt-mode] a[href].absolute.inset-0 {
+  pointer-events: none;
+}
+kd-open {
+  display: none;
+}
+:root[data-nt-mode] kd-open {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 5px 8px;
+  border-radius: 0;
+  border: 1px solid var(--kd-mint, #d7f8dd);
+  background-color: var(--kd-ink, #2c3a40);
+  color: var(--kd-mint, #d7f8dd);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+:root[data-nt-mode] kd-open:hover,
+:root[data-nt-mode] kd-open:focus-visible {
+  background-color: var(--kd-mint, #d7f8dd);
+  color: var(--kd-ink, #2c3a40);
+}
+/* On a card: its top right corner, over the picture or the ink. */
+:root[data-nt-mode] kd-open.nt-open-corner {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+}
+/* Beside a link in a list (the works on a client card). */
+:root[data-nt-mode] kd-open.nt-open-inline {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+/* At the right end of a row-shaped link (the steel ledger), in room
+   made for it, so it covers nothing. */
+:root[data-nt-mode] .nt-open-host {
+  position: relative;
+  padding-right: 64px;
+}
+:root[data-nt-mode] kd-open.nt-open-row {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}

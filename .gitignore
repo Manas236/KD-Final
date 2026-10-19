@@ -73,3 +73,6 @@ db-backup-*.sql
 kd-schema-*.sql
 .npm/
 .config/
+
+# dated copies taken next to a file before editing it (name.bak.YYYYMMDD-HHMM)
+*.bak.*

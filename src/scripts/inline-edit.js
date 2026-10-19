@@ -8,6 +8,12 @@
      · MODE_KEY   nt-edit-mode -> kd-edit-mode
      · markElements() now reads declared `data-edit` slots instead of
        sweeping the document for text leaves. See the note there.
+     · 19 Oct 2026: with the mode on, NO link navigates (guardLinks),
+       so copy inside a link or under a card's stretched link can be
+       reached; Ctrl/Cmd + click and a small "Open" button on linked
+       cards (addOpenButtons) are the two ways to follow one on
+       purpose. The one change to the gestures below is the early return
+       for that Ctrl/Cmd + click. See "Links in edit mode".
 
    Everything else — the gesture model, the optimistic save, the
    version menu, endSession, the toast — is the original, including the
@@ -81,6 +87,10 @@ function hasUiCookie() {
   return document.cookie.split("; ").some((c) => c === `${UI_COOKIE}=1`);
 }
 
+/** The studio's own pages (sign-in, gallery manager, applications) keep
+    their links exactly as they were. See "Links in edit mode". */
+const ON_STUDIO = location.pathname === "/studio" || location.pathname.startsWith("/studio/");
+
 const state = {
   /** key -> { text, original, id } for this page. */
   edits: {},
@@ -132,6 +142,13 @@ async function boot() {
   markElements();
   installGestures();
   buildToolbar();
+
+  // After the keys are marked and the saved edits are on the page, so
+  // nothing added here can be mistaken for copy. Never on /studio.
+  if (!ON_STUDIO) {
+    guardLinks();
+    addOpenButtons();
+  }
 }
 
 /* ============================================================
@@ -242,6 +259,8 @@ function installGestures() {
     (e) => {
       if (!state.editing) return;
       if (e.target.closest && e.target.closest("[data-nt-ui]")) return;
+      // Ctrl/Cmd + click on a link is "open it", not "edit it" (guardLinks).
+      if (!ON_STUDIO && isOpenGesture(e) && linkOf(e.target)) return;
 
       const el = editableFrom(e.target);
       // Not editable: leave it entirely alone, so the page still works.
@@ -363,6 +382,174 @@ function insertPlain(text) {
   range.collapse(true);
   sel.removeAllRanges();
   sel.addRange(range);
+}
+
+/* ============================================================
+   Links in edit mode
+   ------------------------------------------------------------
+   Added 19 Oct 2026. The click rule above stops a link only when the
+   click lands on a keyed run of text, and that left two holes. A card
+   whose link is a stretched overlay (an empty <a class="absolute
+   inset-0"> laid over the whole card, last in it: Listing.astro,
+   Social.astro, Projects.astro) catches every click before the text
+   under it can, so a project tile's name could not be edited at all.
+   And a click on the part of a link that is not text (an arrow, the
+   padding) still followed it.
+
+   So, with the mode on and only then:
+
+     · no link navigates. One capture-phase listener calls
+       preventDefault on a click inside any a[href], nav, footer and
+       #hash links included, and does nothing else: the editor's own
+       listener above still sees the click and enters the text.
+     · the overlays let clicks through (public/editor-ui.css), so the
+       text under them can be reached.
+     · Ctrl/Cmd (or Shift) + click opens a link as the browser always
+       would. On an overlay card, whose link is click-through now, this
+       opens it the same way, in a new tab. The right-click menu and
+       middle-click are not blocked.
+     · each card or list item whose point is a link to another page
+       gets a small "Open" button, which goes there in the same tab,
+       still in edit mode (the mode is kept in sessionStorage).
+
+   Left alone: the editor's own furniture ([data-nt-ui]: the bar, the
+   version menu, "Manage photos", the job-posting and text-block
+   tools), any link into /studio, and the /studio pages themselves.
+
+   The button is a <kd-open> element: a tag no edit key and no page
+   stylesheet uses, so it cannot be taken for copy, and it carries
+   data-nt-ui, which markElements() and every gesture above already
+   skip. Keys are declared data-edit attributes, never positions, so it
+   moves no key; it is still only ever put beside existing elements,
+   never inside a keyed one.
+   ============================================================ */
+const OPEN_TAG = "kd-open";
+const OVERLAY = "a[href].absolute.inset-0";
+
+/** A click meant to open a link rather than edit it: Ctrl, Cmd, Shift,
+    or any button but the main one. */
+function isOpenGesture(e) {
+  return e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0;
+}
+
+/** The link a click on `target` would have followed with the mode off:
+    the <a href> around it, or the stretched overlay of the card it is in
+    (a direct child of one of its ancestors). */
+function linkOf(target) {
+  if (!target || !target.closest) return null;
+  const a = target.closest("a[href]");
+  if (a) return a;
+  for (let n = target; n && n !== document.body; n = n.parentElement) {
+    const overlay = n.querySelector(`:scope > ${OVERLAY}`);
+    if (overlay) return overlay;
+  }
+  return null;
+}
+
+/** Editor furniture and the studio keep their links. */
+function isEditorLink(a) {
+  return !!a.closest("[data-nt-ui]") || a.pathname === "/studio" || a.pathname.startsWith("/studio/");
+}
+
+function guardLinks() {
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (!state.editing || !e.target.closest) return;
+      if (e.target.closest("[data-nt-ui]")) return; // the bar, an Open button, a menu
+      const link = linkOf(e.target);
+      if (!link || isEditorLink(link)) return;
+
+      if (isOpenGesture(e)) {
+        // On a real link the browser does what it always does.
+        if (e.target.closest("a[href]")) return;
+        // An overlay card: its link lets clicks through in this mode.
+        e.preventDefault();
+        window.open(link.href, "_blank", "noopener");
+        return;
+      }
+      // Only this. The editor's listener must still see the click.
+      e.preventDefault();
+    },
+    true
+  );
+
+  // Middle-click on an overlay card, for the same reason. On a real link
+  // a middle-click is the browser's, untouched.
+  document.addEventListener("auxclick", (e) => {
+    if (!state.editing || e.button !== 1 || !e.target.closest) return;
+    if (e.target.closest("[data-nt-ui]") || e.target.closest("a[href]")) return;
+    const link = linkOf(e.target);
+    if (!link || isEditorLink(link)) return;
+    e.preventDefault();
+    window.open(link.href, "_blank", "noopener");
+  });
+
+  /* The Open buttons, delegated like every gesture here. */
+  const follow = (e, newTab) => {
+    const button = e.target.closest && e.target.closest(OPEN_TAG);
+    if (!button || !state.editing) return;
+    const href = button.getAttribute("data-nt-href");
+    if (!href) return;
+    e.preventDefault();
+    if (newTab) window.open(href, "_blank", "noopener");
+    else location.assign(href);
+  };
+  document.addEventListener("click", (e) => follow(e, isOpenGesture(e)));
+  document.addEventListener("auxclick", (e) => {
+    if (e.button === 1) follow(e, true);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") follow(e, e.ctrlKey || e.metaKey || e.shiftKey);
+  });
+}
+
+/** A link to another page of this site: not the studio, not a jump
+    within this page (#apply), not mail, phone or another site. */
+function isPageLink(a) {
+  if (isEditorLink(a)) return false;
+  if (a.origin !== location.origin || !/^https?:$/.test(a.protocol)) return false;
+  return !(a.pathname === location.pathname && a.hash);
+}
+
+function openButton(a, kind) {
+  const button = document.createElement(OPEN_TAG);
+  button.className = `nt-open ${kind}`;
+  button.setAttribute("data-nt-ui", "");
+  button.setAttribute("data-nt-href", a.href);
+  button.setAttribute("role", "link");
+  button.setAttribute("tabindex", "0");
+  button.setAttribute("title", "Open page (or Ctrl/Cmd + click)");
+  const name = (a.getAttribute("aria-label") || a.textContent || "").replace(/\s+/g, " ").trim();
+  button.setAttribute("aria-label", name ? `Open ${name}` : "Open page");
+  button.textContent = "Open";
+  return button;
+}
+
+/* Only inside <main>: the nav and the footer are reached with Ctrl/Cmd +
+   click. Shown only while the mode is on (public/editor-ui.css). */
+function addOpenButtons() {
+  const main = document.querySelector("main");
+  if (!main) return;
+
+  // A card with a stretched link: top right corner of the card. Put
+  // before the overlay, which stays the card's last child.
+  for (const overlay of main.querySelectorAll(OVERLAY)) {
+    if (isPageLink(overlay)) overlay.before(openButton(overlay, "nt-open-corner"));
+  }
+
+  // A list item that is a link to a page, its words copy: the works on a
+  // client card, a plant's "About the plant", a steel ledger row. Beside
+  // an inline link; at the right end of a row-shaped one.
+  for (const a of main.querySelectorAll("li > a[href]")) {
+    if (a.matches(OVERLAY) || !isPageLink(a) || !a.querySelector("[data-edit]")) continue;
+    if (getComputedStyle(a).display.startsWith("inline")) {
+      a.after(openButton(a, "nt-open-inline"));
+    } else {
+      a.parentElement.classList.add("nt-open-host");
+      a.after(openButton(a, "nt-open-row"));
+    }
+  }
 }
 
 /* ============================================================
