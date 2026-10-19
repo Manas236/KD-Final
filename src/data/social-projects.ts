@@ -142,9 +142,9 @@ const SOURCES: readonly SocialDetailSource[] = [
        2026-10-13: K.D.'s own list of completed works (OPEN-QUESTIONS.md
        #44) has this contract as "Construction of Skywalk at Khairane
        Bonkode on Thane Belapur Road" — that is the scope tile. The same
-       list names the department as CIDCO, against the sources above; the
-       client tile is left as it was until K.D. says which is right
-       (PRE-LAUNCH.md S12). */
+       list names the department as CIDCO, against the sources above.
+       2026-10-19: Sir confirmed NMMC (PRE-LAUNCH.md S12, closed;
+       OPEN-QUESTIONS.md #56), so the client tile stands as it was. */
     facts: [
       { value: "NMMC", label: "Client" },
       /* Company Profile deck, slide 10, and WorldArchitecture agree. The
@@ -255,8 +255,8 @@ const SOURCES: readonly SocialDetailSource[] = [
        course at Kharghar" — so the scope tile is the clubhouse, and the
        year asked for is the clubhouse's. The same list names the
        department as NMMC; the course is CIDCO's and Kharghar is outside
-       NMMC's limits, so the client tile is left as it was until K.D.
-       says which is right (PRE-LAUNCH.md S12). */
+       NMMC's limits. 2026-10-19: Sir confirmed CIDCO (PRE-LAUNCH.md S12,
+       closed; OPEN-QUESTIONS.md #56), so the client tile stands as it was. */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "103 ha", label: "Course, 18 holes, par 72" },
@@ -501,19 +501,14 @@ const SOURCES: readonly SocialDetailSource[] = [
     photoNote: IMAGE_NOTE,
   },
   {
-    /* NO CLIENT NAMED. The list gives CIDCO; Rabale is in NMMC's area,
-       like Bonkode, whose page says NMMC. One question covers this
-       skywalk, the Bonkode skywalk and the golf course clubhouse —
-       PRE-LAUNCH.md S12 — and until it is answered this page asks
-       rather than says. */
+    /* The list gives CIDCO; Rabale is in NMMC's area, like Bonkode.
+       2026-10-19: Sir confirmed NMMC (PRE-LAUNCH.md S12, closed;
+       OPEN-QUESTIONS.md #56). Until then the client tile was a "To be
+       confirmed" placeholder. */
     title: "Rabale Skywalk",
     eyebrow: "Urban Infrastructure",
     facts: [
-      {
-        pending: "To be confirmed",
-        title: "Client",
-        body: "Who the skywalk was built for.",
-      },
+      { value: "NMMC", label: "Client" },
       { pending: TBA, title: "Length & width", body: "The skywalk's length and width." },
       { value: "Construction", label: "Scope of works" },
       YEAR,

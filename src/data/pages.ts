@@ -17,6 +17,7 @@
    ============================================================ */
 import { home } from "./home.ts";
 import type { NavLink } from "./home.ts";
+import { slugify } from "../lib/slug.ts";
 
 export interface InfoItem {
   readonly title: string;
@@ -78,6 +79,11 @@ export interface InfoPageCopy {
 }
 
 const chrome = { nav: home.nav, footer: home.footer };
+
+/** A link to a project's own page, labelled with its title: the same
+    slugify() the /projects tiles and /projects/[slug] use, so the href
+    cannot drift from the page it opens. */
+const work = (title: string): NavLink => ({ label: title, href: `/projects/${slugify(title)}` });
 
 export const capabilities: InfoPageCopy = {
   meta: {
@@ -1126,10 +1132,11 @@ export const clients: InfoPageCopy = {
         /* The works under CIDCO and NMMC are from K.D.'s own list of
            completed works (2026-10-13, OPEN-QUESTIONS.md #44), each
            linking to its page under /projects — the label is that
-           page's title. Three works on the list are on neither card
-           until K.D. says who the client was: the Bonkode skywalk, the
-           Rabale skywalk and the Kharghar golf course clubhouse
-           (PRE-LAUNCH.md S12). */
+           page's title. Three works on the list waited for Sir to say
+           who the client was (PRE-LAUNCH.md S12). He did on 2026-10-19
+           (OPEN-QUESTIONS.md #56): the Kharghar golf course clubhouse was
+           CIDCO's, the Bonkode and Rabale skywalks NMMC's. Each is
+           appended to its card, so no stored link key moves. */
         {
           title: "CIDCO",
           body: "City and Industrial Development Corporation of Maharashtra Limited",
@@ -1141,13 +1148,18 @@ export const clients: InfoPageCopy = {
             { label: "Ulwe Mass Housing Infrastructure", href: "/projects/ulwe-mass-housing-infrastructure" },
             { label: "Ulwe Sector 8 Infrastructure", href: "/projects/ulwe-sector-8-infrastructure" },
             { label: "Kharghar 33 kV Substation", href: "/projects/kharghar-33-kv-substation" },
+            work("Kharghar Golf Course"),
           ],
         },
         {
           title: "NMMC",
           body: "Navi Mumbai Municipal Corporation",
           logo: "nmmc.png",
-          links: [{ label: "NMMC School No. 54 & 55", href: "/projects/nmmc-school-no-54-and-55" }],
+          links: [
+            { label: "NMMC School No. 54 & 55", href: "/projects/nmmc-school-no-54-and-55" },
+            work("Bonkode FOB"),
+            work("Rabale Skywalk"),
+          ],
         },
         { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png" },
         { title: "Balbharati", logo: "balbharati.png" },
