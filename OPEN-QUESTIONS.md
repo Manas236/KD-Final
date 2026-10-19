@@ -3507,3 +3507,146 @@ lands there below the header (1280 and 390); 31 boxes, all 13 empty ones with
 the dialog on that project; no sideways scroll at 390. On the local database,
 moving a hidden photograph into Ghansoli Roads & Services put a gallery block
 on its page and the project on /gallery; undoing the move took both off again.
+
+---
+
+## 56. Sir's answers, 19 Oct 2026
+
+2026-10-19. Sir (Shiv Gindodia) answered the open questions, and the user
+relayed the answers. Applied in one pass, one commit per answer, copy
+modules only: no stored edit was read into the copy, changed or removed.
+Nothing was deployed. PRE-LAUNCH.md has the same answers as a list, under
+"Sir's answers, 2026-10-19".
+
+### What changed on the site
+
+| # | Sir's answer | On the site | Commit |
+| --- | --- | --- | --- |
+| 1 | The man-hours note, in his words: "Thanks to the commitment of every worker at Karjat, we’ve reached 3,00,000 safe man-hours as of March 2026. Safety first, always." | `/hse`: the note under the four stat tiles is that sentence, character for character (his curly apostrophe kept). The 3,00,000 tile is unchanged; nothing in `hse.record.bands.4` was touched | `806d83a` |
+| 2 | K.D. holds an electrical licence from the PWD to execute electrical works | `/hse` Certifications: a fifth card, "PWD electrical licence", "Licensed by the Public Works Department to execute electrical works.", appended after the pending card; the pending card now also asks for the licence's number and validity (PRE-LAUNCH.md row 2). `/capabilities`, Electrical Engineering: "K.D. Constructions holds an electrical licence from the PWD to execute electrical works." No ISO certificate number, PDF or validity: Sir has not decided whether to show them | `0dc7bed` |
+| 3 | Bonkode and Rabale skywalks were for NMMC; the Kharghar golf course clubhouse for CIDCO | `/projects/rabale-skywalk`: client tile NMMC (was "To be confirmed"). Bonkode (NMMC) and the golf course (CIDCO) already said so. `/clients`: Kharghar Golf Course appended to the CIDCO card, Bonkode FOB and Rabale Skywalk to the NMMC card, each labelled with its page title, the href from `slugify()`. PRE-LAUNCH.md S12 closed | `28dafa2` |
+| 4 | Kharghar Football Stadium and Kharghar Centre of Excellence are one project; the stadium's representative image can stay | The stadium keeps its title, address, tile and image, and gains a third paragraph with the centre's facts (Sector 33; two training pitches inaugurated January 2022; training venues for the AFC Women's Asian Cup and the FIFA U-17 Women's World Cup). Nothing says K.D. built any of it: the scope tile is still "To be added". Meta description rewritten (155 characters). The centre's tile is off `/projects` and its page is gone; `/projects/kharghar-centre-of-excellence` answers **301** to `/projects/kharghar-football-stadium`. The sitemap (42 to 41 URLs) and the studio gallery manager drop it. PRE-LAUNCH.md 3b and 5h closed, S15 (1) answered | `ac37677`, `51ae8c9` |
+| 5 | WPO's work (a completion certificate, OCR'd, cut off at the end) is the Matunga Workshop contract: the same 350 to 575 bogies a month, the same scope | `/projects/matunga-workshop`: client "Workshop Projects Organisation (WPO), Indian Railways"; three stat tiles appended, 23,761 sq ft G+2 Admin Building, 32,334 sq ft G+2 Basic Training Centre, 5,138 sq ft RCC Store Building (23,761.11 and 32,333.8 rounded); the first paragraph gains the overhead water tank, the RCC store building, a painting shed and concrete roads, the replacement of industrial flooring and roof sheets in the shops, and miscellaneous track works. No year: none given. Meta description 148 characters. `/clients`: the WPO card keeps its line and links "Matunga Railway Workshop". The Indian Railways card is unchanged. **Its own commit**, so it reverts cleanly if Sir says WPO's was a different job | `bd310fd` |
+| 6 | The Vindhane clip's girder is for the Mankhurd FOB | Caption "A girder for the Mankhurd FOB, loaded for dispatch", and the clip's alt names it. **Not linked** to the Mumbai Harbour Line Station Redevelopment page, where the Mankhurd FOB is: `Tile.astro` has no link, and no new UI was built for one | `399eb48` |
+
+### How the Centre of Excellence left without moving a key
+
+The Beyond the railway band had no order list and no way to hide a tile:
+its keys are each tile's array index. Splicing the centre out (index 7)
+would have moved tiles 8 to 15 down one, so every stored edit on them would
+have landed on the tile before. Instead the tile keeps its slot with a new
+`retired: true` (the nav's existing pattern for Gallery, `home.ts`), and
+`foldedInto: "Kharghar Football Stadium"`:
+
+- `Social.astro` skips a retired tile and keeps every other tile's own
+  index, so tiles 8 to 15 still render as `projects.social.items.8` to `15`.
+- `social-projects.ts` builds no page for it, so the sitemap, the studio
+  gallery manager and `/projects/[slug]` (all of which read `socialPages`)
+  drop it with nothing else changed. Its page entry is deleted.
+- `socialRedirects` maps its old slug to the stadium's; `[slug].astro`
+  answers 301 from it before the usual 302 to `/projects` for an unknown
+  slug. The module refuses to build if a tile is folded into one with no page.
+- `check-edit-keys.mjs` already expects no slot for a `retired` object.
+  The tile carries no `pending` any more, so the placeholder count drops
+  with it.
+- The studio gallery: `renamedGroup()` (`gallery-live.ts`), which already
+  maps the group names that had an em dash before 14 Oct, also maps a
+  folded project's title to the project it became part of. So a gallery
+  event or upload that named "Kharghar Centre of Excellence" lands on the
+  stadium instead of dropping off the site (`51ae8c9`). Checked on the
+  local database: a move row into the centre's group put the photograph on
+  the stadium's page, and its undo row took it off again (rows 4 and 5, test
+  rows that cancel out).
+
+The /projects grid is now 15 tiles, five full rows of three at 1280.
+
+### Answers that change nothing on the site
+
+- **Karjat drill times:** keep them (approved). S13 notes it.
+- **Glass drop-down menus:** approved as they are.
+- **The /hse and Vindhane desktop layouts:** approved. S16 closed; S17's
+  only open part is the original video file, coming from site staff.
+- **`/privacy` and `/terms`:** Sir wants a lawyer to review them before
+  launch. **Launch blocker** (S9). The review also covers the careers
+  form's 24-month consent line.
+- **Bonkode FOB and Rabale Skywalk:** separate works, per Sir, to be
+  confirmed with site staff. Both pages stay.
+- **ISO certificates:** soft copies received; whether and how to show them
+  is undecided. Nothing from them is on the site.
+- **The generated boards in six representative images (S15 (2)):** being
+  clarified with Sir.
+- **To be discussed with Sir:** the About menu animation; the directors on
+  `/about` against `/company`; the `/clients` link wording (#49); the
+  homepage Uran shot.
+- **Sir decides tonight:** whether the Matunga Workshop link moves off the
+  Indian Railways card on `/clients` (it is on both that card and WPO's).
+
+### Edit keys
+
+**New:** `hse.sections.1.items.4.title`, `.body`;
+`clients.sections.0.items.5.links.0.label` (WPO);
+`clients.sections.1.items.0.links.6.label` (CIDCO);
+`clients.sections.1.items.1.links.1.label`, `.links.2.label` (NMMC); on
+`/projects/kharghar-football-stadium` `projects.detail.body.2`; on
+`/projects/rabale-skywalk` `projects.detail.facts.0.value`, `.label`; on
+`/projects/matunga-workshop` `projects.detail.stats.1` to `3` (`.value`,
+`.label`).
+
+**Same key, new text:** `hse.hero.statsNote`, `hse.sections.1.items.3.body`,
+`capabilities.sections.0.items.3.body`, `resources.plant.clip.title`; on
+`/projects/matunga-workshop` `projects.detail.client` and
+`projects.detail.body.0`.
+
+**Retired, never to be reused:** `projects.social.items.7.pending`,
+`.note`, `.title`, `.location` (the centre's tile); every key on
+`/projects/kharghar-centre-of-excellence` (the page is gone); on
+`/projects/rabale-skywalk` `projects.detail.facts.0.pending`, `.title`,
+`.body`.
+
+**Saved edits.** The development PC's database has two `content_edits`
+rows: 7, `/projects/matunga-workshop` `projects.blocks.1` (a text-block
+key, not one changed here), and 8, `/projects/panvel-karjat-railway-line`
+(#52). None is on a changed or retired key; its `gallery_events` rows
+1 to 3 touch none either (4 and 5 are this pass's test, above). The server's rows are not known here: at the next
+deploy, before pulling, the server lists `content_edits` rows on the keys
+above (for the retired page: `page_path` =
+`/projects/kharghar-centre-of-excellence`). A row on a changed key hides
+the new text and goes to Sir; it is not changed. Two more, for the
+centre's page alone: `project_text_events` rows with `page_slug` =
+`kharghar-centre-of-excellence` (paragraphs an editor added there no
+longer show anywhere), and `gallery_events` or `gallery_uploads` rows
+with `target_group` = `Kharghar Centre of Excellence` (they now land on
+the stadium's page; worth a look that each belongs there). The local
+database had none of either.
+
+### Placeholders
+
+47 before, 42 after: the Rabale client tile, and the centre's tile and the
+three on its page (scope, the "own work?" card, the photograph card).
+
+### Verified
+
+On a build of `d0bc209` against a build of this pass, both served locally.
+
+| Check | Result |
+| --- | --- |
+| Build | clean |
+| Served HTML, 43 routes (every sitemap route and the 404) | 34 identical; the 9 that differ are `/hse`, `/capabilities`, `/clients`, `/projects`, `/resources/vindhane-plant`, and the Matunga Workshop, football stadium, Rabale Skywalk and Centre of Excellence pages, and every line that differs is one of the changes above |
+| `check-edit-keys` | passes on `/hse`, `/capabilities`, `/clients`, `/projects`, `/resources/vindhane-plant`, `/projects/kharghar-football-stadium`, `/projects/rabale-skywalk`, `/projects/bonkode-fob`, `/projects/kharghar-golf-course`. `/projects/matunga-workshop` is a railway page, which the gate does not cover (ProjectDetailPage.astro); there every `data-edit` key and its text were compared with the build before: the only differences are the eight keys listed above |
+| Em dashes | 0 in the served HTML of all 43 routes, `sitemap.xml` and `robots.txt` |
+| Layout, element by element, at 360, 390 and 1280 | No horizontal scroll anywhere. `/projects/bonkode-fob` and `/projects/kharghar-golf-course` identical. Elsewhere only the changed blocks differ, and what sits below them moves down or up by their difference: `/hse` (the certifications become three across, then the pending card and the licence card, which spans two columns, the grid's own rule for a last row of two; 9,519 to 9,615 px at 1280), `/capabilities` (the Electrical card's row +23 px), `/clients` (the CIDCO and NMMC cards' row +32 px; the railway rows unchanged), `/projects` (one tile fewer: −281 px), the Matunga page (a second row of stat tiles in the hero, a longer first paragraph), the stadium page (its third paragraph), the Rabale page (a figure tile in place of the placeholder; same height at 1280), the Vindhane page (the caption's words only; same box) |
+| Redirect | `/projects/kharghar-centre-of-excellence` (with or without a trailing slash) answers 301 to `/projects/kharghar-football-stadium`; an unknown slug still answers 302 to `/projects` |
+| New links | `/projects/bonkode-fob`, `/projects/rabale-skywalk`, `/projects/kharghar-golf-course`, `/projects/matunga-workshop`: 200 |
+| Sitemap | 41 URLs (was 42): the centre's page is the only one gone |
+
+### For Sir, later
+
+- **The certifications grid on desktop.** Five cards make three across and
+  then two, the licence card spanning two columns. That is a desktop change;
+  a sixth card (a further licence, say) would make two even rows.
+- **Vindhane gallery photograph 06** shows the same lift as the clip. Its
+  caption ("A painted girder lifted onto a trailer for dispatch") could name
+  the Mankhurd FOB too; it was not asked for, so it is unchanged.
+- The Matunga Workshop card on `/projects` and on the homepage still reads
+  "Indian Railways · POH 350 → 575 Bogies/Month". WPO is part of Indian
+  Railways, so it is not wrong; the homepage is locked.
