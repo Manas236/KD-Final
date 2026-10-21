@@ -156,12 +156,16 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        facility's, and have gone with it to its own entry rather than
        being counted twice. The three building areas were appended on
        2026-10-19, from the completion certificate (above): 23,761.11,
-       32,333.8 and 5,138 sq ft, rounded to the square foot. */
+       32,333.8 and 5,138 sq ft, rounded to the square foot. The project
+       period, 2018 to 2021, is Sir's (21 Oct 2026, OPEN-QUESTIONS.md #58):
+       a tile like the others, appended so no stat's key moves, the range
+       with the en dash the site already uses for ranges. */
     stats: [
       { value: "350 → 575", label: "Bogies/Month POH Capacity" },
       { value: "23,761 sq ft", label: "G+2 Admin Building" },
       { value: "32,334 sq ft", label: "G+2 Basic Training Centre" },
       { value: "5,138 sq ft", label: "RCC Store Building" },
+      { value: "2018–2021", label: "Project Period" },
     ],
     image: matungaImg,
     alt: "Architectural rendering of the Matunga Workshop administrative building",
