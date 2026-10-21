@@ -5,8 +5,11 @@
    MOBILE, per DESIGN-SYSTEM.md §10: the H1 steps down through the
    existing display scale rather than inventing a size — `d1` (72px) at
    `lg` and up, `d3` (48px) from `sm`, `d4` (36px) below that. The stat
-   grid stays 2×2 from `sm` up and only goes to a single column below
-   640 — it never goes to four across.
+   grid is one row of two tiles at every width since 21 Oct 2026 (53 Yrs,
+   50+): the two revenue figures are retired in home.ts with their slots
+   kept, so each tile keeps its own index and edit key, and two tiles sit
+   side by side even on a 360px phone (OPEN-QUESTIONS.md #58). Until
+   then it was 2×2, a single column below 640. Never four across.
 
    THE EXPORT LIED ABOUT TWO THINGS HERE and both are ignored:
 
@@ -132,9 +135,9 @@ const { hero } = home;
         </a>
       </div>
 
-      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+      <dl class="grid grid-cols-2 gap-16 mt-56">
         {
-          hero.stats.map((stat, i) => (
+          hero.stats.map((stat, i) => !stat.retired && (
             <div class="bg-kd-stat-fill min-[1080px]:[background-color:var(--kd-hero-stat-fill-photo)] border border-kd-stat-border p-24">
               <dd
                 class="font-display text-d5 text-kd-mint"

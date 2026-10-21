@@ -511,7 +511,7 @@ Tailwind defaults: `sm 640` · `md 768` · `lg 1024`.
 |---|---|---|
 | 4-up grid (capabilities) | 4 cols | 2 cols at `lg` (1024) → 1 col at `sm` (640) |
 | 3-up grid (differentiators) | 3 cols | 1 col at `md` (768) |
-| Hero stats | 2×2 | stays 2×2; 1 col below 640 |
+| Hero stats | 2 across, one row since 2026-10-21 (the two revenue tiles retired) | stays one row of 2 at every width (was 1 col below 640 while there were four) |
 | Project grid 704/464 | 2 cols | full-width stack at 900 |
 | `/projects` listing | 2 cols (featured, pipeline, odd one out span both) | 1 col at 900 |
 | About band 624/560 | 2 cols (pull-quote / bordered block) | full-width stack at 1120 |

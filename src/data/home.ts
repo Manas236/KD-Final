@@ -57,6 +57,10 @@ export interface NavLink {
 export interface Stat {
   readonly value: string;
   readonly label: string;
+  /** Off the page but keeps its array slot, so a later stat's index (its
+      edit key) does not move: the nav's `retired` pattern. The hero skips
+      it and check-edit-keys.mjs expects no slot for it. */
+  readonly retired?: boolean;
 }
 
 export interface CapabilityCard {
@@ -167,10 +171,14 @@ export const home = {
       secondary: { label: "About Us", href: "/about" },
     },
     backdropAlt: "",
+    /* 21 Oct 2026, Sir: the two revenue figures are off the hero. They are
+       retired, not removed, so home.hero.stats.1 and .3 keep their keys;
+       the two left run as one row of two (Hero.astro). The ₹ figures in
+       the About band and the closing banner stay. OPEN-QUESTIONS.md #58. */
     stats: [
-      { value: "₹220 Cr", label: "FY2025–26 Revenue" },
+      { value: "₹220 Cr", label: "FY2025–26 Revenue", retired: true },
       { value: "53 Yrs", label: "Engineering Legacy" },
-      { value: "₹500 Cr", label: "Vision 2030 Target" },
+      { value: "₹500 Cr", label: "Vision 2030 Target", retired: true },
       { value: "50+", label: "Owned Equipment Units" },
     ] as readonly Stat[],
   },
