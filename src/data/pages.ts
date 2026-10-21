@@ -24,6 +24,7 @@
 import { home } from "./home.ts";
 import type { NavLink } from "./home.ts";
 import { slugify } from "../lib/slug.ts";
+import { projects } from "./projects.ts";
 
 export interface InfoItem {
   readonly title: string;
@@ -56,6 +57,10 @@ export interface InfoItem {
   readonly posting?: number;
   /** When that posting stops being listed (ISO 8601), for the editor. */
   readonly expires?: string;
+  /** Off the page, but keeps its array slot so no later card's index
+      (and stored edit keys) moves: the nav's `retired` pattern.
+      InfoSections.astro skips it; the gates expect nothing from it. */
+  readonly retired?: boolean;
 }
 
 export interface InfoSection {
@@ -93,10 +98,29 @@ export interface InfoPageCopy {
 
 const chrome = { nav: home.nav, footer: home.footer };
 
+/* Every project title on /projects: the listing's railway cards (the
+   same titles as their pages, project-detail.ts) and the Beyond the
+   railway tiles. Read from projects.ts because this module, like it,
+   must load in plain Node for the gates (no image imports). */
+const projectTitles = new Set<string>([
+  projects.listing.featured.title,
+  ...projects.listing.medium.map((p) => p.title),
+  ...projects.listing.small.map((p) => p.title),
+  ...projects.social.items.filter((p) => !p.retired).map((p) => p.title),
+]);
+
 /** A link to a project's own page, labelled with its title: the same
     slugify() the /projects tiles and /projects/[slug] use, so the href
-    cannot drift from the page it opens. */
-const work = (title: string): NavLink => ({ label: title, href: `/projects/${slugify(title)}` });
+    cannot drift from the page it opens. The title must be one of the
+    project titles above, so the label is exactly the page's title and
+    never a page that does not exist; the module refuses to build
+    otherwise. */
+const work = (title: string): NavLink => {
+  if (!projectTitles.has(title)) {
+    throw new Error(`pages.ts: work("${title}") names no project on /projects`);
+  }
+  return { label: title, href: `/projects/${slugify(title)}` };
+};
 
 export const capabilities: InfoPageCopy = {
   meta: {
@@ -1059,13 +1083,20 @@ export const clients: InfoPageCopy = {
       items: [
         /* 15 Oct 2026: the works on these five cards were a `body` line
            joined with "·"; each is now a link to its page under
-           /projects, like CIDCO's below. The labels keep the cards'
-           approved wording, which is not always the page's title
-           ("Panvel–Karjat Suburban Rail Corridor" opens "Panvel–Karjat
-           Railway Line"). Sir is to say whether they should read as the
-           page titles (OPEN-QUESTIONS.md #49). The Matunga LHB page is on
-           both the Indian Railways and the COFMOW card, as the text was. */
+           /projects, like CIDCO's below.
+
+           21 Oct 2026, Sir: every link on the railway cards reads as its
+           page's title, exactly: work() takes the title from the project
+           data and refuses one that is not a project (OPEN-QUESTIONS.md
+           #49, #58). Four labels changed with it; their keys did not.
+
+           RETIRED 21 Oct 2026, Sir: the Indian Railways card. Its slot is
+           kept, so the cards after it keep their indexes and stored edit
+           keys (clients.sections.0.items.1 is still Central Railway), and
+           its logo file stays. Its two works are on other cards: Matunga
+           Workshop on WPO's, the Matunga LHB facilities on COFMOW's. */
         {
+          retired: true,
           title: "Indian Railways",
           logo: "indian-railways.png",
           links: [
@@ -1080,41 +1111,24 @@ export const clients: InfoPageCopy = {
           title: "Central Railway",
           logo: "central-railway.png",
           links: [
-            { label: "Matunga Z-Bridge", href: "/projects/matunga-z-bridge" },
-            { label: "Sanpada Carshed", href: "/projects/sanpada-carshed" },
-            {
-              label: "Nhava Sheva & Uran Railway Stations",
-              href: "/projects/nhava-sheva-and-uran-railway-stations",
-            },
-            {
-              label: "Solapur Vande Bharat Maintenance Depot",
-              href: "/projects/solapur-vande-bharat-maintenance-depot",
-            },
+            work("Matunga Z-Bridge"),
+            work("Sanpada Carshed"),
+            work("Nhava Sheva & Uran Railway Stations"),
+            work("Solapur Vande Bharat Maintenance Depot"),
           ],
         },
         {
           title: "Western Railway",
           logo: "western-railway.png",
-          links: [
-            {
-              label: "Lower Parel Railway Redevelopment",
-              href: "/projects/lower-parel-railway-redevelopment",
-            },
-          ],
+          links: [work("Lower Parel Railway Redevelopment")],
         },
         {
           title: "MRVC",
           logo: "mrvc.png",
           links: [
-            {
-              label: "Panvel–Karjat Suburban Rail Corridor",
-              href: "/projects/panvel-karjat-railway-line",
-            },
-            {
-              label: "Mumbai Harbour Line Station Redevelopment",
-              href: "/projects/mumbai-harbour-line-station-redevelopment",
-            },
-            { label: "Harbour Line FOBs", href: "/projects/harbour-line-fobs-and-trespass-control" },
+            work("Panvel–Karjat Railway Line"),
+            work("Mumbai Harbour Line Station Redevelopment"),
+            work("Harbour Line FOBs & Trespass-Control"),
           ],
         },
         /* COFMOW's mark arrived 15 Oct 2026; until then the well set
@@ -1122,12 +1136,7 @@ export const clients: InfoPageCopy = {
         {
           title: "COFMOW",
           logo: "cofmow.png",
-          links: [
-            {
-              label: "LHB Coach Maintenance Facilities at Matunga",
-              href: "/projects/matunga-lhb-coach-maintenance-facilities",
-            },
-          ],
+          links: [work("Matunga LHB Coach Maintenance Facilities")],
         },
         /* Added 2026-10-09 at the client's request. WPO is an Indian
            Railways organisation with no mark of its own, so it carries
@@ -1135,13 +1144,13 @@ export const clients: InfoPageCopy = {
            one (scripts/build-client-logos.mjs). K.D. has not said which
            works were for IRCON — PRE-LAUNCH.md S10 asks. WPO's is the
            Matunga Workshop contract (Sir's mail of 2026-10-19,
-           OPEN-QUESTIONS.md #56); the Indian Railways card keeps its
-           link to it until Sir says whether it moves. */
+           OPEN-QUESTIONS.md #56); since 21 Oct 2026 the only card that
+           links it, the Indian Railways card being retired. */
         {
           title: "WPO",
           body: "Workshop Projects Organisation, Indian Railways",
           logo: "indian-railways.png",
-          links: [{ label: "Matunga Railway Workshop", href: "/projects/matunga-workshop" }],
+          links: [work("Matunga Workshop")],
         },
         { title: "IRCON", body: "IRCON International Limited", logo: "ircon.png" },
       ],

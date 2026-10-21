@@ -20,6 +20,10 @@
    after the last section, or right after the section whose `id` is
    `slotAfter` (/careers: the Apply Here form under Current openings,
    21 Oct 2026). Only where it is drawn moves; no key does.
+
+   A `retired` card (the Indian Railways card on /clients, 21 Oct 2026)
+   is not drawn, and every other card keeps its own index, so its keys do
+   not move. The grid's shape follows the cards that are drawn.
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "./Kicker.astro";
@@ -38,8 +42,10 @@ interface Props {
 
 const { page, sections, slotAfter } = Astro.props;
 const placed = !!slotAfter && sections.some((section) => section.id === slotAfter);
-const withLogos = sections.map((section) => section.items.some((item) => item.logo));
-const withPortraits = sections.map((section) => section.items.some((item) => item.portrait));
+/* The cards each section draws: a retired one keeps its slot only. */
+const shown = sections.map((section) => section.items.filter((item) => !item.retired));
+const withLogos = shown.map((items) => items.some((item) => item.logo));
+const withPortraits = shown.map((items) => items.some((item) => item.portrait));
 ---
 
 {
@@ -77,7 +83,7 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
             // Pure CSS, so it holds for the careers cards added at runtime too.
             withPortraits[s]
               ? "lg:grid-cols-4"
-              : section.items.length === 2 || section.items.length === 4
+              : shown[s].length === 2 || shown[s].length === 4
               ? "sm:[&>li:last-child:nth-child(odd)]:col-span-2"
               : [
                   "lg:grid-cols-3",
@@ -90,6 +96,7 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
           ]}
         >
           {section.items.map((item, i) => {
+            if (item.retired) return null;
             const k = item.slot ? `${page}.${item.slot}` : `${page}.sections.${s}.items.${i}`;
             return (
             <li
