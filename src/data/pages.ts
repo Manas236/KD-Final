@@ -61,6 +61,12 @@ export interface InfoItem {
       (and stored edit keys) moves: the nav's `retired` pattern.
       InfoSections.astro skips it; the gates expect nothing from it. */
   readonly retired?: boolean;
+  /** The name of the card's certificate image, src/assets/certificates/
+      <cert>.jpg, written watermarked by scripts/build-certificates.mjs.
+      An attribute's source, never text: check-edit-keys.mjs skips
+      `.cert`. While the image exists the card has a "View certificate"
+      button (InfoSections.astro); while it does not, nothing shows. */
+  readonly cert?: string;
 }
 
 export interface InfoSection {
@@ -94,6 +100,12 @@ export interface InfoPageCopy {
     readonly retired?: boolean;
   };
   readonly footer: typeof home.footer;
+  /** The certificate viewer's labels (/hse). Drawn only while a card has
+      a certificate image, so check-edit-keys.mjs treats them as runtime;
+      the button and the viewer mark them `data-no-edit` (one label on
+      several buttons, and a viewer that must close in edit mode too), so
+      they are changed here. */
+  readonly viewer?: { readonly view: string; readonly close: string };
 }
 
 const chrome = { nav: home.nav, footer: home.footer };
@@ -373,6 +385,7 @@ export const hse: HseCopy = {
       "ISO 14001:2015.",
   },
   ...chrome,
+  viewer: { view: "View certificate", close: "Close" },
   hero: {
     kicker: "Health, Safety & Environment",
     title: "It is better to be safe than sorry.",
@@ -431,18 +444,37 @@ export const hse: HseCopy = {
     {
       kicker: "Certifications",
       heading: "Certified management systems.",
+      /* CERTIFICATES (21 Oct 2026, Sir). `cert` names the watermarked copy
+         of a card's certificate that scripts/build-certificates.mjs writes
+         to src/assets/certificates/<cert>.jpg from the scans in
+         ISO_Certificates/, Tax_Certificate/, CIDCO_Certificate/ and
+         PWD_Licence/ (never committed, never served). A card whose copy
+         exists gets a "View certificate" button and the viewer; a card
+         without one shows neither. When a certificate is read, its number,
+         certifying body and validity go on its card as `facts`
+         ("Certificate number", "Certifying body", "Valid until"); a field
+         that cannot be read is a "To be added" fact. None was in place on
+         21 Oct 2026, so no card has a button or details yet. */
       items: [
-        { title: "ISO 45001:2018", body: "Occupational health & safety management." },
-        { title: "ISO 14001:2015", body: "Environmental management." },
-        { title: "ISO 9001:2015", body: "Quality management." },
+        { title: "ISO 45001:2018", body: "Occupational health & safety management.", cert: "iso-45001" },
+        { title: "ISO 14001:2015", body: "Environmental management.", cert: "iso-14001" },
+        { title: "ISO 9001:2015", body: "Quality management.", cert: "iso-9001" },
         /* K.D.Website_Details.md's Leadership section ends on an open
            ask to the company: "Please give more details on
            Certifications: ISO certifications or any other certifications
            that your company has achieved". Nothing came back, so the ask
            is on the page where the client will see it. PRE-LAUNCH.md #2.
            19 Oct 2026: the PWD licence's number and validity joined the
-           list (OPEN-QUESTIONS.md #56). */
+           list (OPEN-QUESTIONS.md #56).
+           RETIRED 21 Oct 2026: Sir's own sentence about the tax
+           authorities, which he typed into this card on 9 Oct (a saved
+           edit on the server), has a card of its own below (item 5), and
+           the certificates now come as files (above). The slot is kept and
+           the card simply stops rendering: his saved row is not touched,
+           and these keys are never given to other text
+           (OPEN-QUESTIONS.md #58). */
         {
+          retired: true,
           pending: "To be added",
           title: "Other certifications & certificate details",
           body:
@@ -454,10 +486,28 @@ export const hse: HseCopy = {
         /* Sir, 19 Oct 2026: K.D. holds an electrical licence from the PWD
            to execute electrical works. Appended after the pending card, not
            inserted, so no stored key moves (OPEN-QUESTIONS.md #56). No
-           number or validity until K.D. supplies them (the card above). */
+           number or validity until K.D. supplies them. */
         {
           title: "PWD electrical licence",
           body: "Licensed by the Public Works Department to execute electrical works.",
+          cert: "pwd-licence",
+        },
+        /* Appended 21 Oct 2026 (OPEN-QUESTIONS.md #58). The body is Sir's
+           own sentence, word for word. No year until the certificate
+           shows one. */
+        {
+          title: "Recognition by Indian Tax Authorities",
+          body: "Recognised by Indian Tax Authorities for Compliance Excellence.",
+          cert: "tax-recognition",
+        },
+        /* Appended 21 Oct 2026, Sir. Nothing about class, category or what
+           the registration allows. */
+        {
+          title: "Registered with CIDCO",
+          body:
+            "K.D. Constructions is registered with CIDCO (City and Industrial Development " +
+            "Corporation of Maharashtra).",
+          cert: "cidco-registration",
         },
       ],
     },

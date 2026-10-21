@@ -27,6 +27,7 @@
     "logos:build": "node scripts/build-client-logos.mjs",
     "favicon:build": "node scripts/build-favicon.mjs",
     "share-card:build": "node scripts/build-share-card.mjs",
+    "certificates:build": "node scripts/build-certificates.mjs",
     "media:scan": "node scripts/raw-media-manifest.mjs"
   },
   "dependencies": {

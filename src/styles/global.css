@@ -69,6 +69,16 @@
   background-color: currentColor;
 }
 
+/* Certificates are not printed (CertificateViewer.astro, 21 Oct 2026):
+   neither the viewer, open or shut, nor the buttons that open it. A
+   deterrent only; the watermark in the image is the protection. */
+@media print {
+  dialog[data-cert-viewer],
+  [data-cert-open] {
+    display: none !important;
+  }
+}
+
 /* Nav drop-down (Projects, About) while the bar is transparent over the
    homepage hero — Nav.astro sets data-transparent on the header only
    there, only at ≥1080px, and removes it once the hero scrolls out from

@@ -61,7 +61,9 @@ const PAGES = {
      now, so they are not routes here. */
   "/about": { module: "../src/data/about.ts", exportName: "about", prefix: "about", merged: true },
   "/projects": { module: "../src/data/projects.ts", exportName: "projects", prefix: "projects" },
-  "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse" },
+  /* `viewer.`: the certificate viewer's labels, drawn (data-no-edit)
+     only while a card has a certificate image (InfoSections.astro). */
+  "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse", runtime: ["viewer."] },
   "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
   /* `runtime`: the job-posting cards come from the database, not the
      module (src/pages/careers.astro), so keys and copy under these
@@ -259,8 +261,9 @@ const slotByKey = new Map(report.slots.map((s) => [s.key, s]));
    text. `video` names a clip in public/video/ and `tone` a band surface
    (both /hse, src/components/hse/Record.astro). `parent` is the href a
    nav link drops down from (home.ts nav.links). `embed` and `embedTitle`
-   are /contact's map iframe src and title (pages.ts contact.map). */
-const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|portrait|id|video|tone|parent|embed|embedTitle)$/;
+   are /contact's map iframe src and title (pages.ts contact.map). `cert`
+   names a certificate image (pages.ts, /hse's Certifications). */
+const attrPaths = /\.(href|alt|logoAlt|backdropAlt|file|logo|portrait|id|video|tone|parent|embed|embedTitle|cert)$/;
 const runtime = route.runtime ?? [];
 /* Gallery captions are runtime data on every page since 3 Oct 2026:
    one caption per photograph, edited in /studio/gallery and replayed

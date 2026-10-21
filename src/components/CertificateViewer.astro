@@ -1,0 +1,220 @@
+---
+/* ============================================================
+   CertificateViewer — the "View certificate" dialog
+   ------------------------------------------------------------
+   21 Oct 2026, at Sir's request (OPEN-QUESTIONS.md #58). A card in /hse's
+   Certifications whose certificate image exists has a "View certificate"
+   button (InfoSections.astro); this is the one dialog they all open. It
+   is drawn only on a page where at least one such button is.
+
+   A DETERRENT, NOT PROTECTION. A web page cannot stop an operating
+   system's snipping tool, a phone's screenshot or a camera, and anyone
+   who opens the developer tools can find the file. What protects the
+   certificate is the watermark burned into the image itself
+   (scripts/build-certificates.mjs: "K.D. Constructions · For
+   verification only", tiled across it). This only makes casual copying
+   awkward:
+
+     · the image is drawn onto a <canvas> from an Image object that is
+       never in the page, so there is no <img> to save and no download
+       link;
+     · right-click, dragging and text selection do nothing inside it, and
+       Ctrl/Cmd + S and Ctrl/Cmd + P are swallowed while it is open;
+     · the PrintScreen key blanks the canvas for a moment and, where the
+       browser allows it, overwrites the clipboard;
+     · while the window has lost focus or the tab is hidden, the
+       certificate is drawn blurred, and sharp again on return;
+     · in print, the dialog and the buttons are hidden (global.css).
+
+   The page around it behaves as ever; nothing here runs until a button
+   is pressed, except the print rule.
+
+   ACCESSIBLE. A modal <dialog> (the rest of the page inert behind it),
+   titled by the card's own title, the canvas an image named the same.
+   Focus goes to Close and stays in the dialog (Tab keeps it there); Esc
+   or Close shuts it and focus returns to the button that opened it. On a
+   phone it fills the screen and the certificate is fitted to it.
+
+   EDIT MODE. The labels are `data-no-edit` (copy in src/data/pages.ts,
+   `viewer`), so Close always closes; Esc inside the viewer is kept from
+   the editor, for which Esc with nothing open means "leave edit mode".
+   The cards' own text edits as on any card.
+
+   Surfaces and type are the nav's: ink-deep, an 88px bar with a hairline,
+   a `d8` title, the ghost button on dark (DESIGN-SYSTEM §6).
+   ============================================================ */
+interface Props {
+  labels: { readonly view: string; readonly close: string };
+}
+
+const { labels } = Astro.props;
+---
+
+<dialog
+  class="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none border-0 bg-kd-ink-deep text-kd-mist select-none open:flex flex-col"
+  data-cert-viewer
+  aria-labelledby="kd-cert-title"
+>
+  <div
+    class="w-full max-w-kd mx-auto px-24 sm:px-48 h-88 shrink-0 flex items-center justify-between gap-24 border-b border-b-kd-nav-border"
+  >
+    <h2 id="kd-cert-title" class="font-display text-d8 text-kd-mist truncate" data-cert-title></h2>
+    <button
+      type="button"
+      class="shrink-0 inline-flex items-center text-ui text-kd-mist border border-kd-ghost-outline px-24 py-12 hover:text-kd-mint hover:border-kd-mint focus-visible:text-kd-mint focus-visible:border-kd-mint"
+      data-cert-close
+    >
+      <span data-no-edit>{labels.close}</span>
+    </button>
+  </div>
+  <div class="flex-1 min-h-0 flex items-center justify-center p-16 sm:p-24" data-cert-stage>
+    <canvas class="block" role="img" data-cert-canvas></canvas>
+  </div>
+</dialog>
+
+<script>
+  /* See the header of this file: a deterrent, and nothing more. */
+  const dialog = document.querySelector<HTMLDialogElement>("dialog[data-cert-viewer]");
+  const canvas = dialog?.querySelector<HTMLCanvasElement>("canvas[data-cert-canvas]");
+  const ctx = canvas?.getContext("2d");
+  const stage = dialog?.querySelector<HTMLElement>("[data-cert-stage]");
+  const heading = dialog?.querySelector<HTMLElement>("[data-cert-title]");
+  const closeButton = dialog?.querySelector<HTMLButtonElement>("[data-cert-close]");
+
+  if (dialog && canvas && ctx && stage && heading && closeButton) {
+    let image: HTMLImageElement | null = null;
+    let opener: HTMLElement | null = null;
+    /* Drawn blurred while the window is not in front. */
+    let veiled = false;
+    /* Drawn blank for a moment after PrintScreen. */
+    let blanked = false;
+    let unblank = 0;
+
+    /* The certificate, fitted inside the stage, sharp on a dense screen. */
+    const draw = () => {
+      const w0 = image?.naturalWidth ?? 0;
+      const h0 = image?.naturalHeight ?? 0;
+      if (!image || !w0 || !h0 || !dialog.open) return;
+      const style = getComputedStyle(stage);
+      const roomW = stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const roomH = stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      const scale = Math.min(roomW / w0, roomH / h0, 1);
+      const w = Math.max(1, Math.floor(w0 * scale));
+      const h = Math.max(1, Math.floor(h0 * scale));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      if (blanked) return;
+      if (veiled) {
+        // A browser without canvas filters draws nothing while veiled.
+        if (!("filter" in ctx)) return;
+        ctx.filter = "blur(24px)";
+        ctx.drawImage(image, 0, 0, w, h);
+        ctx.filter = "none";
+        return;
+      }
+      ctx.drawImage(image, 0, 0, w, h);
+    };
+
+    const open = (button: HTMLElement) => {
+      const src = button.getAttribute("data-cert-open");
+      if (!src) return;
+      opener = button;
+      const title = button.closest("li")?.querySelector("h3")?.textContent?.trim() ?? "";
+      heading.textContent = title;
+      canvas.setAttribute("aria-label", title);
+      veiled = document.hidden || !document.hasFocus();
+      blanked = false;
+      image = new Image();
+      image.decoding = "async";
+      image.addEventListener("load", draw);
+      image.src = src;
+      dialog.showModal();
+      closeButton.focus();
+      draw();
+    };
+
+    const shut = () => {
+      if (dialog.open) dialog.close();
+    };
+
+    /* Every way out ends here, Esc included: the drawing goes, and focus
+       goes back to the button that opened it. */
+    dialog.addEventListener("close", () => {
+      window.clearTimeout(unblank);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      image = null;
+      heading.textContent = "";
+      opener?.focus();
+      opener = null;
+    });
+
+    document.addEventListener("click", (event) => {
+      const button = (event.target as Element).closest?.<HTMLElement>("[data-cert-open]");
+      if (button) open(button);
+    });
+    closeButton.addEventListener("click", shut);
+
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        // Close here, and keep the key from the editor (edit mode).
+        event.preventDefault();
+        event.stopPropagation();
+        shut();
+      } else if (event.key === "Tab") {
+        // Close is the one control: focus stays on it.
+        event.preventDefault();
+        closeButton.focus();
+      }
+    });
+
+    /* Save and Print, while the viewer is open. */
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (!dialog.open) return;
+        const key = event.key.toLowerCase();
+        if ((event.ctrlKey || event.metaKey) && (key === "s" || key === "p")) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      true,
+    );
+
+    /* PrintScreen: most systems only report the key's release. */
+    const printScreen = (event: KeyboardEvent) => {
+      if (!dialog.open || event.key !== "PrintScreen") return;
+      blanked = true;
+      draw();
+      navigator.clipboard?.writeText("").catch(() => {});
+      window.clearTimeout(unblank);
+      unblank = window.setTimeout(() => {
+        blanked = false;
+        draw();
+      }, 1500);
+    };
+    document.addEventListener("keydown", printScreen, true);
+    document.addEventListener("keyup", printScreen, true);
+
+    for (const type of ["contextmenu", "dragstart", "selectstart", "copy"]) {
+      dialog.addEventListener(type, (event) => event.preventDefault());
+    }
+
+    /* Away and back. */
+    const reveal = (hide: boolean) => {
+      if (!dialog.open || veiled === hide) return;
+      veiled = hide;
+      draw();
+    };
+    window.addEventListener("blur", () => reveal(true));
+    window.addEventListener("focus", () => reveal(document.hidden));
+    document.addEventListener("visibilitychange", () => reveal(document.hidden || !document.hasFocus()));
+    window.addEventListener("resize", draw);
+  }
+</script>

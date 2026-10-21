@@ -27,7 +27,9 @@
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "./Kicker.astro";
-import type { InfoSection } from "../data/pages";
+import CertificateViewer from "./CertificateViewer.astro";
+import type { InfoPageCopy, InfoSection } from "../data/pages";
+import { certificateImage } from "../lib/certificates";
 import { clientLogo, logoSize } from "../lib/client-logos";
 import { portrait } from "../lib/portraits";
 
@@ -38,14 +40,19 @@ interface Props {
   /** The `id` of the section the default slot follows. Without one, or
       with an id no section has, the slot follows the last section. */
   slotAfter?: string;
+  /** The certificate viewer's labels (/hse). A card with a `cert` whose
+      image exists gets a "View certificate" button, and the page one
+      viewer (CertificateViewer.astro). No image, no button. */
+  viewer?: InfoPageCopy["viewer"];
 }
 
-const { page, sections, slotAfter } = Astro.props;
+const { page, sections, slotAfter, viewer } = Astro.props;
 const placed = !!slotAfter && sections.some((section) => section.id === slotAfter);
 /* The cards each section draws: a retired one keeps its slot only. */
 const shown = sections.map((section) => section.items.filter((item) => !item.retired));
 const withLogos = shown.map((items) => items.some((item) => item.logo));
 const withPortraits = shown.map((items) => items.some((item) => item.portrait));
+const withCertificates = shown.some((items) => items.some((item) => certificateImage(item.cert)));
 ---
 
 {
@@ -208,6 +215,16 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
                   ))}
                 </ul>
               )}
+              {certificateImage(item.cert) && viewer && (
+                <button
+                  type="button"
+                  class="mt-16 text-ui text-kd-mint-2 pb-2 border-b border-b-transparent hover:border-b-kd-mint-2 focus-visible:border-b-kd-mint-2"
+                  aria-haspopup="dialog"
+                  data-cert-open={certificateImage(item.cert)?.src}
+                >
+                  <span data-no-edit>{viewer.view}</span>
+                </button>
+              )}
             </li>
             );
           })}
@@ -220,3 +237,5 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
 }
 
 {!placed && <slot />}
+
+{withCertificates && viewer && <CertificateViewer labels={viewer} />}

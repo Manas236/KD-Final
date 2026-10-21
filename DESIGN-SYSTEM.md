@@ -330,6 +330,27 @@ about the card itself moves.
   edit mode or no script), fades it in once it is playing (motion.css §5)
   and pauses it off screen. The headline stays the LCP element.
 
+### Certificates on `/hse` — a deterrent, not protection
+
+Since 2026-10-21 a Certifications card whose certificate image exists has a
+"View certificate" button (a link-styled button, the cards' own link
+treatment) that opens one full-screen viewer (`CertificateViewer.astro`):
+ink-deep, an 88px bar with the card's title and a ghost "Close", the
+certificate fitted below. **Say this plainly to anyone who asks: a website
+cannot stop an operating system's snipping tool, a phone's screenshot or a
+camera, and anyone with the developer tools can find the file.** The real
+protection is the watermark burned into every image by
+`scripts/build-certificates.mjs` ("K.D. Constructions · For verification
+only", tiled diagonally across it). The viewer only makes casual copying
+awkward: the image is drawn on a `<canvas>` (no `<img>`, no download link);
+right-click, drag, selection, Ctrl/Cmd + S and Ctrl/Cmd + P do nothing in
+it; PrintScreen blanks it for a moment and overwrites the clipboard where
+the browser allows; it blurs while the window is in the background; print
+hides it and its buttons. It is a modal dialog: focus stays on Close, Esc
+closes, focus returns to the button. Only the original scans' watermarked
+copies are ever in the repo or on the site (`src/assets/certificates/`);
+the scans are git-ignored. A card without an image shows no button.
+
 ---
 
 ## 6. Buttons and links
