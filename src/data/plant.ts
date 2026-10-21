@@ -117,16 +117,19 @@ export const plant = {
        shows. Drawn beside the paragraphs above as an /hse clip tile:
        public/video/<video>.mp4 with a .jpg poster, silent, looping.
        2026-10-19, Sir: the girder is for the Mankhurd foot-over-bridge
-       (on the Mumbai Harbour Line Station Redevelopment page). The
-       caption names it but does not link there: Tile.astro has no link
-       (OPEN-QUESTIONS.md #56). */
+       (on the Mumbai Harbour Line Station Redevelopment page), and the
+       caption named it (OPEN-QUESTIONS.md #56).
+       2026-10-21, Sir: the plant engineer's word goes for this clip, so
+       until he gives the caption it names no project: the title and the
+       alt say only what the clip shows (OPEN-QUESTIONS.md #58;
+       PRE-LAUNCH.md has the row for his caption). */
     clip: {
       video: "vindhane-girder-dispatch",
       alt:
-        "A long painted steel girder for the Mankhurd FOB on a multi-axle trailer in the " +
+        "A long painted steel girder loaded on a multi-axle trailer for dispatch in the " +
         "Vindhane plant yard, held on a crane's chain, the fabrication shed behind",
       where: "Plant yard, Vindhane",
-      title: "A girder for the Mankhurd FOB, loaded for dispatch",
+      title: "A girder loaded for dispatch at Vindhane",
     },
 
     products: {
