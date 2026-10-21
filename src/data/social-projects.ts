@@ -139,7 +139,9 @@ const TBA = "To be added";
    one on the tile and on the page header. Until each arrives the page
    carries this card. Never a photograph of a different work. Seven of the
    eight had one by 2026-10-15 (OPEN-QUESTIONS.md #48); build() drops the
-   card for those. */
+   card for those. The eighth, the Rabale Skywalk, turned out to have
+   photographs of its own, filed with Bonkode's until 2026-10-21
+   (OPEN-QUESTIONS.md #59): it has a gallery, not this card. */
 const IMAGE_NOTE: PendingNote = {
   pending: "Image to be added",
   title: "Image",
@@ -547,7 +549,6 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: ["A skywalk across the Thane–Belapur Road at Rabale, Navi Mumbai, built by K.D. Constructions."],
-    photoNote: IMAGE_NOTE,
   },
   {
     /* The list spells the locality "Rabada- Katkaripada". */

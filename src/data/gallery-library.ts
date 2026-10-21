@@ -23,12 +23,6 @@ export interface LibraryPhoto extends GalleryPhoto {
 export const galleryLibrary: readonly LibraryPhoto[] = [
   { file: "bonkode-fob-05.jpg", caption: "Design rendering of the skywalk", project: "Bonkode FOB" },
   { file: "bonkode-fob-06.jpg", caption: "The design rendering beside the skywalk as delivered", project: "Bonkode FOB" },
-  { file: "bonkode-fob-08.jpg", caption: "Skywalk and glazed lift tower beside the road", project: "Bonkode FOB" },
-  { file: "bonkode-fob-11.jpg", caption: "The skywalk spanning the road between two lift towers", project: "Bonkode FOB" },
-  { file: "bonkode-fob-12.jpg", caption: "Lift towers and span above the traffic", project: "Bonkode FOB" },
-  { file: "bonkode-fob-13.jpg", caption: "Lift tower and skywalk from the roadside", project: "Bonkode FOB" },
-  { file: "bonkode-fob-14.jpg", caption: "Twin lift towers and the skywalk from road level", project: "Bonkode FOB" },
-  { file: "bonkode-fob-15.jpg", caption: "The two lift towers framing the span", project: "Bonkode FOB" },
   { file: "bonkode-fob-16.jpg", caption: "The skywalk crossing the junction", project: "Bonkode FOB" },
   { file: "bonkode-fob-22.jpg", caption: "The skywalk on steel trestles over the median", project: "Bonkode FOB" },
   { file: "bonkode-fob-24.jpg", caption: "Canopied stair landing at the skywalk's end", project: "Bonkode FOB" },
@@ -105,6 +99,14 @@ export const galleryLibrary: readonly LibraryPhoto[] = [
   { file: "nhava-sheva-uran-10.jpg", caption: "Nhava Sheva station under construction, from above", project: "Nhava Sheva & Uran Railway Stations" },
   { file: "nhava-sheva-uran-13.jpg", caption: "Uran station: platform, nameboard, building and roof", project: "Nhava Sheva & Uran Railway Stations" },
   { file: "panvel-karjat-02.jpg", caption: "Subway excavation at Chowk, box segments lined up beside the cut", project: "Panvel–Karjat Railway Line" },
+  /* Hidden as Bonkode FOB look-alikes in October; Rabale frames since
+     2026-10-21 (OPEN-QUESTIONS.md #59), with the same captions. */
+  { file: "rabale-skywalk-07.jpg", caption: "Skywalk and glazed lift tower beside the road", project: "Rabale Skywalk" },
+  { file: "rabale-skywalk-08.jpg", caption: "The skywalk spanning the road between two lift towers", project: "Rabale Skywalk" },
+  { file: "rabale-skywalk-09.jpg", caption: "Lift towers and span above the traffic", project: "Rabale Skywalk" },
+  { file: "rabale-skywalk-10.jpg", caption: "Lift tower and skywalk from the roadside", project: "Rabale Skywalk" },
+  { file: "rabale-skywalk-11.jpg", caption: "Twin lift towers and the skywalk from road level", project: "Rabale Skywalk" },
+  { file: "rabale-skywalk-12.jpg", caption: "The two lift towers framing the span", project: "Rabale Skywalk" },
   { file: "rmc-plant-02.jpg", caption: "The plant fully enclosed, seen across the yard", project: "RMC Plant, Karjat" },
   { file: "rmc-plant-07.jpg", caption: "The twin cement silos during erection", project: "RMC Plant, Karjat" },
   { file: "sanpada-carshed-04.jpg", caption: "Main entrance dressed for the inauguration, January 2026", project: "Sanpada Carshed" },

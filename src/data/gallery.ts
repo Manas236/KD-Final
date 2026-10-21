@@ -155,31 +155,29 @@ const railwayFirst: readonly ProjectGallery[] = [
   },
 ];
 
-/* Beyond the railway — the six photographed projects of the band on
+/* Beyond the railway — the seven photographed projects of the band on
    /projects (projects.social), in that band's order. Each opens on its
    /projects tile's own frame (the social-*.jpg files); the rest are
    that project's other usable frames (scripts/build-gallery.mjs says
    which were left out, and why). Four of them have no second frame in
    the library, so their gallery is the one photograph.
-   OPEN-QUESTIONS.md #36. */
-export const socialGalleries: readonly ProjectGallery[] = [
+   OPEN-QUESTIONS.md #36.
+   2026-10-21: the Bonkode FOB group had held two skywalks' photographs.
+   The straight span between two tall glazed lift towers is the Rabale
+   Skywalk, its own group now (socialLater, below); the Bonkode skywalk
+   is the long tubular one on steel trestles (OPEN-QUESTIONS.md #59). */
+const socialFirst: readonly ProjectGallery[] = [
   {
     project: "Bonkode FOB",
     photos: [
-      { file: "social-bonkode-fob.jpg", caption: "The skywalk over the Thane–Belapur road, a lift tower at each end" },
-      { file: "bonkode-fob-02.jpg", caption: "The enclosed walkway between its two glazed towers" },
+      { file: "social-bonkode-fob.jpg", caption: "The skywalk on its steel trestles over the landscaped median" },
       { file: "bonkode-fob-03.jpg", caption: "Steel stair and walkway meeting at a lift tower" },
-      { file: "bonkode-fob-04.jpg", caption: "A glazed lift tower at street level" },
-      { file: "bonkode-fob-07.jpg", caption: "The skywalk over the Thane–Belapur road, a hoarding alongside" },
-      { file: "bonkode-fob-09.jpg", caption: "Skywalk meeting a glazed lift tower" },
-      { file: "bonkode-fob-10.jpg", caption: "Glazed lift tower at street level" },
       { file: "bonkode-fob-18.jpg", caption: "The skywalk curving over the road" },
       { file: "bonkode-fob-19.jpg", caption: "The skywalk seen down the carriageway" },
       { file: "bonkode-fob-20.jpg", caption: "Lift tower and skywalk span" },
       { file: "bonkode-fob-21.jpg", caption: "Stair access up to the skywalk" },
       { file: "bonkode-fob-23.jpg", caption: "Inside the enclosed skywalk" },
       { file: "bonkode-fob-25.jpg", caption: "Canopied stair, front view" },
-      { file: "bonkode-fob-27.jpg", caption: "Skywalk and trestles, wide view" },
     ],
   },
   {
@@ -221,6 +219,26 @@ export const socialGalleries: readonly ProjectGallery[] = [
     ],
   },
 ];
+
+/* The Rabale Skywalk, photographed since 2026-10-21 (its frames had sat
+   in the Bonkode FOB group). Last in its band, and appended to
+   projectGalleries after the Matunga Z-Bridge, so no group above it
+   changes index. */
+const socialLater: readonly ProjectGallery[] = [
+  {
+    project: "Rabale Skywalk",
+    photos: [
+      { file: "social-rabale-skywalk.jpg", caption: "The skywalk over the Thane–Belapur road, a lift tower at each end" },
+      { file: "rabale-skywalk-02.jpg", caption: "The enclosed walkway between its two glazed towers" },
+      { file: "rabale-skywalk-03.jpg", caption: "A glazed lift tower at street level" },
+      { file: "rabale-skywalk-04.jpg", caption: "The skywalk over the Thane–Belapur road, a hoarding alongside" },
+      { file: "rabale-skywalk-05.jpg", caption: "Skywalk meeting a glazed lift tower" },
+      { file: "rabale-skywalk-06.jpg", caption: "A lift tower's street entrance, the walkway joining it at the top" },
+    ],
+  },
+];
+
+export const socialGalleries: readonly ProjectGallery[] = [...socialFirst, ...socialLater];
 
 /* The Matunga Workshop's photographs, split by discipline at the
    owner's request on 8 Oct 2026. Each part is a group of its own — so
@@ -334,7 +352,7 @@ export const railwayGalleries: readonly ProjectGallery[] = [...railwayFirst, ...
 /* The order the /projects Gallery tab has always used — a group's
    index is part of its caption edit keys (projects.gallery.groups.N),
    so a new group is only ever appended. */
-export const projectGalleries: readonly ProjectGallery[] = [...railwayFirst, ...socialGalleries, ...railwayLater];
+export const projectGalleries: readonly ProjectGallery[] = [...railwayFirst, ...socialFirst, ...railwayLater, ...socialLater];
 
 /* K.D.'s own plants. Defined here rather than in plant.ts / rmc-plant.ts
    so the /projects Gallery tab and /gallery can list them without

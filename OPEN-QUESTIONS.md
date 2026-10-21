@@ -3901,3 +3901,71 @@ with the local database.
 | CLS | 0 on `/`, `/about`, `/hse`, `/careers` |
 | Certificate viewer (with test images, then removed) | opens, the canvas drawn, no `<img>`; focus on Close and kept there; right-click, drag, selection, Ctrl/Cmd+S and +P blocked; PrintScreen blanks it then restores; blurred on window blur, sharp on focus; print hides it and the buttons; Esc closes and focus returns; at 1280 and 390; in edit mode the card text edits and Esc closes the viewer without leaving edit mode. Without images: no button, no viewer on the page |
 | Database flows | 5 of 5 pass, before and after |
+
+## 59. The Bonkode FOB photographs were two skywalks: Rabale's are its own now
+
+2026-10-21. The user: every photograph of the Rabale Skywalk and the
+Bonkode FOB had been filed together in `Bonkode FOB/`. They sorted them
+into `Bonkode FOB/` and a new `Rabale Skywalk/` and asked for the site to
+follow.
+
+**What the folders say.** `Rabale Skywalk/` holds AX6A7054 to AX6A7074:
+13 frames shot 09:45 to 10:01 on 21 April 2023, a straight enclosed span
+between two tall glazed lift towers. `Bonkode FOB/` keeps AX6A7083 to
+AX6A7104 (10:17 to 10:25 the same morning, after a 16-minute gap), the
+White House FOB files and the two renderings: the long tubular skywalk on
+steel lattice trestles that the Bonkode page describes and that the
+"Delivered" half of the design board shows. The camera's clock and the
+pictures agree with the user's sort on every frame but one.
+
+**The one frame in both folders.** `AX6A7092.CR2` is in both, byte for
+byte (the Rabale copy is dated today, the others are not: copied, not
+moved). It was shot at 10:19:59, mid-Bonkode, and shows the JCB showroom
+that is in `bonkode-fob-03`. It stays on the Bonkode page as
+`bonkode-fob-20`; the Rabale folder's copy is not used. **For the user:**
+if it really is Rabale, say so and it moves.
+
+### What changed on the site
+
+| Where | Before | After |
+| --- | --- | --- |
+| `/projects`, Bonkode FOB tile and its page header | AX6A7070, a Rabale frame | `WHITE HOUSE FOB X.jpg`, the tubular skywalk on its trestles: the version of that frame Manas kept in the October sort (it was `bonkode-fob-27`, the gallery's last photo). New alt text |
+| `/projects/bonkode-fob` gallery | 14 photographs, 6 of them Rabale's | 8, all Bonkode's: the new header frame, then 03, 18, 19, 20, 21, 23, 25 with their captions as they were |
+| `/projects`, Rabale Skywalk tile (tile 15) | "Image to be added" | A real photograph, AX6A7070 (the old Bonkode tile, same file, now `social-rabale-skywalk.jpg`), no "Representative image" chip. Its place in the band is unchanged |
+| `/projects/rabale-skywalk` | Ink header, an "Image to be added" card | That photograph as its header, and a gallery of six with the captions they had under Bonkode (one reworded, so two "glazed lift tower at street level" captions are not side by side) |
+| `/gallery`, `/projects` Gallery tab, image sitemap | Rabale's frames under Bonkode FOB | A Rabale Skywalk group, after Lush Meadows on `/gallery` and after the Matunga Z-Bridge on the Gallery tab |
+| `/studio/gallery` library | Six Rabale look-alikes listed under Bonkode FOB | The same six, same captions, under Rabale Skywalk, still hidden |
+
+Files: the Rabale frames are `rabale-skywalk-02` to `-12.jpg`, renumbered
+in gallery order, byte-identical to the `bonkode-fob-*` files they replace
+(02 = old 02, 03 = 04, 04 = 07, 05 = 09, 06 = 10, 07 = 08, 08 = 11,
+09 = 12, 10 = 13, 11 = 14, 12 = 15; `scripts/build-gallery.mjs` lists the
+mapping). `bonkode-fob-27.jpg` is gone, being the same file as the new
+Bonkode tile. The Bonkode files that stay keep their names, so any studio
+change to them (a hide, a caption) still applies.
+
+Placeholders 45 to 43: the Rabale tile's "Image to be added" and the
+page's image card (PRE-LAUNCH.md rows 3c and 7g).
+
+### For the next deploy
+
+- **Studio changes made to the old file names no longer apply.** The
+  gallery manager keys hides, moves and captions by file name; rows naming
+  `bonkode-fob-02`, `-04`, `-07` to `-15` or `-27.jpg` now point at nothing
+  and are skipped. A row naming `social-bonkode-fob.jpg` now applies to the
+  new Bonkode picture. Check `gallery_events` for those names first.
+- **Group heading keys on the `/projects` Gallery tab:** the Rabale group
+  is `projects.gallery.groups.13`, so the Vindhane plant, RMC plant and HSE
+  headings move from 13, 14, 15 to 14, 15, 16. On `/gallery` the Rabale
+  group is appended (`gallery.sections.1.groups.6`) and nothing moves.
+- Keys gone: `projects.social.items.14.pending` and `.note` on `/projects`;
+  `projects.detail.photoNote.*` on `/projects/rabale-skywalk`. A saved
+  edit on any of these no longer shows.
+
+### Verified
+
+Build clean; `check-edit-keys` passes on `/projects`, `/projects/bonkode-fob`,
+`/projects/rabale-skywalk` and `/gallery`; every image on both project pages
+answers 200; CLS 0 on both pages; no em dash in the served HTML of those
+pages, `/about` or the sitemap. The two tiles, both pages and their
+galleries checked by eye at 1280 and 390.

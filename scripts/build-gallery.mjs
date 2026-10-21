@@ -108,9 +108,13 @@ const PHOTOS = [
   // Beyond the railway — the confirmed non-railway projects, one frame
   // each, shown on /projects as name + location + photograph only. See
   // OPEN-QUESTIONS.md #30 for why one frame and why these frames.
-  // `WHITE HOUSE FOB 1.jpg` is deliberately NOT the Bonkode pick: it is
-  // formerly the Matunga Z-Bridge stand-in (project-matunga-workshop-fob.jpg).
-  { out: "social-bonkode-fob.jpg", src: "Bonkode FOB/AX6A7070.JPG" },
+  // 2026-10-21 (OPEN-QUESTIONS.md #59): the Bonkode FOB folder had held
+  // two skywalks. The user split it; AX6A7054–AX6A7074 are the Rabale
+  // Skywalk (shot 09:45–10:01 on 21 Apr 2023, Bonkode 10:17–10:25), and
+  // the Bonkode tile, which was AX6A7070, is now the Bonkode frame Manas
+  // kept in the October sort (WHITE HOUSE FOB X, an edit of AX6A7098).
+  { out: "social-bonkode-fob.jpg", src: "Bonkode FOB/WHITE HOUSE FOB X.jpg" },
+  { out: "social-rabale-skywalk.jpg", src: "Rabale Skywalk/AX6A7070.JPG" },
   { out: "social-ulwe-hospital.jpg", src: "Ulwa Hospital/1.jpg" },
   { out: "social-ulwe-cidco-school.jpg", src: "Ulwa CIDCO School/school.jpg" },
   { out: "social-karanjade-health-care.jpg", src: "Karanjade Health Care/Karanjale Health Care.jpg" },
@@ -119,15 +123,31 @@ const PHOTOS = [
 
   // The same projects' further frames, for their own pages under
   // /projects/<slug> (OPEN-QUESTIONS.md #36). Each gallery opens on its
-  // social-*.jpg tile above; these follow it. Left out on purpose:
-  // AX6A7054 (a hoarding with a model's face fills the left third) and
-  // AX6A7071 (AX6A7070 again, a second later); WHITE HOUSE FOB X, the
-  // twin of the former Matunga Z-Bridge stand-in (see the note above); and
+  // social-*.jpg tile above; these follow it. Left out at first:
   // `Ulwa Hospital/ULWE HOSPITAL.jpg`, which shows the Karanjade building
-  // (#30). The two collages are cut above their inset thumbnails.
-  { out: "bonkode-fob-02.jpg", src: "Bonkode FOB/AX6A7062.JPG" },
+  // (#30), and the frames the 2026-09-28 pass below added back. The two
+  // collages are cut above their inset thumbnails.
+  // bonkode-fob-02 and -04 were Rabale frames; they are rabale-skywalk-02
+  // and -03 below.
   { out: "bonkode-fob-03.jpg", src: "Bonkode FOB/AX6A7085.JPG" },
-  { out: "bonkode-fob-04.jpg", src: "Bonkode FOB/AX6A7067.JPG" },
+  // The Rabale Skywalk, numbered in its gallery order: 02–06 on the site,
+  // 07–12 the look-alikes Manas hid (gallery-library.ts). Was:
+  // 02 = bonkode-fob-02, 03 = -04, 04 = -07, 05 = -09, 06 = -10,
+  // 07 = -08, 08 = -11, 09 = -12, 10 = -13, 11 = -14, 12 = -15.
+  // Not used: AX6A7054.CR2 (the RAW of AX6A7054.JPG), and the folder's
+  // copy of AX6A7092.CR2, which is a Bonkode frame (shot at 10:19:59,
+  // the JCB showroom of bonkode-fob-03 in it) and stays bonkode-fob-20.
+  { out: "rabale-skywalk-02.jpg", src: "Rabale Skywalk/AX6A7062.JPG" },
+  { out: "rabale-skywalk-03.jpg", src: "Rabale Skywalk/AX6A7067.JPG" },
+  { out: "rabale-skywalk-04.jpg", src: "Rabale Skywalk/AX6A7054.JPG" },
+  { out: "rabale-skywalk-05.jpg", src: "Rabale Skywalk/AX6A7059.CR2" },
+  { out: "rabale-skywalk-06.jpg", src: "Rabale Skywalk/AX6A7060.CR2" },
+  { out: "rabale-skywalk-07.jpg", src: "Rabale Skywalk/AX6A7058.CR2" },
+  { out: "rabale-skywalk-08.jpg", src: "Rabale Skywalk/AX6A7063.CR2" },
+  { out: "rabale-skywalk-09.jpg", src: "Rabale Skywalk/AX6A7064.CR2" },
+  { out: "rabale-skywalk-10.jpg", src: "Rabale Skywalk/AX6A7065.CR2" },
+  { out: "rabale-skywalk-11.jpg", src: "Rabale Skywalk/AX6A7071.JPG" },
+  { out: "rabale-skywalk-12.jpg", src: "Rabale Skywalk/AX6A7074.CR2" },
   { out: "ulwe-cidco-school-02.jpg", src: "Ulwa CIDCO School/ULWE CIDCO SCHOOL.jpg", cropBottom: 0.31 },
   { out: "kharghar-golf-course-02.jpg", src: "Kharghar Golf Course/GOLF COURSE.jpg", cropBottom: 0.28 },
   { out: "kharghar-golf-course-03.jpg", src: "Kharghar Golf Course/476809854_2089582004810785_7377283002968379122_n.jpg" },
@@ -457,18 +477,10 @@ const PHOTOS = [
   { out: "sanpada-carshed-40.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 7.10.28 PM.jpeg" },
   { out: "sanpada-carshed-41.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 7.10.40 PM (1).jpeg" },
   { out: "sanpada-carshed-42.jpg", src: "Sanpada Carshed/WhatsApp Image 2026-01-02 at 7.10.40 PM.jpeg" },
-  // bonkode-fob
+  // bonkode-fob (07–15 were Rabale frames: rabale-skywalk-* above; 27,
+  // WHITE HOUSE FOB X, is the tile now, social-bonkode-fob.jpg)
   { out: "bonkode-fob-05.jpg", src: "Bonkode FOB/1.jpg" },
   { out: "bonkode-fob-06.jpg", src: "Bonkode FOB/Add a subheading.png" },
-  { out: "bonkode-fob-07.jpg", src: "Bonkode FOB/AX6A7054.JPG" },
-  { out: "bonkode-fob-08.jpg", src: "Bonkode FOB/AX6A7058.CR2" },
-  { out: "bonkode-fob-09.jpg", src: "Bonkode FOB/AX6A7059.CR2" },
-  { out: "bonkode-fob-10.jpg", src: "Bonkode FOB/AX6A7060.CR2" },
-  { out: "bonkode-fob-11.jpg", src: "Bonkode FOB/AX6A7063.CR2" },
-  { out: "bonkode-fob-12.jpg", src: "Bonkode FOB/AX6A7064.CR2" },
-  { out: "bonkode-fob-13.jpg", src: "Bonkode FOB/AX6A7065.CR2" },
-  { out: "bonkode-fob-14.jpg", src: "Bonkode FOB/AX6A7071.JPG" },
-  { out: "bonkode-fob-15.jpg", src: "Bonkode FOB/AX6A7074.CR2" },
   { out: "bonkode-fob-16.jpg", src: "Bonkode FOB/AX6A7083 (1).CR2" },
   { out: "bonkode-fob-17.jpg", src: "Bonkode FOB/AX6A7083.CR2" },
   { out: "bonkode-fob-18.jpg", src: "Bonkode FOB/AX6A7086.CR2" },
@@ -480,7 +492,6 @@ const PHOTOS = [
   { out: "bonkode-fob-24.jpg", src: "Bonkode FOB/AX6A7103.CR2" },
   { out: "bonkode-fob-25.jpg", src: "Bonkode FOB/AX6A7104.CR2" },
   { out: "bonkode-fob-26.jpg", src: "Bonkode FOB/WHITE HOUSE FOB 1.jpg" },
-  { out: "bonkode-fob-27.jpg", src: "Bonkode FOB/WHITE HOUSE FOB X.jpg" },
   { out: "bonkode-fob-28.jpg", src: "Bonkode FOB/WHITE HOUSE FOB.CR2" },
   // kharghar-golf-course
   { out: "kharghar-golf-course-04.jpg", src: "Kharghar Golf Course/AX6A7025.CR2" },

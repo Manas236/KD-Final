@@ -418,7 +418,7 @@ export const projects = {
         title: "Bonkode FOB",
         location: "Bonkode · Navi Mumbai",
         file: "social-bonkode-fob.jpg",
-        alt: "Bonkode FOB: glazed skywalk with a lift tower at each end, spanning a busy road with traffic passing beneath",
+        alt: "Bonkode FOB: the long enclosed tubular skywalk on steel lattice trestles over a landscaped median, apartment towers behind",
       },
       {
         title: "Ulwe Hospital",
@@ -483,7 +483,10 @@ export const projects = {
          marked as one; until each arrives its tile is a `pending` tile
          like the one above them. Never a photograph of a different work.
          2026-10-15: seven arrived (OPEN-QUESTIONS.md #48), each tile now
-         `file` + `representative`; Rabale is still waiting. */
+         `file` + `representative`. 2026-10-21: Rabale needs none. Its
+         photographs had been filed with Bonkode's; the user sorted them
+         into their own folder, so its tile is a real photograph, the
+         frame that was Bonkode's tile until then (OPEN-QUESTIONS.md #59). */
       {
         title: "Ghansoli Roads & Services",
         location: "Ghansoli · Navi Mumbai",
@@ -529,10 +532,8 @@ export const projects = {
       {
         title: "Rabale Skywalk",
         location: "Rabale · Navi Mumbai",
-        pending: "Image to be added",
-        note:
-          "No photograph of this work is on record. A representative image, marked as one, " +
-          "fills this tile.",
+        file: "social-rabale-skywalk.jpg",
+        alt: "Rabale Skywalk: glazed skywalk with a lift tower at each end, spanning a busy road with traffic passing beneath",
       },
       {
         title: "NMMC School No. 54 & 55",
