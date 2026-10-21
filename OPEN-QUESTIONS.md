@@ -3651,6 +3651,12 @@ On a build of `d0bc209` against a build of this pass, both served locally.
   "Indian Railways · POH 350 → 575 Bogies/Month". WPO is part of Indian
   Railways, so it is not wrong; the homepage is locked.
 
+**Later, 2026-10-21 (#58):** answer 4 is undone at Sir's request (the
+Kharghar Centre of Excellence is its own project again, as before this
+entry), answer 6's caption gave way to a neutral one until the plant
+engineer gives his, and the Indian Railways card on `/clients` is retired
+(answer 5's open question). This entry is kept as the record of 19 Oct.
+
 ---
 
 ## 57. Edit mode: links stop navigating, Ctrl/Cmd + click and "Open" buttons go there
@@ -3728,3 +3734,170 @@ local, with the local database.
 | Visitor (no cookie): served HTML of all 42 routes | identical but for one hash: the editor loader's file name, since the chunk it imports changed. `inline-edit.js` never requested; no `<kd-open>`; tile, nav and client links navigate |
 | Visitor layout, every element (box and computed style) of all 42 routes at 360, 390 and 1280 | identical; no sideways scroll |
 | Em dashes in served HTML | 0 |
+
+---
+
+## 58. Sir's change pass, 21 Oct 2026: one About page, the nav, the careers form, the hero figures, clients, Matunga's period, the Centre of Excellence back, the Vindhane caption, certificates
+
+2026-10-21. Sir asked for nine changes; the user relayed them with every
+decision made. Applied in one pass, one commit per item, nothing deployed.
+PRE-LAUNCH.md has the list ("Sir's change pass, 2026-10-21"), the new rows
+(S18 to S20, C1 to C4) and the deploy notes ("At the next deploy: the
+2026-10-21 pass").
+
+### What changed on the site
+
+| # | Sir asked | On the site | Commit |
+| --- | --- | --- | --- |
+| 1 | The About menu's pages as one page | `/about` runs About's own bands, then Company, Capabilities, Resources, Clients and CSR, each opening on an ink header band that was its hero (kicker, an `h2` in `d2`, `d4` below 900px, the sub-paragraph; `about/PageSection.astro`) and then its card sections exactly as its page drew them (`InfoSections.astro`, InfoPage's markup moved out unchanged). Anchors `#company`, `#capabilities`, `#resources`, `#clients`, `#csr`, with `scroll-margin-top` equal to the nav. About's own CTA closes the page; the five pages' CTAs are retired. The directors appear once, the Company version with portraits (Kailash, Sarita, Shiv, Mohanlal); About's own board is retired. `/company`, `/capabilities`, `/resources`, `/clients`, `/csr` answer **301** to `/about#<section>`; the sitemap drops them. Footer hrefs, the two plant pages' back links and breadcrumbs and the RMC page's button point at the anchors (labels and order unchanged). `/about`'s title and description unchanged | `9df3e7a` |
+| 2 | HSE on the bar, CSR under About, About's items to the sections | Bar: Home · About ▾ · Projects ▾ · HSE · Careers · Contact + Get in Touch. About ▾: Company, Capabilities, Resources, Clients, CSR → `/about#…`. On `/about` a nav or footer link to a section scrolls there with no reload, smoothly where motion is allowed, and the phone drawer closes. On `/about` only About is lit; `/hse` lights HSE; a plant page still lights About and Resources | `f078002` |
+| 3 | The apply form right under Current openings | `/careers`: Current openings, Apply Here, Where We Hire, Why K.D., How to Apply, CTA. InfoPage takes `slotAfter`; no key moved | `55bd84d` |
+| 4 | The revenue figures off the hero | `home.hero.stats.0` (₹220 Cr) and `.2` (₹500 Cr) retired; 53 Yrs and 50+ keep `.1` and `.3`, one row of two at every width (two across on a phone too, where two full-width boxes looked empty). The About band and closing banner figures stay | `343e34b` |
+| 5 | The Indian Railways card off; railway links as page titles | `clients.sections.0.items.0` retired (logo file kept); six railway cards, two full rows. Matunga Workshop stays linked on WPO's card, the LHB facilities on COFMOW's. Every railway link is `work(title)`, which now refuses a title that is not a project, so the label is exactly the page's title | `86d39db` |
+| 6 | Matunga Workshop: 2018 to 2021 | A fifth hero tile on `/projects/matunga-workshop`, "2018–2021" over "Project Period" (no railway page had a year or period field; the tile is the railway pages' figure form). The LHB page untouched | `b009eee` |
+| 7 | The Centre of Excellence its own project again | #56's answer 4 undone (below). Tile and page back, no image, placeholders as before 19 Oct; the 301 gone; back in the sitemap and the studio gallery manager; the stadium's description and body as before, its third paragraph retired | `95ef4c5` |
+| 8 | A neutral caption for the Vindhane clip | `resources.plant.clip.title` "A girder loaded for dispatch at Vindhane"; the alt says the same, no project. The plant engineer gives the final one (PRE-LAUNCH.md S18). No saved edit on that key locally | `6812c2b` |
+| 9 | Certificates viewable and watermarked; a Tax Authorities card; a CIDCO card | See "Certificates" below. Cards appended: "Recognition by Indian Tax Authorities" (Sir's sentence) and "Registered with CIDCO". The "Other certifications & certificate details" placeholder (where Sir typed his sentence on 2026-10-09) retired: his saved row is untouched and simply no longer shows. Six cards, two even rows at 1280 | `bf38228` |
+
+### Calls made without asking
+
+- **The About section headers are ink bands, and `/about`'s HSE band is
+  now mist.** A header that was a hero reads as one; with About's board
+  gone, Philosophy (ink), HSE (ink) and the Company header (ink) would
+  have been three ink bands together, so HSE took #17's documented fix
+  (mist, the light-band card treatment of the same grammar). Every
+  boundary on `/about` now changes surface. A desktop change to an
+  approved band: S19 asks Sir about the page as a whole.
+- **No key renamed.** The five pages keep their own prefixes on `/about`
+  (DESIGN-SYSTEM §9 now says so); no two collide.
+- **`KNOWN_PATHS` (editable.ts, frozen) still lists the five old paths.**
+  Nothing renders there now; leaving the frozen file alone was the
+  smaller change. A stray save under one would be stored and never shown.
+- **The careers form keeps its white band and its top hairline** right
+  under the white openings band: that hairline is what separates two
+  white bands, the precedent it was made for.
+- **"How to Apply" was not reworded:** neither its wording ("Open a role
+  above") nor the openings intro ("use the form below") became untrue.
+- **Hero stats two across on a phone too**, not two stacked full-width
+  boxes ("no half-empty grid" at 360 and 390).
+- **Matunga's period is "Project Period"**, a label in the railway tiles'
+  Title Case; the social pages' "Year completed" did not fit a range.
+  The en dash is the site's range dash.
+- **The stadium's third paragraph is a `RetiredParagraph`**
+  (`{ retired: true, text }`), the retired pattern for a list of strings,
+  rather than deleted, so `projects.detail.body.2` is never reused.
+- **Two comments from the fold's commit were kept** because they record
+  facts, not the fold: Sir's 19 Oct allowance of the stadium's
+  representative image, and that the stadium has one.
+- **About keeps lighting on the plant pages** (`/resources/<plant>`), as
+  before, because a section link stands for the page it was.
+- **The certificate viewer's labels are `data-no-edit`** (changed in
+  `pages.ts`): one label on several buttons, and a Close that must close
+  in edit mode rather than open for editing.
+
+### Edit keys
+
+**Moved** (key string unchanged, page path now `/about`; a saved row
+follows by the migration below): every key of the five pages' hero
+(kicker, title, sub) and sections: `/company` 34, `/capabilities` 32,
+`/resources` 22, `/clients` 46, `/csr` 26 (160).
+
+**Retired, never to be reused:** `about.board.*` (14);
+`home.hero.stats.0.*`, `home.hero.stats.2.*` (4);
+`clients.sections.0.items.0.title`, `.links.0.label`, `.links.1.label`
+(the Indian Railways card); `hse.sections.1.items.3.pending`, `.title`,
+`.body`; on `/projects/kharghar-football-stadium`
+`projects.detail.body.2`; and, with their pages, the five pages' own
+`<page>.nav.*`, `<page>.footer.*` and `<page>.cta.*` keys (61 each).
+
+**New:** `hse.sections.1.items.5.title`, `.body` (Tax Authorities),
+`hse.sections.1.items.6.title`, `.body` (CIDCO); on
+`/projects/matunga-workshop` `projects.detail.stats.4.value`, `.label`.
+**Back** (retired on 19 Oct, live again): `projects.social.items.7.*`
+(4) and every key of `/projects/kharghar-centre-of-excellence` (84).
+
+**Same key, new text:** `clients.sections.0.items.3.links.0.label`
+("Panvel–Karjat Suburban Rail Corridor" → "Panvel–Karjat Railway Line"),
+`.3.links.2.label` ("Harbour Line FOBs" → "Harbour Line FOBs &
+Trespass-Control"), `.4.links.0.label` ("LHB Coach Maintenance
+Facilities at Matunga" → "Matunga LHB Coach Maintenance Facilities"),
+`.5.links.0.label` ("Matunga Railway Workshop" → "Matunga Workshop");
+`resources.plant.clip.title`.
+
+**Renamed:** none.
+
+### The saved-edit migration
+
+`db/migrations/2026-10-21-about-merge.sql` copies every `content_edits`
+row of `/company`, `/capabilities`, `/resources`, `/clients` and `/csr`
+to `page_path = '/about'`, in id order, with its texts, audit columns and
+`created_at`; it never updates, moves or deletes. A key `/about` already
+has is skipped (all its rows) and listed. Dry run by default; the real
+run needs `SET @kd_apply = 1`. Running it twice changes nothing. No other
+table holds a page path (gallery rows name project groups,
+`project_text_events` a project slug). Tested on a throwaway copy of the
+local database with six synthetic rows: the dry run changed nothing, the
+real run copied four rows in order and skipped the key `/about` already
+had, a second run copied none. On the local database itself, dry and
+real: no rows on the five pages, nothing to copy.
+
+### The Centre of Excellence: #56's answer 4 undone
+
+`git revert 51ae8c9 ac37677` conflicted in PRE-LAUNCH.md (edited since by
+`34e6d5d`) and was aborted. The six code files the two commits touched,
+and only they touched since, were restored to `ac37677^`; PRE-LAUNCH.md
+and `K.D.Website_Details.md` were edited by hand to record both the fold
+and the undo. #56 stays as the record of 19 Oct. Local database: no
+`content_edits`, `project_text_events` or gallery row is stranded (gallery
+rows 4 and 5, a move into the centre's group and its undo, still cancel
+out). The server must be checked the same way (PRE-LAUNCH.md deploy
+notes).
+
+### Certificates
+
+No folder of scans was in the project or its parent on 2026-10-21
+(`ISO_Certificates/`, `Tax_Certificate/`, `CIDCO_Certificate/`,
+`PWD_Licence/`), so no card has a button and no certificate detail is on
+the site; PRE-LAUNCH.md C1 to C4. Built so it works when they arrive:
+
+- `scripts/build-certificates.mjs` (`npm run certificates:build`) renders
+  a PDF's first page in Chrome, matches each ISO file to its standard by
+  reading it (the PDF's text, or `scripts/certificates.map.json` for a
+  scan), never by order, scales to 1400px, burns in a tiled diagonal
+  "K.D. Constructions · For verification only", and writes only
+  `src/assets/certificates/<name>.jpg`. Rerunnable; the same scan gives
+  the same bytes. It warns about any card whose "Valid until" is past or
+  within 60 days. Exercised end to end with synthetic, clearly marked test
+  certificates (a PDF matched by its text, a scan by the map file, a
+  single tax file), then everything it made was removed.
+- The viewer (`CertificateViewer.astro`) is a deterrent, and says so in
+  DESIGN-SYSTEM §5: the watermark is the protection.
+
+### Placeholders
+
+42 before, 45 after: +4 the Centre of Excellence (its tile, and its
+page's scope tile, "own work?" card and photograph card), −1 the retired
+`/hse` certificate-details card.
+
+### Verified
+
+On a build of this pass against a build of `437f495`, both served locally,
+with the local database.
+
+| Check | Result |
+| --- | --- |
+| Build | clean |
+| `check-edit-keys` | passes on every route it covers (28 of 38; the ten railway project pages are covered by the key snapshot below, as before). `/about` 291 keys across six prefixes, `/hse` 235, `/careers` 113, `/` 113 |
+| Every `data-edit` key, in edit mode, on every sitemap route and the 404 | 42 routes / 3,929 keys before, 38 / 3,693 after. The differences are exactly the moved, retired, new, back and same-key-new-text lists above; no key renamed; every key editable; no page error |
+| Saved edits | local rows 8 and 12 still name keys on their pages; row 7 (`projects.blocks.1`, a removed block) was not on its page before either. Every `/careers` key, every `/hse` key but `hse.sections.1.items.3.*`, and `home.hero.sub`, `home.capabilities.cards.0.body`, `.3.body` still on their pages |
+| Edit mode on `/about` | for `about.story.heading` and one key in each of Company, Capabilities, Resources, Clients and CSR: click, save, reload (editor and a fresh visitor) shows the saved text; typed back, shows the original. Local rows 13 to 24, in pairs that cancel out |
+| Em dashes | 0 in the served HTML of every route, the sitemap and robots.txt |
+| Redirects | `/company`, `/capabilities`, `/resources`, `/clients`, `/csr` (with or without a trailing slash) answer 301 to `/about#company` and so on; `/projects/kharghar-centre-of-excellence` answers 200; an unknown slug still 302 |
+| Links | 372 distinct internal hrefs, image sources and JSON-LD URLs across all pages: none answers a redirect (the 404's own canonical answers 404, as before) |
+| Sitemap | 37 URLs, each once, each 200: the five merged pages gone, the Centre of Excellence back |
+| Nav | bar Home · About · Projects · HSE · Careers · Contact; About's menu Company, Capabilities, Resources, Clients, CSR. From another page each lands with its heading under the bar (at 216px; bar 88px). On `/about` the scroll is animated, with no reload; with reduced motion it lands at once; at 360 and 390 the drawer closes after the jump. Lit: About on `/about` (no section link), HSE on `/hse`, About and Resources on a plant page |
+| Layout, every route at 360, 390 and 1280 | no sideways scroll, no keyed text off screen or clipped, no broken image, no console error; no text overlap that the baseline did not have. Content inside `<main>` identical to the baseline on every route but `/`, `/about`, `/careers`, `/hse`, `/projects`, the Matunga Workshop, stadium and Centre of Excellence pages |
+| Reveal on `/about` | scrolled at a reading pace: a block is in view for 1.0s (median) and at most 1.6s before full opacity, as on the old pages; none left hidden |
+| CLS | 0 on `/`, `/about`, `/hse`, `/careers` |
+| Certificate viewer (with test images, then removed) | opens, the canvas drawn, no `<img>`; focus on Close and kept there; right-click, drag, selection, Ctrl/Cmd+S and +P blocked; PrintScreen blanks it then restores; blurred on window blur, sharp on focus; print hides it and the buttons; Esc closes and focus returns; at 1280 and 390; in edit mode the card text edits and Esc closes the viewer without leaving edit mode. Without images: no button, no viewer on the page |
+| Database flows | 5 of 5 pass, before and after |
