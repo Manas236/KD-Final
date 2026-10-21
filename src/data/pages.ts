@@ -106,7 +106,7 @@ const projectTitles = new Set<string>([
   projects.listing.featured.title,
   ...projects.listing.medium.map((p) => p.title),
   ...projects.listing.small.map((p) => p.title),
-  ...projects.social.items.filter((p) => !p.retired).map((p) => p.title),
+  ...projects.social.items.map((p) => p.title),
 ]);
 
 /** A link to a project's own page, labelled with its title: the same

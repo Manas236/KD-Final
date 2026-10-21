@@ -17,15 +17,13 @@
    `slugify()` of the title (src/lib/slug.ts) that every card, tile and
    gallery heading links with, so a page exists for every project and
    only for a project that exists. The two title sets are disjoint; a
-   railway project would win a collision, being looked up first. A
-   project folded into another (social-projects.ts, socialRedirects)
-   answers 301 to that one's page, for good. Any other unknown slug goes
-   back to /projects.
+   railway project would win a collision, being looked up first. An
+   unknown slug goes back to /projects.
    ============================================================ */
 import ProjectDetailPage from "../../components/projects/ProjectDetailPage.astro";
 import SocialProjectPage from "../../components/projects/SocialProjectPage.astro";
 import { getProjectDetail } from "../../data/project-detail";
-import { getSocialPage, getSocialRedirect } from "../../data/social-projects";
+import { getSocialPage } from "../../data/social-projects";
 
 export const prerender = false;
 
@@ -34,8 +32,6 @@ const project = getProjectDetail(slug);
 const social = project ? undefined : getSocialPage(slug);
 
 if (!project && !social) {
-  const foldedInto = getSocialRedirect(slug);
-  if (foldedInto) return Astro.redirect(`/projects/${foldedInto}`, 301);
   return Astro.redirect("/projects", 302);
 }
 ---

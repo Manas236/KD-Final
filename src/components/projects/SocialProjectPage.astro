@@ -206,7 +206,9 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
               </p>
             </div>
           ))}
-          {detail.body.map((paragraph, i) => (
+          {/* A retired paragraph (social-projects.ts) keeps its slot and is
+              not drawn, so the ones after it keep their keys. */}
+          {detail.body.map((paragraph, i) => typeof paragraph === "string" && (
             <p class="text-body-sm text-kd-slate-2" data-edit={`${K}.body.${i}`}>
               {paragraph}
             </p>

@@ -23,10 +23,13 @@
    here — the last eight entries of SOURCES.
 
    UPDATE 2026-10-19: Sir answered the client question (Bonkode and
-   Rabale skywalks NMMC, the golf course clubhouse CIDCO) and said the
-   Kharghar Football Stadium and Centre of Excellence are one project.
-   The centre's page is gone, its facts are on the stadium's, and its
-   old URL redirects there (socialRedirects). OPEN-QUESTIONS.md #56.
+   Rabale skywalks NMMC, the golf course clubhouse CIDCO), and said the
+   Kharghar Football Stadium and Centre of Excellence were one project:
+   the centre's page went, its facts moved to the stadium's, and its URL
+   redirected there (OPEN-QUESTIONS.md #56). UPDATE 2026-10-21: Sir made
+   the centre its own project again. Its tile and page are back exactly
+   as before the fold, the redirect is gone, and the stadium's third
+   paragraph is retired (OPEN-QUESTIONS.md #58).
 
    WHAT IS KNOWN, AND FROM WHERE. For six of the eight, the source doc
    (K.D.Website_Details.md §Further Projects) gives a name, a location
@@ -107,7 +110,12 @@ interface SocialDetailSource {
       that paragraph cut to 155 at most, nothing added. Left out, the
       first paragraph itself is used. */
   readonly description?: string;
-  readonly body: readonly string[];
+  /** The paragraphs, keyed by index (`projects.detail.body.<i>`). A
+      paragraph taken off keeps its slot as a `retired` entry, so no later
+      paragraph's key moves and its key is never given to other text;
+      SocialProjectPage.astro skips it and the gates expect nothing from
+      it. */
+  readonly body: readonly (string | RetiredParagraph)[];
   /** Cards above the paragraphs — the unconfirmed project's question,
       and Lush Meadows' portal-data check. */
   readonly notes?: readonly PendingNote[];
@@ -115,6 +123,12 @@ interface SocialDetailSource {
       place of photoNote()'s "Photograph to be added" — for the works
       whose picture will be a representative image. */
   readonly photoNote?: PendingNote;
+}
+
+/** A paragraph off the page, kept for its slot and as a record. */
+export interface RetiredParagraph {
+  readonly retired: true;
+  readonly text: string;
 }
 
 const TBA = "To be added";
@@ -337,13 +351,12 @@ const SOURCES: readonly SocialDetailSource[] = [
     /* From the research the user supplied on 2026-09-28 (WIFA; Free
        Press Journal). The stadium is PLANNED at 40,000 — the copy says
        so and does not call it complete.
-       2026-10-19: Sir says the stadium and the Kharghar Centre of
-       Excellence are ONE project, so the centre's own page went and its
-       facts are here, in the third paragraph, from the same research
-       (OPEN-QUESTIONS.md #56). Nothing says K.D. built any of it: its
-       scope is still the "To be added" tile. The same FPJ article (Jul
-       2026) reports the centre largely unused for years, so nothing here
-       claims use or athlete numbers. */
+       2026-10-19 the Centre of Excellence was folded into this page (a
+       third paragraph, a rewritten description); 2026-10-21 Sir made it
+       its own project again, and both are as they were before the fold.
+       The third paragraph is retired, not removed: projects.detail.body.2
+       on this page is never given to other text (OPEN-QUESTIONS.md #56,
+       #58). */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "40,000", label: "Planned capacity" },
@@ -355,25 +368,60 @@ const SOURCES: readonly SocialDetailSource[] = [
       { pending: TBA, title: "Year completed", body: "The year K.D.'s works were handed over." },
     ],
     description:
-      "CIDCO's Football Maharashtra Centre of Excellence, Kharghar: a planned 40,000-capacity, " +
-      "FIFA-approved stadium and two training pitches inaugurated in 2022.",
+      "Part of CIDCO's Football Maharashtra Centre of Excellence in Kharghar, the " +
+      "stadium is planned as a 40,000-capacity, FIFA-approved venue.",
     body: [
       "Part of the Football Maharashtra Centre of Excellence developed by CIDCO in Kharghar, " +
         "the stadium is planned as a 40,000-capacity, FIFA-approved venue anchoring one of the " +
         "region's largest sports complexes.",
       "The wider complex brings together training pitches, a high-performance centre, a golf " +
         "course, a rugby stadium and a shooting range.",
-      /* Appended (projects.detail.body.2), so the two keys above keep
-         their text. */
-      "The Centre of Excellence's two training pitches, in Sector 33, Kharghar, were " +
-        "inaugurated in January 2022 and served as training venues for the AFC Women's Asian " +
-        "Cup and the FIFA U-17 Women's World Cup, both held in India that year.",
+      {
+        retired: true,
+        text:
+          "The Centre of Excellence's two training pitches, in Sector 33, Kharghar, were " +
+          "inaugurated in January 2022 and served as training venues for the AFC Women's Asian " +
+          "Cup and the FIFA U-17 Women's World Cup, both held in India that year.",
+      },
     ],
   },
-  /* The Kharghar Centre of Excellence had a page here until 2026-10-19,
-     when Sir said it is the stadium's project (above). Its tile is
-     `retired` in projects.ts, and its URL answers 301 to the stadium's
-     page (socialRedirects, below). */
+  {
+    /* Named ★ in the brief's at-a-glance list (docs/KD_INFO.md §7.12).
+       The facility's facts are now on record from the research the user
+       supplied on 2026-09-28 (WIFA; Free Press Journal); K.D.'s part in
+       it is not, so the "To be confirmed" card stays. The same FPJ
+       article (Jul 2026) reports the facility largely unused for years:
+       nothing here claims use or athlete numbers. */
+    title: "Kharghar Centre of Excellence",
+    eyebrow: "Sports & Recreation",
+    facts: [
+      { value: "CIDCO", label: "Client" },
+      { value: "2", label: "Training pitches" },
+      {
+        pending: TBA,
+        title: "Scope of works",
+        body: "What K.D. Constructions delivered: the pitches, the buildings, site works, or part of that.",
+      },
+      { value: "2022", label: "Pitches inaugurated" },
+    ],
+    body: [
+      "The Football Maharashtra Centre of Excellence is CIDCO's high-performance football " +
+        "facility in Sector 33, Kharghar.",
+      "Its two world-class training pitches were inaugurated in January 2022 and served as " +
+        "training venues for the AFC Women's Asian Cup and the FIFA U-17 Women's World Cup, " +
+        "both held in India that year.",
+    ],
+    notes: [
+      {
+        pending: "To be confirmed",
+        title: "K.D. Constructions' own work?",
+        body:
+          "The facility's facts are from public sources; K.D. Constructions' part in it is not " +
+          "yet confirmed. A yes keeps this page and fills the scope; a no removes the page and " +
+          "its tile on the Projects page.",
+      },
+    ],
+  },
   /* ---- The eight works from K.D.'s own list of completed works ----
      Added 2026-10-13 (OPEN-QUESTIONS.md #44). Client and scope are the
      list's "Name of Department" and "Description of Works"; the size
@@ -543,7 +591,8 @@ function build(item: SocialProject) {
   return {
     meta: {
       title: `${item.title} | K.D. Constructions`,
-      description: src.description ?? src.body[0] ?? `${item.title}, ${place}.`,
+      description:
+        src.description ?? (typeof src.body[0] === "string" ? src.body[0] : undefined) ?? `${item.title}, ${place}.`,
     },
     nav: home.nav,
     footer: home.footer,
@@ -583,31 +632,11 @@ function build(item: SocialProject) {
 export type SocialPageCopy = ReturnType<typeof build>;
 
 /** Every Beyond the railway project's page copy, keyed by the same
-    slugify() of its title that the /projects tile links with. A
-    `retired` tile has no page, so the sitemap, the studio gallery
-    manager and the page route (all of which read this) drop it too. */
+    slugify() of its title that the /projects tile links with. */
 export const socialPages: Readonly<Record<string, SocialPageCopy>> = Object.fromEntries(
-  projects.social.items.filter((item) => !item.retired).map((item) => [slugify(item.title), build(item)])
-);
-
-/** A retired tile's old slug, and the slug of the page it became part
-    of: /projects/[slug] answers 301 from one to the other, so a link or
-    a search result to the old page lands on the right one. */
-export const socialRedirects: Readonly<Record<string, string>> = Object.fromEntries(
-  projects.social.items.flatMap((item) => {
-    if (!item.retired || !item.foldedInto) return [];
-    const target = slugify(item.foldedInto);
-    if (!Object.hasOwn(socialPages, target)) {
-      throw new Error(`social-projects.ts: "${item.title}" is folded into "${item.foldedInto}", which has no page`);
-    }
-    return [[slugify(item.title), target]];
-  })
+  projects.social.items.map((item) => [slugify(item.title), build(item)])
 );
 
 export function getSocialPage(slug: string): SocialPageCopy | undefined {
   return Object.hasOwn(socialPages, slug) ? socialPages[slug] : undefined;
-}
-
-export function getSocialRedirect(slug: string): string | undefined {
-  return Object.hasOwn(socialRedirects, slug) ? socialRedirects[slug] : undefined;
 }

@@ -219,7 +219,7 @@ text: on the site as sign-offs PRE-LAUNCH.md S6–S7 until confirmed.
 - **Ulwe CIDCO School** — Ulwe (photographs in `Ulwa CIDCO School/`)
 - **Karanjade Health Care** — Karanjade (photograph in `Karanjade Health Care/`)
 - **Lush Meadows** — Kharghar, residential (photographs in `Lush Meadows/`; K.D.'s own work, not a sister concern)
-- **Kharghar Centre of Excellence** — named in the at-a-glance list above, but not covered by the session and without photography. On /projects from 2026-09-18 as a "To be confirmed" placeholder tile (PRE-LAUNCH.md 3b) and on its own page from 2026-09-19 (5h). **2026-10-19, Sir:** the Kharghar Football Stadium and the Centre of Excellence are **one project**. The centre has no tile or page of its own now; its facts are on the stadium's page, and its old address redirects there (OPEN-QUESTIONS.md #56).
+- **Kharghar Centre of Excellence** — named in the at-a-glance list above, but not covered by the session and without photography. On /projects from 2026-09-18 as a "To be confirmed" placeholder tile (PRE-LAUNCH.md 3b) and on its own page from 2026-09-19 (5h). **2026-10-19, Sir:** the Kharghar Football Stadium and the Centre of Excellence are **one project**. The centre had no tile or page of its own from then; its facts were on the stadium's page, and its old address redirected there (OPEN-QUESTIONS.md #56). **2026-10-21, Sir:** the Centre of Excellence is **its own project again**. Its tile and page are back as they were before 19 Oct ("To be confirmed", no image), the redirect is gone, and the stadium's page is as it was before the fold (OPEN-QUESTIONS.md #58).
 
 ## Civic works — from K.D.'s own list of completed works
 

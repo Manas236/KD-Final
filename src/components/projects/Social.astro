@@ -70,16 +70,11 @@ import { slugify } from "../../lib/slug";
 
 const { social } = projects;
 
-/* A `retired` tile (projects.ts) is skipped, and `i` stays each tile's
-   own array index, so the tiles after it keep their edit keys. */
-const tiles = social.items
-  .map((item, i) => ({
-    item,
-    i,
-    image: item.file ? galleryImage(item.file) : undefined,
-    href: `/projects/${slugify(item.title)}`,
-  }))
-  .filter(({ item }) => !item.retired);
+const tiles = social.items.map((item) => ({
+  item,
+  image: item.file ? galleryImage(item.file) : undefined,
+  href: `/projects/${slugify(item.title)}`,
+}));
 ---
 
 <section class="bg-kd-mist py-96" data-listing-view data-project-status="completed">
@@ -94,7 +89,7 @@ const tiles = social.items
 
     <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 mt-56">
       {
-        tiles.map(({ item, i, image, href }) =>
+        tiles.map(({ item, image, href }, i) =>
           !image ? (
             <li>
               <div
