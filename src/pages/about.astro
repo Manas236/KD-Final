@@ -18,10 +18,27 @@
    restores the alternation on both sides rather than breaking it
    further. See #20.
 
+   ONE PAGE SINCE 21 OCT 2026, at Sir's request (OPEN-QUESTIONS.md #58):
+   the pages under the About menu follow About's own bands as sections,
+   Company, Capabilities, Resources, Clients, CSR, each opening on ink
+   with what was its hero (about/PageSection.astro, aboutSections in
+   src/data/pages.ts), and About's own CTA closes the page. So the stack
+   is now
+
+     hero → story (white) → journey (mist) → vision (white)
+     → philosophy (ink) → HSE (mist) → [ink header, white, mist...] × 5
+     → CTA (ink) → footer (ink-deep)
+
+   The board band is retired (the directors are in the Company section,
+   with their portraits), and the HSE band turned mist, #17's fix, since
+   otherwise philosophy, HSE and the Company header would be three ink
+   bands in a row. Every boundary now changes surface.
+
    `page="about"` on the chrome is not decoration: it is the first
    segment of every slot key the nav and the footer write, so the nav's
    labels are `about.nav.*` here and `home.nav.*` on the homepage. See
-   the note at the top of src/data/about.ts.
+   the note at the top of src/data/about.ts. The merged sections keep
+   their own prefixes (`company.*`, `clients.*`...).
 
    Each band paints its own surface and holds its own 1280px container,
    so this file is a list and nothing else.
@@ -36,8 +53,10 @@ import Vision from "../components/about/Vision.astro";
 import Philosophy from "../components/about/Philosophy.astro";
 import Board from "../components/about/Board.astro";
 import Hse from "../components/about/Hse.astro";
+import PageSection from "../components/about/PageSection.astro";
 import Cta from "../components/about/Cta.astro";
 import { about } from "../data/about";
+import { aboutSections } from "../data/pages";
 /* The hero's backdrop, doubling as the share card — the same file
    components/about/Hero.astro draws. */
 import shareImage from "../assets/about-mankhurd-workforce.jpg";
@@ -55,6 +74,7 @@ export const prerender = false;
     <Philosophy />
     <Board />
     <Hse />
+    {aboutSections.map(({ id, page, copy }) => <PageSection id={id} page={page} copy={copy} />)}
     <Cta />
   </main>
   <SiteFooter page="about" />

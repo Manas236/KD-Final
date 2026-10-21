@@ -1,0 +1,62 @@
+---
+/* ============================================================
+   A former page, now a section of /about
+   ------------------------------------------------------------
+   21 Oct 2026, at Sir's request: Company, Capabilities, Resources,
+   Clients and CSR are sections of /about, in that order, after About's
+   own bands (aboutSections in src/data/pages.ts, OPEN-QUESTIONS.md #58).
+
+   Each opens with what was its hero, as the section's header: an ink
+   band with the kicker, the title and the sub-paragraph, at section
+   size rather than page size (the title is an <h2>, `d2` from 900px as
+   the closing headlines are, `d4` below; /about's one <h1> is its hero
+   quote). Then its card sections exactly as its page drew them
+   (InfoSections.astro), white then mist, so the sections run
+   ink, light, light, ink... and every boundary changes surface.
+
+   The header carries the anchor (`id`, /about#clients) and clears the
+   fixed 88px nav when jumped to (`scroll-margin-top`), so the kicker and
+   title are never under the bar. `data-section` marks it as a place the
+   nav may scroll to without a reload (Nav.astro).
+
+   KEYS keep the old page's prefix (`page`): `clients.hero.title`,
+   `clients.sections.1.items.0.title`, as on /clients.
+   ============================================================ */
+import Kicker from "../Kicker.astro";
+import InfoSections from "../InfoSections.astro";
+import type { InfoPageCopy } from "../../data/pages";
+
+interface Props {
+  /** The section's anchor, and its old address without the slash. */
+  id: string;
+  /** First segment of every slot key: the old page's own. */
+  page: string;
+  copy: InfoPageCopy;
+}
+
+const { id, page, copy } = Astro.props;
+const { hero, sections } = copy;
+---
+
+<section
+  id={id}
+  class="bg-kd-ink py-96 scroll-mt-[var(--kd-nav-h)]"
+  data-section
+>
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <div class="w-896 max-w-full">
+      <Kicker label={hero.kicker} editKey={`${page}.hero.kicker`} />
+      <h2
+        class="font-display text-d4 min-[900px]:text-d2 text-kd-mist mt-16"
+        data-edit={`${page}.hero.title`}
+      >
+        {hero.title}
+      </h2>
+      <p class="text-body-lg text-kd-fog mt-24 max-w-720" data-edit={`${page}.hero.sub`}>
+        {hero.sub}
+      </p>
+    </div>
+  </div>
+</section>
+
+<InfoSections page={page} sections={sections} />

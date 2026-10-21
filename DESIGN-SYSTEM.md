@@ -110,6 +110,18 @@ The homepage order is:
 > **It is not a precedent.** `OPEN-QUESTIONS.md` #17 has the reasoning and the
 > one-word fix for each. Derive `/projects` from the rules below, not from
 > `/about`'s band table.
+>
+> **Since 2026-10-21 `/about` is one long page** (`OPEN-QUESTIONS.md` #58):
+> Hero (ink) → Our Story (white) → Our Journey (mist) → Vision (white) →
+> Philosophy (ink) → HSE (**mist**, #17's fix) → then Company,
+> Capabilities, Resources, Clients and CSR, each an **ink header band**
+> (what was its hero: kicker, an `h2` in `d2`, `d4` below 900px, and the
+> sub-paragraph; `about/PageSection.astro`) followed by its card sections,
+> white then mist (`InfoSections.astro`) → its own closing CTA (ink) →
+> footer. The Board band is retired; the directors are in the Company
+> section with their portraits. Every boundary changes surface. Each header
+> carries its anchor (`/about#clients`) with `scroll-margin-top` equal to
+> the nav's height, so a jump never hides its heading under the bar.
 
 `/projects` arrived after this was written, as its own export, and is:
 
@@ -428,6 +440,20 @@ Rules:
 - **Never renumber, never reuse a retired key.** A key is a database identity:
   rows in `content_edits` are filed under it. Changing `home.about.body1` to
   `home.about.lead` orphans every edit made to it.
+- **A page merged into another keeps its own prefix.** The one case so far:
+  since 2026-10-21 `/about` carries `/company`, `/capabilities`,
+  `/resources`, `/clients` and `/csr` as sections (`aboutSections` in
+  `src/data/pages.ts`), and their keys still begin `company.`,
+  `capabilities.`, `resources.`, `clients.`, `csr.`. So `/about` is the one
+  page with more than one first segment, and that list is the whole of
+  them; `scripts/check-edit-keys.mjs` checks each against its own export.
+  A stored edit follows by a copy of its row to `page_path = '/about'`
+  (`db/migrations/2026-10-21-about-merge.sql`), never by a renamed key.
+- **Retire, don't delete.** An item taken off the page keeps its array slot
+  with `retired: true` and its renderer skips it, so no later index (and no
+  stored key) moves; both gates expect nothing from a retired object. In use
+  on nav links, the homepage hero stats, InfoPage cards (`InfoSections`),
+  `about.board` and the merged pages' CTAs.
 - Lowercase, dot-separated, `[a-z0-9-]` within a segment. Array items are
   indexed: `home.capabilities.cards.0.title`.
 - Copy lives in `src/data/<page>.ts` as a typed object. **No hardcoded strings

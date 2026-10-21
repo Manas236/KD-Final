@@ -76,3 +76,14 @@ kd-schema-*.sql
 
 # dated copies taken next to a file before editing it (name.bak.YYYYMMDD-HHMM)
 *.bak.*
+
+# local database dumps taken on the development PC before a pass
+/backups/
+
+# certificate scans as received (scripts/build-certificates.mjs reads them
+# and writes only watermarked copies into src/assets/certificates/); the
+# originals are never committed and never served
+/ISO_Certificates/
+/Tax_Certificate/
+/CIDCO_Certificate/
+/PWD_Licence/

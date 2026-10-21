@@ -9,6 +9,12 @@
    its export, and a shared object would report the other five pages'
    copy as missing.
 
+   Since 21 Oct 2026 /company, /capabilities, /resources, /clients and
+   /csr are sections of /about (aboutSections, at the foot of this file)
+   and their old addresses redirect there. Their exports stay as they
+   were, keys and all; only /hse, /contact and /careers are still pages
+   of their own here.
+
    Sources: K.D.Website_Details.md (authoritative) and KD_INFO.md for
    the contact details and fleet categories. Fleet categories are
    REPRESENTATIVE — never render a count that sums them (KD_INFO §5.1).
@@ -74,7 +80,14 @@ export interface InfoPageCopy {
     readonly statsNote?: string;
   };
   readonly sections: readonly InfoSection[];
-  readonly cta: { readonly kicker: string; readonly headline: string; readonly button: NavLink };
+  /** `retired` on a page merged into /about (aboutSections, below): its
+      closing CTA renders nowhere, and the gates expect no slot for it. */
+  readonly cta: {
+    readonly kicker: string;
+    readonly headline: string;
+    readonly button: NavLink;
+    readonly retired?: boolean;
+  };
   readonly footer: typeof home.footer;
 }
 
@@ -191,6 +204,7 @@ export const capabilities: InfoPageCopy = {
     kicker: "Our Work",
     headline: "See these capabilities at work.",
     button: { label: "View Projects", href: "/projects" },
+    retired: true,
   },
 };
 
@@ -255,6 +269,7 @@ export const resources: InfoPageCopy = {
     kicker: "Capabilities",
     headline: "Resources that power every discipline.",
     button: { label: "Our Capabilities", href: "/capabilities" },
+    retired: true,
   },
 };
 
@@ -899,6 +914,7 @@ export const csr: InfoPageCopy = {
     kicker: "Our Work",
     headline: "Every project is a community investment.",
     button: { label: "View Projects", href: "/projects" },
+    retired: true,
   },
 };
 
@@ -1017,6 +1033,7 @@ export const company: InfoPageCopy = {
     kicker: "Our Story",
     headline: "Five decades of engineering integrity.",
     button: { label: "About K.D. Constructions", href: "/about" },
+    retired: true,
   },
 };
 
@@ -1181,8 +1198,30 @@ export const clients: InfoPageCopy = {
     kicker: "Work With Us",
     headline: "Build with a partner of five decades.",
     button: { label: "Contact Us", href: "/contact" },
+    retired: true,
   },
 };
+
+/* /about's sections, 21 Oct 2026, at Sir's request: the pages under
+   the About menu are one page, About's own bands first and then these
+   five, in this order, each opening with what was its hero
+   (OPEN-QUESTIONS.md #58). `id` is the section's anchor (/about#clients)
+   and its old address, /<id>, answers 301 there (src/pages/<id>.astro);
+   the sitemap drops those addresses.
+
+   EACH KEEPS ITS OWN KEY PREFIX. `page` is the first segment of every key
+   the section writes, so `clients.sections.1.items.0.title` on /about is
+   the key it was on /clients, and a stored edit moves with a copy of its
+   row (db/migrations/2026-10-21-about-merge.sql), never a rename. Only the
+   hero and the sections render on /about: each page's nav and footer are
+   /about's (`about.*`), and its CTA is retired (/about keeps its own). */
+export const aboutSections = [
+  { id: "company", page: "company", copy: company },
+  { id: "capabilities", page: "capabilities", copy: capabilities },
+  { id: "resources", page: "resources", copy: resources },
+  { id: "clients", page: "clients", copy: clients },
+  { id: "csr", page: "csr", copy: csr },
+] as const satisfies readonly { id: string; page: string; copy: InfoPageCopy }[];
 
 /* /contact's map band (Oct 2 2026) — a live Google Maps embed between
    the cards and the CTA, rendered by src/pages/contact.astro. `embed`

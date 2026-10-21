@@ -119,7 +119,7 @@ export const rmcPlant = {
       body:
         "With concrete, steel and heavy equipment all under its own control, K.D. Constructions " +
         "delivers from the first foundation to final commissioning with fewer outside dependencies.",
-      button: { label: "Our Capabilities", href: "/capabilities" } as NavLink,
+      button: { label: "Our Capabilities", href: "/about#capabilities" } as NavLink,
     },
   },
 } as const;

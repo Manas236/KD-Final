@@ -266,7 +266,14 @@ export const about = {
     ] as readonly PhilosophyCard[],
   },
 
+  /* RETIRED 21 Oct 2026, at Sir's request: the directors appear once on
+     /about, in its Company section, with their portraits (company in
+     src/data/pages.ts, Kailash, Sarita, Shiv, Mohanlal). Board.astro
+     draws nothing for a retired board; the object stays so that no
+     `about.board.*` key is ever given to other text, and the gates
+     expect no slot for it (OPEN-QUESTIONS.md #58). */
   board: {
+    retired: true,
     kicker: "Board of Directors",
     heading: "The Stewards of the Vision",
     /* Kailash, not Mohanlal, is the Founding Director — the two roles and

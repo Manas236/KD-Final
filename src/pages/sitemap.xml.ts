@@ -17,7 +17,9 @@
         each becomes a route the way Astro's router would spell it.
         Dynamic files (`[slug]`) are skipped here and covered below;
         `/studio/*` is the editor's sign-in and is noindex; `/404` is
-        the error page and is not a destination.
+        the error page and is not a destination. The five pages merged
+        into /about on 21 Oct 2026 (aboutSections) are 301s to its
+        sections now, not pages, and are left out.
      2. PROJECT PAGES — one URL per entry in project-detail.ts and one
         per "Beyond the railway" page in social-projects.ts, the same
         `slugify()` the cards and the route use (src/lib/slug.ts).
@@ -47,7 +49,7 @@ import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
 import { rmcPlant } from "../data/rmc-plant";
 import { galleryPage } from "../data/gallery-page";
-import { hse } from "../data/pages";
+import { aboutSections, hse } from "../data/pages";
 
 export const prerender = false;
 
@@ -84,11 +86,15 @@ function routeOf(file: string): string {
   ).replace(/\/+$/, "") || "/";
 }
 
+/* /company and the rest: redirects to sections of /about. */
+const MOVED_TO_ABOUT = new Set<string>(aboutSections.map(({ id }) => `/${id}`));
+
 function staticRoutes(): string[] {
   const files = Object.keys(import.meta.glob("./**/*.astro"));
   return files
     .filter((f) => !f.includes("[") && !f.startsWith("./studio/") && f !== "./404.astro")
     .map(routeOf)
+    .filter((route) => !MOVED_TO_ABOUT.has(route))
     .sort();
 }
 

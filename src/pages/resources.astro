@@ -1,8 +1,11 @@
 ---
-import InfoPage from "../components/InfoPage.astro";
-import { resources } from "../data/pages";
-
+/* /resources has been a section of /about since 21 Oct 2026, at Sir's
+   request: the pages under the About menu are one page now
+   (aboutSections in src/data/pages.ts, OPEN-QUESTIONS.md #58). This
+   address answers 301 to the section, for good, so a bookmark or a
+   search result lands on it; the sitemap no longer lists it, and no
+   link on the site points here. */
 export const prerender = false;
----
 
-<InfoPage page="resources" copy={resources} />
+return Astro.redirect("/about#resources", 301);
+---

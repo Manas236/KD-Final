@@ -1,6 +1,6 @@
 ---
 /* ============================================================
-   Health, Safety & Environment — ink band, four cards
+   Health, Safety & Environment — mist band, four cards
    ------------------------------------------------------------
    Differentiator grammar (DESIGN-SYSTEM §4.3) at four across instead of
    three: a claim and its argument, no numeral, no gap, the dividers
@@ -28,6 +28,15 @@
    columns: on cards 2-4 at four across, on the right-hand card of each
    pair at two, and nowhere when the cards stack. Every card keeps its
    own top border, which is the line between rows.
+
+   MIST SINCE 21 OCT 2026, not the export's ink. When /about became one
+   page (OPEN-QUESTIONS.md #58) the white Board band between Philosophy
+   and this one retired, and the Company section that now follows opens
+   on ink: on ink this band would have run three ink bands together.
+   Mist is the fix OPEN-QUESTIONS.md #17 named for it. The cards take the
+   light-band treatment of the same grammar (Differentiators.astro):
+   card 1's top border in `--kd-mint-2`, hairlines in
+   `--kd-card-border-light`, ink titles, slate-2 bodies.
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -35,12 +44,12 @@ import Kicker from "../Kicker.astro";
 const { hse } = about;
 ---
 
-<section class="bg-kd-ink py-96">
+<section class="bg-kd-mist py-96">
   <div class="max-w-kd mx-auto px-24 sm:px-48">
-    <Kicker label={hse.kicker} editKey="about.hse.kicker" />
+    <Kicker label={hse.kicker} editKey="about.hse.kicker" tone="light" />
 
     <h2
-      class="font-display text-d3 text-kd-mist mt-16"
+      class="font-display text-d3 text-kd-ink mt-16"
       data-edit="about.hse.heading"
     >
       {hse.heading}
@@ -52,20 +61,20 @@ const { hse } = about;
           <li
             class:list={[
               "border-t-2 p-32",
-              i === 0 ? "border-t-kd-mint" : "border-t-kd-nav-border",
-              i > 0 && "lg:border-l lg:border-l-kd-nav-border",
-              i % 2 === 1 && "sm:max-lg:border-l sm:max-lg:border-l-kd-nav-border",
+              i === 0 ? "border-t-kd-mint-2" : "border-t-kd-card-border-light",
+              i > 0 && "lg:border-l lg:border-l-kd-card-border-light",
+              i % 2 === 1 && "sm:max-lg:border-l sm:max-lg:border-l-kd-card-border-light",
             ]}
-            data-card="dark"
+            data-card="light"
           >
             <h3
-              class="font-display text-d9 text-kd-mist"
+              class="font-display text-d9 text-kd-ink"
               data-edit={`about.hse.cards.${i}.title`}
             >
               {card.title}
             </h3>
             <p
-              class="text-body-sm text-kd-fog mt-16"
+              class="text-body-sm text-kd-slate-2 mt-16"
               data-edit={`about.hse.cards.${i}.body`}
             >
               {card.body}

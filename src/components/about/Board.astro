@@ -26,6 +26,11 @@
 
    CARDS RENDER IN `board.order`, not array order. `i` is the director's
    index (his edit keys), `at` his place on the page (the column rule).
+
+   RETIRED 21 Oct 2026 (`board.retired`, src/data/about.ts): the
+   directors appear once on /about, with their portraits, in its Company
+   section. Nothing is drawn while the board is retired; its keys are
+   never given to other text (OPEN-QUESTIONS.md #58).
    ============================================================ */
 import { about } from "../../data/about";
 import Kicker from "../Kicker.astro";
@@ -33,6 +38,7 @@ import Kicker from "../Kicker.astro";
 const { board } = about;
 ---
 
+{!board.retired && (
 <section class="bg-white py-96">
   <div class="max-w-kd mx-auto px-24 sm:px-48">
     <Kicker label={board.kicker} editKey="about.board.kicker" tone="light" />
@@ -82,3 +88,4 @@ const { board } = about;
     </ul>
   </div>
 </section>
+)}

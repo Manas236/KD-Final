@@ -49,15 +49,20 @@ const PAGE = process.argv[3] || "/";
    ------------------------------------------------------------ */
 const PAGES = {
   "/": { module: "../src/data/home.ts", exportName: "home", prefix: "home" },
-  "/about": { module: "../src/data/about.ts", exportName: "about", prefix: "about" },
+  /* `merged`: since 21 Oct 2026 /about also carries /company,
+     /capabilities, /resources, /clients and /csr as sections, each under
+     its OLD prefix, so a stored edit keeps its key (aboutSections in
+     src/data/pages.ts, OPEN-QUESTIONS.md #58). This is the one page
+     whose keys have more than one first segment, and the list of them
+     is exactly aboutSections: for each, its hero (kicker, title, sub,
+     now the section's header) and its sections are checked against its
+     own export under its own prefix. Its nav, footer and meta are
+     /about's, and its CTA is retired. Those five addresses are 301s
+     now, so they are not routes here. */
+  "/about": { module: "../src/data/about.ts", exportName: "about", prefix: "about", merged: true },
   "/projects": { module: "../src/data/projects.ts", exportName: "projects", prefix: "projects" },
-  "/capabilities": { module: "../src/data/pages.ts", exportName: "capabilities", prefix: "capabilities" },
-  "/resources": { module: "../src/data/pages.ts", exportName: "resources", prefix: "resources" },
   "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse" },
-  "/clients": { module: "../src/data/pages.ts", exportName: "clients", prefix: "clients" },
   "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
-  "/csr": { module: "../src/data/pages.ts", exportName: "csr", prefix: "csr" },
-  "/company": { module: "../src/data/pages.ts", exportName: "company", prefix: "company" },
   /* `runtime`: the job-posting cards come from the database, not the
      module (src/pages/careers.astro), so keys and copy under these
      paths are neither required on the page nor orphans when present. */
@@ -131,7 +136,18 @@ function leaves(node, path = [], out = []) {
 }
 
 const { meta, ...body } = copy;
-const copyLeaves = leaves(body);
+/* Each leaf carries the prefix its key is written under: the route's,
+   or on /about a merged section's own (see PAGES). */
+const copyLeaves = leaves(body).map((l) => ({ ...l, prefix: route.prefix }));
+if (route.merged) {
+  const { aboutSections } = await import("../src/data/pages.ts");
+  for (const { page: prefix, copy: section } of aboutSections) {
+    const { kicker, title, sub } = section.hero;
+    for (const l of leaves({ hero: { kicker, title, sub }, sections: section.sections })) {
+      copyLeaves.push({ ...l, prefix });
+    }
+  }
+}
 
 async function launch() {
   try {
@@ -257,7 +273,7 @@ const rendered = copyLeaves.filter((l) => !attrPaths.test(l.path) && !isRuntime(
 
 let bad = 0;
 for (const leaf of rendered) {
-  const key = route.prefix + "." + leaf.path;
+  const key = leaf.prefix + "." + leaf.path;
   const slot = slotByKey.get(key);
   const wanted = leaf.value.replace(/\s+/g, " ").trim();
   if (!slot) {
@@ -272,9 +288,10 @@ if (!bad) pass(`all ${rendered.length} copy strings render into their own slot, 
 
 /* A slot on the page whose key is not in home.ts is a hardcoded string
    or a stale key — both are defects. */
-const copyKeys = new Set(rendered.map((l) => route.prefix + "." + l.path));
+const copyKeys = new Set(rendered.map((l) => l.prefix + "." + l.path));
+/* Runtime paths are relative to a key's own prefix, its first segment. */
 const orphans = report.slots.filter(
-  (s) => !copyKeys.has(s.key) && !isRuntime(s.key.slice(route.prefix.length + 1))
+  (s) => !copyKeys.has(s.key) && !isRuntime(s.key.slice(s.key.indexOf(".") + 1))
 );
 if (orphans.length === 0)
   pass(`no slot on the page is missing from ${route.module.replace("../", "")}`);

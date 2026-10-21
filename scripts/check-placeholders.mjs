@@ -26,13 +26,14 @@ const MODULES = [
   { file: "../src/data/home.ts", exportName: "home", route: "/" },
   { file: "../src/data/about.ts", exportName: "about", route: "/about" },
   { file: "../src/data/projects.ts", exportName: "projects", route: "/projects" },
-  { file: "../src/data/pages.ts", exportName: "capabilities", route: "/capabilities" },
-  { file: "../src/data/pages.ts", exportName: "resources", route: "/resources" },
+  /* Sections of /about since 21 Oct 2026 (aboutSections in pages.ts). */
+  { file: "../src/data/pages.ts", exportName: "capabilities", route: "/about" },
+  { file: "../src/data/pages.ts", exportName: "resources", route: "/about" },
   { file: "../src/data/pages.ts", exportName: "hse", route: "/hse" },
-  { file: "../src/data/pages.ts", exportName: "clients", route: "/clients" },
+  { file: "../src/data/pages.ts", exportName: "clients", route: "/about" },
   { file: "../src/data/pages.ts", exportName: "contact", route: "/contact" },
-  { file: "../src/data/pages.ts", exportName: "csr", route: "/csr" },
-  { file: "../src/data/pages.ts", exportName: "company", route: "/company" },
+  { file: "../src/data/pages.ts", exportName: "csr", route: "/about" },
+  { file: "../src/data/pages.ts", exportName: "company", route: "/about" },
   { file: "../src/data/pages.ts", exportName: "careers", route: "/careers" },
   { file: "../src/data/plant.ts", exportName: "plant", route: "/resources/vindhane-plant" },
   { file: "../src/data/rmc-plant.ts", exportName: "rmcPlant", route: "/resources/rmc-plant-karjat" },
@@ -46,9 +47,12 @@ const MODULES = [
 ];
 
 /* Walk any object; yield every object that carries a `pending` field,
-   with the path that reached it. */
+   with the path that reached it. A `retired` object renders nowhere
+   (its slot is only kept so later indexes do not move), so nothing in it
+   is on the site. */
 function* pendingItems(value, path = []) {
   if (!value || typeof value !== "object") return;
+  if (value.retired === true) return;
   if (typeof value.pending === "string") yield { path, item: value };
   for (const [k, v] of Object.entries(value)) yield* pendingItems(v, [...path, k]);
 }
