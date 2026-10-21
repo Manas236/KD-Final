@@ -120,16 +120,22 @@ export const home = {
        2026-10-09 (client feedback): Gallery left About — it lives under
        Projects only — so entry 8 is `retired`, not deleted. The Projects
        tab "Steel Fabrication & Erection" became "Plants" (entry 15), and
-       "Company" (/company) was appended under About, first in its menu. */
+       "Company" (/company) was appended under About, first in its menu.
+
+       2026-10-21 (Sir): the About menu's pages are sections of /about
+       now, so its items jump there (/about#company ... /about#csr; Nav.astro
+       scrolls on /about itself). HSE left the menu for CSR's place on the
+       bar (order 2.2), and CSR joined the menu, last (its index, 7, sorts
+       it after Clients). Labels unchanged. OPEN-QUESTIONS.md #58. */
     links: [
       { label: "About", href: "/about", order: 1 },
-      { label: "Capabilities", href: "/capabilities", parent: "/about" },
+      { label: "Capabilities", href: "/about#capabilities", parent: "/about" },
       { label: "Projects", href: "/projects", order: 2 },
-      { label: "Resources", href: "/resources", parent: "/about" },
-      { label: "HSE", href: "/hse", parent: "/about" },
-      { label: "Clients", href: "/clients", parent: "/about" },
+      { label: "Resources", href: "/about#resources", parent: "/about" },
+      { label: "HSE", href: "/hse", order: 2.2 },
+      { label: "Clients", href: "/about#clients", parent: "/about" },
       { label: "Contact", href: "/contact", order: 3 },
-      { label: "CSR", href: "/csr", order: 2.2 },
+      { label: "CSR", href: "/about#csr", parent: "/about" },
       { label: "Gallery", href: "/gallery", parent: "/about", retired: true },
       { label: "Home", href: "/", order: 0 },
       { label: "Careers", href: "/careers", order: 2.5 },
@@ -138,7 +144,7 @@ export const home = {
       { label: "Completed", href: "/projects#completed", parent: "/projects" },
       { label: "Gallery", href: "/projects#gallery", parent: "/projects" },
       { label: "Plants", href: "/projects#plants", parent: "/projects" },
-      { label: "Company", href: "/company", parent: "/about", order: 0 },
+      { label: "Company", href: "/about#company", parent: "/about", order: 0 },
     ] as readonly NavLink[],
     cta: { label: "Get in Touch", href: "/contact" } as NavLink,
   },

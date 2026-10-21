@@ -17,7 +17,9 @@
    The header carries the anchor (`id`, /about#clients) and clears the
    fixed 88px nav when jumped to (`scroll-margin-top`), so the kicker and
    title are never under the bar. `data-section` marks it as a place the
-   nav may scroll to without a reload (Nav.astro).
+   nav may scroll to without a reload (Nav.astro), which then gives it
+   focus so the keyboard carries on from there; it is not a control, so
+   it draws no focus ring.
 
    KEYS keep the old page's prefix (`page`): `clients.hero.title`,
    `clients.sections.1.items.0.title`, as on /clients.
@@ -40,7 +42,7 @@ const { hero, sections } = copy;
 
 <section
   id={id}
-  class="bg-kd-ink py-96 scroll-mt-[var(--kd-nav-h)]"
+  class="bg-kd-ink py-96 scroll-mt-[var(--kd-nav-h)] focus:outline-none"
   data-section
 >
   <div class="max-w-kd mx-auto px-24 sm:px-48">

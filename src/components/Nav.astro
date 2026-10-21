@@ -17,6 +17,11 @@
    (page_path, edit_key) and /api/content returns one path's rows, so a
    nav edit made on one page was never going to paint on another.
 
+   SECTIONS OF /about (21 Oct 2026). The About menu's items are
+   /about#company and the rest: from another page they load /about at
+   the section; on /about the script below scrolls there instead. A
+   section link is not lit on /about (see isHere).
+
    MOBILE, per DESIGN-SYSTEM.md §10: collapses to a drawer below 900px —
    the logo stays in the bar; the links and the CTA move into a panel
    under it, toggled by a hamburger button. The two link lists (bar and
@@ -25,6 +30,7 @@
    repeats markup per instance instead of abstracting a one-off.
    ============================================================ */
 import { home } from "../data/home";
+import { aboutSections } from "../data/pages";
 
 interface Props {
   /** First segment of every slot key this component writes. */
@@ -54,10 +60,19 @@ const childrenOf = (href: string) =>
 const topLevel = indexed
   .filter(({ link }) => !link.parent)
   .sort((a, b) => (a.link.order ?? a.i) - (b.link.order ?? b.i));
+/* A link to a section of /about (21 Oct 2026, aboutSections) stands for
+   the page that section used to be: it is never lit on /about itself,
+   where every section shares the path, but it is on the pages that sat
+   beneath that page, so /resources/vindhane-plant still lights About and,
+   in its menu, Resources. */
+const sectionPage = new Map<string, string>(aboutSections.map(({ id }) => [`/about#${id}`, `/${id}`]));
 /* A link is current on its own page and on any page beneath it, so
    Projects stays lit on /projects/<slug>. Home matches only itself. */
-const isHere = (href: string) =>
-  here === href || (href !== "/" && here.startsWith(href + "/"));
+const isHere = (href: string) => {
+  const was = sectionPage.get(href);
+  if (was) return here.startsWith(was + "/");
+  return here === href || (href !== "/" && here.startsWith(href + "/"));
+};
 ---
 
 {/* OVERLAY (homepage, ≥1080px only): while the hero is under the bar,
@@ -300,6 +315,36 @@ const isHere = (href: string) =>
 
   drawer?.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest("a")) setOpen(false);
+  });
+
+  /* A nav or footer link to a section of the page already open
+     (/about#clients on /about, 21 Oct 2026): scroll to it without a
+     reload. Smooth only where motion.css's own conditions allow motion
+     (kd-motion, not edit mode, no reduced motion), otherwise a plain
+     jump; the browser's own smooth scroll, so no timing lives here. The
+     drawer has already closed (above). Focus moves to the section, so
+     the open drop-down lets go and the keyboard carries on from there.
+     Only targets marked `data-section` (about/PageSection.astro): the
+     Projects menu's #tabs are Filters.astro's, and keep the hash
+     navigation it listens for. In edit mode the editor has already
+     stopped the click, and this leaves it alone. */
+  const root = document.documentElement;
+  document.addEventListener("click", (event) => {
+    if (event.defaultPrevented || event.button !== 0) return;
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const link = (event.target as Element).closest?.<HTMLAnchorElement>("header a[href*='#'], footer a[href*='#']");
+    if (!link || link.pathname !== location.pathname || link.search !== location.search || !link.hash) return;
+    const section = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+    if (!section?.hasAttribute("data-section")) return;
+    event.preventDefault();
+    const smooth =
+      root.classList.contains("kd-motion") &&
+      !root.hasAttribute("data-nt-mode") &&
+      matchMedia("(prefers-reduced-motion: no-preference)").matches;
+    if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+    section.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+    section.setAttribute("tabindex", "-1");
+    section.focus({ preventScroll: true });
   });
 
   const header = document.querySelector<HTMLElement>("header[data-overlay]");
