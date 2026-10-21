@@ -78,9 +78,12 @@ interface Props {
   /** First segment of every slot key, and the route name. */
   page: string;
   copy: InfoPageCopy;
+  /** Draw the page's own bands (the default slot) right after the
+      section with this `id` instead of after the last one (/careers). */
+  slotAfter?: string;
 }
 
-const { page, copy } = Astro.props;
+const { page, copy, slotAfter } = Astro.props;
 const { hero, sections, cta } = copy;
 ---
 
@@ -128,8 +131,9 @@ const { hero, sections, cta } = copy;
       </div>
     </section>
 
-    {/* The card sections, then the page's own bands before the CTA (/hse). */}
-    <InfoSections page={page} sections={sections}>
+    {/* The card sections, then the page's own bands before the CTA (/hse),
+        or after a named section (/careers). */}
+    <InfoSections page={page} sections={sections} slotAfter={slotAfter}>
       <slot />
     </InfoSections>
 

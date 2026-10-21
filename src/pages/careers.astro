@@ -1,10 +1,12 @@
 ---
 /* /careers. The page copy is src/data/pages.ts; the "Current openings"
    cards are read from the database on every request (src/lib/job-postings.ts)
-   and managed in edit mode by src/scripts/careers-editor.js. Under
-   them, before the CTA, the "Apply here" band: a form that sends the
+   and managed in edit mode by src/scripts/careers-editor.js. Right
+   under them (since 21 Oct 2026, at Sir's request; until then it came
+   after the last section), the "Apply here" band: a form that sends the
    applicant's details and resume to HR (src/scripts/apply-form.js →
-   src/pages/api/apply.ts). */
+   src/pages/api/apply.ts). InfoPage's `slotAfter` places it; it is the
+   same band and the same keys. */
 import InfoPage from "../components/InfoPage.astro";
 import Kicker from "../components/Kicker.astro";
 import Arrow from "../components/Arrow.astro";
@@ -43,7 +45,7 @@ const copy = {
 Astro.response.headers.set("Cache-Control", "no-store");
 ---
 
-<InfoPage page="careers" copy={copy}>
+<InfoPage page="careers" copy={copy} slotAfter="openings">
   <section id="apply" class="bg-white py-96 border-t border-t-kd-card-border-light">
     <div class="max-w-kd mx-auto px-24 sm:px-48 grid gap-48 lg:grid-cols-[5fr_7fr]">
       <div>

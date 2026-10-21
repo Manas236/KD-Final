@@ -17,7 +17,9 @@
    surface (DESIGN-SYSTEM §2).
 
    The default slot is a page's own band (/hse's site record) and comes
-   after the last section.
+   after the last section, or right after the section whose `id` is
+   `slotAfter` (/careers: the Apply Here form under Current openings,
+   21 Oct 2026). Only where it is drawn moves; no key does.
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "./Kicker.astro";
@@ -29,15 +31,20 @@ interface Props {
   /** First segment of every slot key. */
   page: string;
   sections: readonly InfoSection[];
+  /** The `id` of the section the default slot follows. Without one, or
+      with an id no section has, the slot follows the last section. */
+  slotAfter?: string;
 }
 
-const { page, sections } = Astro.props;
+const { page, sections, slotAfter } = Astro.props;
+const placed = !!slotAfter && sections.some((section) => section.id === slotAfter);
 const withLogos = sections.map((section) => section.items.some((item) => item.logo));
 const withPortraits = sections.map((section) => section.items.some((item) => item.portrait));
 ---
 
 {
   sections.map((section, s) => (
+    <Fragment>
     <section id={section.id} class:list={["py-96", s % 2 === 0 ? "bg-white" : "bg-kd-mist"]}>
       <div class="max-w-kd mx-auto px-24 sm:px-48">
         <Kicker
@@ -200,7 +207,9 @@ const withPortraits = sections.map((section) => section.items.some((item) => ite
         </ul>
       </div>
     </section>
+    {placed && section.id === slotAfter && <slot />}
+    </Fragment>
   ))
 }
 
-<slot />
+{!placed && <slot />}
