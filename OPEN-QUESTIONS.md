@@ -4052,3 +4052,36 @@ when the window loses focus and sharpens on return; right-click is
 suppressed; Esc closes and focus returns; no page errors, no sideways
 scroll. The certificates, put back together, checked by eye: no seams.
 The script is idempotent (same bytes on a second run).
+
+## 61. The Vindhane clip's caption: "Mankhurd deck"
+
+2026-10-22. The user's brief: the clip beside the paragraphs on
+`/resources/vindhane-plant`, neutral since #58, is captioned "Mankhurd
+deck". This answers PRE-LAUNCH.md S18.
+
+### What changed
+
+- `src/data/plant.ts`, `plant.clip.title`: "A girder loaded for dispatch
+  at Vindhane" -> **"Mankhurd deck"**.
+- `plant.clip.alt` (the video's `aria-label`; the clip has no `title`
+  attribute) opens with the caption: "Mankhurd deck: a long painted steel
+  girder loaded on a multi-axle trailer for dispatch in the Vindhane plant
+  yard, held on a crane's chain, the fabrication shed behind".
+- Unchanged: the line above the caption, "Plant yard, Vindhane"
+  (`resources.plant.clip.where`), the video and poster files, and every
+  other Vindhane text. The clip is drawn on that one page only.
+
+### Edit keys
+
+Same key, `resources.plant.clip.title`, nothing added, moved or gone. The
+alt has no key. The local database has no saved edit on it; **on the
+server, a saved `content_edits` row on `resources.plant.clip.title` would
+still show its own text**, so check for one at the next deploy.
+
+### Verified
+
+Build clean; across the 37 pages of the sitemap plus `/404` and
+`/studio/login`, only `/resources/vindhane-plant` changed, in the caption
+and the `aria-label` alone; no em dash in any of them; `check-edit-keys`
+passes on the page; placeholders 43, unchanged. The tile checked by eye at
+1440 and 390.

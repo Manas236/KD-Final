@@ -122,14 +122,16 @@ export const plant = {
        2026-10-21, Sir: the plant engineer's word goes for this clip, so
        until he gives the caption it names no project: the title and the
        alt say only what the clip shows (OPEN-QUESTIONS.md #58;
-       PRE-LAUNCH.md has the row for his caption). */
+       PRE-LAUNCH.md has the row for his caption).
+       2026-10-22: the caption is "Mankhurd deck", and the alt opens
+       with it (PRE-LAUNCH.md S18, OPEN-QUESTIONS.md #61). */
     clip: {
       video: "vindhane-girder-dispatch",
       alt:
-        "A long painted steel girder loaded on a multi-axle trailer for dispatch in the " +
-        "Vindhane plant yard, held on a crane's chain, the fabrication shed behind",
+        "Mankhurd deck: a long painted steel girder loaded on a multi-axle trailer for " +
+        "dispatch in the Vindhane plant yard, held on a crane's chain, the fabrication shed behind",
       where: "Plant yard, Vindhane",
-      title: "A girder loaded for dispatch at Vindhane",
+      title: "Mankhurd deck",
     },
 
     products: {
