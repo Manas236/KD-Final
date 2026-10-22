@@ -94,6 +94,8 @@ document says the content is unverified, so they need a yes before launch.
 | ~~S18~~ | ~~`/resources/vindhane-plant` · The Plant · the clip's caption and alt text~~ | ✅ **Answered 2026-10-22** (the user's brief): the caption is **"Mankhurd deck"**, and the alt opens with it ("Mankhurd deck: a long painted steel girder loaded on a multi-axle trailer for dispatch in the Vindhane plant yard, …"); the line above it, "Plant yard, Vindhane", is unchanged (key `resources.plant.clip.title`, OPEN-QUESTIONS.md #61). The question was: **Owner: the plant engineer (via Sir).** Sir, 2026-10-21: the plant engineer's word goes for this clip. Until he gives it, the caption is neutral, "A girder loaded for dispatch at Vindhane", and the alt names no project (key `resources.plant.clip.title`, OPEN-QUESTIONS.md #58). On his word: put his caption in `src/data/plant.ts` (`plant.clip.title`, and `alt` to match) | The 2026-10-19 caption named the Mankhurd FOB on Sir's earlier word (S17) |
 | S19 | `/about` · the order of the sections | **For Sir:** "On the About page, the sections now run About, Company, Capabilities, Resources, Clients, CSR. Is this order OK?" A different order is one list (`aboutSections` in `src/data/pages.ts`); no key moves with it | Sir's change pass, 2026-10-21 (OPEN-QUESTIONS.md #58): the About menu's pages became one page, in the order the brief gave |
 | S20 | `/hse` · Certifications · the PWD electrical licence card | **For Sir:** "Do we have a scan of the PWD electrical licence to show on the site like the ISO certificates?" With one, it goes in `PWD_Licence/` and gets a "View certificate" button like the others (row C4) | Sir's change pass, 2026-10-21 (OPEN-QUESTIONS.md #58) |
+| S21 | `/projects/solapur-vande-bharat-maintenance-depot`, `/projects/lower-parel-railway-redevelopment`, `/projects/panvel-karjat-railway-line`, `/projects/mumbai-harbour-line-station-redevelopment` · hero, and the same four cards on `/projects` | **For Sir:** "Four project pages show a photograph of other K.D. work because we have none of the project itself: Solapur (a Vande Bharat rake in a Matunga shed), Lower Parel (a platform, from the Nhava Sheva folder), Panvel–Karjat (the workforce at Mankhurd) and Harbour Line Station Redevelopment (a station under construction, also from the Nhava Sheva folder). Since 22 Oct 2026 their descriptions for search engines and link previews say 'Representative image'; nothing is written on the page. Can you send a photograph of each project, or confirm these may stay?" A photograph replaces the stand-in (`image` in `src/data/project-detail.ts`, and drop its `imageKind`); a yes may add a visible "Representative image" caption, which is a desktop change | The pre-launch SEO check, 2026-10-22 (OPEN-QUESTIONS.md #19b, #62) |
+| S22 | `/gallery` · Safety on Site, and the Gallery tab on `/projects` · photographs `hse-07` to `hse-39` | **For Amritanshu, K.D.'s HSE executive:** "33 photographs from the 75,000 safe man-hours celebration at Mankhurd share four captions, so search engines see the same description up to nine times. If you can tell us who is receiving each certificate (role or crew, no names needed) or anything else that tells one from the next, each gets its own caption. Several look like the same moment taken twice: say which to drop." Captions are changed in `/studio/gallery` (never in code once one is saved there) | The pre-launch SEO check, 2026-10-22: the captions were written in a cycle of four (OPEN-QUESTIONS.md #62) |
 
 ---
 
@@ -308,6 +310,16 @@ Run on the server by its own Claude Code session, as always (CLAUDE.md). In this
    It only copies rows to `/about` (never moves or deletes), skips a key `/about` already has, and is safe to run twice. Keep both outputs for the report.
 5. **Build, restart** (steps 4 and 5 above). Editors hard-refresh once.
 6. **After, read-only:** every latest `content_edits` row on `/about`, `/hse`, `/projects/kharghar-football-stadium` and `/projects/kharghar-centre-of-excellence` names a `data-edit` key that is on that page now (none stranded); `/company`, `/capabilities`, `/resources`, `/clients`, `/csr` answer 301 to `/about#<section>`; `/projects/kharghar-centre-of-excellence` answers 200; the sitemap lists 37 URLs; every sitemap page loads.
+
+### At the next deploy: the 2026-10-22 search and share pass (OPEN-QUESTIONS.md #62)
+
+No schema change and no saved-edit migration. Before pulling, read-only: any
+`gallery_events` row with `action = 'caption'` on `matunga-workshop-10.jpg` or
+`matunga-workshop-31.jpg` (their baseline captions changed; a saved one keeps
+showing, which is fine, but say so in the report). After the restart:
+`/about/` answers 301 to `/about`, a made-up `/projects/x` answers 404 with the
+site's 404 page, `/studio/<slug>` and `/api/content?path=/` answer as before,
+and the `og:image` of `/` and of one project page opens as a 1200 × 630 JPEG.
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

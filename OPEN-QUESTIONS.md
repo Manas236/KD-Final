@@ -4085,3 +4085,156 @@ Build clean; across the 37 pages of the sitemap plus `/404` and
 and the `aria-label` alone; no em dash in any of them; `check-edit-keys`
 passes on the page; placeholders 43, unchanged. The tile checked by eye at
 1440 and 390.
+
+## 62. Search and share pass: titles, one address per page, share images, alt text, structured data
+
+2026-10-22, afternoon. From the read-only pre-launch SEO and image check
+of the same morning (its tables are outside the repo). Manas's decisions:
+the launch domain is kdconstructions.net (the legal copy stays as it
+is); the photo credit metadata (EXIF/XMP) and the launch-day switches
+(site URL, `SITE_NOINDEX`, the nginx `X-Robots-Tag`) are not in this
+pass; the four stand-in photographs are labelled, not removed. Nothing a
+visitor sees on screen changed, except the two Matunga captions below.
+
+### Head and routing
+
+- **Titles in the house format.** `/about`: "About | K.D. Constructions"
+  (was "… · Founded 1973, Incorporated 2004"); `/projects`: "Projects |
+  K.D. Constructions" (was "… · Portfolio"). The longer lines are now
+  each page's `ogTitle`, the way the homepage does it.
+- **One address per page.** A path ending in "/" answers 301 to the same
+  path without it, query string kept (`src/middleware.ts`); `/studio`,
+  `/api`, `/_astro`, `/_image`, `/media`, `/video` and file paths are
+  left alone. The canonical drops a trailing slash too. Old addresses
+  with a slash (`/company/`) take two hops now: `/company/` -> `/company`
+  -> `/about#company`.
+- **Unknown project addresses are a 404**, the site's own page with a
+  404 status, the same bodyless answer the studio gives. They were a 302
+  to `/projects`, a soft 404.
+- **Share images** (`src/lib/share-image.ts`): a 1200 × 630 JPEG
+  cover-crop of each page's share photograph, the size actually served
+  in `og:image:width/height`, and `og:image:type`. Three photographs are
+  smaller than that and are never enlarged: the Matunga LHB shed (1024 ×
+  538), Ulwe CIDCO School (955 × 501), Karanjade (1105 × 580). Three keep
+  their subject with a crop focus, per photograph: the Mankhurd workforce
+  (bottom), the Karjat batching plant and the Karanjade health centre
+  (top). Every crop was checked by eye. Pages without a photograph keep
+  the 1200 × 630 PNG card.
+- **`og:image:alt` on every page**, and `twitter:image:alt`. `/about` and
+  `/projects` use their hero's alt. The homepage's share picture is not
+  its hero (the Nhava Sheva aerial, kept from before the Uran loop), so
+  it has its own words, `home.meta.shareAlt`.
+- **Robots.** `max-image-preview:large` on public pages, but only while
+  `SITE_NOINDEX` is off; with it on, the pages carry no robots meta, as
+  before. A noindex page (the 404, the studio) has no canonical.
+- `lang="en-IN"` (as `og:locale`), and no `<meta name="generator">`.
+
+### Alt text
+
+- **Heroes** that were `""`: `/` "Aerial view of Uran railway station, a
+  K.D. Constructions project on the Nerul–Uran line"; `/projects` "Uran
+  railway station, a K.D. Constructions project for Central Railway";
+  `/about` "K.D. Constructions workforce on site at Mankhurd". They sit
+  behind `aria-hidden`, so they are for search engines and the share
+  card.
+- **Client logos**: a `logoAlt` on each card (`src/data/pages.ts`),
+  "<Client> logo"; the WPO card's mark is the Indian Railways roundel, so
+  "Indian Railways logo". The footer's K.D. logo stays `alt=""`.
+- **Every gallery photograph's alt is composed in one place**,
+  `src/lib/gallery-alt.ts`: "<Project> by K.D. Constructions.
+  <caption>", "K.D. Constructions' <Plant>. <caption>", "K.D.
+  Constructions HSE. <caption>". GalleryGrid (and so the lightbox), the
+  studio manager and the sitemap all use it. The caption is whatever it
+  is today; no caption was edited for this. Two composed alts run over
+  125 characters, kept as they are: `matunga-workshop-fob-02` (126) and
+  `vindhane-plant-11` (128); a shorter caption in the studio fixes either.
+- **About thirty single photographs** (heroes, cards, the `/hse` record,
+  the clip labels) now name K.D. Constructions, each checked against the
+  photograph. The four representative images' alts and the Vindhane clip's
+  label are under 125 characters; the clip's still opens "Mankhurd deck"
+  and no longer names Vindhane.
+- **The four stand-ins** say they are representative (`imageKind:
+  "stand-in"` in `project-detail.ts`), on the hero, the `/projects` card,
+  the sitemap image title and `og:image:alt`, with no project or place
+  claimed: Solapur ("Representative image: K.D. Constructions railway shed
+  work, a Vande Bharat trainset inside a maintenance shed"), Lower Parel,
+  Panvel–Karjat, Harbour Line Station Redevelopment. They stay in the
+  sitemap. Panvel–Karjat shares its own photograph now
+  (`panvel-karjat-03.jpg`, the track-panel lift), its hero unchanged.
+  PHOTOS.md traces two of them further than the site said: the Lower
+  Parel frame (A10) and the Harbour Line one (B12) are both from the
+  Nhava Sheva folder. PRE-LAUNCH.md S21.
+- **Duplicate captions.** `matunga-workshop-10` and `-31` shared one; each
+  photograph plainly shows a different view, so each has its own
+  baseline caption now ("Name wall and the water channel along the
+  entrance walk"; "Name wall seen head-on, its fountain lit, at the
+  workshop entrance"). These are the one visible change. A caption saved
+  in the studio for either file still wins. The 33 HSE photographs
+  `hse-07` to `hse-39` keep their four shared captions: all are
+  certificate handovers at the same celebration, and nothing in the
+  photographs tells them apart beyond the people in them. PRE-LAUNCH.md
+  S22.
+- **Studio caption guard.** A new caption (studio edit or upload) with an
+  em dash, a file name ("IMG_1234", "WhatsApp Image …", ".jpg") or over
+  120 characters (was 200) is refused with a plain message. Captions
+  already saved are untouched and still show; putting back a photograph's
+  original caption always passes.
+
+### Structured data
+
+- Organization: `hasCredential`, the three ISO certificates read from the
+  `/hse` cards (number, QRO Certification LLP, valid until 2029-05-19);
+  `contactPoint`, the Business Enquiries card (switchboard and
+  infra@kdconstructions.net); the telephone now written as /contact's,
+  "+912227815380". `founder` still waits for S1.
+- Homepage: a `WebSite` block, publisher the Organization.
+- `/contact`: the GeneralContractor names the Organization as its
+  `parentOrganization` and carries the e-mail.
+- Project pages: a `WebPage` block with `primaryImageOfPage`, the hero as
+  an ImageObject. A K.D. photograph, stand-ins included, names K.D. as
+  creator and credit; the Matunga Workshop rendering and the AI
+  representative images do not, and their captions say what they are.
+
+### Edit keys
+
+None added, moved or renumbered. The new fields are properties
+(`logoAlt`, `shareAlt`, `ogTitle`, `imageKind`, `shareFile`); alt text,
+titles and structured data have no edit slots, so no saved edit can be
+shadowed or overwritten. The two Matunga captions are gallery captions,
+replayed under any saved studio caption.
+
+### For the next deploy
+
+Pull, build, restart. Read-only before it: any `gallery_events` caption
+row for `matunga-workshop-10.jpg` or `-31.jpg` (if there is one, Sir's
+caption keeps showing); after it, `/about/` answers 301, a made-up
+`/projects/…` answers 404, and the share image of any project page opens.
+`PUBLIC_SITE_URL` and the nginx header are launch-day items, not this
+deploy's.
+
+### Verified
+
+Built against a stand-in https origin and crawled: 37 sitemap pages, each
+title, description, canonical, `og:*` and share image checked (declared
+size = served size on every page, no WebP share image left, `og:image:alt`
+on all 38 including the 404); every JSON-LD block parses and its 88 URLs
+answer 200; 0 photographs of K.D. work without "K.D." in their alt, 0
+empty alts but the footer logo, 33 shared alts left (S22); 407 sitemap
+image titles, all naming K.D.; no em dash in any served page, the sitemap
+or robots.txt. `release` build: the site-URL gate passes, the placeholder
+gate stops it, 43, as it must. `check-edit-keys` passes on all 28 routes
+it covers; CLS 0 on `/`, `/about`, `/hse`, `/careers`, `/projects`;
+compared element by element with `5b2f811` at 360, 390 and 1280 on all
+38 pages, the only difference is the two Matunga captions (on
+`/projects/matunga-workshop`, `/gallery` and the `/projects` Gallery
+tab). Edit mode saves, shows to a signed-out visitor and is put back on
+`/`, `/about` and `/projects/sanpada-carshed`. The caption guard refuses
+an em dash, three kinds of file name and 121 characters; all 354
+baseline captions already meet the new rules.
+
+**Found, not changed (before this pass too):** edit mode cannot save a
+key with a capital letter (`RE_EDIT_KEY` in `src/lib/editable.ts` allows
+`a-z`, `0-9` and hyphens): 36 such keys are on the site, among them every
+project page's `projects.detail.overviewKicker`, `backLabel`,
+`ctaHeadline`, the footer's `legalName` and the `statsNote` lines. The
+save answers "Could not identify the text on the page."
