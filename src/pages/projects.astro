@@ -43,7 +43,13 @@ import shareImage from "../assets/hero-uran-station.jpg";
 export const prerender = false;
 ---
 
-<BaseLayout title={projects.meta.title} description={projects.meta.description} image={shareImage}>
+<BaseLayout
+  title={projects.meta.title}
+  ogTitle={projects.meta.ogTitle}
+  description={projects.meta.description}
+  image={shareImage}
+  imageAlt={projects.hero.backdropAlt}
+>
   <Nav page="projects" />
   <main>
     <Hero />

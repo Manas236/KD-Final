@@ -64,7 +64,13 @@ import shareImage from "../assets/about-mankhurd-workforce.jpg";
 export const prerender = false;
 ---
 
-<BaseLayout title={about.meta.title} description={about.meta.description} image={shareImage}>
+<BaseLayout
+  title={about.meta.title}
+  ogTitle={about.meta.ogTitle}
+  description={about.meta.description}
+  image={shareImage}
+  imageAlt={about.hero.backdropAlt}
+>
   <Nav page="about" />
   <main>
     <Hero />

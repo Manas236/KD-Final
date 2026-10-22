@@ -267,7 +267,10 @@ const matungaParts: readonly ProjectGallery[] = [
     parent: "Matunga Workshop",
     label: "Civil Works",
     photos: [
-      { file: "matunga-workshop-10.jpg", caption: "Name wall and water feature at the workshop entrance" },
+      /* 10 and 31 shared one caption until 22 Oct 2026; each now says what
+         its own frame shows (a baseline caption: one saved in the studio
+         still wins). */
+      { file: "matunga-workshop-10.jpg", caption: "Name wall and the water channel along the entrance walk" },
       { file: "matunga-workshop-16.jpg", caption: "Office block side elevation and service lane" },
       { file: "matunga-workshop-17.jpg", caption: "Renovated two-storey block with a landscaped forecourt" },
       { file: "matunga-workshop-18.jpg", caption: "Shed facade under scaffold netting, covered coach entry below" },
@@ -276,7 +279,7 @@ const matungaParts: readonly ProjectGallery[] = [
       { file: "matunga-workshop-25.jpg", caption: "Planting bed along the office block" },
       { file: "matunga-workshop-27.jpg", caption: "Paved drive to the office block entrance" },
       { file: "matunga-workshop-29.jpg", caption: "Potted palms lining the entrance walk" },
-      { file: "matunga-workshop-31.jpg", caption: "Name wall and water feature at the workshop entrance" },
+      { file: "matunga-workshop-31.jpg", caption: "Name wall seen head-on, its fountain lit, at the workshop entrance" },
       { file: "matunga-workshop-34.jpg", caption: "Stone planters and the name wall from the side" },
       { file: "matunga-workshop-38.jpg", caption: "Boundary screens, with the workshop gate beyond" },
       { file: "matunga-workshop-39.jpg", caption: "Planted bed along the tiled boundary wall" },
@@ -542,4 +545,13 @@ export function galleryHref(group: ProjectGallery): string {
 
 export function getGallery(projectTitle: string): ProjectGallery | undefined {
   return projectGalleries.find((g) => g.project === projectTitle);
+}
+
+/** How a group's photographs read in their alt text (src/lib/gallery-alt.ts):
+    the two plants and the HSE group in their own words, every other group,
+    a split project's part included, as a project. */
+export function altKindOf(project: string): "project" | "plant" | "hse" {
+  if (plantGalleries.some((g) => g.project === project)) return "plant";
+  if (hseGalleries.some((g) => g.project === project)) return "hse";
+  return "project";
 }

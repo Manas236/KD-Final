@@ -23,14 +23,22 @@ import Differentiators from "../components/Differentiators.astro";
 import ClosingCta from "../components/ClosingCta.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { home } from "../data/home";
-/* The hero's backdrop, doubling as the share card — the same file
-   components/Hero.astro draws. */
+/* The share card: the Nhava Sheva aerial. It was the hero's backdrop
+   until the Uran loop replaced it (2026-10-15) and stayed the share
+   picture, so its alt text is its own (home.meta.shareAlt), not the
+   hero's. */
 import shareImage from "../assets/hero-nhava-sheva-station.jpg";
 
 export const prerender = false;
 ---
 
-<BaseLayout title={home.meta.title} ogTitle={home.meta.ogTitle} description={home.meta.description} image={shareImage}>
+<BaseLayout
+  title={home.meta.title}
+  ogTitle={home.meta.ogTitle}
+  description={home.meta.description}
+  image={shareImage}
+  imageAlt={home.meta.shareAlt}
+>
   <Nav overlay />
   <main>
     <Hero />

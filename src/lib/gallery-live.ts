@@ -306,15 +306,49 @@ export async function readEvents(): Promise<GalleryEvent[] | null> {
   }
 }
 
-/** Longest caption, in characters. */
-export const MAX_CAPTION = 200;
+/** Longest caption a NEW save may have, in characters. It was 200 until
+    22 Oct 2026: a caption is also the photograph's alt text, with the
+    project's name and "K.D. Constructions" around it (src/lib/gallery-alt.ts),
+    and search engines and screen readers both want that short. */
+export const MAX_CAPTION = 120;
 
-/** A caption cleaned and checked, or the reason it cannot be used. */
-export function checkCaption(raw: unknown): { caption: string } | { error: string } {
+/* The client's rule (CLAUDE.md): no em dash anywhere a visitor can see.
+   Spelled as a char code so this file holds none either. */
+const RE_EM_DASH = new RegExp(String.fromCharCode(0x2014));
+/* A camera's or phone's file name, or a file extension: "IMG_1234",
+   "DSC01234", "AX6A7092", "WhatsApp Image 2026-01-02", "site.jpg". */
+const RE_FILE_NAME =
+  /\.(?:jpe?g|png|webp|heic|heif|gif|tiff?|bmp)\b|\b(?:IMG|DSC|DSCN|DCIM|PXL|MVIMG|AX6A)[ _-]?\d{3,}|\bWhatsApp Image\b/i;
+
+/** A caption cleaned and checked, or the reason it cannot be used.
+
+    The rules apply to NEW captions only (since 22 Oct 2026). `keep` is a
+    caption the photograph already has, its original (what "Restore
+    original caption" sends): putting that back always passes, so a
+    caption saved before the rules is never stranded. Captions already in
+    gallery_events are replayed as they are and never pass through here. */
+export function checkCaption(raw: unknown, keep?: string | null): { caption: string } | { error: string } {
   const caption = cleanText(raw);
   if (!caption) return { error: "A caption cannot be empty." };
-  if (caption.length > MAX_CAPTION) return { error: `Keep captions under ${MAX_CAPTION} characters.` };
+  if (keep != null && caption === keep) return { caption };
+  if (RE_EM_DASH.test(caption)) {
+    return { error: "Please use a comma or a full stop instead of the long dash." };
+  }
+  if (RE_FILE_NAME.test(caption)) {
+    return { error: "That looks like a file name. Describe what the photo shows instead." };
+  }
+  if (caption.length > MAX_CAPTION) return { error: `Keep captions to ${MAX_CAPTION} characters or fewer.` };
   return { caption };
+}
+
+/** The caption a photograph shipped with, or was uploaded with: what
+    "Restore original caption" in the studio puts back. */
+export function baseCaptionOf(state: LiveState, file: unknown): string | null {
+  for (const photos of state.groups.values()) {
+    const photo = photos.find((p) => p.file === file);
+    if (photo) return photo.baseCaption;
+  }
+  return null;
 }
 
 /** Width and height of every studio upload, from gallery_uploads. The

@@ -13,6 +13,8 @@ import "../styles/global.css";
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { CACHE_PREFIX } from "../lib/editable";
+import { shareRendition } from "../lib/share-image";
+import { isNoindexDeployment } from "../lib/staging";
 import { organization } from "../data/organization";
 import logo from "../assets/kd-logo-mint.jpg";
 
@@ -44,62 +46,102 @@ interface Props {
       a link to this page. A page's own hero photograph, where it has
       one; a page that passes none gets the designed 1200×630 card. */
   image?: ImageMetadata;
-  /** The photograph's alt text, where the page has it to hand. Omitted,
-      no og:image:alt is written for a photograph; the designed card
-      always carries its own. */
+  /** The photograph's alt text, for og:image:alt. Every page that passes
+      an `image` passes this too; the designed card carries its own. */
   imageAlt?: string;
   /** Home → … → this page, for the BreadcrumbList a search result
       shows in place of the raw URL. Only pages below the top level
       pass one; the last crumb is the page itself. */
   breadcrumbs?: readonly { name: string; path: string }[];
+  /** A project page's main photograph, for the WebPage block's
+      primaryImageOfPage: the hero, at the size the hero draws it, so the
+      URL is the one already in the page. `credit` is false for a picture
+      that is not K.D.'s own photograph (a representative image, an
+      architect's rendering): the block then names no creator. */
+  primaryImage?: {
+    image: ImageMetadata;
+    width: number;
+    height: number;
+    caption: string;
+    credit: boolean;
+  };
 }
 
-const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs } = Astro.props;
+const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs, primaryImage } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
+/* One address per page. "/about/" answers too (src/middleware.ts sends
+   it to "/about" with a 301), so the canonical drops a trailing slash
+   rather than repeating whichever form was asked for. */
+const canonical = new URL(Astro.url.pathname.replace(/\/+$/, "") || "/", Astro.site);
 
 /* ---------- Share card ----------
-   A page's own photograph, in the same rendition the hero draws, so the
-   crawler fetches one file. A page with no photograph — /company,
-   /contact, /privacy, a project still waiting for its picture — gets
+   A page's own photograph, as a 1200 × 630 JPEG crop of it made for
+   link previews (src/lib/share-image.ts), with the size actually served
+   written into og:image:width/height. A page with no photograph
+   (/contact, /privacy, a project still waiting for its picture) gets
    the designed card instead: public/share-card.png, the logo and the
    company name, written by scripts/build-share-card.mjs. So every link
    to the site previews with a picture.
 
    Absolute either way, because og:image must be, and built on
-   Astro.site — PUBLIC_SITE_URL — so it follows the site to whatever
+   Astro.site (PUBLIC_SITE_URL), so it follows the site to whatever
    origin it is deployed on. */
-const OG = { width: 1551, height: 700 };
 const CARD = {
   src: "/share-card.png",
   width: 1200,
   height: 630,
+  type: "image/png",
   alt: `${organization.name} logo and company name`,
 };
-const photo = image ? await getImage({ src: image, ...OG }) : null;
+const photo = image ? await shareRendition(image) : null;
 const share = photo
-  ? { url: new URL(photo.src, Astro.site).href, ...OG, alt: imageAlt }
-  : { url: new URL(CARD.src, Astro.site).href, width: CARD.width, height: CARD.height, alt: CARD.alt };
+  ? {
+      url: new URL(photo.src, Astro.site).href,
+      width: photo.width,
+      height: photo.height,
+      type: "image/jpeg",
+      alt: imageAlt,
+    }
+  : { url: new URL(CARD.src, Astro.site).href, width: CARD.width, height: CARD.height, type: CARD.type, alt: CARD.alt };
+
+/* ---------- Robots ----------
+   A noindex page (the 404, the studio) says so and names no canonical:
+   there is no address of its own to point a search engine at. Every
+   other page asks for large image previews, except on a test deployment
+   (SITE_NOINDEX=1), where the X-Robots-Tag header already says noindex
+   on every response (src/middleware.ts) and the page adds nothing. */
+const largePreviews = !noindex && !isNoindexDeployment();
 
 /* ---------- Structured data ----------
-   Two JSON-LD blocks, per docs/SEO.md "Schema recommendations":
+   JSON-LD blocks, per docs/SEO.md "Schema recommendations":
 
    Organization, on EVERY page. The facts are src/data/organization.ts,
-   which reads what it can from home.footer so the two cannot drift;
-   its header says what is withheld and why. The logo is the nav's.
+   which reads what it can from home.footer, /contact and /hse so they
+   cannot drift; its header says what is withheld and why. The logo is
+   the nav's.
+
+   WebSite, on the homepage only, naming the Organization as its
+   publisher: what a search result shows as the site's name.
 
    BreadcrumbList, on pages that pass `breadcrumbs`. A search result
    for a project page then reads "Home › Projects › Sanpada Carshed"
    rather than the URL.
 
+   WebPage, on pages that pass `primaryImage` (the project pages): the
+   page and its main photograph, an ImageObject. A K.D. photograph names
+   K.D. as creator and credit; a representative image or a rendering does
+   not, and its caption says what it is.
+
    Serialised with `<\\/` escaped: a "</script>" inside a JSON string
    would end the tag early. */
 const logoUrl = new URL((await getImage({ src: logo, width: logo.width })).src, Astro.site).href;
+const organizationId = new URL("/#organization", Astro.site).href;
+const websiteId = new URL("/#website", Astro.site).href;
 
 const organizationLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": new URL("/#organization", Astro.site).href,
+  "@id": organizationId,
   name: organization.name,
   legalName: organization.legalName,
   url: Astro.site?.href,
@@ -110,10 +152,59 @@ const organizationLd = {
   address: { "@type": "PostalAddress", ...organization.address },
   telephone: organization.telephone,
   email: organization.email,
+  contactPoint: { "@type": "ContactPoint", ...organization.contactPoint },
   sameAs: organization.sameAs,
   memberOf: { "@type": "Organization", name: organization.memberOf },
   areaServed: organization.areaServed,
+  hasCredential: organization.credentials.map((c) => ({
+    "@type": "EducationalOccupationalCredential",
+    name: c.name,
+    ...(c.description && { description: c.description }),
+    credentialCategory: "certification",
+    identifier: c.number,
+    ...(c.issuer && { recognizedBy: { "@type": "Organization", name: c.issuer } }),
+    ...(c.validUntil && { expires: c.validUntil }),
+  })),
 };
+
+const websiteLd = canonical.pathname === "/" && {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: Astro.site?.href,
+  name: organization.name,
+  alternateName: organization.legalName,
+  inLanguage: "en-IN",
+  publisher: { "@id": organizationId },
+};
+
+const primary = primaryImage
+  ? await getImage({ src: primaryImage.image, width: primaryImage.width, height: primaryImage.height })
+  : null;
+const webPageLd = primaryImage &&
+  primary && {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${canonical.href}#webpage`,
+    url: canonical.href,
+    name: title,
+    description,
+    inLanguage: "en-IN",
+    isPartOf: { "@id": websiteId },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      /* No width or height: a photograph narrower than the size the hero
+         asks for is served smaller (never enlarged), so a stated size
+         could be wrong. */
+      contentUrl: new URL(primary.src, Astro.site).href,
+      caption: primaryImage.caption,
+      ...(primaryImage.credit && {
+        creator: { "@id": organizationId },
+        creditText: organization.name,
+        copyrightNotice: organization.name,
+      }),
+    },
+  };
 
 const breadcrumbLd = breadcrumbs && {
   "@context": "https://schema.org",
@@ -221,16 +312,16 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <link rel="canonical" href={canonical} />
+    {largePreviews && <meta name="robots" content="max-image-preview:large" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
 
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={description} />
@@ -239,18 +330,22 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
     <meta property="og:site_name" content={organization.name} />
     <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content={share.url} />
+    <meta property="og:image:type" content={share.type} />
     <meta property="og:image:width" content={String(share.width)} />
     <meta property="og:image:height" content={String(share.height)} />
     {share.alt && <meta property="og:image:alt" content={share.alt} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={share.url} />
+    {share.alt && <meta name="twitter:image:alt" content={share.alt} />}
 
     <!-- The KD monogram on mint, cut from the logo by scripts/build-favicon.mjs. -->
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <script type="application/ld+json" set:html={jsonLd(organizationLd)} />
+    {websiteLd && <script type="application/ld+json" set:html={jsonLd(websiteLd)} />}
     {breadcrumbLd && <script type="application/ld+json" set:html={jsonLd(breadcrumbLd)} />}
+    {webPageLd && <script type="application/ld+json" set:html={jsonLd(webPageLd)} />}
 
     <link rel="preload" as="font" type="font/woff2" href={frauncesLatin} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={frauncesLatinExt} crossorigin />

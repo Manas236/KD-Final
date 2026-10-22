@@ -97,7 +97,10 @@ export const about = {
   /* Head only, and assembled from approved fragments rather than
      written fresh — see OPEN-QUESTIONS.md #7. */
   meta: {
-    title: "About | K.D. Constructions · Founded 1973, Incorporated 2004",
+    /* The tab and the search result: the house format, "<Page> | K.D.
+       Constructions" (22 Oct 2026). The longer line is the share title. */
+    title: "About | K.D. Constructions",
+    ogTitle: "About | K.D. Constructions · Founded 1973, Incorporated 2004",
     description: META_DESCRIPTION,
   },
 
@@ -120,7 +123,10 @@ export const about = {
       name: "Founded 1973",
       meta: "Incorporated 2004",
     } as MetaPair,
-    backdropAlt: "",
+    /* Since 22 Oct 2026: the photograph is K.D.'s own workforce, so it
+       says so; it was "" (decorative). Behind aria-hidden, so it is for
+       search engines and the share card, not read aloud. */
+    backdropAlt: "K.D. Constructions workforce on site at Mankhurd",
   },
 
   story: {

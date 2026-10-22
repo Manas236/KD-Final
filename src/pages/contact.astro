@@ -34,9 +34,13 @@
                      if that URL ever stops carrying one
      url, logo       the site's origin, and the logo file the
                      Organization block names
+     email           the Business Enquiries card's address, the one the
+                     Organization block names too (since 22 Oct 2026)
+     parentOrganization  the Organization block's @id, so a search engine
+                     reads the office as that company's, not a second one
 
-   Nothing else: no opening hours, rating, price range or founding year
-   — none of them is on the site. It sits in the body because this page
+   Nothing else: no opening hours, rating, price range or founding year,
+   none of them is on the site. It sits in the body because this page
    reaches BaseLayout through InfoPage; a JSON-LD block is read wherever
    it is, and the key check skips scripts.
    ============================================================ */
@@ -45,7 +49,7 @@ import InfoPage from "../components/InfoPage.astro";
 import Kicker from "../components/Kicker.astro";
 import Arrow from "../components/Arrow.astro";
 import { contact } from "../data/pages";
-import { organization } from "../data/organization";
+import { e164, organization } from "../data/organization";
 import logo from "../assets/kd-logo-mint.jpg";
 
 export const prerender = false;
@@ -53,12 +57,13 @@ export const prerender = false;
 const { map } = contact;
 
 /* "tel:02227815380" -> "+912227815380": the card writes the landline
-   the way it is dialled in India; schema wants the international form. */
+   the way it is dialled in India; schema wants the international form,
+   written the same way as the Organization block's (e164()). */
 const telephone = contact.sections
   .flatMap((section) => section.items)
   .flatMap((item) => item.links ?? [])
   .filter((link) => link.href.startsWith("tel:"))
-  .map((link) => link.href.slice(4).replace(/^0/, "+91"));
+  .map((link) => e164(link.href));
 
 const pin = map.embed.match(/[?&]ll=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
 
@@ -69,7 +74,9 @@ const officeLd = {
   name: organization.name,
   url: Astro.site?.href,
   logo: new URL((await getImage({ src: logo, width: logo.width })).src, Astro.site).href,
+  parentOrganization: { "@id": new URL("/#organization", Astro.site).href },
   telephone,
+  email: organization.email,
   address: { "@type": "PostalAddress", ...organization.address },
   ...(pin && {
     geo: { "@type": "GeoCoordinates", latitude: Number(pin[1]), longitude: Number(pin[2]) },

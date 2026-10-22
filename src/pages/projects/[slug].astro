@@ -17,8 +17,13 @@
    `slugify()` of the title (src/lib/slug.ts) that every card, tile and
    gallery heading links with, so a page exists for every project and
    only for a project that exists. The two title sets are disjoint; a
-   railway project would win a collision, being looked up first. An
-   unknown slug goes back to /projects.
+   railway project would win a collision, being looked up first.
+
+   AN UNKNOWN SLUG IS A 404 (since 22 Oct 2026), the site's own 404 page
+   with a 404 status, the same bodyless answer /studio gives a wrong slug
+   (see the note in src/pages/studio/[key].astro for why it is built this
+   way). It used to be a 302 to /projects, which a search engine reads as
+   a soft 404: a page that is not there, answered as if it were.
    ============================================================ */
 import ProjectDetailPage from "../../components/projects/ProjectDetailPage.astro";
 import SocialProjectPage from "../../components/projects/SocialProjectPage.astro";
@@ -32,7 +37,7 @@ const project = getProjectDetail(slug);
 const social = project ? undefined : getSocialPage(slug);
 
 if (!project && !social) {
-  return Astro.redirect("/projects", 302);
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
 }
 ---
 

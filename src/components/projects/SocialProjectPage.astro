@@ -81,6 +81,16 @@ const heroImage = detail.file ? galleryImage(detail.file) : undefined;
 /* A representative image is not the share card: a link preview shows the
    picture without its caption. Such a page gets the site's own card. */
 const shareImage = detail.representative ? undefined : heroImage;
+/* The page's main photograph for its structured data: the hero, at the
+   size it is drawn. A representative image is a generated picture, not
+   K.D.'s photograph: it names no creator, and its alt says what it is. */
+const primaryImage = heroImage && {
+  image: heroImage,
+  width: 1551,
+  height: 700,
+  caption: detail.alt ?? detail.title,
+  credit: !detail.representative,
+};
 
 /* Live photographs: gallery.ts with the studio gallery manager's
    changes. A project with none in the baseline can gain some from the
@@ -110,6 +120,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
   image={shareImage}
   imageAlt={shareImage ? detail.alt : undefined}
   breadcrumbs={breadcrumbs}
+  primaryImage={primaryImage}
 >
   <Nav page="projects" />
   <main data-gallery-project={detail.title}>

@@ -23,8 +23,9 @@ import GalleryGrid from "../components/GalleryGrid.astro";
 import GalleryParts from "../components/GalleryParts.astro";
 import Lightbox from "../components/Lightbox.astro";
 import { galleryPage as copy } from "../data/gallery-page";
-import { galleryHref } from "../data/gallery";
+import { altKindOf, galleryHref } from "../data/gallery";
 import { galleryImage, isUpload } from "../lib/gallery-images";
+import { galleryAlt } from "../lib/gallery-alt";
 import { liveSection, liveState } from "../lib/gallery-live";
 import { slugify } from "../lib/slug";
 
@@ -52,7 +53,7 @@ const shareImg = galleryImage(firstPhoto.file);
   title={copy.meta.title}
   description={copy.meta.description}
   image={shareImg}
-  imageAlt={`${first.project}. ${first.photos[0].caption}`}
+  imageAlt={galleryAlt(first.project, first.photos[0].caption, altKindOf(first.project))}
   breadcrumbs={[
     { name: "Home", path: "/" },
     { name: hero.kicker, path: "/gallery" },

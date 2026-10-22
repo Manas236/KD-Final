@@ -66,6 +66,8 @@ import GalleryParts from "../../components/GalleryParts.astro";
 import TextBlocks from "./TextBlocks.astro";
 import { liveParts, livePhotos, liveState } from "../../lib/gallery-live";
 import { blocksFor } from "../../lib/project-blocks";
+import { galleryImage } from "../../lib/gallery-images";
+import { galleryAlt } from "../../lib/gallery-alt";
 import { home } from "../../data/home";
 
 interface Props {
@@ -89,6 +91,25 @@ const blocks = await blocksFor(project.slug);
 const title = `${project.title} | K.D. Constructions`;
 const description = project.description;
 
+/* The share card: the project's own photograph from its gallery where
+   the data names one (`shareFile`, for a page whose hero is a stand-in)
+   and it is on the site now, with that photograph's live caption in its
+   alt; otherwise the hero. The hero itself never changes here. */
+const sharePhoto = project.shareFile ? livePhotoList.find((p) => p.file === project.shareFile) : undefined;
+const shareImage = sharePhoto ? galleryImage(sharePhoto.file) : project.image;
+const shareAlt = sharePhoto ? galleryAlt(project.title, sharePhoto.caption, "project") : project.alt;
+
+/* The page's main photograph for its structured data: the hero, at the
+   size it is drawn. A rendering is not K.D.'s photograph, so it names no
+   creator; a stand-in is, and its caption says it is representative. */
+const primaryImage = {
+  image: project.image,
+  width: 1551,
+  height: 700,
+  caption: project.alt,
+  credit: project.imageKind !== "render",
+};
+
 /* Share card and breadcrumb trail — see BaseLayout's Props. The middle
    crumb is the nav's own label for /projects, so a search result reads
    "Home › Projects › <title>", the way the site bar does — not the
@@ -104,9 +125,10 @@ const breadcrumbs = [
 <BaseLayout
   title={title}
   description={description}
-  image={project.image}
-  imageAlt={project.alt}
+  image={shareImage}
+  imageAlt={shareAlt}
   breadcrumbs={breadcrumbs}
+  primaryImage={primaryImage}
 >
   <Nav page="projects" />
   <main data-gallery-project={project.title}>

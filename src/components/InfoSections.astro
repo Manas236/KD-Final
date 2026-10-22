@@ -125,7 +125,7 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
                   {item.logo ? (
                     <Image
                       src={clientLogo(item.logo)}
-                      alt=""
+                      alt={item.logoAlt ?? ""}
                       {...logoSize(item.logo)}
                       densities={[1, 2]}
                       loading="lazy"

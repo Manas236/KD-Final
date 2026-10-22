@@ -46,7 +46,7 @@ export const rmcPlant = {
     badges: ["Ready-Mix Concrete"],
     /* The hero is gallery frame rmc-plant-01.jpg, resolved by the page. */
     file: "rmc-plant-01.jpg",
-    alt: "The Karjat batching plant under its red steel cladding, aggregate stockpiles in front",
+    alt: "K.D. Constructions' batching plant at Karjat under its red steel cladding, aggregate stockpiles in front",
 
     stats: [
       {

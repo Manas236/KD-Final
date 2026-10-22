@@ -74,6 +74,18 @@ export interface ProjectDetail {
   readonly stats: readonly DetailStat[];
   readonly image: ImageMetadata;
   readonly alt: string;
+  /** What `image` is, where it is not this project's own photograph
+      (22 Oct 2026, OPEN-QUESTIONS.md #62). "stand-in": a K.D. photograph
+      of other work, shown until this project's arrives; its `alt` opens
+      "Representative image:" and claims no project or place. "render":
+      an architect's rendering, so the page's structured data names no
+      creator for it (BaseLayout.astro, primaryImage). */
+  readonly imageKind?: "stand-in" | "render";
+  /** A photograph of this project's own, from its gallery
+      (src/assets/gallery/), for the share card in place of a stand-in
+      hero. The hero itself does not change. Used only while the
+      photograph is on the site (not hidden in the studio). */
+  readonly shareFile?: string;
 }
 
 const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
@@ -108,7 +120,11 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "146,814 m³", label: "Earthwork" },
     ],
     image: featuredImg,
-    alt: "K.D. Constructions workforce on site at Mankhurd",
+    imageKind: "stand-in",
+    alt: "Representative image: K.D. Constructions workforce on site at Mankhurd",
+    /* The track-panel lift on the corridor: the project's own photograph
+       for link previews, the hero staying as it is (#62). */
+    shareFile: "panvel-karjat-03.jpg",
   },
   {
     title: "Matunga Workshop",
@@ -168,7 +184,8 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "2018–2021", label: "Project Period" },
     ],
     image: matungaImg,
-    alt: "Architectural rendering of the Matunga Workshop administrative building",
+    imageKind: "render",
+    alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
   },
   {
     /* "Creation of LHB Coach Maintenance Facilities, Matunga" in
@@ -209,7 +226,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "80 t", label: "CNC Traverser" },
     ],
     image: matungaLhbImg,
-    alt: "The LHB shed at Matunga Workshop under its full-length arched roof",
+    alt: "The LHB shed K.D. Constructions built at Matunga Workshop, under its full-length arched roof",
   },
   {
     title: "Nhava Sheva & Uran Railway Stations",
@@ -242,7 +259,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "2,731 m²", label: "Uran Station Building" },
     ],
     image: nhavaShevaUranImg,
-    alt: "Aerial view of a new railway station, platform roof and approach roads",
+    alt: "Aerial view of a new station on K.D. Constructions' Nhava Sheva and Uran works, platform roof and approach roads",
   },
   {
     title: "Harbour Line FOBs & Trespass-Control",
@@ -282,7 +299,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "Truss + Plate", label: "Girder Systems" },
     ],
     image: harbourFobImg,
-    alt: "Steel truss foot overbridge on its piers, spanning electrified railway tracks",
+    alt: "Steel truss foot overbridge built by K.D. Constructions between Vashi and Sanpada, spanning electrified railway tracks",
   },
   {
     title: "Mumbai Harbour Line Station Redevelopment",
@@ -320,7 +337,11 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "45,000+", label: "Commuters a Day" },
     ],
     image: harbourRedevImg,
-    alt: "Railway station under construction, materials staged trackside",
+    /* PHOTOS.md B12: a frame from the Nhava Sheva folder, so not one of
+       these four stations. Representative until Sir confirms or replaces
+       it (#62). */
+    imageKind: "stand-in",
+    alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
   },
   {
     title: "Sanpada Carshed",
@@ -365,7 +386,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "P-Way", label: "Track Laying Works" },
     ],
     image: sanpadaImg,
-    alt: "Aerial view of the Sanpada carshed, roofed maintenance bays alongside stabling lines",
+    alt: "Aerial view of the Sanpada carshed built by K.D. Constructions, roofed maintenance bays alongside stabling lines",
   },
   {
     title: "Matunga Z-Bridge",
@@ -405,7 +426,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "1,584 m³", label: "RCC" },
     ],
     image: matungaFobImg,
-    alt: "Aerial view of the Matunga Z-Bridge, its covered deck running the length of the workshop yard",
+    alt: "Aerial view of the Matunga Z-Bridge by K.D. Constructions, its covered deck running the length of the workshop yard",
   },
   {
     title: "Solapur Vande Bharat Maintenance Depot",
@@ -431,7 +452,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     ],
     stats: [{ value: "LoA Awarded", label: "Contract Stage" }],
     image: solapurImg,
-    alt: "Vande Bharat trainset inside a railway maintenance shed",
+    /* PHOTOS.md B1: the Vande Bharat rake in a Matunga shed, not Solapur.
+       Representative until Sir confirms or replaces it (#62). */
+    imageKind: "stand-in",
+    alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
   },
   {
     title: "Lower Parel Railway Redevelopment",
@@ -454,7 +478,10 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     ],
     stats: [{ value: "Recently Awarded", label: "Contract Stage" }],
     image: lowerParelImg,
-    alt: "Railway platform under a full-length station canopy",
+    /* PHOTOS.md A10: a platform from the Nhava Sheva folder, not Lower
+       Parel. Representative until Sir confirms or replaces it (#62). */
+    imageKind: "stand-in",
+    alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
   },
 ];
 

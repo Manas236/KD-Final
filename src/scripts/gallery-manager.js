@@ -12,6 +12,7 @@
    ============================================================ */
 
 import { anchorOf } from "./gallery-anchor.js";
+import { altKindOfSection, galleryAlt } from "../lib/gallery-alt";
 
 const boot = JSON.parse(document.getElementById("gm-boot").textContent);
 const $ = (id) => document.getElementById(id);
@@ -249,9 +250,9 @@ function tile(group, photo, visible, i) {
       type: "button",
       class: "gm-thumb",
       "aria-label": `Enlarge ${photo.file}`,
-      onclick: () => preview(photo),
+      onclick: () => preview(photo, group),
     },
-    [el("img", { src: t.thumb || "", alt: photo.caption, loading: "lazy" })]
+    [el("img", { src: t.thumb || "", alt: altOf(group, photo), loading: "lazy" })]
   );
 
   const caption = captionBlock(photo);
@@ -383,7 +384,7 @@ function captionBlock(photo) {
     }
   };
   const edit = () => {
-    const area = el("textarea", { class: "gm-cap-input", maxlength: "200", rows: "3", "aria-label": `Caption for ${photo.file}` });
+    const area = el("textarea", { class: "gm-cap-input", maxlength: "120", rows: "3", "aria-label": `Caption for ${photo.file}` });
     area.value = photo.caption;
     const save = () => {
       const value = area.value.replace(/\s+/g, " ").trim();
@@ -519,11 +520,16 @@ $("gm-history-close").addEventListener("click", () => {
 });
 
 /* ---------------- preview, jump, banner, toast ---------------- */
-function preview(photo) {
+/* The photograph's alt text as the site writes it (src/lib/gallery-alt.ts). */
+function altOf(group, photo) {
+  return galleryAlt(group.project, photo.caption, altKindOfSection(group.section));
+}
+
+function preview(photo, group) {
   const dialog = $("gm-preview");
   const t = media(photo);
   $("gm-preview-img").src = t.large || t.thumb || "";
-  $("gm-preview-img").alt = photo.caption;
+  $("gm-preview-img").alt = altOf(group, photo);
   $("gm-preview-cap").textContent = `${photo.caption} · ${photo.file}`;
   if (typeof dialog.showModal === "function") dialog.showModal();
 }
@@ -703,7 +709,7 @@ function queueRow(item) {
     const area = el("textarea", {
       class: "gm-cap-input",
       rows: "2",
-      maxlength: "200",
+      maxlength: "120",
       placeholder: "Caption (required), e.g. Girder erection over the running line at night",
       "aria-label": `Caption for ${item.file.name}`,
     });

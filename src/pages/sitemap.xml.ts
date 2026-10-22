@@ -49,7 +49,9 @@ import { plant } from "../data/plant";
 import plantHero from "../assets/project-vindhane-plant.jpg";
 import { rmcPlant } from "../data/rmc-plant";
 import { galleryPage } from "../data/gallery-page";
+import { altKindOf } from "../data/gallery";
 import { aboutSections, hse } from "../data/pages";
+import { galleryAlt, type AltKind } from "../lib/gallery-alt";
 
 export const prerender = false;
 
@@ -113,18 +115,22 @@ async function rendition(
   return new URL(path, origin).href;
 }
 
+/* Each photograph's title is its alt text, composed the way the page
+   composes it (src/lib/gallery-alt.ts); the hero's is the page's own hero
+   alt, which on a stand-in says it is a representative image. */
 async function projectImages(
   title: string,
   hero: ImageMetadata,
   heroAlt: string,
   photos: readonly { file: string; caption: string }[] | undefined,
-  origin: URL
+  origin: URL,
+  kind: AltKind = "project"
 ): Promise<SitemapImage[]> {
   const out: SitemapImage[] = [{ loc: await rendition(hero, HERO, origin), title: heroAlt }];
   for (const photo of photos ?? []) {
     out.push({
       loc: await tileUrl(photo.file, origin),
-      title: `${title}. ${photo.caption}`,
+      title: galleryAlt(title, photo.caption, kind),
     });
   }
   return out;
@@ -140,7 +146,7 @@ async function galleryPageImages(origin: URL, live: LiveState): Promise<SitemapI
       for (const photo of group.photos) {
         out.push({
           loc: await tileUrl(photo.file, origin),
-          title: `${group.project}. ${photo.caption}`,
+          title: galleryAlt(group.project, photo.caption, altKindOf(group.project)),
         });
       }
     }
@@ -160,7 +166,7 @@ async function hseImages(origin: URL): Promise<SitemapImage[]> {
       const wide = media.length % 2 === 1 && i === 0;
       out.push({
         loc: await rendition(galleryImage(m.file), wide ? { width: 1232, height: 480 } : { width: 800, height: 480 }, origin),
-        title: `${hse.hero.kicker}. ${m.title}`,
+        title: galleryAlt(hse.hero.kicker, m.title, "hse"),
       });
     }
   }
@@ -215,9 +221,9 @@ export const GET: APIRoute = async ({ site }) => {
     const { rmc } = rmcPlant;
     const images =
       route === PLANT_ROUTE
-        ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, livePlantPhotos(live, PLANT_ROUTE), site)
+        ? await projectImages(plant.plant.title, plantHero, plant.plant.alt, livePlantPhotos(live, PLANT_ROUTE), site, "plant")
         : route === RMC_ROUTE
-          ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, livePlantPhotos(live, RMC_ROUTE), site)
+          ? await projectImages(rmc.title, galleryImage(rmc.file), rmc.alt, livePlantPhotos(live, RMC_ROUTE), site, "plant")
           : route === GALLERY_ROUTE
             ? await galleryPageImages(site, live)
             : route === HSE_ROUTE

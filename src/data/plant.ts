@@ -69,8 +69,8 @@ export const plant = {
     /* The hero is PHOTOS.md B19, the same frame as the /projects card —
        imported by the page, not here (see the note above). */
     alt:
-      "Fabricated steel plate girders laid out in the Vindhane plant yard, a " +
-      "Hydra crane alongside and the fabrication shed behind",
+      "Fabricated steel plate girders in the yard of K.D. Constructions' Vindhane plant, a " +
+      "Hydra crane alongside",
 
     /* Two figures the record supports, two it does not. "11,600+ MT" is
        the steel ledger's total on /projects (the doc's five tonnages sum
@@ -124,12 +124,14 @@ export const plant = {
        alt say only what the clip shows (OPEN-QUESTIONS.md #58;
        PRE-LAUNCH.md has the row for his caption).
        2026-10-22: the caption is "Mankhurd deck", and the alt opens
-       with it (PRE-LAUNCH.md S18, OPEN-QUESTIONS.md #61). */
+       with it (PRE-LAUNCH.md S18, OPEN-QUESTIONS.md #61). Later the same
+       day it was cut to 125 characters or less, and names no place as
+       where the girder was made (#62). */
     clip: {
       video: "vindhane-girder-dispatch",
       alt:
-        "Mankhurd deck: a long painted steel girder loaded on a multi-axle trailer for " +
-        "dispatch in the Vindhane plant yard, held on a crane's chain, the fabrication shed behind",
+        "Mankhurd deck: a long painted steel girder on a multi-axle trailer, held on a crane's " +
+        "chain in K.D. Constructions' plant yard",
       where: "Plant yard, Vindhane",
       title: "Mankhurd deck",
     },

@@ -35,6 +35,10 @@ export interface InfoItem {
       check-edit-keys.mjs skips `.logo` the way it skips `.file`. A
       section in which any item has one gives every card a logo well. */
   readonly logo?: string;
+  /** The logo's alt text, naming the client whose mark it is (22 Oct
+      2026). An attribute, never text: check-edit-keys.mjs skips
+      `.logoAlt`. Absent, the logo is decorative (alt=""). */
+  readonly logoAlt?: string;
   /** A file in src/assets/directors/ (/company). An attribute's source,
       never text — check-edit-keys.mjs skips `.portrait`. */
   readonly portrait?: string;
@@ -588,7 +592,7 @@ export const hse: HseCopy = {
               "standby ambulance.",
             media: {
               file: "hse-electrical-shock-drill-mankhurd.jpg",
-              alt: "Electrical-shock mock drill: the casualty is loaded into a standby ambulance",
+              alt: "K.D. Constructions electrical-shock mock drill at Mankhurd: the casualty is loaded into a standby ambulance",
             },
           },
           {
@@ -626,7 +630,7 @@ export const hse: HseCopy = {
               "site with the crew's own stretcher and supervisors.",
             media: {
               file: "hse-heat-stress-drill-08.jpg",
-              alt: "Heat-stress mock drill at Karjat: four men carry the casualty out on the stretcher",
+              alt: "K.D. Constructions heat-stress mock drill at Karjat: four men carry the casualty out on the stretcher",
             },
             more: "Step by step",
             points: [
@@ -649,7 +653,7 @@ export const hse: HseCopy = {
               "between the fall and the casualty leaving for hospital.",
             media: {
               file: "hse-karjat-height-drill-02.jpg",
-              alt: "Work-at-height mock drill at Karjat: the crew attends the casualty on an orange stretcher",
+              alt: "K.D. Constructions work-at-height mock drill at Karjat: the crew attends the casualty on an orange stretcher",
             },
             more: "Minute by minute",
             points: [
@@ -682,7 +686,7 @@ export const hse: HseCopy = {
               "the crew who would have to face a real one.",
             media: {
               video: "hse-mohape-fire-drill",
-              alt: "Fire mock drill at Mohape: a worker puts out the test fire with a powder extinguisher while the crew stands by",
+              alt: "K.D. Constructions fire mock drill at Mohape: a worker puts out the test fire with a powder extinguisher",
             },
             more: "What the drill covered",
             points: [
@@ -703,7 +707,7 @@ export const hse: HseCopy = {
               "by stretcher to a vehicle for hospital. Then the safety officer briefs the crew.",
             media: {
               file: "hse-karjat-snake-bite-drill-02.jpg",
-              alt: "Snake-bite mock drill at Karjat: the casualty on the stretcher, his arm bandaged and kept still",
+              alt: "K.D. Constructions snake-bite mock drill at Karjat: the casualty on the stretcher, his arm bandaged and kept still",
             },
             more: "The RIGHT rule, and what never to do",
             points: [
@@ -725,7 +729,7 @@ export const hse: HseCopy = {
             body: "Responders attend the casualty, carry him on a stretcher and load him into an ambulance.",
             media: {
               video: "hse-work-at-height-rescue-drill",
-              alt: "Work-at-height rescue drill at GTB Nagar Station",
+              alt: "K.D. Constructions work-at-height rescue drill at GTB Nagar Station",
             },
           },
           {
@@ -734,7 +738,7 @@ export const hse: HseCopy = {
             body: "Workers take turns putting out a test fire with a DCP extinguisher while the crew watches.",
             media: {
               video: "hse-fire-extinguisher-drill",
-              alt: "Fire-extinguisher drill at GTB Nagar Station",
+              alt: "K.D. Constructions fire-extinguisher drill at GTB Nagar Station",
             },
           },
         ],
@@ -749,7 +753,7 @@ export const hse: HseCopy = {
         media: [
           {
             file: "hse-lifting-training-govandi.jpg",
-            alt: "An HSE officer briefs workers and supervisors around the table in the Govandi site office",
+            alt: "A K.D. Constructions HSE officer briefs workers and supervisors in the Govandi site office",
             title: "Lifting procedure and tools-and-tackles training",
             where: "Govandi Station",
           },
@@ -838,13 +842,13 @@ export const hse: HseCopy = {
         media: [
           {
             file: "hse-air-monitoring-mankhurd.jpg",
-            alt: "Two HSE staff in hard hats set up an ambient air sampler on the Mankhurd site",
+            alt: "Two K.D. Constructions HSE staff set up an ambient air sampler on the Mankhurd site",
             title: "Ambient air monitoring started",
             where: "Mankhurd Station",
           },
           {
             file: "hse-world-environment-day.jpg",
-            alt: "Workers in yellow helmets gather beneath an FOB deck for a World Environment Day talk",
+            alt: "K.D. Constructions workers gather beneath an FOB deck for a World Environment Day talk",
             title: "World Environment Day, 5 June",
             where: "Site assembly",
           },
@@ -887,13 +891,13 @@ export const hse: HseCopy = {
           },
           {
             file: "hse-national-safety-day-mankhurd.jpg",
-            alt: "Workers and site staff gathered beneath the steel frame of the new FOB at Mankhurd for National Safety Day",
+            alt: "K.D. Constructions workers and site staff beneath the steel frame of the new Mankhurd FOB for National Safety Day",
             title: "National Safety Day",
             where: "Mankhurd Station",
           },
           {
             file: "hse-worker-recognition.jpg",
-            alt: "A site worker in a hi-vis harness receives a prize and a handshake",
+            alt: "A K.D. Constructions site worker in a hi-vis harness receives a prize and a handshake",
             title: "Prize distribution",
             where: "On site",
           },
@@ -1193,6 +1197,7 @@ export const clients: InfoPageCopy = {
         {
           title: "Central Railway",
           logo: "central-railway.png",
+          logoAlt: "Central Railway logo",
           links: [
             work("Matunga Z-Bridge"),
             work("Sanpada Carshed"),
@@ -1203,11 +1208,13 @@ export const clients: InfoPageCopy = {
         {
           title: "Western Railway",
           logo: "western-railway.png",
+          logoAlt: "Western Railway logo",
           links: [work("Lower Parel Railway Redevelopment")],
         },
         {
           title: "MRVC",
           logo: "mrvc.png",
+          logoAlt: "MRVC logo",
           links: [
             work("Panvel–Karjat Railway Line"),
             work("Mumbai Harbour Line Station Redevelopment"),
@@ -1219,6 +1226,7 @@ export const clients: InfoPageCopy = {
         {
           title: "COFMOW",
           logo: "cofmow.png",
+          logoAlt: "COFMOW logo",
           links: [work("Matunga LHB Coach Maintenance Facilities")],
         },
         /* Added 2026-10-09 at the client's request. WPO is an Indian
@@ -1233,9 +1241,11 @@ export const clients: InfoPageCopy = {
           title: "WPO",
           body: "Workshop Projects Organisation, Indian Railways",
           logo: "indian-railways.png",
+          /* The mark is Indian Railways' (see above), so the alt says so. */
+          logoAlt: "Indian Railways logo",
           links: [work("Matunga Workshop")],
         },
-        { title: "IRCON", body: "IRCON International Limited", logo: "ircon.png" },
+        { title: "IRCON", body: "IRCON International Limited", logo: "ircon.png", logoAlt: "IRCON logo" },
       ],
     },
     {
@@ -1254,6 +1264,7 @@ export const clients: InfoPageCopy = {
           title: "CIDCO",
           body: "City and Industrial Development Corporation of Maharashtra Limited",
           logo: "cidco.png",
+          logoAlt: "CIDCO logo",
           links: [
             { label: "Ghansoli Roads & Services", href: "/projects/ghansoli-roads-and-services" },
             { label: "Kamothe Peripheral Roads", href: "/projects/kamothe-peripheral-roads" },
@@ -1268,21 +1279,23 @@ export const clients: InfoPageCopy = {
           title: "NMMC",
           body: "Navi Mumbai Municipal Corporation",
           logo: "nmmc.png",
+          logoAlt: "NMMC logo",
           links: [
             { label: "NMMC School No. 54 & 55", href: "/projects/nmmc-school-no-54-and-55" },
             work("Bonkode FOB"),
             work("Rabale Skywalk"),
           ],
         },
-        { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png" },
-        { title: "Balbharati", logo: "balbharati.png" },
+        { title: "JNPT", body: "Jawaharlal Nehru Port Trust", logo: "jnpt.png", logoAlt: "JNPT logo" },
+        { title: "Balbharati", logo: "balbharati.png", logoAlt: "Balbharati logo" },
         {
           title: "Maharashtra PWD",
           body: "Our earliest works, from 1973",
           logo: "maharashtra-pwd.png",
+          logoAlt: "Maharashtra PWD logo",
         },
         /* Added 2026-10-09 at the client's request. */
-        { title: "FCI", body: "Food Corporation of India", logo: "fci.png" },
+        { title: "FCI", body: "Food Corporation of India", logo: "fci.png", logoAlt: "FCI logo" },
       ],
     },
   ],

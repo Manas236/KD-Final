@@ -110,6 +110,10 @@ export const home = {
     title: "K.D. Constructions",
     ogTitle: "K.D. Constructions | EPC Infrastructure · Vashi, Navi Mumbai",
     description: META_DESCRIPTION,
+    /* og:image:alt (22 Oct 2026). The share picture is not the hero's:
+       it is the Nhava Sheva aerial (src/pages/index.astro), so it gets its
+       own words rather than the hero's. */
+    shareAlt: "Aerial view of Nhava Sheva railway station, a K.D. Constructions project",
   },
 
   nav: {
@@ -181,7 +185,9 @@ export const home = {
       primary: { label: "View Projects", href: "/projects" },
       secondary: { label: "About Us", href: "/about" },
     },
-    backdropAlt: "",
+    /* Was "" until 22 Oct 2026. The first frame of the Uran drone loop,
+       behind aria-hidden: for search engines, not read aloud. */
+    backdropAlt: "Aerial view of Uran railway station, a K.D. Constructions project on the Nerul–Uran line",
     /* 21 Oct 2026, Sir: the two revenue figures are off the hero. They are
        retired, not removed, so home.hero.stats.1 and .3 keep their keys;
        the two left run as one row of two (Hero.astro). The ₹ figures in
@@ -268,14 +274,14 @@ export const home = {
          facility's, a separate contract with its own page. See
          OPEN-QUESTIONS.md #24. */
       meta: "Indian Railways · POH 350 → 575 Bogies/Month",
-      alt: "Architectural rendering of the Matunga Workshop administrative building",
+      alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
     } as ProjectCard,
     cards: [
       {
         title: "Sanpada Carshed",
         badge: "Civil · Mechanical · Electrical",
         meta: "Central Railway · 11,338 m³ RCC",
-        alt: "Aerial view of the Sanpada carshed, roofed maintenance bays alongside stabling lines",
+        alt: "Aerial view of the Sanpada carshed built by K.D. Constructions, roofed maintenance bays alongside stabling lines",
       },
       {
         /* Renamed from "Matunga Z-Bridge" — this photo is a genuine
@@ -284,7 +290,7 @@ export const home = {
         title: "Harbour Line FOBs & Trespass-Control",
         badge: "Civil",
         meta: "MRVC · 4 Locations",
-        alt: "Steel truss foot overbridge on its piers, spanning railway tracks",
+        alt: "Steel truss foot overbridge built by K.D. Constructions between Vashi and Sanpada, spanning railway tracks",
       },
     ] as readonly ProjectCard[],
   },

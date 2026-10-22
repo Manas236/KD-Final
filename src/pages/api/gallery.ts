@@ -27,6 +27,7 @@ import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
 import {
+  baseCaptionOf,
   checkCaption,
   hasPhoto,
   isGroup,
@@ -93,7 +94,7 @@ function validate(body: Record<string, unknown>, state: LiveState): Insert | str
       return { action, file, group: body.group, position, caption: null, ref: null };
     }
     case "caption": {
-      const checked = checkCaption(body.caption);
+      const checked = checkCaption(body.caption, baseCaptionOf(state, file));
       if ("error" in checked) return checked.error;
       return { action, file, group: null, position: null, caption: checked.caption, ref: null };
     }

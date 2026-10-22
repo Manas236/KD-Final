@@ -29,11 +29,12 @@
    control.
    ============================================================ */
 import { Image, getImage } from "astro:assets";
-import type { GalleryPhoto } from "../data/gallery";
+import { altKindOf, type GalleryPhoto } from "../data/gallery";
 import { galleryImage, isUpload, uploadUrls } from "../lib/gallery-images";
+import { galleryAlt } from "../lib/gallery-alt";
 
 interface Props {
-  /** The project title — prefixes every alt text. */
+  /** The project title, which every alt text names (src/lib/gallery-alt.ts). */
   project: string;
   photos: readonly GalleryPhoto[];
   /** Lightbox group: prev/next cycle within one group only. */
@@ -41,6 +42,7 @@ interface Props {
 }
 
 const { project, photos, group } = Astro.props;
+const kind = altKindOf(project);
 
 const LIGHTBOX_WIDTH = 1600;
 
@@ -50,7 +52,7 @@ const LIGHTBOX_WIDTH = 1600;
    same size and crop instead of through <Image>. */
 const tiles = await Promise.all(
   photos.map(async (photo) => {
-    const alt = `${project}. ${photo.caption}`;
+    const alt = galleryAlt(project, photo.caption, kind);
     if (isUpload(photo.file)) {
       const urls = uploadUrls(photo.file);
       return { photo, image: null, tile: urls.tile, full: urls.full, alt };

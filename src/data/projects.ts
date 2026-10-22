@@ -127,7 +127,9 @@ export const projects = {
      the hero sub, which is the one sentence here that says what the
      page is. */
   meta: {
-    title: "Projects | K.D. Constructions · Portfolio",
+    /* House format since 22 Oct 2026; the longer line is the share title. */
+    title: "Projects | K.D. Constructions",
+    ogTitle: "Projects | K.D. Constructions · Portfolio",
     description:
       "Five decades. Six disciplines. A growing national footprint across " +
       "Indian Railways, urban transit, and government infrastructure.",
@@ -144,7 +146,9 @@ export const projects = {
     sub:
       "Five decades. Six disciplines. A growing national footprint across " +
       "Indian Railways, urban transit, and government infrastructure.",
-    backdropAlt: "",
+    /* Was "" until 22 Oct 2026. Behind aria-hidden: for search engines
+       and the share card. */
+    backdropAlt: "Uran railway station, a K.D. Constructions project for Central Railway",
     stats: [
       { value: "29.6 km", label: "Panvel–Karjat Ongoing Corridor" },
       { value: "₹362.90 Cr", label: "Pipeline (3 Tenders)" },
@@ -177,11 +181,12 @@ export const projects = {
         "Delivering direct CSMT–Panvel–Karjat suburban connectivity under " +
         "MUTP-III. Stations: Chikhale, Mohape, Chowk, Karjat.",
       footnote: "4 Stations · January 2026",
-      /* No dedicated photograph exists for this project — see
+      /* No dedicated photograph exists for this project, see
          OPEN-QUESTIONS.md #18. The alt text describes the stand-in
          image actually in the box, not the project, the same way the
-         Matunga Z-Bridge card's alt text does — see #19b. */
-      alt: "K.D. Constructions workforce on site at Mankhurd",
+         Matunga Z-Bridge card's alt text did (#19b). Since 22 Oct 2026
+         it also says it is a representative image (#62). */
+      alt: "Representative image: K.D. Constructions workforce on site at Mankhurd",
     } as FeaturedProject,
 
     medium: [
@@ -194,7 +199,7 @@ export const projects = {
            maintenance facility, a separate contract in the doc, which now
            has its own entry below. See OPEN-QUESTIONS.md #24. */
         meta: "Indian Railways · POH 350 → 575 Bogies/Month",
-        alt: "Architectural rendering of the Matunga Workshop administrative building",
+        alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
       },
       {
         live: false,
@@ -203,7 +208,7 @@ export const projects = {
         steel: true,
         title: "Nhava Sheva & Uran Railway Stations",
         meta: "Central Railway · 3,046 MT Steel",
-        alt: "Aerial view of a new railway station, platform roof and approach roads",
+        alt: "Aerial view of a new station on K.D. Constructions' Nhava Sheva and Uran works, platform roof and approach roads",
       },
       {
         live: false,
@@ -212,7 +217,7 @@ export const projects = {
         steel: true,
         title: "Harbour Line FOBs & Trespass-Control",
         meta: "MRVC · 4 Locations",
-        alt: "Steel truss foot overbridge on its piers, spanning electrified railway tracks",
+        alt: "Steel truss foot overbridge built by K.D. Constructions between Vashi and Sanpada, spanning electrified railway tracks",
       },
       {
         live: true,
@@ -221,8 +226,9 @@ export const projects = {
         title: "Mumbai Harbour Line Station Redevelopment",
         meta: "Mumbai Railway Vikas Corporation Ltd · 4 Stations",
         /* Stand-in — no dedicated photograph exists for this project.
-           See OPEN-QUESTIONS.md #19b. */
-        alt: "Railway station under construction, materials staged trackside",
+           See OPEN-QUESTIONS.md #19b. Said to be one since 22 Oct 2026
+           (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
+        alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
       },
       {
         /* A signature project the doc has always carried ("Creation of LHB
@@ -239,7 +245,7 @@ export const projects = {
         steel: true,
         title: "Matunga LHB Coach Maintenance Facilities",
         meta: "Indian Railways / COFMOW · 27,090 m³ RCC",
-        alt: "The LHB shed at Matunga Workshop under its full-length arched roof",
+        alt: "The LHB shed K.D. Constructions built at Matunga Workshop, under its full-length arched roof",
       },
     ] as readonly ProjectEntry[],
 
@@ -254,8 +260,8 @@ export const projects = {
            doc's own Signature Projects entry. See OPEN-QUESTIONS.md #19. */
         meta: "Central Railway · 11,338 m³ RCC",
         alt:
-          "Aerial view of the Sanpada carshed, roofed maintenance bays " +
-          "alongside stabling lines",
+          "Aerial view of the Sanpada carshed built by K.D. Constructions, roofed maintenance " +
+          "bays alongside stabling lines",
       },
       {
         live: false,
@@ -268,7 +274,7 @@ export const projects = {
            (OPEN-QUESTIONS.md #41). Its own photograph since 2026-09-28
            (#38), no longer a stand-in. */
         meta: "Central Railway · 303m Span",
-        alt: "Aerial view of the Matunga Z-Bridge, its covered deck running the length of the workshop yard",
+        alt: "Aerial view of the Matunga Z-Bridge by K.D. Constructions, its covered deck running the length of the workshop yard",
       },
       {
         live: true,
@@ -281,8 +287,9 @@ export const projects = {
         meta: "Central Railway · Recently Awarded",
         /* Stand-in — Matunga's own Vande Bharat trainset photo, honestly
            captioned as what it shows rather than as Solapur. See
-           OPEN-QUESTIONS.md #19b. */
-        alt: "Vande Bharat trainset inside a railway maintenance shed",
+           OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
+           2026 (#62). */
+        alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
       },
       {
         live: true,
@@ -291,8 +298,9 @@ export const projects = {
         title: "Lower Parel Railway Redevelopment",
         meta: "Western Railway · Recently Awarded",
         /* Stand-in — no dedicated photograph exists. See
-           OPEN-QUESTIONS.md #19b. */
-        alt: "Railway platform under a full-length station canopy",
+           OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
+           2026 (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
+        alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
       },
     ] as readonly ProjectEntry[],
 
@@ -325,8 +333,8 @@ export const projects = {
           "large-span industrial sheds, fabricated in-house on welding, bending and " +
           "cutting lines.",
         alt:
-          "Fabricated steel plate girders laid out in the Vindhane plant yard, a " +
-          "Hydra crane alongside and the fabrication shed behind",
+          "Fabricated steel plate girders in the yard of K.D. Constructions' Vindhane plant, a " +
+          "Hydra crane alongside",
       },
       ledger: {
         kicker: "Steel Fabrication & Erection",
@@ -356,7 +364,7 @@ export const projects = {
         "Ready-mix concrete batched under cover on our own plant, for greater control over " +
         "quality, consistency, availability and project scheduling.",
       file: "rmc-plant-01.jpg",
-      alt: "The Karjat batching plant under its red steel cladding, aggregate stockpiles in front",
+      alt: "K.D. Constructions' batching plant at Karjat under its red steel cladding, aggregate stockpiles in front",
     },
 
     /* Not a project — the one non-photographic entry in the band, and
@@ -418,37 +426,37 @@ export const projects = {
         title: "Bonkode FOB",
         location: "Bonkode · Navi Mumbai",
         file: "social-bonkode-fob.jpg",
-        alt: "Bonkode FOB: the long enclosed tubular skywalk on steel lattice trestles over a landscaped median, apartment towers behind",
+        alt: "Bonkode FOB by K.D. Constructions: an enclosed tubular skywalk on steel lattice trestles over a landscaped median",
       },
       {
         title: "Ulwe Hospital",
         location: "Ulwe · Navi Mumbai",
         file: "social-ulwe-hospital.jpg",
-        alt: "Ulwe Hospital: the completed hospital building seen from its gate",
+        alt: "Ulwe Hospital, built by K.D. Constructions, seen from its gate",
       },
       {
         title: "Ulwe CIDCO School",
         location: "Ulwe · Navi Mumbai",
         file: "social-ulwe-cidco-school.jpg",
-        alt: "Ulwe CIDCO School: the completed school block, red-and-white elevation",
+        alt: "Ulwe CIDCO School by K.D. Constructions: the completed school block, red-and-white elevation",
       },
       {
         title: "Karanjade Health Care",
         location: "Karanjade · Navi Mumbai",
         file: "social-karanjade-health-care.jpg",
-        alt: "Karanjade Health Care: the multi-storey health centre with its blue glazed stair column",
+        alt: "Karanjade Health Care by K.D. Constructions: the multi-storey health centre with its blue glazed stair column",
       },
       {
         title: "Kharghar Golf Course",
         location: "Kharghar · Navi Mumbai",
         file: "social-kharghar-golf-course.jpg",
-        alt: "Kharghar Golf Course: the clubhouse seen across the green",
+        alt: "Kharghar Golf Course clubhouse seen across the green, a K.D. Constructions project",
       },
       {
         title: "Lush Meadows",
         location: "Kharghar · Navi Mumbai",
         file: "social-lush-meadows.jpg",
-        alt: "Lush Meadows, Kharghar: the residential tower's entrance porch with the name lettering above it",
+        alt: "Lush Meadows, Kharghar, by K.D. Constructions: the residential tower's entrance porch with its name lettering",
       },
       /* Confirmed work, no photograph on record. Since 2026-10-15 its tile
          is a representative image the user supplied, like the civic works
@@ -491,7 +499,7 @@ export const projects = {
         title: "Ghansoli Roads & Services",
         location: "Ghansoli · Navi Mumbai",
         file: "representative-ghansoli-roads-and-services.jpg",
-        alt: "Ghansoli Roads & Services, representative image: a concrete road with a paved footpath, drain covers along its edge, street lights and young trees, residential towers on both sides",
+        alt: "Ghansoli Roads & Services, representative image: a concrete road with a paved footpath, street lights and towers",
         representative: "Representative image",
       },
       {
@@ -512,28 +520,28 @@ export const projects = {
         title: "Ulwe Mass Housing Infrastructure",
         location: "Ulwe · Navi Mumbai",
         file: "representative-ulwe-mass-housing-infrastructure.jpg",
-        alt: "Ulwe Mass Housing Infrastructure, representative image: a divided road between residential towers, a bus and autorickshaws on it",
+        alt: "Ulwe Mass Housing Infrastructure, representative image: a divided road between residential towers",
         representative: "Representative image",
       },
       {
         title: "Ulwe Sector 8 Infrastructure",
         location: "Ulwe · Navi Mumbai",
         file: "representative-ulwe-sector-8-infrastructure.jpg",
-        alt: "Ulwe Sector 8 Infrastructure, representative image: a new concrete road being finished, two workers setting kerbs beside it, a backhoe loader and a roller, towers under construction and hills behind",
+        alt: "Ulwe Sector 8 Infrastructure, representative image: a new concrete road being finished, kerbs being set beside it",
         representative: "Representative image",
       },
       {
         title: "Kharghar 33 kV Substation",
         location: "Kharghar · Navi Mumbai",
         file: "representative-kharghar-33-kv-substation.jpg",
-        alt: "Kharghar 33 kV Substation, representative image: an outdoor substation of transformers and gantries behind its name wall and gate",
+        alt: "Kharghar 33 kV Substation, representative image: an outdoor substation of transformers behind its gate",
         representative: "Representative image",
       },
       {
         title: "Rabale Skywalk",
         location: "Rabale · Navi Mumbai",
         file: "social-rabale-skywalk.jpg",
-        alt: "Rabale Skywalk: glazed skywalk with a lift tower at each end, spanning a busy road with traffic passing beneath",
+        alt: "Rabale Skywalk by K.D. Constructions: glazed skywalk with a lift tower at each end, spanning a busy road",
       },
       {
         title: "NMMC School No. 54 & 55",
