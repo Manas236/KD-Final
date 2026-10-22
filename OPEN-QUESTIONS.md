@@ -3969,3 +3969,86 @@ Build clean; `check-edit-keys` passes on `/projects`, `/projects/bonkode-fob`,
 answers 200; CLS 0 on both pages; no em dash in the served HTML of those
 pages, `/about` or the sitemap. The two tiles, both pages and their
 galleries checked by eye at 1280 and 390.
+
+## 60. The certificates are on the site, from `/hse` and from the footer
+
+2026-10-21, evening, after #58 and #59. The user: the Certifications cards
+on `/hse` could not be clicked, nor the "Certified to" lines in the
+footer, to see the certificates K.D. had just put in `Certificates/`; and
+"make sure I can't take a screenshot".
+
+**What K.D. sent.** Four PDFs in `Certificates/` (now git-ignored, like
+the other scan folders):
+
+| File | What it is | On the site as |
+| --- | --- | --- |
+| `KD ISO 45001.pdf` | QRO Certification LLP, ISO 45001:2018, no. 3050260520169HS | `iso-45001` |
+| `KD ISO 14001.pdf` | the same, ISO 14001:2015, no. 3050260520170E | `iso-14001` |
+| `KD ISO 9001.pdf` | the same, ISO 9001:2015, no. 3050260520168Q | `iso-9001` |
+| `E-Certificate-27AACCK5158J1ZA.pdf` | CBIC (Ministry of Finance), Certificate of Appreciation to K.D. for prompt GST returns and payment, financial year 2025–26 | `tax-recognition` |
+
+The three ISO certificates: certified 20 May 2026, surveillance audits due
+19 May 2027 and 19 May 2028, expiry 19 May 2029; scope "fabrication,
+erection, assembly and painting of steel girders and other members"; the
+Vashi office and the Vindhane factory. Nothing for CIDCO or the PWD
+licence (PRE-LAUNCH C3, C4, S20 stay open).
+
+### What changed
+
+- **`/hse` cards.** The three ISO cards carry three facts each,
+  "Certificate number", "Certifying body" (QRO Certification LLP) and
+  "Valid until" (19 May 2029), as #58 laid down; the tax card carries
+  "Issued by" and "Awarded for" ("Prompt GST returns and payment,
+  financial year 2025–26"), under Sir's sentence, unchanged. The four
+  cards have "View certificate", and a click anywhere on the card opens
+  it. The CIDCO and PWD cards are as they were.
+- **Footer, every page.** Each "Certified to" line opens its certificate.
+  At rest it looks exactly as before (checked element by element against
+  `c1d09c1` at 1280, 1440, 1920 and 390 on `/`, `/hse` and `/gallery`:
+  same boxes, same styles); the standard is underlined on hover.
+- **The file served is a mosaic.** The build cuts each watermarked image
+  into 64px tiles and shuffles them; `src/assets/certificates/layout.json`
+  holds the seed, and only the viewer puts the tiles back. Opening the
+  JPEG on its own, or saving it from the network panel, gives the mosaic.
+- **Screenshots.** **A website cannot make a screenshot impossible**, and
+  this is said to the user as plainly. What the viewer now does, on top
+  of #58's canvas, watermark, blur and PrintScreen handling: the moment
+  the Windows or Command key goes down, or Ctrl + Shift, the certificate
+  goes blank, which is how Win + Shift + S, Win + PrintScreen and
+  Cmd + Shift + 3/4/5 begin, and it stays blank until the keys are up and
+  the pointer moves on the page again; and it blurs while the mouse is out
+  of the window. What still gets through: a phone's own screenshot (no
+  browser can see it), a camera, screen-recording software, a capture tool
+  started from its own window with a timer, and anyone who reads the
+  script. Whatever is captured carries the watermark.
+- **Labels.** "View certificate" and "Close" moved from `hse.viewer` to
+  `certificateViewer` in `src/data/home.ts` (not an edit slot, as before),
+  so the footer can use them; `check-edit-keys.mjs` no longer lists
+  `viewer.` as runtime on `/hse`.
+
+### Edit keys
+
+New, on `/hse` only: `hse.sections.1.items.{0,1,2}.facts.{0,1,2}.{label,value}`
+and `hse.sections.1.items.5.facts.{0,1}.{label,value}`. None changed,
+moved or gone; the footer's keys are untouched. No database change.
+
+### For the next deploy
+
+Nothing beyond the pull and build: the scrambled images and `layout.json`
+are committed, the scans are not needed on the server. After it, open a
+certificate from `/hse` and from the footer of any page.
+
+### Verified
+
+Build clean; `check-edit-keys` passes on `/hse`, `/`, `/about`,
+`/gallery`, `/careers` and `/404`; CLS 0 on `/hse` and `/`; placeholders
+43, unchanged; no em dash in the served HTML of `/`, `/hse`, `/gallery`.
+In Chrome at 1440 and 390: four card buttons and three footer links on
+`/hse`, one viewer per page; a click on a card's text opens its
+certificate; the footer opens ISO 9001 on `/`; the tax certificate opens;
+Win/Cmd and Ctrl + Shift blank it, it stays blank after the keys are up
+and comes back when the pointer moves; PrintScreen blanks it; it blurs
+when the window loses focus and sharpens on return; right-click is
+suppressed; Esc closes and focus returns; no page errors, no sideways
+scroll. The certificates, put back together, checked by eye: no seams.
+The script is idempotent (same bytes on a second run).

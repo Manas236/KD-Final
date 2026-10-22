@@ -336,20 +336,32 @@ Since 2026-10-21 a Certifications card whose certificate image exists has a
 "View certificate" button (a link-styled button, the cards' own link
 treatment) that opens one full-screen viewer (`CertificateViewer.astro`):
 ink-deep, an 88px bar with the card's title and a ghost "Close", the
-certificate fitted below. **Say this plainly to anyone who asks: a website
-cannot stop an operating system's snipping tool, a phone's screenshot or a
-camera, and anyone with the developer tools can find the file.** The real
-protection is the watermark burned into every image by
-`scripts/build-certificates.mjs` ("K.D. Constructions · For verification
-only", tiled diagonally across it). The viewer only makes casual copying
-awkward: the image is drawn on a `<canvas>` (no `<img>`, no download link);
-right-click, drag, selection, Ctrl/Cmd + S and Ctrl/Cmd + P do nothing in
-it; PrintScreen blanks it for a moment and overwrites the clipboard where
-the browser allows; it blurs while the window is in the background; print
-hides it and its buttons. It is a modal dialog: focus stays on Close, Esc
-closes, focus returns to the button. Only the original scans' watermarked
-copies are ever in the repo or on the site (`src/assets/certificates/`);
-the scans are git-ignored. A card without an image shows no button.
+certificate fitted below. The button's `::after` covers the whole card, so
+a click anywhere on the card opens it. The footer's "Certified to" lines
+open the same viewer on every page: a button stretched over each line,
+invisible at rest, the standard underlined on hover, so the approved
+footer looks exactly as it did. The footer draws the one viewer per page.
+In edit mode both stretches let clicks through to the words (global.css).
+**Say this plainly to anyone who asks: a website cannot stop an operating
+system's snipping tool, a phone's screenshot or a camera, and anyone who
+reads the viewer's script can rebuild the image.** The real protection is
+the watermark burned into every image by `scripts/build-certificates.mjs`
+("K.D. Constructions · For verification only", tiled diagonally across
+it). The viewer only makes copying awkward: the image is drawn on a
+`<canvas>` (no `<img>`, no download link), and the file served is a
+mosaic of shuffled 64px tiles that only the viewer puts back, so the JPEG
+opened on its own shows nothing usable; right-click, drag, selection,
+Ctrl/Cmd + S and Ctrl/Cmd + P do nothing in it; the Windows or Command
+key, or Ctrl + Shift, blanks it the moment it goes down (the start of
+Win + Shift + S, Win + PrintScreen and Cmd + Shift + 3/4/5), until the
+keys are up and the pointer moves on the page again; PrintScreen blanks it
+and overwrites the clipboard where the browser allows (Windows reports
+that key only after the capture); it blurs while the window is in the
+background or the mouse is out of the window; print hides it and its
+buttons. It is a modal dialog: focus stays on Close, Esc closes, focus
+returns to the button. Only the original scans' watermarked copies are
+ever in the repo or on the site (`src/assets/certificates/`); the scans
+are git-ignored. A card or footer line without an image has no button.
 
 ---
 
