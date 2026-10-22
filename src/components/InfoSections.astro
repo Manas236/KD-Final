@@ -24,12 +24,19 @@
    A `retired` card (the Indian Railways card on /clients, 21 Oct 2026)
    is not drawn, and every other card keeps its own index, so its keys do
    not move. The grid's shape follows the cards that are drawn.
+
+   A card with a `cert` whose image exists (/hse's Certifications) has a
+   "View certificate" button, and the button's ::after is stretched over
+   the whole card, so a click anywhere on it opens the certificate (21 Oct
+   2026). In edit mode the stretch lets clicks through to the text
+   (global.css). The viewer itself is drawn once per page by the footer
+   (SiteFooter.astro), which opens certificates too.
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "./Kicker.astro";
-import CertificateViewer from "./CertificateViewer.astro";
-import type { InfoPageCopy, InfoSection } from "../data/pages";
-import { certificateImage } from "../lib/certificates";
+import { certificateViewer } from "../data/home";
+import type { InfoSection } from "../data/pages";
+import { certificate } from "../lib/certificates";
 import { clientLogo, logoSize } from "../lib/client-logos";
 import { portrait } from "../lib/portraits";
 
@@ -40,19 +47,14 @@ interface Props {
   /** The `id` of the section the default slot follows. Without one, or
       with an id no section has, the slot follows the last section. */
   slotAfter?: string;
-  /** The certificate viewer's labels (/hse). A card with a `cert` whose
-      image exists gets a "View certificate" button, and the page one
-      viewer (CertificateViewer.astro). No image, no button. */
-  viewer?: InfoPageCopy["viewer"];
 }
 
-const { page, sections, slotAfter, viewer } = Astro.props;
+const { page, sections, slotAfter } = Astro.props;
 const placed = !!slotAfter && sections.some((section) => section.id === slotAfter);
 /* The cards each section draws: a retired one keeps its slot only. */
 const shown = sections.map((section) => section.items.filter((item) => !item.retired));
 const withLogos = shown.map((items) => items.some((item) => item.logo));
 const withPortraits = shown.map((items) => items.some((item) => item.portrait));
-const withCertificates = shown.some((items) => items.some((item) => certificateImage(item.cert)));
 ---
 
 {
@@ -105,11 +107,13 @@ const withCertificates = shown.some((items) => items.some((item) => certificateI
           {section.items.map((item, i) => {
             if (item.retired) return null;
             const k = item.slot ? `${page}.${item.slot}` : `${page}.sections.${s}.items.${i}`;
+            const cert = certificate(item.cert);
             return (
             <li
               class:list={[
                 "border border-kd-card-border-light border-t-2 border-t-kd-mint-2 p-32",
                 item.pending && "border-dashed",
+                cert && "relative",
               ]}
               data-card="light framed"
               data-pending={item.pending ? "" : undefined}
@@ -158,6 +162,7 @@ const withCertificates = shown.some((items) => items.some((item) => certificateI
               <h3
                 class="font-display text-d8 text-kd-ink"
                 data-edit={`${k}.title`}
+                data-cert-name={cert ? "" : undefined}
               >
                 {item.title}
               </h3>
@@ -215,14 +220,15 @@ const withCertificates = shown.some((items) => items.some((item) => certificateI
                   ))}
                 </ul>
               )}
-              {certificateImage(item.cert) && viewer && (
+              {cert && (
                 <button
                   type="button"
-                  class="mt-16 text-ui text-kd-mint-2 pb-2 border-b border-b-transparent hover:border-b-kd-mint-2 focus-visible:border-b-kd-mint-2"
+                  class="mt-16 text-ui text-kd-mint-2 pb-2 border-b border-b-transparent hover:border-b-kd-mint-2 focus-visible:border-b-kd-mint-2 cursor-pointer after:absolute after:inset-0"
                   aria-haspopup="dialog"
-                  data-cert-open={certificateImage(item.cert)?.src}
+                  data-cert-open={cert.src}
+                  data-cert-layout={cert.layout}
                 >
-                  <span data-no-edit>{viewer.view}</span>
+                  <span data-no-edit>{certificateViewer.view}</span>
                 </button>
               )}
             </li>
@@ -238,4 +244,3 @@ const withCertificates = shown.some((items) => items.some((item) => certificateI
 
 {!placed && <slot />}
 
-{withCertificates && viewer && <CertificateViewer labels={viewer} />}

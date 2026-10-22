@@ -133,7 +133,7 @@ const { hero, sections, cta } = copy;
 
     {/* The card sections, then the page's own bands before the CTA (/hse),
         or after a named section (/careers). */}
-    <InfoSections page={page} sections={sections} slotAfter={slotAfter} viewer={copy.viewer}>
+    <InfoSections page={page} sections={sections} slotAfter={slotAfter}>
       <slot />
     </InfoSections>
 

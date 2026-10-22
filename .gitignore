@@ -84,6 +84,7 @@ kd-schema-*.sql
 # certificate scans as received (scripts/build-certificates.mjs reads them
 # and writes only watermarked copies into src/assets/certificates/); the
 # originals are never committed and never served
+/Certificates/
 /ISO_Certificates/
 /Tax_Certificate/
 /CIDCO_Certificate/

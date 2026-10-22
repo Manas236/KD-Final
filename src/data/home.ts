@@ -87,7 +87,18 @@ export interface DifferentiatorCard {
 export interface Certification {
   readonly standard: string;
   readonly covers: string;
+  /** The certificate image the line opens (src/lib/certificates.ts), as
+      `cert` on /hse's cards: an attribute's source, never text. */
+  readonly cert?: string;
 }
+
+/* The certificate viewer's labels: the "View certificate" button on
+   /hse's cards, the footer's certificate links and the viewer's Close
+   (CertificateViewer.astro). Not edit slots: one label on several
+   buttons, and a viewer that must close in edit mode too, so they are
+   `data-no-edit` and changed here. Outside `home`, so the edit-key gate
+   expects no slot for them. */
+export const certificateViewer = { view: "View certificate", close: "Close" } as const;
 
 export const home = {
   /* Head only. The design specifies neither a page title nor a meta
@@ -379,15 +390,18 @@ export const home = {
     /* WEBSITE_INFO.md §12: the standards belong wherever a tender
        evaluator looks, and the footer is one of those places. NAMES
        ONLY — certificate numbers stay blocked until they arrive, and
-       §0 rule 3 forbids saying or implying RDSO certification. */
+       §0 rule 3 forbids saying or implying RDSO certification.
+       21 Oct 2026: the three certificates arrived; each line opens its
+       own in the certificate viewer (`cert`), the words unchanged. */
     certified: {
       head: "Certified to",
       items: [
-        { standard: "ISO 9001:2015", covers: "Quality management" },
-        { standard: "ISO 14001:2015", covers: "Environmental management" },
+        { standard: "ISO 9001:2015", covers: "Quality management", cert: "iso-9001" },
+        { standard: "ISO 14001:2015", covers: "Environmental management", cert: "iso-14001" },
         {
           standard: "ISO 45001:2018",
           covers: "Occupational health & safety management",
+          cert: "iso-45001",
         },
       ] as readonly Certification[],
       association: "Member, Chamber of Railway Industries (Rail Chamber)",

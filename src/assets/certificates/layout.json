@@ -1,0 +1,26 @@
+{
+  "iso-14001": {
+    "width": 989,
+    "height": 1400,
+    "tile": 64,
+    "seed": 1642330511
+  },
+  "iso-45001": {
+    "width": 989,
+    "height": 1400,
+    "tile": 64,
+    "seed": 3611587781
+  },
+  "iso-9001": {
+    "width": 989,
+    "height": 1400,
+    "tile": 64,
+    "seed": 2181104867
+  },
+  "tax-recognition": {
+    "width": 1400,
+    "height": 989,
+    "tile": 64,
+    "seed": 1058092288
+  }
+}

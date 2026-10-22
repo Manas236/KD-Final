@@ -61,9 +61,7 @@ const PAGES = {
      now, so they are not routes here. */
   "/about": { module: "../src/data/about.ts", exportName: "about", prefix: "about", merged: true },
   "/projects": { module: "../src/data/projects.ts", exportName: "projects", prefix: "projects" },
-  /* `viewer.`: the certificate viewer's labels, drawn (data-no-edit)
-     only while a card has a certificate image (InfoSections.astro). */
-  "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse", runtime: ["viewer."] },
+  "/hse": { module: "../src/data/pages.ts", exportName: "hse", prefix: "hse" },
   "/contact": { module: "../src/data/pages.ts", exportName: "contact", prefix: "contact" },
   /* `runtime`: the job-posting cards come from the database, not the
      module (src/pages/careers.astro), so keys and copy under these

@@ -44,13 +44,25 @@
    `page` supplies the first segment of every key so that a key belongs
    to exactly one page, as DESIGN-SYSTEM §9 requires.
 
+   THE CERTIFIED-TO LINES OPEN THEIR CERTIFICATES (21 Oct 2026). A line
+   whose `cert` has an image (src/lib/certificates.ts) carries a button
+   stretched over the whole line: a click anywhere on it opens the
+   certificate in the viewer, and the standard is underlined on hover.
+   At rest the band looks exactly as approved. The button is named
+   "View certificate" plus the standard, read from the line itself. In
+   edit mode it lets clicks through to the words (global.css). The
+   viewer (CertificateViewer.astro) is drawn here, once per page, while
+   any certificate exists; /hse's card buttons open the same one.
+
    MOBILE: the 3-column template (`1.4fr_1fr_1fr`) only holds from `md`
    up. Below that it is a plain 2-up grid, and below `sm` a single
    column — the wide brand column does not survive stacking, so it is
    dropped in favour of equal-width columns at both smaller steps.
    DESIGN-SYSTEM.md §10.
    ============================================================ */
-import { home } from "../data/home";
+import CertificateViewer from "./CertificateViewer.astro";
+import { certificateViewer, home } from "../data/home";
+import { anyCertificate, certificate } from "../lib/certificates";
 
 interface Props {
   /** First segment of every slot key this component writes. */
@@ -187,23 +199,46 @@ const year = new Date().getFullYear();
       </h2>
       <ul class="mt-20 flex flex-wrap gap-x-32 gap-y-8">
         {
-          certified.items.map((item, i) => (
-            <li class="text-body-sm">
-              <span
-                class="text-kd-mint"
-                data-edit={`${page}.footer.certified.items.${i}.standard`}
-              >
-                {item.standard}
-              </span>
-              <span class="text-kd-slate" data-no-edit>·</span>
-              <span
-                class="text-kd-slate"
-                data-edit={`${page}.footer.certified.items.${i}.covers`}
-              >
-                {item.covers}
-              </span>
-            </li>
-          ))
+          certified.items.map((item, i) => {
+            const cert = certificate(item.cert);
+            return (
+              <li class:list={["text-body-sm", cert && "group relative"]}>
+                <span
+                  class:list={[
+                    "text-kd-mint",
+                    cert && "underline-offset-4 decoration-1 group-hover:underline",
+                  ]}
+                  id={cert ? `kd-cert-standard-${i}` : undefined}
+                  data-cert-name={cert ? "" : undefined}
+                  data-edit={`${page}.footer.certified.items.${i}.standard`}
+                >
+                  {item.standard}
+                </span>
+                <span class="text-kd-slate" data-no-edit>·</span>
+                <span
+                  class="text-kd-slate"
+                  data-edit={`${page}.footer.certified.items.${i}.covers`}
+                >
+                  {item.covers}
+                </span>
+                {cert && (
+                  <button
+                    type="button"
+                    class="absolute inset-0 cursor-pointer"
+                    aria-haspopup="dialog"
+                    aria-labelledby={`kd-cert-view-${i} kd-cert-standard-${i}`}
+                    data-cert-open={cert.src}
+                    data-cert-layout={cert.layout}
+                    data-cert-overlay
+                  >
+                    <span id={`kd-cert-view-${i}`} class="sr-only" data-no-edit>
+                      {certificateViewer.view}
+                    </span>
+                  </button>
+                )}
+              </li>
+            );
+          })
         }
       </ul>
       <p
@@ -241,3 +276,5 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+{anyCertificate && <CertificateViewer labels={certificateViewer} />}

@@ -100,12 +100,6 @@ export interface InfoPageCopy {
     readonly retired?: boolean;
   };
   readonly footer: typeof home.footer;
-  /** The certificate viewer's labels (/hse). Drawn only while a card has
-      a certificate image, so check-edit-keys.mjs treats them as runtime;
-      the button and the viewer mark them `data-no-edit` (one label on
-      several buttons, and a viewer that must close in edit mode too), so
-      they are changed here. */
-  readonly viewer?: { readonly view: string; readonly close: string };
 }
 
 const chrome = { nav: home.nav, footer: home.footer };
@@ -385,7 +379,6 @@ export const hse: HseCopy = {
       "ISO 14001:2015.",
   },
   ...chrome,
-  viewer: { view: "View certificate", close: "Close" },
   hero: {
     kicker: "Health, Safety & Environment",
     title: "It is better to be safe than sorry.",
@@ -454,11 +447,42 @@ export const hse: HseCopy = {
          certifying body and validity go on its card as `facts`
          ("Certificate number", "Certifying body", "Valid until"); a field
          that cannot be read is a "To be added" fact. None was in place on
-         21 Oct 2026, so no card has a button or details yet. */
+         21 Oct 2026 at 17:00; that evening K.D. sent four (Certificates/):
+         the three ISO certificates, issued by QRO on 20 May 2026, and the
+         CBIC's Certificate of Appreciation for 2025–26. Their facts below
+         are read off the certificates. The buttons, the footer's links and
+         the viewer are drawn from the images themselves. */
       items: [
-        { title: "ISO 45001:2018", body: "Occupational health & safety management.", cert: "iso-45001" },
-        { title: "ISO 14001:2015", body: "Environmental management.", cert: "iso-14001" },
-        { title: "ISO 9001:2015", body: "Quality management.", cert: "iso-9001" },
+        {
+          title: "ISO 45001:2018",
+          body: "Occupational health & safety management.",
+          cert: "iso-45001",
+          facts: [
+            { label: "Certificate number", value: "3050260520169HS" },
+            { label: "Certifying body", value: "QRO Certification LLP" },
+            { label: "Valid until", value: "19 May 2029" },
+          ],
+        },
+        {
+          title: "ISO 14001:2015",
+          body: "Environmental management.",
+          cert: "iso-14001",
+          facts: [
+            { label: "Certificate number", value: "3050260520170E" },
+            { label: "Certifying body", value: "QRO Certification LLP" },
+            { label: "Valid until", value: "19 May 2029" },
+          ],
+        },
+        {
+          title: "ISO 9001:2015",
+          body: "Quality management.",
+          cert: "iso-9001",
+          facts: [
+            { label: "Certificate number", value: "3050260520168Q" },
+            { label: "Certifying body", value: "QRO Certification LLP" },
+            { label: "Valid until", value: "19 May 2029" },
+          ],
+        },
         /* K.D.Website_Details.md's Leadership section ends on an open
            ask to the company: "Please give more details on
            Certifications: ISO certifications or any other certifications
@@ -493,12 +517,21 @@ export const hse: HseCopy = {
           cert: "pwd-licence",
         },
         /* Appended 21 Oct 2026 (OPEN-QUESTIONS.md #58). The body is Sir's
-           own sentence, word for word. No year until the certificate
-           shows one. */
+           own sentence, word for word. The certificate (E-Certificate-
+           27AACCK5158J1ZA.pdf, K.D.'s GSTIN) is the CBIC's Certificate of
+           Appreciation for prompt GST returns and payment in 2025–26; the
+           facts say so in its own terms. It has no validity date. */
         {
           title: "Recognition by Indian Tax Authorities",
           body: "Recognised by Indian Tax Authorities for Compliance Excellence.",
           cert: "tax-recognition",
+          facts: [
+            {
+              label: "Issued by",
+              value: "Central Board of Indirect Taxes and Customs, Ministry of Finance",
+            },
+            { label: "Awarded for", value: "Prompt GST returns and payment, financial year 2025–26" },
+          ],
         },
         /* Appended 21 Oct 2026, Sir. Nothing about class, category or what
            the registration allows. */

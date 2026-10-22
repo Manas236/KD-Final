@@ -4,12 +4,17 @@
    ------------------------------------------------------------
    21 Oct 2026, at Sir's request (OPEN-QUESTIONS.md #58). A card in /hse's
    Certifications whose certificate image exists has a "View certificate"
-   button (InfoSections.astro); this is the one dialog they all open. It
-   is drawn only on a page where at least one such button is.
+   button (InfoSections.astro), and so has each "Certified to" line in
+   the footer, on every page (SiteFooter.astro); this is the one dialog
+   they all open. The footer draws it, once per page, while any
+   certificate image exists. A button carries the image's URL
+   (data-cert-open) and its layout (data-cert-layout); the dialog's
+   title is the text of the [data-cert-name] element in the button's
+   <li>, read when it opens.
 
    A DETERRENT, NOT PROTECTION. A web page cannot stop an operating
    system's snipping tool, a phone's screenshot or a camera, and anyone
-   who opens the developer tools can find the file. What protects the
+   who reads this script can rebuild the image. What protects the
    certificate is the watermark burned into the image itself
    (scripts/build-certificates.mjs: "K.D. Constructions · For
    verification only", tiled across it). This only makes casual copying
@@ -18,12 +23,28 @@
      · the image is drawn onto a <canvas> from an Image object that is
        never in the page, so there is no <img> to save and no download
        link;
+     · the file itself is a mosaic: scripts/build-certificates.mjs cuts
+       it into tiles and shuffles them, and only this script puts them
+       back (the same seeded shuffle, its functions below), so the JPEG
+       opened on its own, or saved from the network panel, shows nothing
+       usable;
      · right-click, dragging and text selection do nothing inside it, and
        Ctrl/Cmd + S and Ctrl/Cmd + P are swallowed while it is open;
-     · the PrintScreen key blanks the canvas for a moment and, where the
-       browser allows it, overwrites the clipboard;
-     · while the window has lost focus or the tab is hidden, the
-       certificate is drawn blurred, and sharp again on return;
+     · the moment the Windows or Command key goes down, or Ctrl + Shift
+       together, the canvas goes blank: that is how Win + Shift + S,
+       Win + PrintScreen and the Mac's Cmd + Shift + 3/4/5 all begin,
+       and the page hears it before the capture is taken. It stays blank
+       until the keys are up AND the pointer moves on the page again (or
+       a tap, or another key), so a capture whose keys are let go before
+       the area is chosen (Cmd + Shift + 4) still finds it blank;
+     · PrintScreen on its own blanks it the same way and, where the
+       browser allows it, overwrites the clipboard. Windows reports that
+       key only once it is released, after the capture, so for a
+       full-screen capture this is late; the clipboard is what it saves;
+     · while the window has lost focus, the tab is hidden or the mouse
+       has left the window (towards a capture tool on the taskbar or the
+       dock), the certificate is drawn blurred, and sharp again on
+       return;
      · in print, the dialog and the buttons are hidden (global.css).
 
    The page around it behaves as ever; nothing here runs until a button
@@ -51,7 +72,7 @@ const { labels } = Astro.props;
 ---
 
 <dialog
-  class="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none border-0 bg-kd-ink-deep text-kd-mist select-none open:flex flex-col"
+  class="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none border-0 bg-kd-ink-deep text-kd-mist select-none [-webkit-touch-callout:none] open:flex flex-col"
   data-cert-viewer
   aria-labelledby="kd-cert-title"
 >
@@ -74,6 +95,59 @@ const { labels } = Astro.props;
 
 <script>
   /* See the header of this file: a deterrent, and nothing more. */
+
+  /* The tile shuffle: the same functions as in
+     scripts/build-certificates.mjs. Change one, change both. */
+  function random(seed: number) {
+    // mulberry32
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /** Tile i of the file is tile order[i] of the certificate. */
+  function tileOrder(count: number, seed: number) {
+    const order = Array.from({ length: count }, (_, i) => i);
+    const next = random(seed);
+    for (let i = count - 1; i > 0; i--) {
+      const j = Math.floor(next() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  }
+
+  /** The certificate put back together, at the size it was written. */
+  function assemble(file: HTMLImageElement, layout: string) {
+    const [width, height, tile, seed] = layout.split(" ").map(Number);
+    if (!width || !height || !tile) return null;
+    const cols = Math.ceil(width / tile);
+    const rows = Math.ceil(height / tile);
+    const sheet = document.createElement("canvas");
+    sheet.width = width;
+    sheet.height = height;
+    const c = sheet.getContext("2d");
+    if (!c) return null;
+    tileOrder(cols * rows, seed).forEach((from, to) => {
+      c.drawImage(
+        file,
+        (to % cols) * tile,
+        Math.floor(to / cols) * tile,
+        tile,
+        tile,
+        (from % cols) * tile,
+        Math.floor(from / cols) * tile,
+        tile,
+        tile,
+      );
+    });
+    return sheet;
+  }
+
   const dialog = document.querySelector<HTMLDialogElement>("dialog[data-cert-viewer]");
   const canvas = dialog?.querySelector<HTMLCanvasElement>("canvas[data-cert-canvas]");
   const ctx = canvas?.getContext("2d");
@@ -82,19 +156,25 @@ const { labels } = Astro.props;
   const closeButton = dialog?.querySelector<HTMLButtonElement>("[data-cert-close]");
 
   if (dialog && canvas && ctx && stage && heading && closeButton) {
-    let image: HTMLImageElement | null = null;
+    /* The certificate as put back together, while the viewer is open. */
+    let sheet: HTMLCanvasElement | null = null;
     let opener: HTMLElement | null = null;
-    /* Drawn blurred while the window is not in front. */
+    /* Which opening a loading image belongs to. */
+    let opening = 0;
+    /* Drawn blurred while the window is not in front or the mouse is
+       out of it. */
     let veiled = false;
-    /* Drawn blank for a moment after PrintScreen. */
+    let pointerOut = false;
+    /* Drawn blank from a capture shortcut until the keys are up
+       (`waiting`) and then the person is back on the page. */
     let blanked = false;
-    let unblank = 0;
+    let waiting = false;
 
     /* The certificate, fitted inside the stage, sharp on a dense screen. */
     const draw = () => {
-      const w0 = image?.naturalWidth ?? 0;
-      const h0 = image?.naturalHeight ?? 0;
-      if (!image || !w0 || !h0 || !dialog.open) return;
+      const w0 = sheet?.width ?? 0;
+      const h0 = sheet?.height ?? 0;
+      if (!sheet || !w0 || !h0 || !dialog.open) return;
       const style = getComputedStyle(stage);
       const roomW = stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
       const roomH = stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
@@ -113,29 +193,37 @@ const { labels } = Astro.props;
         // A browser without canvas filters draws nothing while veiled.
         if (!("filter" in ctx)) return;
         ctx.filter = "blur(24px)";
-        ctx.drawImage(image, 0, 0, w, h);
+        ctx.drawImage(sheet, 0, 0, w, h);
         ctx.filter = "none";
         return;
       }
-      ctx.drawImage(image, 0, 0, w, h);
+      ctx.drawImage(sheet, 0, 0, w, h);
     };
 
     const open = (button: HTMLElement) => {
       const src = button.getAttribute("data-cert-open");
-      if (!src) return;
+      const layout = button.getAttribute("data-cert-layout");
+      if (!src || !layout) return;
       opener = button;
-      const title = button.closest("li")?.querySelector("h3")?.textContent?.trim() ?? "";
+      const title =
+        button.closest("li")?.querySelector("[data-cert-name]")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
       heading.textContent = title;
       canvas.setAttribute("aria-label", title);
-      veiled = document.hidden || !document.hasFocus();
+      veiled = document.hidden || !document.hasFocus() || pointerOut;
       blanked = false;
-      image = new Image();
-      image.decoding = "async";
-      image.addEventListener("load", draw);
-      image.src = src;
+      waiting = false;
+      sheet = null;
+      const mine = ++opening;
+      const file = new Image();
+      file.decoding = "async";
+      file.addEventListener("load", () => {
+        if (mine !== opening || !dialog.open) return;
+        sheet = assemble(file, layout);
+        draw();
+      });
+      file.src = src;
       dialog.showModal();
       closeButton.focus();
-      draw();
     };
 
     const shut = () => {
@@ -145,10 +233,10 @@ const { labels } = Astro.props;
     /* Every way out ends here, Esc included: the drawing goes, and focus
        goes back to the button that opened it. */
     dialog.addEventListener("close", () => {
-      window.clearTimeout(unblank);
+      opening++;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      image = null;
+      sheet = null;
       heading.textContent = "";
       opener?.focus();
       opener = null;
@@ -187,34 +275,83 @@ const { labels } = Astro.props;
       true,
     );
 
-    /* PrintScreen: most systems only report the key's release. */
-    const printScreen = (event: KeyboardEvent) => {
-      if (!dialog.open || event.key !== "PrintScreen") return;
+    /* ---------- capture shortcuts ---------- */
+    const blank = () => {
       blanked = true;
+      waiting = false;
       draw();
-      navigator.clipboard?.writeText("").catch(() => {});
-      window.clearTimeout(unblank);
-      unblank = window.setTimeout(() => {
-        blanked = false;
-        draw();
-      }, 1500);
     };
-    document.addEventListener("keydown", printScreen, true);
-    document.addEventListener("keyup", printScreen, true);
+    /* The keys are up: still blank until the person is back on the page. */
+    const release = () => {
+      if (blanked) waiting = true;
+    };
+    const back = () => {
+      if (!waiting) return;
+      waiting = false;
+      blanked = false;
+      draw();
+    };
+    /* Win / Cmd, or Ctrl + Shift: how a system or browser capture starts. */
+    const capturing = (event: KeyboardEvent) =>
+      event.key === "Meta" || event.key === "OS" || event.metaKey || (event.ctrlKey && event.shiftKey);
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (!dialog.open) return;
+        if (capturing(event)) blank();
+        else if (!["Shift", "Control", "Alt", "PrintScreen"].includes(event.key)) back();
+      },
+      true,
+    );
+    document.addEventListener(
+      "keyup",
+      (event) => {
+        if (!dialog.open) return;
+        if (event.key === "PrintScreen") {
+          // Windows reports this key only on release, after the capture.
+          blank();
+          navigator.clipboard?.writeText("").catch(() => {});
+          release();
+          return;
+        }
+        if (!(event.metaKey || (event.ctrlKey && event.shiftKey))) release();
+      },
+      true,
+    );
+    document.addEventListener("pointermove", back);
+    document.addEventListener("pointerdown", back);
 
     for (const type of ["contextmenu", "dragstart", "selectstart", "copy"]) {
       dialog.addEventListener(type, (event) => event.preventDefault());
     }
 
-    /* Away and back. */
-    const reveal = (hide: boolean) => {
-      if (!dialog.open || veiled === hide) return;
-      veiled = hide;
+    /* ---------- away and back ---------- */
+    const reveal = () => {
+      const away = document.hidden || !document.hasFocus() || pointerOut;
+      if (!dialog.open || veiled === away) return;
+      veiled = away;
       draw();
     };
-    window.addEventListener("blur", () => reveal(true));
-    window.addEventListener("focus", () => reveal(document.hidden));
-    document.addEventListener("visibilitychange", () => reveal(document.hidden || !document.hasFocus()));
+    window.addEventListener("blur", reveal);
+    window.addEventListener("focus", () => {
+      // Back from the Start menu or a capture tool: the key that took
+      // focus away may never be reported released here.
+      release();
+      reveal();
+    });
+    document.addEventListener("visibilitychange", reveal);
+    /* The mouse out of the window (no related target), and back in. */
+    document.addEventListener("pointerout", (event) => {
+      if (event.pointerType !== "mouse" || event.relatedTarget) return;
+      pointerOut = true;
+      reveal();
+    });
+    document.addEventListener("pointerover", (event) => {
+      if (event.pointerType !== "mouse" || !pointerOut) return;
+      pointerOut = false;
+      reveal();
+    });
     window.addEventListener("resize", draw);
   }
 </script>

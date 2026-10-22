@@ -79,6 +79,15 @@
   }
 }
 
+/* Edit mode: a certificate button stretched over its card (its ::after,
+   InfoSections.astro) or over a footer line (data-cert-overlay,
+   SiteFooter.astro) lets clicks through to the words under it, so they
+   edit as anywhere else. The visible "View certificate" still opens. */
+html[data-nt-mode] [data-cert-open]::after,
+html[data-nt-mode] [data-cert-overlay] {
+  pointer-events: none;
+}
+
 /* Nav drop-down (Projects, About) while the bar is transparent over the
    homepage hero — Nav.astro sets data-transparent on the header only
    there, only at ≥1080px, and removes it once the hero scrolls out from

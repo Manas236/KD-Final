@@ -1,7 +1,8 @@
-# Certificate images (watermarked copies only)
+# Certificate images (watermarked, scrambled copies only)
 
 This folder holds the images behind the "View certificate" buttons on
-`/hse` (Certifications), one per certificate, under a fixed name:
+`/hse` (Certifications) and the footer's "Certified to" lines, one per
+certificate, under a fixed name:
 
 | File | Card |
 | --- | --- |
@@ -14,9 +15,12 @@ This folder holds the images behind the "View certificate" buttons on
 
 Nothing is put here by hand. `npm run certificates:build`
 (`scripts/build-certificates.mjs`) reads the scans K.D. supplies, from
-`ISO_Certificates/`, `Tax_Certificate/`, `CIDCO_Certificate/` and
-`PWD_Licence/` in the project root or its parent folder, and writes each
-here scaled to 1400px and watermarked ("K.D. Constructions · For
-verification only"). The scans are git-ignored and never served. A card
-whose image is missing shows no button. See the script's header and
-OPEN-QUESTIONS.md #58.
+`Certificates/` (any of them, mixed), `ISO_Certificates/`,
+`Tax_Certificate/`, `CIDCO_Certificate/` and `PWD_Licence/` in the project
+root or its parent folder, and writes each here scaled to 1400px,
+watermarked ("K.D. Constructions · For verification only") and cut into
+shuffled 64px tiles. `layout.json` holds each one's true size, tile size
+and shuffle seed; without its line an image is not shown, because only
+the viewer (`CertificateViewer.astro`) can put the tiles back. The scans
+are git-ignored and never served. A card whose image is missing shows no
+button. See the script's header and OPEN-QUESTIONS.md #58 and #60.
