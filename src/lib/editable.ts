@@ -14,6 +14,9 @@
        has rows in it.
 
    Everything else, including every comment, is the original.
+
+   Changed since: RE_EDIT_KEY takes capital letters (23 Oct 2026). See
+   the note above it.
    ============================================================ */
 /* ============================================================
    Inline editing — the rules, in one place
@@ -205,13 +208,27 @@ export function cleanText(raw: unknown): string {
    The server still never builds a key, and still refuses anything not
    shaped like one — the value goes back out to other visitors'
    browsers as a querySelector argument, so its character set is
-   deliberately narrow: lower-case alphanumerics and hyphens within a
+   deliberately narrow: ASCII letters, digits and hyphens within a
    segment, dots between segments, at least two segments. Nothing in
    that set needs escaping in an attribute selector.
+
+   CAPITAL LETTERS, since 23 Oct 2026. A key mirrors a copy property,
+   and a property can be camelCase: `projects.detail.overviewKicker`,
+   `home.footer.legalName`, `hse.hero.statsNote`. Until then a segment
+   was `[a-z0-9]`, so those slots (37 keys, 206 slots, at least one on
+   every page) opened in the editor and every save was refused with
+   "Could not identify the text on the page." Nothing about a
+   lower-case key changes.
+
+   Case and the database: content_edits.edit_key is utf8mb4_unicode_ci,
+   so the API routes find a key's rows whatever their case. That is
+   safe while no two keys on one page differ by case alone, and on
+   23 Oct 2026 none did, on any page or across the site. Never name a
+   property that differs from a sibling only by case.
    ------------------------------------------------------------ */
 export const MAX_KEY = 512;
 
-const KEY_SEGMENT = "[a-z0-9]+(?:-[a-z0-9]+)*";
+const KEY_SEGMENT = "[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*";
 export const RE_EDIT_KEY = new RegExp(
   "^" + KEY_SEGMENT + "(?:\\." + KEY_SEGMENT + ")+$"
 );

@@ -1,7 +1,7 @@
 /* ============================================================
    Build gate — declared slots and copy fidelity
    ------------------------------------------------------------
-   Loads the rendered page in a real browser and asserts four things.
+   Loads the rendered page in a real browser and asserts five things.
    A real DOM rather than a regex over the HTML, because the questions
    here are about TEXT NODES, and "which runs of text does this document
    actually contain" is a parser's answer, not a pattern's.
@@ -16,6 +16,9 @@
         so a key on a non-leaf is a slot that silently does not work.
      4. Every string in the page's copy module is rendered exactly once,
         as the whole text of some slot.
+     5. Every data-edit key is one the save route accepts: isValidKey()
+        in src/lib/editable.ts, the function the API routes call. A key
+        it refuses opens in the editor and fails on every save.
 
    On (4), "exactly once" means once as a COMPLETE slot value, not once
    as a substring of the page. The approved copy repeats the company's
@@ -29,6 +32,7 @@
    ============================================================ */
 import { chromium } from "playwright";
 import "dotenv/config";
+import { isValidKey } from "../src/lib/editable.ts";
 
 const ORIGIN = process.argv[2] || `http://localhost:${process.env.PORT || 4322}`;
 const PAGE = process.argv[3] || "/";
@@ -298,6 +302,15 @@ if (orphans.length === 0)
   pass(`no slot on the page is missing from ${route.module.replace("../", "")}`);
 else for (const o of orphans)
   fail(`slot "${o.key}" has no matching string in ${route.module.replace("../", "")}`);
+
+/* ---------- 5. every key is one the save route accepts ----------
+   Until 23 Oct 2026 the rule refused capital letters, and 37 keys
+   (`projects.detail.overviewKicker`, `home.footer.legalName` and the
+   rest) were editable on screen and refused on every save. */
+const refused = report.slots.filter((s) => !isValidKey(s.key));
+if (refused.length === 0) pass(`all ${report.slots.length} keys are ones the save route accepts`);
+else for (const s of refused)
+  fail(`key "${s.key}" is refused by isValidKey() in src/lib/editable.ts, so it can never be saved`);
 
 /* Informational: distinct slots that legitimately carry the same words. */
 const sameWords = new Map();

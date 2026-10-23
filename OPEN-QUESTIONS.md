@@ -4237,4 +4237,81 @@ key with a capital letter (`RE_EDIT_KEY` in `src/lib/editable.ts` allows
 `a-z`, `0-9` and hyphens): 36 such keys are on the site, among them every
 project page's `projects.detail.overviewKicker`, `backLabel`,
 `ctaHeadline`, the footer's `legalName` and the `statsNote` lines. The
-save answers "Could not identify the text on the page."
+save answers "Could not identify the text on the page." Fixed in #63;
+the true count was 37.
+
+## 63. Edit mode: keys with capital letters can be saved
+
+2026-10-23. Found in the #62 pass. The save route refused every edit key
+with a capital letter, so 37 keys opened in the editor and every save
+answered "Could not identify the text on the page." They are 206 slots,
+at least one on every page: the footer's legal name on all 38 pages,
+every project page's back link, Overview kicker, gallery kicker, status
+badge and closing band (kicker, headline, button), the Vindhane and RMC
+plant pages' same labels and the erection ledger heading, the RMC plant
+card on `/projects`, the two `/hse` stats notes, the careers form's
+consent link and the photo note on the project page that has one.
+
+### What changed
+
+- `src/lib/editable.ts`, `RE_EDIT_KEY`: a segment may hold `A-Z` as well
+  as `a-z`, `0-9` and inner hyphens. The rest of the rule stands: dots
+  between segments, at least two segments, 512 characters at most. This
+  one check serves saving, undo and the version list (`/api/content`,
+  `/api/content/revert`, `/api/content/history`). Nothing else checks a
+  key: the browser does not, and the column is `VARCHAR(512)`.
+- `scripts/check-edit-keys.mjs`: a fifth check, every key on the page
+  passes that rule, so a key that could never be saved fails the gate.
+  Run with the old rule, it fails `/hse` on its three capital-letter keys.
+- DESIGN-SYSTEM.md §9: the key rule, and no two keys on a page differing
+  by case alone.
+
+### The keys
+
+Collected from every address of the build (the 37 sitemap pages and the
+404), as served and as the browser sees them: 1,634 distinct keys, 3,715
+slots, 12 to 50 characters, 2 to 8 segments. Characters used: `a-z`,
+`0-9`, `-`, `.` and the capitals `B H K L N P`, each inside a camelCase
+segment (`backLabel`, `ctaButton`, `ctaHeadline`, `ctaKicker`,
+`galleryKicker`, `overviewKicker`, `photoNote`, `statusBadge`,
+`legalName`, `consentLink`, `statsNote`, `rmcPlant`, `ledgerHead`). The
+rule admits any capital, so a new camelCase property needs no change
+here. Keys written by the edit-mode features (`projects.blocks.<n>`,
+`careers.jobs.<n>.*`) are lowercase and digits. Every real key passes;
+46 kinds of junk are refused (spaces, quotes, angle brackets, slashes,
+`..`, backslash, empty or stray dots and hyphens, non-ASCII look-alikes
+such as the Kelvin sign, 513 characters and more).
+
+**Case.** `content_edits.edit_key` is `utf8mb4_unicode_ci` (in
+`db/migrate.sql` and on the local database), so a lookup ignores case.
+No two keys differ by case alone, on any page or across the site, and no
+lowercase spelling of any of the 37 has ever been in the repository, so
+no stored row can be read under the wrong key. No schema change.
+
+### Edit keys
+
+None added, moved or renamed. On the server none of the 37 can have a
+saved row, because every save of one was refused, so nothing of Sir's
+is shadowed or overwritten.
+
+### For the next deploy
+
+Pull, build, restart. No migration and no database check.
+
+### Verified
+
+Build clean. Edit mode on the new build, signed in, then reloaded as a
+signed-out visitor: `projects.detail.overviewKicker` on
+`/projects/sanpada-carshed`, `home.footer.legalName` on `/`,
+`hse.hero.statsNote` on `/hse` and the lowercase `home.hero.kicker` on
+`/` each saved (one row, key stored exactly), showed to the visitor,
+held across the editor's reload, and were put back. On the build before
+the fix the same three capital-letter saves answer 400 "Could not
+identify the text on the page." and write nothing, and the version list
+of `hse.hero.statsNote` answers the same; on the new build it lists both
+versions. `check-edit-keys` passes on all 28 routes it covers, including
+the new check. No em dash in any served page, the sitemap or robots.txt.
+Placeholders 43. Compared element by element with `7232c52` at 1280 on
+all 38 pages (16,761 elements: box, computed style, text): no
+difference. The local database got only the test saves and their
+put-backs; every key there shows the text it showed before.

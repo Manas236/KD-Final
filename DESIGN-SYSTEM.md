@@ -487,8 +487,15 @@ Rules:
   stored key) moves; both gates expect nothing from a retired object. In use
   on nav links, the homepage hero stats, InfoPage cards (`InfoSections`),
   `about.board` and the merged pages' CTAs.
-- Lowercase, dot-separated, `[a-z0-9-]` within a segment. Array items are
-  indexed: `home.capabilities.cards.0.title`.
+- Dot-separated, `[A-Za-z0-9-]` within a segment. Lowercase, except that a
+  segment naming a camelCase property keeps its capitals
+  (`projects.detail.overviewKicker`). Array items are indexed:
+  `home.capabilities.cards.0.title`. The rule is `isValidKey()` in
+  `src/lib/editable.ts`; `scripts/check-edit-keys.mjs` checks every slot
+  against it.
+- **No two keys on a page may differ by case alone.** `content_edits` matches
+  keys case-insensitively (`utf8mb4_unicode_ci`), so the two would share one
+  history.
 - Copy lives in `src/data/<page>.ts` as a typed object. **No hardcoded strings
   in markup.**
 
