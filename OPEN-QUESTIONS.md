@@ -4545,7 +4545,7 @@ second paragraph says the plant is "equipped with welding, bending and
 cutting machinery" (from `K.D.Website_Details.md`). Both are kept as they
 were and asked: PRE-LAUNCH.md S23.
 
-### The photographs and the video: not on this PC
+### The photographs and the video: not on this PC at first
 
 They were to be in `Vindhane Plant/` beside `vindhane-shed-eot-crane.png`.
 They are not. The newest file there is `Vidhane_Factory.mp4` of 2026-10-15
@@ -4650,9 +4650,64 @@ Pull, build, restart. No schema change, no migration. Before pulling, list
 any `content_edits` row on the five reworded rows and on slot 9 (PRE-LAUNCH.md,
 "At the next deploy: the 2026-10-24 Vindhane machine list and layout").
 
+### The photograph and the video, later the same day
+
+The user then put the files in `Vindhane Plant/`: `img1.jpg`, `img2.jpg`, and
+the video saved as a web page, `vid2.html` with its folder `vid2_files/`.
+
+- **The two photographs are one photograph.** `img1.jpg` and `img2.jpg` are
+  byte-identical (1600 × 900, 218,740 bytes). Both went untouched into
+  `backups/vindhane-originals-20261024/` (git-ignored). `img1.jpg` was renamed
+  `Vindhane Plant/vindhane-shed-eot-crane-wide.jpg` (PHOTOS.md B23, listed in
+  `raw-media.manifest.txt`); the duplicate `img2.jpg` was taken out of the
+  folder, its untouched copy kept in the backup. The photograph looks down the
+  length of the crane shed: the yellow EOT crane across the bay, the roof
+  trusses and skylights, the crew working steel on the floor, a mobile crane at
+  the far door.
+- **On the site** it is photograph 17 of the Vindhane gallery group, "EOT crane
+  across the fabrication shed, the crew at work on the floor below", right
+  after B21 (photograph 16), the same crane seen from below. It shows wherever
+  the group does: the Plant Gallery on `/resources/vindhane-plant`, `/gallery`
+  and the `/projects` Gallery tab. Its alt text is the one every plant
+  photograph gets (src/lib/gallery-alt.ts): "K.D. Constructions' Vindhane Steel
+  Fabrication Plant. EOT crane across the fabrication shed, …". Same pipeline
+  as every gallery photograph: `scripts/build-gallery.mjs` (long edge capped at
+  1600px, JPEG q82, metadata stripped), then `scripts/build-gallery-hashes.mjs`
+  for the studio's near-copy check. Appended, so no photograph in the group
+  moved. At 1280 it fills the empty third of the group's last row (16 photos
+  left one alone there); on phones it is one more tile in the column.
+- **The band beside the paragraphs is unchanged.** It holds the clip; with no
+  new clip there was nothing to add there, and the Mankhurd deck clip stays
+  where Sir approved it (S17). The paragraphs (356px) and the clip (331px)
+  still balance at 1280.
+- **No credit is embedded in the file**, as in every other photograph on the
+  site: the gallery script strips metadata (phone EXIF carries GPS), and Astro
+  re-encodes every served size without it. K.D. is credited in the alt text,
+  and on project pages also in the structured data. Credit inside the served
+  files would mean changing how every image on the site is served.
+- **S4 is confirmed** (PRE-LAUNCH.md): the same shed and the same crane as B21.
+  The crane: the same yellow double-girder crane, the same ladder down to a
+  hanging cage platform at its left end, and along the girder the same row of a
+  panel box, a picture banner, a plate and a small display. The shed: the same
+  white battened columns stepping out under grey runway girders, grey wall
+  sheeting, glazing under the eaves and a door in the end wall. The plate
+  beside the banner is white in B21 and the yellow maker's plate in the new
+  photograph, which reads as the same plate before its cover came off. The
+  plate shows a capacity; no caption repeats it. S4 had said B21 would join
+  the gallery on a yes. It has been there since 2026-09-28, when every
+  supplied photograph went up, as photograph 16, so the yes changes nothing
+  on the site.
+- **The video is not on the site.** `vid2_files/` holds the WhatsApp Web
+  page's scripts and stylesheets and 15 `file.enc` items that are 96 × 96 still
+  thumbnails; ffprobe found no video stream with a duration in any of its 76
+  files. As asked, nothing was taken from the page or any address in it, and
+  nothing changed for the video. `vid2.html` and `vid2_files/` are left where
+  they are; the folder is git-ignored and nothing from them is in the build.
+
 ### Still open
 
-- **The photographs and the video** (above), and with them **S4**.
+- **The video:** it needs to come as the video file itself (in WhatsApp, the
+  video saved or forwarded, not the chat page saved from the browser).
 - **S23**, bending machinery: for the plant in-charge, via Sir.
 - **Karjat RMC plant, rows 4d to 4f:** for the RMC plant's own contact.
 
@@ -4668,3 +4723,19 @@ muted, every image loaded (local, git-ignored, before and after:
 `backups/vindhane-layout-20261024/`). Compared element by element with
 `0c054eb` at 1280, 390 and 360 on all 38 pages: only
 `/resources/vindhane-plant` differs.
+
+The photograph, later the same day: build clean, placeholders 40.
+`check-edit-keys` passes on `/resources/vindhane-plant` (148 keys, every one
+identical in place, size, style and text to `df8752a` at 360, 390 and 1280),
+`/gallery` and `/projects`. No em dash in the 40 served addresses, no staff
+name in them or in `src`, `public` or the build, and nothing from `vid2.html`
+or `vid2_files/` in the build. `/resources/vindhane-plant` and `/gallery` at
+360x800, 390x844 and 1280x800: 17 Vindhane photographs, all loaded, no
+sideways scroll, nothing clipped; the clip plays muted (local, git-ignored:
+`backups/vindhane-media-20261024/`). Served: the tile 800 × 552 WebP, 67,416
+bytes; the lightbox 1600 × 900 WebP, 167,878 bytes; the stored JPEG 217,203
+bytes. Compared element by element with `df8752a` at 1280, 390 and 360 on all
+38 pages: 35 identical; on `/resources/vindhane-plant`, `/gallery` and
+`/projects`, with the new tile taken out, every element is identical, and the
+only change is that on phones what follows the Vindhane group sits 281px
+lower (the tile and its gap).
