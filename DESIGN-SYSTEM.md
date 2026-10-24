@@ -358,7 +358,13 @@ keys are up and the pointer moves on the page again; PrintScreen blanks it
 and overwrites the clipboard where the browser allows (Windows reports
 that key only after the capture); it blurs while the window is in the
 background or the mouse is out of the window; print hides it and its
-buttons. It is a modal dialog: focus stays on Close, Esc closes, focus
+buttons. Every drawing of the certificate, sharp or blurred (never the
+blank one), carries a **viewing stamp** (2026-10-24): "Viewed on
+kdconstructions.net · 24 Oct 2026", the visitor's own date, Inter 600 at
+a 26th of the certificate's drawn short side (11px at least), `--kd-ink`
+at 18%, tiled at -30 degrees in every gap between the watermark's rows.
+A phone's screenshot cannot be stopped, so every capture is marked as a
+dated copy from the website. It is a modal dialog: focus stays on Close, Esc closes, focus
 returns to the button. Only the original scans' watermarked copies are
 ever in the repo or on the site (`src/assets/certificates/`); the scans
 are git-ignored. A card or footer line without an image has no button.

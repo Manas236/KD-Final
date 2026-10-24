@@ -4315,3 +4315,101 @@ Placeholders 43. Compared element by element with `7232c52` at 1280 on
 all 38 pages (16,761 elements: box, computed style, text): no
 difference. The local database got only the test saves and their
 put-backs; every key there shows the text it showed before.
+
+## 64. A dated viewing stamp across every certificate in the viewer
+
+2026-10-24. A phone fires no event a web page can hear when a screenshot
+is taken, so on a phone the watermark burned into the file ("K.D.
+Constructions · For verification only", #60) was all a capture carried.
+The user asked for a second, dated layer drawn into the viewer's canvas,
+so that any copy taken on any device is plainly a copy from the website.
+
+### What changed
+
+- **`src/components/CertificateViewer.astro`.** After the certificate is
+  drawn, sharp or blurred, the viewer draws "Viewed on
+  kdconstructions.net · 24 Oct 2026" across it. The date is the
+  visitor's own on the day the viewer opens (day, three-letter month,
+  year: "5 Sep 2026"). Nothing is drawn while the canvas is blank. It is
+  drawn in the canvas's own pixels with the certificate's device-pixel
+  handling, so it is as crisp as the certificate and in every capture of
+  it; over the blurred certificate it stays sharp.
+- **Placement.** Tiled at -30 degrees, the watermark's angle, one row in
+  every gap between the watermark's rows, midway, so the two never lie
+  on each other. Each row has one whole stamp centred on the stretch of
+  it that crosses the certificate, and further copies out to its edges.
+  To find the gaps the viewer repeats `watermarkSvg()`'s size, step,
+  span and turn from `scripts/build-certificates.mjs`. That script was
+  not touched in this pass, so the note to keep the two in step is on
+  the viewer's side only: if the watermark's geometry ever changes, change
+  `mark()` in the viewer too (a mismatch only puts the stamp on top of
+  watermark rows; it is still drawn everywhere).
+- **Look.** Inter 600, a 26th of the drawn certificate's short side (its
+  width on the three ISO certificates, its height on the landscape CBIC
+  one), never under 11px; `--kd-ink` at 18% opacity.
+- **Wording.** `certificateViewer.stamp` in `src/data/home.ts`, beside
+  "View certificate" and "Close": "Viewed on kdconstructions.net ·
+  {date}". Not an edit slot: it reaches the script as an attribute of the
+  dialog (`data-cert-stamp`), never as text on the page. The site's name
+  is written there, never read from the address bar, so on the test link
+  (a bare IP) it still says kdconstructions.net.
+- DESIGN-SYSTEM.md §5 and PRE-LAUNCH.md (Certificates) say the same.
+
+### Tuning
+
+Rendered at 360x800 and 390x844 at 3x (a phone screenshot's own pixels)
+and at 1280x800, ISO 45001 and the CBIC certificate, and looked at:
+
+- **A row in every second gap** was cleaner, but left a 78px square of
+  the certificate (a fifth of its width on a phone) with no stamp in it:
+  room for a stamp-free crop of the standard or the certificate number.
+  **Every gap:** the largest stamp-free square is 42 to 46px on a phone
+  (60px at 1280), and every sixteenth of every certificate has stamp ink
+  in it.
+- **Size.** A 26th of the width made the stamp on the landscape CBIC
+  certificate 1.4 times larger, against the document, than on the ISO
+  ones (36px at 1280), heavier than the watermark and crowding its rows.
+  A 26th of the short side gives all four the same proportion.
+- **Opacity.** 14% read lighter than the watermark and was easy to miss
+  in a phone screenshot at a glance. 18% reads across the whole
+  certificate, and the holder's name, the standard, the certificate
+  number, the certifying body (QRO), the dates of certification and
+  expiry, the GSTIN, the financial year and the CBIC lines all read
+  cleanly at every size. Where the stamp crosses the ISO certificates'
+  blue left band and the CBIC certificate's orange bands it is faint;
+  none of the certificate's text is there. One setting did both; nothing
+  was traded away.
+
+### What it does not do
+
+It does not prevent a screenshot. A capture now carries the date it was
+viewed and the site's name. Anyone who reads the script can still
+rebuild the image without the stamp, as before (#60).
+
+### Edit keys
+
+None added, changed or gone. No database change.
+
+### For the next deploy
+
+Pull, build, restart. No migration, no certificate rebuild. Afterwards,
+open a certificate on a phone and take a screenshot.
+
+### Verified
+
+Build clean. The viewer opened from each of the four `/hse` cards and
+from a footer "Certified to" line on `/`, at 360x800, 390x844 and
+1280x800: the stamp text, its date and Inter 600 confirmed on every
+opening; screenshots looked at (local, git-ignored:
+`backups/cert-stamp-20261024/final/`). Blank on Win/Cmd (and still blank
+once the key is up, until the pointer moves), Ctrl + Shift and
+PrintScreen; the blur on window blur and with the mouse out of the
+window; Ctrl + S and Ctrl + P swallowed; Tab, Esc, Close and focus
+return; print hiding the open dialog and the buttons: the same 43
+results on the build before (`1b072ff`) and after, at 1280 and 390. No
+stamp is drawn while blank; it is drawn, sharp, over the blurred
+certificate. A fixed clock gives "5 Sep 2026". Placeholders 43.
+`check-edit-keys` passes on all 28 routes it covers. No em dash in any
+served page, the sitemap or robots.txt. Compared element by element with
+`1b072ff` at 1280 on all 38 pages (16,761 elements: box, computed style,
+text): no difference.

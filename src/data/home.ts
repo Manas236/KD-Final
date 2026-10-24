@@ -97,8 +97,16 @@ export interface Certification {
    (CertificateViewer.astro). Not edit slots: one label on several
    buttons, and a viewer that must close in edit mode too, so they are
    `data-no-edit` and changed here. Outside `home`, so the edit-key gate
-   expects no slot for them. */
-export const certificateViewer = { view: "View certificate", close: "Close" } as const;
+   expects no slot for them. `stamp` is the viewing stamp drawn across
+   the certificate (24 Oct 2026): `{date}` becomes the visitor's own date
+   when the viewer opens, as "24 Oct 2026". The site's name is written
+   here, never read from the address bar, which on the test link is a
+   bare IP. */
+export const certificateViewer = {
+  view: "View certificate",
+  close: "Close",
+  stamp: "Viewed on kdconstructions.net · {date}",
+} as const;
 
 export const home = {
   /* Head only. The design specifies neither a page title nor a meta

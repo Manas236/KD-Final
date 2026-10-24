@@ -45,6 +45,19 @@
        has left the window (towards a capture tool on the taskbar or the
        dock), the certificate is drawn blurred, and sharp again on
        return;
+     · every drawing of it, sharp or blurred, carries a VIEWING STAMP
+       (24 Oct 2026): "Viewed on kdconstructions.net · 24 Oct 2026", the
+       date the visitor's own when the viewer opens, the words
+       `certificateViewer.stamp` in src/data/home.ts. A phone's
+       screenshot cannot be blocked, nor even noticed, by a web page, so
+       on a phone the watermark in the file was all a capture carried;
+       now every capture, on any device, is plainly a dated copy taken
+       from the website. It is tiled at -30 degrees, rows and columns,
+       over the whole certificate, in the gaps between the watermark's
+       rows, and drawn into the canvas in the same pixels as the
+       certificate, so no capture of the certificate is without it and
+       nothing bigger than a word or two can be cropped clear of it. Not
+       drawn while the canvas is blank;
      · in print, the dialog and the buttons are hidden (global.css).
 
    The page around it behaves as ever; nothing here runs until a button
@@ -56,8 +69,9 @@
    or Close shuts it and focus returns to the button that opened it. On a
    phone it fills the screen and the certificate is fitted to it.
 
-   EDIT MODE. The labels are `data-no-edit` (copy in src/data/pages.ts,
-   `viewer`), so Close always closes; Esc inside the viewer is kept from
+   EDIT MODE. The labels are `data-no-edit` (copy in src/data/home.ts,
+   `certificateViewer`; the stamp is an attribute, never text on the
+   page), so Close always closes; Esc inside the viewer is kept from
    the editor, for which Esc with nothing open means "leave edit mode".
    The cards' own text edits as on any card.
 
@@ -65,7 +79,7 @@
    a `d8` title, the ghost button on dark (DESIGN-SYSTEM §6).
    ============================================================ */
 interface Props {
-  labels: { readonly view: string; readonly close: string };
+  labels: { readonly view: string; readonly close: string; readonly stamp: string };
 }
 
 const { labels } = Astro.props;
@@ -74,6 +88,7 @@ const { labels } = Astro.props;
 <dialog
   class="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none border-0 bg-kd-ink-deep text-kd-mist select-none [-webkit-touch-callout:none] open:flex flex-col"
   data-cert-viewer
+  data-cert-stamp={labels.stamp}
   aria-labelledby="kd-cert-title"
 >
   <div
@@ -169,6 +184,64 @@ const { labels } = Astro.props;
        (`waiting`) and then the person is back on the page. */
     let blanked = false;
     let waiting = false;
+    /* The viewing stamp of this opening: the label, with the date. */
+    let stamp = "";
+    let fontAsked = false;
+    const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const STAMP_OPACITY = 0.18;
+    /* A stamp row in every gap between watermark rows (1), or every
+       second gap (2). */
+    const STAMP_EVERY = 1;
+
+    /* The viewing stamp (see the header) over the certificate drawn at
+       w x h from the file's w0 x h0, in the canvas's CSS pixels. Its rows
+       run midway between the rows of the watermark burned into the file,
+       so neither covers the other: the watermark's size, step, span and
+       turn are those of watermarkSvg() in scripts/build-certificates.mjs.
+       If that changes, change this. Each row has one whole stamp centred on
+       the stretch of it that crosses the certificate, and more copies
+       either side out to its edges. */
+    const mark = (w: number, h: number, w0: number, h0: number) => {
+      if (!stamp) return;
+      // A 26th of the drawn width; of the height on a landscape certificate.
+      const size = Math.max(11, Math.min(w, h) / 26);
+      const font = `600 ${size}px ${getComputedStyle(dialog).fontFamily}`;
+      if (!fontAsked && !document.fonts.check(font, stamp)) {
+        // Drawn again once the face is in.
+        fontAsked = true;
+        document.fonts.load(font, stamp).then(draw, () => {});
+      }
+      const k = w / w0;
+      const wmSize = Math.round(Math.max(w0, h0) / 44);
+      const wmStep = Math.round(wmSize * 4.2);
+      const span = Math.ceil(Math.hypot(w0, h0));
+      const cos = Math.cos(Math.PI / 6);
+      const sin = Math.sin(Math.PI / 6);
+      ctx.save();
+      ctx.font = font;
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--kd-ink").trim();
+      ctx.globalAlpha = STAMP_OPACITY;
+      const box = ctx.measureText(stamp);
+      // From the middle of a gap to the baseline that centres the words.
+      const lift = (box.actualBoundingBoxAscent - box.actualBoundingBoxDescent) / 2;
+      const period = box.width + size * 3;
+      // Turned about the centre, as the watermark is.
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(-Math.PI / 6);
+      ctx.translate(-w / 2, -h / 2);
+      for (let y = -span; y < span * 2; y += wmStep * STAMP_EVERY) {
+        const middle = (y + (wmStep - wmSize / 2) / 2) * k;
+        // Where this row crosses the certificate, along the row, from the centre.
+        const d = middle - h / 2;
+        const from = Math.max((-w / 2 - d * sin) / cos, (d * cos - h / 2) / sin);
+        const to = Math.min((w / 2 - d * sin) / cos, (d * cos + h / 2) / sin);
+        if (from >= to) continue;
+        const centred = w / 2 + (from + to) / 2 - box.width / 2;
+        let x = centred - Math.ceil((centred - (w / 2 + from)) / period) * period;
+        for (; x < w / 2 + to; x += period) ctx.fillText(stamp, x, middle + lift);
+      }
+      ctx.restore();
+    };
 
     /* The certificate, fitted inside the stage, sharp on a dense screen. */
     const draw = () => {
@@ -195,9 +268,11 @@ const { labels } = Astro.props;
         ctx.filter = "blur(24px)";
         ctx.drawImage(sheet, 0, 0, w, h);
         ctx.filter = "none";
-        return;
+      } else {
+        ctx.drawImage(sheet, 0, 0, w, h);
       }
-      ctx.drawImage(sheet, 0, 0, w, h);
+      // Sharp over the blurred certificate too.
+      mark(w, h, w0, h0);
     };
 
     const open = (button: HTMLElement) => {
@@ -212,6 +287,11 @@ const { labels } = Astro.props;
       veiled = document.hidden || !document.hasFocus() || pointerOut;
       blanked = false;
       waiting = false;
+      const today = new Date();
+      stamp = (dialog.getAttribute("data-cert-stamp") ?? "").replace(
+        "{date}",
+        `${today.getDate()} ${MONTHS[today.getMonth()]} ${today.getFullYear()}`,
+      );
       sheet = null;
       const mine = ++opening;
       const file = new Image();
