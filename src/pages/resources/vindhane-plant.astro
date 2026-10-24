@@ -12,8 +12,8 @@
      nav (ink) -> hero (ink + image, /projects/[slug]'s three-layer
      construction, back link, kicker, H1, stat tiles) -> overview
      (white: Story.astro's kicker/paragraph shape with the plant's clip
-     beside it as an /hse clip tile, then two hairline lists, then the
-     gallery block exactly as [slug] draws it) ->
+     beside it as an /hse clip tile, then two pairs of hairline lists,
+     then the gallery block exactly as [slug] draws it) ->
      erection & proof (ink: the steel ledger's rows, each linking to
      its project page, closing on a button) -> footer (ink-deep)
 
@@ -25,9 +25,9 @@
 
    PENDING TILES (review only). The figures a facility page leads with
    — capacity, area, year, machine counts — were placeholders until
-   2026-10-24, when the plant in-charge gave all but the machine counts
-   (OPEN-QUESTIONS.md #65); none is on the page now, and the branch
-   stays for the next one. A placeholder is a `pending` item in
+   2026-10-24, when the plant in-charge gave them all (OPEN-QUESTIONS.md
+   #65, #66); none is on the page now, and the branch stays for the
+   next one. A placeholder is a `pending` item in
    src/data/plant.ts, drawn here
    the way projects/Social.astro draws them on ink (dashed ghost
    outline, the badge chip carrying the label, the ask in the body)
@@ -70,6 +70,29 @@ const breadcrumbs = [
   { name: plant.title, path: "/resources/vindhane-plant" },
 ];
 const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";
+
+/* The first pair's rows, column by column (OPEN-QUESTIONS.md #66):
+   "What the plant makes" draws its own rows and then the machinery rows
+   its `machineryRows` names; "How it is equipped" draws the rest in its
+   `order`. A row's key comes from the list and index it is stored at,
+   so a row drawn in the other column, or higher up, keeps its key. */
+const columns = [
+  {
+    list: "products" as const,
+    rows: [
+      ...plant.products.items.map((_, i) => ({ list: "products" as const, i })),
+      ...plant.products.machineryRows.map((i) => ({ list: "machinery" as const, i })),
+    ],
+  },
+  {
+    list: "machinery" as const,
+    rows: plant.machinery.order.map((i) => ({ list: "machinery" as const, i })),
+  },
+];
+/* From 900px a column is a subgrid of its pair's grid, spanning the
+   number of the pair's rows its own --rows says. */
+const column = "min-[900px]:grid min-[900px]:grid-rows-subgrid min-[900px]:row-span-(--rows)";
+const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline justify-between gap-16 text-body-sm";
 ---
 
 <BaseLayout
@@ -186,43 +209,85 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
           </div>
         </div>
 
-        {/* Two hairline lists, the steel ledger's row grammar on a light
-            band: one line per item on a divider, no bullets. */}
-        <div class="mt-56 pt-56 border-t border-kd-divider-light grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 gap-y-48">
-          {(["products", "machinery"] as const).map((list) => (
-            <div>
-              <h2 class="text-label uppercase text-kd-slate" data-edit={`${K}.${list}.head`}>
+        {/* Hairline lists in two pairs, the steel ledger's row grammar
+            on a light band: one line per item on a divider, no bullets.
+            What the plant makes beside how it is equipped, then its
+            covered areas beside its team, those two with the figure on
+            the right and a total. From 900px each pair is one grid and
+            each column a subgrid of it, so the nth rows of the two
+            columns share a track and their rules line up, even where one
+            of them wraps. Narrower, the columns stack, 48px apart
+            (OPEN-QUESTIONS.md #66). */}
+        <div class="mt-56 pt-56 border-t border-kd-divider-light grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 gap-y-48 min-[900px]:gap-y-0">
+          {columns.map(({ list, rows }) => (
+            <div class={column} style={`--rows: ${rows.length + 1}`}>
+              <h2 class="text-label uppercase text-kd-slate pb-16" data-edit={`${K}.${list}.head`}>
                 {plant[list].head}
               </h2>
-              <ul class="mt-16">
-                {plant[list].items.map((item, i) =>
-                  item.pending ? (
+              <ul class={column} style={`--rows: ${rows.length}`}>
+                {rows.map(({ list: from, i }) => {
+                  const item = plant[from].items[i];
+                  const k = `${K}.${from}.items.${i}`;
+                  return item.pending ? (
                     <li
                       class="border border-dashed border-kd-card-border-light p-24 mt-16"
                       data-pending
                     >
-                      <span class:list={[chip, "text-kd-ink"]} data-edit={`${K}.${list}.items.${i}.pending`}>
+                      <span class:list={[chip, "text-kd-ink"]} data-edit={`${k}.pending`}>
                         {item.pending}
                       </span>
-                      <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.${list}.items.${i}.title`}>
+                      <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${k}.title`}>
                         {item.title}
                       </h3>
-                      <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.${list}.items.${i}.body`}>
+                      <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${k}.body`}>
                         {item.body}
                       </p>
                     </li>
                   ) : (
                     <li
                       class="border-t border-t-kd-divider-light py-16 text-body-sm text-kd-slate-2"
-                      data-edit={`${K}.${list}.items.${i}.text`}
+                      data-edit={`${k}.text`}
                     >
                       {item.text}
                     </li>
-                  )
-                )}
+                  );
+                })}
               </ul>
             </div>
           ))}
+        </div>
+
+        <div class="mt-48 grid grid-cols-1 min-[900px]:grid-cols-2 gap-x-32 gap-y-48 min-[900px]:gap-y-0">
+          {(["areas", "team"] as const).map((list) => {
+            const { head, items, total } = plant[list];
+            const note = list === "team" ? plant.team.note : undefined;
+            const rows = [
+              ...items.map((row, i) => ({ row, k: `${K}.${list}.items.${i}`, total: false })),
+              { row: total, k: `${K}.${list}.total`, total: true },
+            ];
+            return (
+              <div class={column} style={`--rows: ${rows.length + (note ? 2 : 1)}`}>
+                <h2 class="text-label uppercase text-kd-slate pb-16" data-edit={`${K}.${list}.head`}>
+                  {head}
+                </h2>
+                <dl class={column} style={`--rows: ${rows.length}`}>
+                  {rows.map(({ row, k, total }) => (
+                    <div class:list={[figureRow, total ? "text-kd-ink" : "text-kd-slate-2"]}>
+                      <dt data-edit={`${k}.label`}>{row.label}</dt>
+                      <dd class="shrink-0 whitespace-nowrap tabular-nums" data-edit={`${k}.value`}>
+                        {row.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                {note && (
+                  <p class="border-t border-t-kd-divider-light pt-16 text-label-sm text-kd-slate" data-edit={`${K}.${list}.note`}>
+                    {note}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         <div class="mt-56 pt-56 border-t border-kd-divider-light">

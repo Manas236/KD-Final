@@ -24,8 +24,9 @@
    2026-09-18), so they were `pending` items — the review-only
    placeholder from OPEN-QUESTIONS.md #32 — PRE-LAUNCH.md rows 4a–4c.
    All three were filled on 2026-10-24 from the plant in-charge's
-   answers (OPEN-QUESTIONS.md #65), in place, so no key moved. No
-   machine count was given, and none is written or implied here.
+   answers (OPEN-QUESTIONS.md #65), in place, so no key moved. His
+   machine list followed the same day (#66): every count on the page is
+   his, and none beyond his list is written or implied.
 
    KEYS. The page renders under the `resources` prefix (it is a child
    of /resources, and Nav/SiteFooter write `resources.nav.*` there), so
@@ -49,6 +50,10 @@ export type PlantStat =
 export type PlantListItem =
   | { readonly text: string; readonly pending?: undefined }
   | { readonly pending: string; readonly title: string; readonly body: string };
+
+/** A row in the covered-areas / team lists: what is counted, and the
+    figure, drawn on the right. */
+export type PlantFigure = { readonly label: string; readonly value: string };
 
 export const plant = {
   meta: {
@@ -74,8 +79,8 @@ export const plant = {
 
     /* Tiles 1 and 2 are the plant in-charge's figures, 2026-10-24
        (OPEN-QUESTIONS.md #65): capacity per month as given, and the
-       five covered areas summed (the row at the end of `machinery` lists
-       them). No yard area was given, so none is counted. "11,600+ MT" is
+       five covered areas summed (the `areas` list below gives each). No
+       yard area was given, so none is counted. "11,600+ MT" is
        the steel ledger's total on /projects (the doc's five tonnages sum
        to 11,664.88) and is labelled as what it is — steel delivered on
        projects, not plant output. "2 × 650 t" is the Vashi FOB lift, the
@@ -141,37 +146,86 @@ export const plant = {
         { text: "Steel roofing systems" },
         { text: "Large-span industrial sheds" },
       ] as readonly PlantListItem[],
+      /* Since 2026-10-24 this column ends on machinery rows 7 and 8
+         ("Truss and plate girder fabrication", "On-site fabrication where
+         a project calls for it"): they say how the plant works rather
+         than what it is equipped with, and with them here the two columns
+         run 8 and 10 rows instead of 6 and 12 (OPEN-QUESTIONS.md #66).
+         They stay in `machinery.items`, so their edit keys do not move. */
+      machineryRows: [7, 8] as const,
     },
     machinery: {
       head: "How it is equipped",
+      /* Counts from the plant in-charge, 2026-10-24 (OPEN-QUESTIONS.md
+         #66), as he gave them: SFW and PUG are his words and are not
+         expanded, the compressor's pressure is left out, and no count
+         beyond his list is written. Each count went into the row it makes
+         specific (0, 2, 4, 5, 6), which keeps its key. "Bending machinery"
+         is not in his list; it stays as it was until K.D. says (PRE-LAUNCH.md
+         S23). A count and its noun, and "with MSEB grid supply", are held
+         together with no-break spaces (\u00a0), so a phone breaks rows 0
+         and 6 at a comma and never strands "1" or "supply" (edit mode folds
+         them to plain spaces, normalizeText in src/lib/editable.ts). */
       items: [
-        { text: "Welding lines" },
+        { text: "12 welding sets: 6\u00a0electrode, 5\u00a0CO2\u00a0(MIG), 1\u00a0SFW" },
         { text: "Bending machinery" },
-        { text: "Cutting machinery" },
+        { text: "4 gas cutters and 2 PUG cutting machines" },
         { text: "20-tonne EOT crane" },
-        /* From the company's labelled photographs, 2026-09-28. */
-        { text: "Metalizing shop" },
-        { text: "Painting shop" },
-        { text: "Diesel generator power for the shops" },
+        /* The three shops from the company's labelled photographs,
+           2026-09-28; their counts and the grid supply from #66. */
+        { text: "Metalizing shop, 2 metalizing guns" },
+        { text: "Painting shop, 3 painting machines" },
+        { text: "125\u00a0kVA diesel generator, with\u00a0MSEB\u00a0grid\u00a0supply" },
+        /* 7 and 8 are drawn under "What the plant makes"
+           (products.machineryRows). */
         { text: "Truss and plate girder fabrication" },
         { text: "On-site fabrication where a project calls for it" },
-        /* Was the "Machine inventory" placeholder; filled in place on
-           2026-10-24 from the plant in-charge (OPEN-QUESTIONS.md #65):
-           roles and counts only, no names. Machine counts were not
-           given, so the row has none. Each area is held together with
-           no-break spaces (\u00a0) so a phone never ends a line on
-           "1,500" and starts the next on "sq ft"; edit mode folds them
-           to plain spaces (normalizeText in src/lib/editable.ts). */
-        {
-          text:
-            "A team of 33: 4 staff, a 19-person fabrication crew and 10 on civil work. The crew " +
-            "covers plate and gas cutting, welding including CO2, core drilling, grinding and " +
-            "finishing, and EOT crane operation. Covered areas, 14,800\u00a0sq\u00a0ft in all: " +
-            "main workshop 10,000\u00a0sq\u00a0ft, copper slag blasting shop 1,500\u00a0sq\u00a0ft, " +
-            "painting area 1,500\u00a0sq\u00a0ft, paint storage room 1,100\u00a0sq\u00a0ft, and a " +
-            "700\u00a0sq\u00a0ft storage room for welding materials and machinery.",
-        },
+        /* Row 9 was the team and covered areas in one paragraph from
+           the morning of 2026-10-24 (#65), never deployed; they are the
+           `areas` and `team` lists now (#66), and 9 to 11 are his other
+           machines. */
+        { text: "3 core drill machines" },
+        { text: "2 grinding machines (7 inch)" },
+        { text: "Air compressor, full set" },
       ] as readonly PlantListItem[],
+      /* The order this column draws its rows in, as indexes into
+         `items`, the way about.ts orders the board: cutting, drilling and
+         grinding beside welding, the compressor beside the paint shops,
+         power last. Display only, so every row keeps its key. */
+      order: [0, 2, 9, 10, 1, 3, 4, 5, 11, 6] as const,
+    },
+
+    /* The covered areas and the team, from the plant in-charge on
+       2026-10-24 (OPEN-QUESTIONS.md #65). Until #66, later that day, they
+       were one paragraph at the foot of "How it is equipped"; now they
+       are a pair of lists of their own below it, the figure on the
+       right. Roles and counts only: his answers named the people, and no
+       name goes on the site. The five areas are as he gave them and sum
+       to the total, which is also hero tile 2; "Welding and machinery
+       store" is his "storage room for welding materials and machinery",
+       short enough to sit on one line beside its figure on a phone. The
+       team's three counts sum to 33. */
+    areas: {
+      head: "Covered areas",
+      items: [
+        { label: "Main workshop", value: "10,000 sq ft" },
+        { label: "Copper slag blasting shop", value: "1,500 sq ft" },
+        { label: "Painting area", value: "1,500 sq ft" },
+        { label: "Paint storage room", value: "1,100 sq ft" },
+        { label: "Welding and machinery store", value: "700 sq ft" },
+      ] as readonly PlantFigure[],
+      total: { label: "Total", value: "14,800 sq ft" } as PlantFigure,
+    },
+    team: {
+      head: "Team",
+      items: [
+        { label: "Staff", value: "4" },
+        { label: "Fabrication crew", value: "19" },
+        { label: "Civil work", value: "10" },
+      ] as readonly PlantFigure[],
+      total: { label: "Total", value: "33" } as PlantFigure,
+      /* The crew's trades, one line under the list. */
+      note: "Crew trades: cutting, welding, core drilling, grinding, finishing and EOT crane operation.",
     },
 
     /* PHOTOS.md B19 and B20 first — the two frames from the annual deck.
