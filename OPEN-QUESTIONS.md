@@ -4516,3 +4516,155 @@ text, tiles and the new row looked at (local, git-ignored:
 with `b0118b8` at 1280, 390 and 360 on all 38 pages (16,756 elements a
 width): only `/resources/vindhane-plant` differs. The sitemap is
 byte-identical.
+
+## 66. Vindhane plant: the machine list, and the lists in two even pairs
+
+2026-10-24, the afternoon pass after #65. K.D.'s Vindhane plant in-charge
+sent his machine list over WhatsApp on 24 Oct 2026 (Sir said on 2026-10-21
+that the plant's word can be taken for the plant), with two photographs and
+a short video of the crane shed. The user asked for all of it on
+`/resources/vindhane-plant`, and for the lower half of the page to be tidied:
+"What the plant makes" had 6 short rows, "How it is equipped" 10 ending in a
+seven-line paragraph (the team and covered areas, #65), so the right column
+ran 337px past the left at 1280 and the paragraph broke the list style.
+Placeholders on the site: 40, unchanged.
+
+### What the plant in-charge gave
+
+Electrode welding sets 6; MIG (CO2) welding sets 5; SFW 1 machine, full set;
+gas cutters 4; PUG cutting machines 2; core drill machines 3; grinding
+machines (7 inch) 2; air compressor 1, full set (with its pressure, left off
+the site); metalizing guns 2; painting machines 3; power, a 125 kVA DG set
+with MSEB grid supply. PRE-LAUNCH.md, "The Vindhane plant in-charge's machine
+list, 2026-10-24", sets each item beside its row on the page.
+
+SFW and PUG are his words and are written as he wrote them, not expanded. No
+count beyond his list is on the page. **No bending machine is on his list,**
+but the page has had a "Bending machinery" row since it was built, and its
+second paragraph says the plant is "equipped with welding, bending and
+cutting machinery" (from `K.D.Website_Details.md`). Both are kept as they
+were and asked: PRE-LAUNCH.md S23.
+
+### The photographs and the video: not on this PC
+
+They were to be in `Vindhane Plant/` beside `vindhane-shed-eot-crane.png`.
+They are not. The newest file there is `Vidhane_Factory.mp4` of 2026-10-15
+(the Mankhurd deck clip), and its one WhatsApp-named file, an image of
+2026-09-27, was there before. The newest WhatsApp files anywhere else on the
+development PC (Downloads, 23 Oct) are not K.D. material. So nothing was
+copied to `backups/vindhane-originals-20261024/` or renamed, the page's media
+and the Vindhane gallery group are as they were, and **S4 stays open**: there
+was nothing to compare with the EOT crane photograph (PHOTOS.md B21).
+
+When the three files are in `Vindhane Plant/`, the rest of the brief runs on
+them: the originals copied untouched into
+`backups/vindhane-originals-20261024/`, each renamed by what it shows, the
+photographs compared with B21 for S4, the photographs on the page and in the
+Vindhane gallery group (web sizes, the K.D. Constructions credit in the file,
+alt text naming K.D. Constructions), and the clip encoded as the Mankhurd deck
+clip was (H.264, veryfast with CRF, no audio, 720p at most, faststart, a
+poster frame; muted and looping in a Tile).
+
+### What changed
+
+**How it is equipped** (`plant.machinery.items`). Each count went into the row
+it makes specific, which keeps that row's key; the other three machines took
+slot 9 and two new slots; the column draws its rows in a new order,
+`machinery.order` (display only, the way `about.board.order` orders the
+directors), so cutting, drilling and grinding sit by welding, the compressor
+by the paint shops, and power comes last.
+
+| Slot | Was | Now |
+| --- | --- | --- |
+| 0 | Welding lines | 12 welding sets: 6 electrode, 5 CO2 (MIG), 1 SFW |
+| 2 | Cutting machinery | 4 gas cutters and 2 PUG cutting machines |
+| 9 | The team and covered areas, one paragraph (#65) | 3 core drill machines |
+| 10 | (new) | 2 grinding machines (7 inch) |
+| 1 | Bending machinery | unchanged (S23) |
+| 3 | 20-tonne EOT crane | unchanged |
+| 4 | Metalizing shop | Metalizing shop, 2 metalizing guns |
+| 5 | Painting shop | Painting shop, 3 painting machines |
+| 11 | (new) | Air compressor, full set |
+| 6 | Diesel generator power for the shops | 125 kVA diesel generator, with MSEB grid supply |
+
+In rows 0 and 6, a count and its noun, and "with MSEB grid supply", are held
+together with no-break spaces: at 360 the two rows break at a comma instead
+of leaving "1" or "supply" alone on a line.
+
+**The layout.**
+
+- No paragraph rows. At 1280 every row of every list is one line.
+- The team and covered areas are their own pair below the first:
+  **Covered areas** (main workshop 10,000 sq ft, copper slag blasting shop
+  1,500, painting area 1,500, paint storage room 1,100, welding and machinery
+  store 700, Total 14,800 sq ft) and **Team** (Staff 4, Fabrication crew 19,
+  Civil work 10, Total 33), with the crew's trades as one line under it:
+  "Crew trades: cutting, welding, core drilling, grinding, finishing and EOT
+  crane operation." Same rule, row padding and type as the other lists, the
+  figure on the right in tabular figures, the total row in ink, the trades
+  line in the stat-caption type (`text-label-sm`, DESIGN-SYSTEM §8).
+  "Welding and machinery store" is his "storage room for welding materials and
+  machinery", shortened so that it sits on one line beside its figure at 360.
+- **Balance.** "Truss and plate girder fabrication" and "On-site fabrication
+  where a project calls for it" say how the plant works, not what it is
+  equipped with. They now end the "What the plant makes" column
+  (`products.machineryRows`) but stay stored in `machinery.items` as 7 and 8,
+  so their keys did not move. The first pair runs 8 rows against 10 (112px
+  apart at 1280, was 337px), the second 6 against 4 and the trades line (55px).
+- **One grid per pair.** From 900px each pair is a two-column grid and each
+  column a CSS subgrid of it (as `/hse`'s lead card already is), so the nth
+  rows of the two columns share a track and their rules sit at the same
+  height; where a row wraps, as the trades line does from 900 to 1119px, its neighbour's track grows with it. Checked at 900, 1024, 1280 and
+  1440: every rule in both pairs lines up. Below 900 the columns stack in the
+  order products, machinery, covered areas, team, 48px apart, as the two lists
+  did before.
+- **Motion:** nothing new. Each column is still one reveal block.
+
+The notes at the top of `plant.ts` and `vindhane-plant.astro` say the counts
+are on the page now. Unchanged: the hero and its four tiles, the four
+paragraphs, the clip, the gallery, the erection band, and every other page.
+
+### Edit keys
+
+**No key moved and none went away.** The page has 148 keys, 123 before: 25
+new, none gone.
+
+| Key (under `resources.plant.`) | |
+| --- | --- |
+| `products.head`, `products.items.0.text` to `.5.text` | kept, same text |
+| `machinery.head`, `machinery.items.1.text`, `.3.text` | kept, same text |
+| `machinery.items.0.text`, `.2.text`, `.4.text`, `.5.text`, `.6.text` | kept, the text now carries his counts |
+| `machinery.items.7.text`, `.8.text` | kept, same text, drawn at the foot of the other column |
+| `machinery.items.9.text` | kept as a key: was the team and covered areas paragraph (#65, added that morning, never deployed), now "3 core drill machines"; the paragraph's content is the new `areas.*` and `team.*` keys |
+| `machinery.items.10.text`, `.11.text` | new |
+| `areas.head`, `areas.items.0` to `.4` `.label` / `.value`, `areas.total.label` / `.value` | new |
+| `team.head`, `team.items.0` to `.2` `.label` / `.value`, `team.total.label` / `.value`, `team.note` | new |
+
+Every other key on the page is identical in place, size, style and text at
+360, 390 and 1280; only its distance down the page changed below the lists.
+The local database has no saved edit on any `resources.plant.*` key.
+
+### For the next deploy
+
+Pull, build, restart. No schema change, no migration. Before pulling, list
+any `content_edits` row on the five reworded rows and on slot 9 (PRE-LAUNCH.md,
+"At the next deploy: the 2026-10-24 Vindhane machine list and layout").
+
+### Still open
+
+- **The photographs and the video** (above), and with them **S4**.
+- **S23**, bending machinery: for the plant in-charge, via Sir.
+- **Karjat RMC plant, rows 4d to 4f:** for the RMC plant's own contact.
+
+### Verified
+
+Build clean. Placeholders 40, none on `/resources/vindhane-plant`.
+`check-edit-keys` passes on the page (148 keys). No em dash in any of the 40
+served addresses (the sitemap's 37 pages, a 404, the sitemap and robots.txt).
+No staff name in any of them, nor anywhere in `src`, `public` or the build.
+The page at 360x800, 390x844 and 1280x800: no sideways scroll, no clipped
+text, every rule of both pairs at the same height at 1280, the clip playing
+muted, every image loaded (local, git-ignored, before and after:
+`backups/vindhane-layout-20261024/`). Compared element by element with
+`0c054eb` at 1280, 390 and 360 on all 38 pages: only
+`/resources/vindhane-plant` differs.
