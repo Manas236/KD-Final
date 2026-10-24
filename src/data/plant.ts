@@ -229,9 +229,10 @@ export const plant = {
     },
 
     /* PHOTOS.md B19 and B20 first — the two frames from the annual deck.
-       B21 (EOT crane under a trussed shed) is uncaptioned there and
-       stays out; 04 and 05 now show the EOT crane in the company's own
-       labelled frames anyway. */
+       B21 (EOT crane under a trussed shed), uncaptioned there, is 16;
+       17, the plant in-charge's own photograph of 24 Oct 2026, shows
+       the same crane and shed, which settled PRE-LAUNCH.md S4
+       (OPEN-QUESTIONS.md #66). */
     galleryKicker: "Plant Gallery",
     /* Captions live in gallery.ts, shared with /gallery and the /projects
        Gallery tab. */

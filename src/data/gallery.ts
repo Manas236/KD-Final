@@ -381,6 +381,10 @@ export const vindhanePlantPhotos: readonly GalleryPhoto[] = [
     { file: "vindhane-plant-14.jpg", caption: "Dussehra celebration lunch at the plant" },
     { file: "vindhane-plant-15.jpg", caption: "The plant team and truck fleet lined up outside the shed" },
     { file: "vindhane-plant-16.jpg", caption: "EOT crane spanning a fabrication shed bay" },
+  /* The plant in-charge's photograph of the same crane and shed, 24 Oct
+     2026 (OPEN-QUESTIONS.md #66, PRE-LAUNCH.md S4). Appended, so no
+     earlier photograph in the group moves. */
+  { file: "vindhane-plant-17.jpg", caption: "EOT crane across the fabrication shed, the crew at work on the floor below" },
 ];
 
 export const rmcPlantPhotos: readonly GalleryPhoto[] = [

@@ -173,7 +173,9 @@ const PHOTOS = [
   // Vindhane steel fabrication plant — /resources/vindhane-plant
   // (OPEN-QUESTIONS.md #33). The two confirmed frames, PHOTOS.md B19 and
   // B20, both recovered from the 2026 Annual PPT at web-export size. B21
-  // (EOT crane) is uncaptioned on that slide and stays out until confirmed.
+  // (EOT crane), uncaptioned on that slide, came in with every supplied
+  // photograph on 2026-09-28 as vindhane-plant-16 below, and the plant
+  // in-charge's own photograph (17) confirmed it on 2026-10-24 (PRE-LAUNCH.md S4).
   { out: "vindhane-plant-01.jpg", src: "Vindhane Plant/vindhane-yard-girders-hydra.png" },
   // Portrait; the tile's centre crop would cut the welder's face, so the
   // foot of the frame (the base of the welding set) is trimmed.
@@ -534,6 +536,9 @@ const PHOTOS = [
   { out: "vindhane-plant-14.jpg", src: "Vindhane Plant/Dussera celebration at Vindhane.jpeg" },
   { out: "vindhane-plant-15.jpg", src: "Vindhane Plant/vindhane-fleet-and-team.png" },
   { out: "vindhane-plant-16.jpg", src: "Vindhane Plant/vindhane-shed-eot-crane.png" },
+  // The plant in-charge's photograph of the crane shed, WhatsApp, 24 Oct
+  // 2026 (received as img1.jpg and an identical img2.jpg; OPEN-QUESTIONS.md #66).
+  { out: "vindhane-plant-17.jpg", src: "Vindhane Plant/vindhane-shed-eot-crane-wide.jpg" },
   // rmc-plant
   { out: "rmc-plant-10.jpg", src: "RMC Plant Karjat/New tippers for RMC plant.jpeg" },
 ];
