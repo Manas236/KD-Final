@@ -4413,3 +4413,106 @@ certificate. A fixed clock gives "5 Sep 2026". Placeholders 43.
 served page, the sitemap or robots.txt. Compared element by element with
 `1b072ff` at 1280 on all 38 pages (16,761 elements: box, computed style,
 text): no difference.
+
+## 65. Vindhane plant: capacity, covered area, start and team, from the plant in-charge
+
+2026-10-24. K.D.'s Vindhane plant in-charge answered the plant page's
+three open figures over WhatsApp on 24 Oct 2026, and Sir said on
+2026-10-21 that the plant's word can be taken for the plant. This fills
+PRE-LAUNCH.md rows 4a, 4b and 4c. Placeholders on the site: 43 -> 40.
+
+### What the plant in-charge gave
+
+- Fabrication capacity: 100 to 120 MT per month.
+- Fabrication started, and the first materials were dispatched, in Sep 2024.
+- Covered areas: main workshop 10,000 sq ft; copper slag blasting shop
+  1,500 sq ft; painting area 1,500 sq ft; paint storage room 1,100 sq ft;
+  storage room for welding materials and machinery 700 sq ft. Total
+  14,800 sq ft. No yard area.
+- A team of 33: 4 staff (plant in-charge, fabrication expert, civil
+  supervisor, driver and loading/unloading planner); 19 in the fabrication
+  crew (foreman, plate cutting, gas cutting, CO2 welding, other welding,
+  core drilling, grinding/cleaning/loading, welder helper; one welder also
+  operates the EOT crane); 10 on civil work.
+- **Not given:** machine counts (welding sets, cutting lines, cranes).
+  None is written or implied on the page.
+
+The answers named the people. The site, and this file, carry roles and
+counts only.
+
+### What changed
+
+Each placeholder was filled in its own slot in `src/data/plant.ts`: same
+item, same position, `pending` deleted. Nothing was added to, removed from
+or moved in `stats` or `machinery.items`.
+
+- **Tile 1** (`plant.stats[0]`, was "Annual capacity"): **100 to 120 MT**,
+  "Fabrication per month".
+- **Tile 2** (`plant.stats[1]`, was "Plant area & year"): **14,800 sq ft**,
+  "Covered area, fabricating since Sep 2024". The long label was kept: it
+  takes two lines at 360, 390 and 1280, as the labels of the two tiles
+  below it do, and at 1280 all four tiles are the same height (126px). So
+  the shorter "Covered area" fallback was not needed, and the plant's
+  paragraphs are unchanged.
+- **The last row of "How it is equipped"** (`plant.machinery.items[9]`, was
+  "Machine inventory"): one plain row, the team and the covered areas: "A
+  team of 33: 4 staff, a 19-person fabrication crew and 10 on civil work.
+  The crew covers plate and gas cutting, welding including CO2, core
+  drilling, grinding and finishing, and EOT crane operation. Covered areas,
+  14,800 sq ft in all: main workshop 10,000 sq ft, copper slag blasting shop
+  1,500 sq ft, painting area 1,500 sq ft, paint storage room 1,100 sq ft,
+  and a 700 sq ft storage room for welding materials and machinery." Each
+  area's number and "sq ft" are joined by no-break spaces, so a phone never
+  ends a line on "1,500" and starts the next on "sq ft"; edit mode folds
+  them to plain spaces.
+- The notes at the top of `plant.ts` and `vindhane-plant.astro` no longer
+  say the figures are missing.
+- Unchanged: "11,600+ MT" and "2 × 650 t", the four paragraphs, the clip,
+  the other nine rows, the gallery, and every other page.
+
+Checked first: no text on the page or anywhere in `src/data` gives a
+different capacity, area, start year or team size for Vindhane.
+
+### Edit keys
+
+No key on the page moved. The three items keep their places
+(`resources.plant.stats.0`, `resources.plant.stats.1`,
+`resources.plant.machinery.items.9`); what is inside them changed with the
+kind of item:
+
+- `resources.plant.stats.0.pending` / `.title` / `.body` ->
+  `resources.plant.stats.0.value` / `.label`
+- `resources.plant.stats.1.pending` / `.title` / `.body` ->
+  `resources.plant.stats.1.value` / `.label`
+- `resources.plant.machinery.items.9.pending` / `.title` / `.body` ->
+  `resources.plant.machinery.items.9.text`
+
+The page's other 118 keys are identical, in place, size, style and text,
+at 360, 390 and 1280. The local database has no saved edit on any
+`resources.plant.*` key.
+
+### For the next deploy
+
+Pull, build, restart. No schema change, no migration. Before pulling,
+list any `content_edits` row on those three items (PRE-LAUNCH.md, "At the
+next deploy: the 2026-10-24 Vindhane figures").
+
+### Still open
+
+- **Karjat RMC plant, rows 4d to 4f:** asked of the RMC plant's own
+  contact, not Vindhane's.
+- **S4, the EOT crane photograph:** the crew list confirms an EOT crane
+  operator at Vindhane, not that the photograph is that shed.
+
+### Verified
+
+Build clean. Placeholders 40, none on `/resources/vindhane-plant`.
+`check-edit-keys` passes on the page. No em dash in any of the 40 served
+addresses (the sitemap's 37 pages, a 404, the sitemap and robots.txt). No
+staff name in any of them, nor anywhere in `src`, `public` or the build.
+The page at 360x800, 390x844 and 1280x800: no sideways scroll, no clipped
+text, tiles and the new row looked at (local, git-ignored:
+`backups/vindhane-details-20261024/shots/`). Compared element by element
+with `b0118b8` at 1280, 390 and 360 on all 38 pages (16,756 elements a
+width): only `/resources/vindhane-plant` differs. The sitemap is
+byte-identical.

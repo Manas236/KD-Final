@@ -18,14 +18,14 @@
    it straight into Node. The hero image is imported by the page; the
    gallery names files in src/assets/gallery/ the way gallery.ts does.
 
-   THE FIGURES A FACILITY PAGE LEADS WITH ARE NOT ON RECORD. Every peer
-   opens with capacity in MT per annum, plant area and the year it was
-   commissioned; none of the three appears in the source doc, the docs/
-   folder or either deck (searched 2026-09-18). They are on the page as
-   `pending` items — the review-only placeholder from OPEN-QUESTIONS.md
-   #32 — so the client sees exactly which numbers are missing, and
-   `npm run check:placeholders` fails until each is filled or removed.
-   PRE-LAUNCH.md carries the same three rows.
+   THE FIGURES A FACILITY PAGE LEADS WITH. Every peer opens with
+   capacity, plant area and the year it started; none of the three was
+   in the source doc, the docs/ folder or either deck (searched
+   2026-09-18), so they were `pending` items — the review-only
+   placeholder from OPEN-QUESTIONS.md #32 — PRE-LAUNCH.md rows 4a–4c.
+   All three were filled on 2026-10-24 from the plant in-charge's
+   answers (OPEN-QUESTIONS.md #65), in place, so no key moved. No
+   machine count was given, and none is written or implied here.
 
    KEYS. The page renders under the `resources` prefix (it is a child
    of /resources, and Nav/SiteFooter write `resources.nav.*` there), so
@@ -72,22 +72,17 @@ export const plant = {
       "Fabricated steel plate girders in the yard of K.D. Constructions' Vindhane plant, a " +
       "Hydra crane alongside",
 
-    /* Two figures the record supports, two it does not. "11,600+ MT" is
+    /* Tiles 1 and 2 are the plant in-charge's figures, 2026-10-24
+       (OPEN-QUESTIONS.md #65): capacity per month as given, and the
+       five covered areas summed (the row at the end of `machinery` lists
+       them). No yard area was given, so none is counted. "11,600+ MT" is
        the steel ledger's total on /projects (the doc's five tonnages sum
        to 11,664.88) and is labelled as what it is — steel delivered on
        projects, not plant output. "2 × 650 t" is the Vashi FOB lift, the
        one erection figure the doc gives. */
     stats: [
-      {
-        pending: "To be added",
-        title: "Annual capacity",
-        body: "Fabrication capacity of the Vindhane plant, in MT per annum or per month.",
-      },
-      {
-        pending: "To be added",
-        title: "Plant area & year",
-        body: "Covered shed and open yard area, in sq ft or acres, and the year the plant was commissioned.",
-      },
+      { value: "100 to 120 MT", label: "Fabrication per month" },
+      { value: "14,800 sq ft", label: "Covered area, fabricating since Sep 2024" },
       { value: "11,600+ MT", label: "Structural steel across five projects" },
       { value: "2 × 650 t", label: "Telescopic cranes, Vashi FOB lift" },
     ] as readonly PlantStat[],
@@ -160,14 +155,21 @@ export const plant = {
         { text: "Diesel generator power for the shops" },
         { text: "Truss and plate girder fabrication" },
         { text: "On-site fabrication where a project calls for it" },
+        /* Was the "Machine inventory" placeholder; filled in place on
+           2026-10-24 from the plant in-charge (OPEN-QUESTIONS.md #65):
+           roles and counts only, no names. Machine counts were not
+           given, so the row has none. Each area is held together with
+           no-break spaces (\u00a0) so a phone never ends a line on
+           "1,500" and starts the next on "sq ft"; edit mode folds them
+           to plain spaces (normalizeText in src/lib/editable.ts). */
         {
-          pending: "To be added",
-          title: "Machine inventory",
-          body:
-            "Number and type of welding sets, cutting lines and EOT cranes, and the plant's " +
-            "skilled workforce.",
-          /* The metalizing and painting shops above now answer part of
-             this; the counts are still missing. */
+          text:
+            "A team of 33: 4 staff, a 19-person fabrication crew and 10 on civil work. The crew " +
+            "covers plate and gas cutting, welding including CO2, core drilling, grinding and " +
+            "finishing, and EOT crane operation. Covered areas, 14,800\u00a0sq\u00a0ft in all: " +
+            "main workshop 10,000\u00a0sq\u00a0ft, copper slag blasting shop 1,500\u00a0sq\u00a0ft, " +
+            "painting area 1,500\u00a0sq\u00a0ft, paint storage room 1,100\u00a0sq\u00a0ft, and a " +
+            "700\u00a0sq\u00a0ft storage room for welding materials and machinery.",
         },
       ] as readonly PlantListItem[],
     },
