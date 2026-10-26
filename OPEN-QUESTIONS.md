@@ -4739,3 +4739,32 @@ bytes. Compared element by element with `df8752a` at 1280, 390 and 360 on all
 `/projects`, with the new tile taken out, every element is identical, and the
 only change is that on phones what follows the Vindhane group sits 281px
 lower (the tile and its gap).
+
+## 67. The fire drill's date on /hse: 31 July 2026
+
+2026-10-26. The fire emergency drill card on `/hse` (card 5 of the
+Emergency Preparedness band, key `hse.record.bands.0.cards.5`) showed
+**Mohape site** with a "To be added" badge for the date (PRE-LAUNCH.md
+row 2b, #53). The HSE team confirmed the site on 2026-10-16 but gave no
+date.
+
+The drill's own photograph carries a work-record stamp: "Time:
+2026/07/31 14:18", "Address: Poyanje (Mohope), Station Road, Poyanje",
+under the heading "Fire Mockdrill at Mohape site". Manas confirmed on
+26 Oct 2026 that this stamp is the source for the date, so no further
+question goes to the HSE team.
+
+### What changed
+
+- `src/data/pages.ts`: the card's `where` is now
+  `Mohape site · 31 July 2026` (the same "site · date" form as the Karjat
+  cards beside it) and its `pending` field is deleted. Title, body, clip,
+  points and the card's place are unchanged, so no edit key moves.
+- PRE-LAUNCH.md: row 2b struck; placeholders 40 -> 39.
+
+### Verified
+
+`node scripts/check-placeholders.mjs`: 39 placeholders (was 40), none on
+`/hse`. Not built or browsed here (made from GitHub without the local
+folder); the deploy to the test server builds it, checks saved edits on
+`hse.record.bands.0.cards.5.*` before the pull, and looks at `/hse`.

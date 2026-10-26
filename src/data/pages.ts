@@ -672,15 +672,13 @@ export const hse: HseCopy = {
              it led into is behind the toggle now, whose label names it.
              No names.
 
-             The fire drill's site is confirmed (Mohape site) and its date
-             is not (16 Oct 2026, #53): "31 July 2026" was read off the
-             camera's stamp on the photographs, and no document in the
-             repo gives it. So the date is a placeholder, drawn as a chip
-             beside the site over the clip, until the HSE team gives it. */
+             The fire drill's site was confirmed by the HSE team on 16 Oct
+             2026 (#53). Its date, 31 July 2026, is the work-record stamp on
+             the drill's own photograph ("Time: 2026/07/31 14:18", "Poyanje
+             (Mohope)"), taken as the source on 26 Oct 2026 (#67). */
           {
             title: "Fire emergency drill",
-            where: "Mohape site",
-            pending: "To be added",
+            where: "Mohape site · 31 July 2026",
             body:
               "A test fire lit on the Mohape site and put out with the site's own extinguishers, by " +
               "the crew who would have to face a real one.",
