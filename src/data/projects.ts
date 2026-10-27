@@ -135,8 +135,8 @@ export const projects = {
     title: "Projects | K.D. Constructions",
     ogTitle: "Projects | K.D. Constructions · Portfolio",
     description:
-      "Five decades. Six disciplines. A growing national footprint across " +
-      "Indian Railways, urban transit, and government infrastructure.",
+      "Five decades. Six disciplines. Railway, urban transit and government " +
+      "infrastructure, built across Maharashtra.",
   },
 
   /* Shared chrome. Same strings as the homepage, different slot keys —
@@ -148,8 +148,8 @@ export const projects = {
     kicker: "Portfolio",
     heading: "Our Work",
     sub:
-      "Five decades. Six disciplines. A growing national footprint across " +
-      "Indian Railways, urban transit, and government infrastructure.",
+      "Five decades. Six disciplines. Railway, urban transit and government " +
+      "infrastructure, built across Maharashtra.",
     /* Was "" until 22 Oct 2026. Behind aria-hidden: for search engines
        and the share card. */
     backdropAlt: "Uran railway station, a K.D. Constructions project for Central Railway",
@@ -359,15 +359,17 @@ export const projects = {
     },
 
     /* The Karjat RMC plant's card, beside Vindhane's under the "Plants"
-       tab (2026-10-09). Same words as its own page, src/data/rmc-plant.ts;
-       `file` is the page's hero frame, resolved by Listing.astro. */
+       tab (2026-10-09). Its facts are its own page's, src/data/rmc-plant.ts
+       (since 27 Oct 2026 a line of its own rather than the page's "greater
+       control" sentence); `file` is the page's hero frame, resolved by
+       Listing.astro. */
     rmcPlant: {
       badge: "Our Own Plant",
       title: "RMC Plant, Karjat",
       meta: "Karjat · Raigad",
       body:
-        "Ready-mix concrete batched under cover on our own plant, for greater control over " +
-        "quality, consistency, availability and project scheduling.",
+        "Ready-mix concrete batched under cover on our own plant, with cement in twin silos " +
+        "and a covered loading bay for the transit mixers.",
       file: "rmc-plant-01.jpg",
       alt: "K.D. Constructions' batching plant at Karjat under its red steel cladding, aggregate stockpiles in front",
     },
@@ -382,7 +384,7 @@ export const projects = {
       kicker: "Active Pipeline",
       value: "₹362.90 Cr",
       body: "Three tenders currently in active quotation.",
-      link: { label: "Growing National Footprint", href: "/about" } as NavLink,
+      link: { label: "Learn About Us", href: "/about" } as NavLink,
     },
   },
 

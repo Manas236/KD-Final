@@ -240,33 +240,32 @@ export const home = {
         num: "01",
         title: "Civil Engineering",
         body:
-          "Railway stations, foot overbridges, bridges, workshops, depots, " +
-          "earthworks, and rail corridors: the foundation of our " +
-          "integrated EPC delivery.",
+          "We build railway stations, foot overbridges, bridges, " +
+          "workshops, depots and rail corridors, from the earthworks up.",
       },
       {
         num: "02",
         title: "Mechanical Engineering",
         body:
-          "Inspection sheds, heavy repair sheds, and workshop systems, " +
-          "plus specialised railway machinery sourced from OEMs and " +
-          "supported through the DLP period.",
+          "Inspection and heavy repair sheds and workshop systems, fitted " +
+          "with OEM railway machinery that we support through the DLP " +
+          "period.",
       },
       {
         num: "03",
         title: "Electrical Engineering",
         body:
-          "Railway and building electrical works integrated with civil " +
-          "and mechanical execution, including projects within live, " +
-          "operational railway environments.",
+          "Electrical works for railways and buildings, carried out with " +
+          "the civil and mechanical work, including on stations that stay " +
+          "open to trains.",
       },
       {
         num: "04",
         title: "Steel Fabrication & Erection",
         body:
-          "Girders and trusses fabricated at our own plant in Vindhane, " +
-          "Raigad, then launched and erected on site, including FOBs " +
-          "over running railway lines.",
+          "Our plant in Vindhane, Raigad fabricates the girders and " +
+          "trusses; our crews launch and erect them, FOBs over running " +
+          "railway lines included.",
       },
     ] as readonly CapabilityCard[],
   },

@@ -178,8 +178,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       { value: "2012", label: "Year completed" },
     ],
     description:
-      "Spanning the six-lane Thane–Belapur Road, the Bonkode foot-over-bridge gives the " +
-      "people of Bonkode village a safe crossing to the TTC industrial belt.",
+      "K.D. Constructions built the Bonkode foot-over-bridge for NMMC across the six-lane " +
+      "Thane–Belapur Road: a safe crossing from Bonkode to the TTC belt.",
     body: [
       /* The deck's "eco-friendly" is dropped: nothing says what makes it
          so, the same call #28b made on "some of the biggest in India". */
@@ -290,8 +290,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
     ],
     description:
-      "CIDCO's Kharghar Valley Golf Course, across 103 hectares in Sector 22, Kharghar: " +
-      "upgraded from 9 to 18 international-standard holes, reopened April 2026.",
+      "K.D. Constructions built the clubhouse of CIDCO's Kharghar Valley Golf Course: 103 " +
+      "hectares in Sector 22, now 18 holes, reopened in April 2026.",
     body: [
       "Set across 103 hectares of green hills in Sector 22, opposite Kharghar's Central Park, " +
         "CIDCO's Kharghar Valley Golf Course has been upgraded from 9 to 18 international-" +
@@ -441,8 +441,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     description:
-      "15 m and 20 m wide roads across Sectors 8 to 21 of Ghansoli, Navi Mumbai, with " +
-      "storm-water drains, water supply lines and sewer lines.",
+      "For CIDCO, K.D. Constructions built 15 m and 20 m wide roads across Sectors 8 to " +
+      "21 of Ghansoli, Navi Mumbai, with their drains, water and sewer lines.",
     body: [
       "15 m and 20 m wide roads across Sectors 8 to 21 of Ghansoli, Navi Mumbai, built up to the " +
         "first stage of asphalting, with the storm-water drains, water supply lines and sewer " +
@@ -460,8 +460,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     description:
-      "Integrated development of the 20 m wide peripheral roads in Sectors 19, 21 and 22 of " +
-      "Kamothe's Phase II area, Navi Mumbai, under the 12.5% scheme.",
+      "K.D. Constructions developed the balance half carriageway of Kamothe's 20 m " +
+      "peripheral roads, Sectors 19, 21 and 22, for CIDCO under the 12.5% scheme.",
     body: [
       "Integrated development of the balance half carriageway of the 20 m wide peripheral roads " +
         "in Sectors 19, 21 and 22 of Kamothe's Phase II area, under the 12.5% scheme.",
@@ -478,8 +478,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: [
-      "The balance work of the 12 m wide approach road connecting Sanpada to the south side of " +
-        "Vashi Railway Station, Navi Mumbai.",
+      "K.D. Constructions completed the balance work on the 12 m wide approach road that " +
+        "links Sanpada to the south side of Vashi Railway Station, Navi Mumbai.",
     ],
     photoNote: IMAGE_NOTE,
   },
@@ -497,7 +497,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: [
-      "Integrated development around the mass housing scheme at Sector 19A, Ulwe, Navi Mumbai.",
+      "For CIDCO, K.D. Constructions carried out the integrated development works around " +
+        "the mass housing scheme at Sector 19A, Ulwe, Navi Mumbai.",
     ],
     photoNote: IMAGE_NOTE,
   },
@@ -515,8 +516,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: [
-      "Integrated development of infrastructure works under the 12.5% scheme in Sector 8, Ulwe, " +
-        "Navi Mumbai.",
+      "In Sector 8, Ulwe, Navi Mumbai, K.D. Constructions carried out CIDCO's " +
+        "infrastructure development under the 12.5% scheme.",
     ],
     photoNote: IMAGE_NOTE,
   },
@@ -530,8 +531,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: [
-      "Civil works completing the 33 kV electric substation in Sector 23, at Kharghar's Central " +
-        "Park, Navi Mumbai.",
+      "K.D. Constructions carried out the civil works that completed the 33 kV electric " +
+        "substation in Sector 23, at Kharghar's Central Park, Navi Mumbai.",
     ],
     photoNote: IMAGE_NOTE,
   },
@@ -561,8 +562,8 @@ const SOURCES: readonly SocialDetailSource[] = [
       YEAR,
     ],
     body: [
-      "Extension of the first and second floors of Navi Mumbai Municipal Corporation School " +
-        "No. 54 & 55 at Rabale–Katkaripada, Navi Mumbai.",
+      "K.D. Constructions built the first and second floor extension of Navi Mumbai " +
+        "Municipal Corporation School No. 54 & 55 at Rabale–Katkaripada, Navi Mumbai.",
     ],
     photoNote: IMAGE_NOTE,
   },

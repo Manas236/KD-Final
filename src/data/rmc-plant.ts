@@ -32,8 +32,8 @@ export const rmcPlant = {
   meta: {
     title: "Karjat RMC Plant | K.D. Constructions",
     description:
-      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad, for greater " +
-      "control over concrete quality, consistency, availability and scheduling.",
+      "K.D. Constructions' own ready-mix concrete plant at Karjat, Raigad: batching, twin " +
+      "cement silos and transit-mixer loading, all under cover.",
   },
   nav: home.nav,
   footer: home.footer,
@@ -63,16 +63,14 @@ export const rmcPlant = {
 
     overviewKicker: "The Plant",
     body: [
-      "K.D. Constructions' own ready-mix concrete plant at Karjat strengthens the company's " +
-        "concrete supply, with greater control over quality, consistency, availability and " +
-        "project scheduling, reducing dependence on external suppliers.",
+      "K.D. Constructions' own ready-mix concrete plant at Karjat gives the company a " +
+        "concrete supply of its own, so its sites rely less on outside suppliers.",
       /* From the company's labelled photographs, 2026-09-28 ("Covered RMC
          plant", "RMC plant coverage construction", "Silos", "TM loading"). */
       "The plant works fully under cover: batching, cement handling and transit-mixer " +
         "loading all happen inside a clad steel shed, with cement held in twin silos on site.",
-      "Alongside the steel fabrication plant at Vindhane and a self-owned fleet of 50+ heavy " +
-        "equipment units, it is part of the integrated resource base behind K.D.'s end-to-end " +
-        "turnkey execution.",
+      "It is one of three resources K.D. Constructions owns rather than hires, with the " +
+        "steel fabrication plant at Vindhane and a fleet of 50+ heavy equipment units.",
     ],
 
     supplies: {

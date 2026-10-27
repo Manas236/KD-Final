@@ -107,7 +107,7 @@ export const plant = {
       "A 20-tonne EOT crane, now fully operational, makes heavy lifts safer and material " +
         "handling faster, and the plant has recently fabricated the longest girder in its " +
         "history.",
-      "With fabrication in-house and an owned crane fleet for erection, K.D. controls the " +
+      "With fabrication in-house and an owned crane fleet for erection, K.D. Constructions controls the " +
         "full chain from shop floor to final alignment, which matters most where a launch " +
         "happens within a live railway environment with overhead OHE.",
     ],

@@ -144,9 +144,8 @@ export const capabilities: InfoPageCopy = {
     kicker: "Capabilities",
     title: "One integrated EPC framework.",
     sub:
-      "From planning and engineering to procurement, construction, commissioning and project " +
-      "management, we provide integrated end-to-end solutions tailored to railway and public " +
-      "infrastructure.",
+      "We plan, engineer, procure, build and commission railway and public infrastructure, and " +
+      "manage the project at every one of those stages.",
   },
   sections: [
     {
@@ -156,36 +155,35 @@ export const capabilities: InfoPageCopy = {
         {
           title: "Civil Engineering",
           body:
-            "Railway stations, foot overbridges, bridges, buildings, workshops, depots, earthworks " +
-            "and rail corridors: the foundation of our integrated EPC delivery.",
+            "We build railway stations, foot overbridges, bridges, buildings, workshops, depots " +
+            "and rail corridors, from the earthworks up.",
         },
         {
           title: "Steel Fabrication & Erection",
           body:
-            "Girders, trusses, FOBs, cover-over-platforms, steel roofing and large-span sheds, " +
-            "fabricated at our Vindhane plant or on site, then launched and erected, including " +
-            "over running railway lines with overhead OHE.",
+            "Girders, trusses, FOBs, cover-over-platforms, steel roofing and large-span sheds come " +
+            "off our Vindhane plant or are fabricated on site, and our crews launch and erect " +
+            "them, over running railway lines with overhead OHE too.",
         },
         {
           title: "Track Engineering",
           body:
-            "Permanent-way construction and associated railway track systems, integrated with " +
-            "civil works and broader railway operations.",
+            "We lay permanent way and its track systems, from the P-Way at Sanpada Carshed to " +
+            "the track panels of the Panvel–Karjat corridor.",
         },
         /* The licence sentence is Sir's, 19 Oct 2026 (OPEN-QUESTIONS.md #56). */
         {
           title: "Electrical Engineering",
           body:
-            "Railway and building electrical works, integrating power and electrical systems with " +
-            "civil and mechanical execution, including within operational railway environments. " +
+            "Electrical works for railways and buildings, from the 6,000 kVA system at the Matunga " +
+            "LHB facility to work on stations that stay open to trains. " +
             "K.D. Constructions holds an electrical licence from the PWD to execute electrical works.",
         },
         {
           title: "Mechanical Engineering",
           body:
-            "Railway sheds, inspection and heavy repair facilities, workshops and mechanical " +
-            "installations, plus OEM-sourced railway machinery with maintenance support through " +
-            "the DLP period.",
+            "We build inspection and heavy repair sheds and workshops, and supply the OEM railway " +
+            "machinery inside them, supported through the DLP period.",
         },
         {
           title: "Signalling & Telecommunication",
@@ -197,19 +195,19 @@ export const capabilities: InfoPageCopy = {
     },
     {
       kicker: "Integrated Manufacturing",
-      heading: "Owned resources, greater control.",
+      heading: "Our own steel, concrete and equipment.",
       items: [
         {
           title: "Steel Fabrication",
           body:
-            "Our in-house facility at Vindhane, Raigad supports railway structures, bridges, FOBs " +
-            "and girders with control over quality, cost and delivery schedules.",
+            "Our own plant at Vindhane, Raigad fabricates 100 to 120 MT of steel a month for " +
+            "railway structures, bridges, FOBs and girders.",
         },
         {
           title: "Ready-Mix Concrete",
           body:
-            "Our RMC plant at Karjat gives greater control over concrete quality, consistency, " +
-            "availability and scheduling.",
+            "Our RMC plant at Karjat batches concrete under cover, with its cement held in twin " +
+            "silos on site.",
         },
         {
           title: "Heavy Equipment",
@@ -223,9 +221,9 @@ export const capabilities: InfoPageCopy = {
       kicker: "One Integrated Delivery Model",
       heading: "From the first foundation to final commissioning.",
       intro:
-        "Together, these capabilities allow K.D. Constructions to deliver end-to-end turnkey " +
-        "infrastructure solutions, with greater control, accountability and reliability at " +
-        "every stage.",
+        "Together, these let K.D. Constructions carry a project from engineering and " +
+        "procurement through construction and commissioning, on its own steel, concrete and " +
+        "equipment.",
       items: [
         { title: "Engineering Expertise" },
         { title: "In-House Manufacturing" },
@@ -254,8 +252,8 @@ export const resources: InfoPageCopy = {
     kicker: "Resources",
     title: "Owned plant. Owned fleet.",
     sub:
-      "An integrated resource base of 50+ heavy equipment units, an in-house steel fabrication " +
-      "plant and an RMC plant gives us control over supply, quality and delivery.",
+      "Steel from our own plant at Vindhane, concrete from our own plant at Karjat, and a fleet " +
+      "of 50+ heavy equipment units we own outright.",
   },
   sections: [
     {
@@ -265,17 +263,16 @@ export const resources: InfoPageCopy = {
         {
           title: "Steel Fabrication Plant, Vindhane, Raigad",
           body:
-            "Welding, bending and cutting lines producing girders, trusses, roofing systems and " +
-            "sheds for railway structures, bridges and FOBs, with greater control over quality, " +
-            "cost and delivery schedules.",
+            "Welding, bending and cutting lines turning out 100 to 120 MT a month of girders, " +
+            "trusses, roofing systems and sheds for railway structures, bridges and FOBs.",
           /* The plant's own page — OPEN-QUESTIONS.md #33. */
           links: [{ label: "About the plant", href: "/resources/vindhane-plant" }],
         },
         {
           title: "RMC Plant, Karjat",
           body:
-            "Ready-mix concrete supply with greater control over quality, consistency, availability " +
-            "and project scheduling, reducing dependence on external suppliers.",
+            "Ready-mix concrete batched and loaded into transit mixers under cover, so our sites " +
+            "depend less on outside suppliers.",
           /* Its own page since 2026-09-28 — OPEN-QUESTIONS.md #37. */
           links: [{ label: "About the plant", href: "/resources/rmc-plant-karjat" }],
         },
