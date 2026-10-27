@@ -10,7 +10,9 @@
 
    The sub-headings are data, not copy: they carry `data-no-edit`, the
    same opt-out GalleryGrid's captions use, and are renamed in
-   gallery.ts.
+   gallery.ts. Their level follows the page (27 Oct 2026): h4 under a
+   project's own h3 on /gallery, h2 on the project's page, where the
+   h1 is the project and nothing heads the gallery between them.
    ============================================================ */
 import GalleryGrid from "./GalleryGrid.astro";
 import type { GalleryPart } from "../data/gallery";
@@ -21,9 +23,12 @@ interface Props {
   /** Lightbox group for every grid. */
   group: string;
   tone?: "dark" | "light";
+  /** Heading level of the sub-headings. */
+  level?: 2 | 3 | 4;
 }
 
-const { project, parts, group, tone = "light" } = Astro.props;
+const { project, parts, group, tone = "light", level = 4 } = Astro.props;
+const Heading = `h${level}` as const;
 const head = tone === "light" ? "text-kd-ink" : "text-kd-mist";
 const rule = tone === "light" ? "bg-kd-mint-2" : "bg-kd-mint";
 ---
@@ -32,10 +37,10 @@ const rule = tone === "light" ? "bg-kd-mint-2" : "bg-kd-mint";
   {
     parts.map((part) => (
       <div>
-        <h4 class:list={["flex items-center gap-12 text-label uppercase", head]} data-no-edit>
+        <Heading class:list={["flex items-center gap-12 text-label uppercase", head]} data-no-edit>
           <span class:list={["block w-16 h-1 shrink-0", rule]} aria-hidden="true" />
           <span>{part.label}</span>
-        </h4>
+        </Heading>
         <div class="mt-16">
           <GalleryGrid project={`${project}, ${part.label}`} photos={part.photos} group={group} />
         </div>

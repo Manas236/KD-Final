@@ -46,7 +46,7 @@ const when = (d: Date) =>
 const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(b / 1024)} KB`);
 ---
 
-<BaseLayout title="Applications | K.D. Constructions" description="Job applications sent from the careers page." noindex>
+<BaseLayout title="Applications | K.D. Constructions" description="Job applications sent from the careers page." noindex skip={false}>
   <link rel="stylesheet" href="/gallery-manager.css" />
   <main class="gm">
     <header class="gm-top">

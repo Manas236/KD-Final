@@ -17,6 +17,7 @@ import { ntApplyCore } from "../lib/edit-apply.js";
 import { shareRendition } from "../lib/share-image";
 import { isNoindexDeployment } from "../lib/staging";
 import { organization } from "../data/organization";
+import { skipLink } from "../data/home";
 import logo from "../assets/kd-logo-mint.jpg";
 
 /* The two font files each family actually needs, imported so Vite
@@ -73,9 +74,12 @@ interface Props {
       the page (src/lib/server-edits.ts). og:title follows the title only
       where it is the title. */
   editSources?: { title?: string; description?: string };
+  /** The "Skip to content" link, to the page's <main id="main">. Off on
+      the studio's screens, which have no navigation to skip. */
+  skip?: boolean;
 }
 
-const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs, primaryImage, editSources } = Astro.props;
+const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs, primaryImage, editSources, skip = true } = Astro.props;
 const titleFrom = editSources?.title;
 const ogTitleFrom = ogTitle === title ? titleFrom : undefined;
 const descriptionFrom = editSources?.description;
@@ -333,6 +337,15 @@ const applyCoreScript = `window.__ntApplyCore = ${ntApplyCore.toString()};`;
       the scroll reveal. It runs after the page's own scripts, so on
       /projects#gallery the filter has already opened its tab and
       scrolled before the reveal looks at what is on screen. */
+
+/* ---------- Skip link ----------
+   The first thing on every page (27 Oct 2026): "Skip to content", to
+   <main id="main">, for keyboard and screen-reader users who would
+   otherwise tab through the whole navigation first. Visually hidden
+   (sr-only) until it has focus; then it sits over the nav at its top
+   left, mint on ink like the nav's own button, above the nav (z-50). It
+   takes no space either way and never animates, so motion.css has
+   nothing to gate. */
 ---
 
 <!doctype html>
@@ -578,6 +591,15 @@ const applyCoreScript = `window.__ntApplyCore = ${ntApplyCore.toString()};`;
     </script>
   </head>
   <body>
+    {skip && (
+      <a
+        href="#main"
+        class="sr-only text-ui focus:not-sr-only focus:fixed focus:left-16 focus:top-16 focus:z-[60] focus:bg-kd-mint focus:text-kd-ink-deep focus:px-16 focus:py-12 focus:outline-2 focus:outline-offset-2 focus:outline-kd-mint"
+        data-no-edit
+      >
+        {skipLink}
+      </a>
+    )}
     <slot />
 
     <!-- Scroll reveal: blocks below the fold fade up once as they arrive. See the frontmatter. -->

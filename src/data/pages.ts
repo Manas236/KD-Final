@@ -266,7 +266,7 @@ export const resources: InfoPageCopy = {
             "Welding, bending and cutting lines turning out 100 to 120 MT a month of girders, " +
             "trusses, roofing systems and sheds for railway structures, bridges and FOBs.",
           /* The plant's own page — OPEN-QUESTIONS.md #33. */
-          links: [{ label: "About the plant", href: "/resources/vindhane-plant" }],
+          links: [{ label: "About the Vindhane steel plant", href: "/resources/vindhane-plant" }],
         },
         {
           title: "RMC Plant, Karjat",
@@ -274,7 +274,7 @@ export const resources: InfoPageCopy = {
             "Ready-mix concrete batched and loaded into transit mixers under cover, so our sites " +
             "depend less on outside suppliers.",
           /* Its own page since 2026-09-28 — OPEN-QUESTIONS.md #37. */
-          links: [{ label: "About the plant", href: "/resources/rmc-plant-karjat" }],
+          links: [{ label: "About the Karjat RMC plant", href: "/resources/rmc-plant-karjat" }],
         },
       ],
     },

@@ -102,6 +102,12 @@ export interface Certification {
    when the viewer opens, as "24 Oct 2026". The site's name is written
    here, never read from the address bar, which on the test link is a
    bare IP. */
+/* The skip link at the head of every page (BaseLayout.astro), seen only
+   while it has keyboard focus. Not an edit slot, for the reason the
+   certificate viewer's labels below are not: one label on every page, so
+   it is `data-no-edit` and changed here (27 Oct 2026). */
+export const skipLink = "Skip to content";
+
 export const certificateViewer = {
   view: "View certificate",
   close: "Close",
