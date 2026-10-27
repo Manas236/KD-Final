@@ -1,22 +1,25 @@
 /* ============================================================
-   /robots.txt — crawl everything, and here is the sitemap
+   /robots.txt — what crawlers may fetch, and where the sitemap is
    ------------------------------------------------------------
    Served rather than dropped in public/ because the Sitemap line
    needs an absolute URL, and the origin is `site` from
    astro.config.mjs (PUBLIC_SITE_URL) — the same value the sitemap and
-   every canonical are written against.
+   every canonical are written against. At launch that is
+   https://kdconstructions.net, the bare domain (www redirects to it,
+   PRE-LAUNCH.md S2), so the line reads that and never the test IP.
 
-   Nothing is disallowed, on purpose:
+   Since 27 Oct 2026 (PRE-LAUNCH.md S2):
 
-   - NOT /api/. The head script on every page fetches /api/content to
-     paint the in-page editor's saved copy (BaseLayout.astro, "THE READ
-     PATH"). Googlebot renders pages, and a render that cannot reach
-     that endpoint indexes the copy the site was built with instead of
-     the copy it now says. Nothing links to /api/, so nothing there is
-     crawled as a page anyway.
-   - NOT /studio/. The sign-in page sets X-Robots-Tag: noindex and its
-     slug is a 40-character secret nothing links to; a Disallow line
-     would only announce that the path exists.
+   - /studio is disallowed: the editor's sign-in, gallery manager and
+     applications list are nothing a search result should lead to.
+     The line names the folder, never the sign-in slug under it.
+   - /api is disallowed, except /api/content. The server writes saved
+     edits into every page's HTML (src/lib/server-edits.ts), so a
+     crawler reads Sir's text without calling anything. But when the
+     server could not (no answer from the database), the head script's
+     fetch of /api/content is what puts it on the page, and a crawler
+     that renders the page must be allowed that fetch too. The longer
+     Allow wins over the shorter Disallow for Google and Bing.
 
    Except on a test deployment (SITE_NOINDEX=1, src/lib/staging.ts):
    there it disallows everything and names no sitemap.
@@ -35,7 +38,7 @@ export const GET: APIRoute = ({ site }) => {
       },
     });
   }
-  const lines = ["User-agent: *", "Allow: /"];
+  const lines = ["User-agent: *", "Disallow: /studio", "Disallow: /api", "Allow: /api/content"];
   if (site) lines.push("", `Sitemap: ${new URL("/sitemap.xml", site).href}`);
   return new Response(lines.join("\n") + "\n", {
     headers: {
