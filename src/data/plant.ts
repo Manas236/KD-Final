@@ -173,7 +173,7 @@ export const plant = {
         { text: "20-tonne EOT crane" },
         /* The three shops from the company's labelled photographs,
            2026-09-28; their counts and the grid supply from #66. */
-        { text: "Metalizing shop, 2 metalizing guns" },
+        { text: "Metallising shop, 2 metallising guns" },
         { text: "Painting shop, 3 painting machines" },
         { text: "125\u00a0kVA diesel generator, with\u00a0MSEB\u00a0grid\u00a0supply" },
         /* 7 and 8 are drawn under "What the plant makes"

@@ -25,5 +25,5 @@ export const detailChrome = {
   },
   ctaKicker: "More Projects",
   ctaHeadline: "Explore the rest of our portfolio.",
-  ctaButton: "View All Projects",
+  ctaButton: "View Projects",
 } as const;

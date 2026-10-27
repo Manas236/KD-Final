@@ -63,7 +63,7 @@ export interface ProjectGallery {
       the project it belongs to. Pages show the parent with one
       sub-heading per part; only the studio shows a part on its own. */
   readonly parent?: string;
-  /** A part's sub-heading on the page — "Civil Works". */
+  /** A part's sub-heading on the page — "Civil works". */
   readonly label?: string;
   readonly photos: readonly GalleryPhoto[];
   /** Filled in by src/lib/gallery-live.ts, never written here: a split
@@ -265,7 +265,7 @@ const matungaParts: readonly ProjectGallery[] = [
   {
     project: MATUNGA_PARTS.civil,
     parent: "Matunga Workshop",
-    label: "Civil Works",
+    label: "Civil works",
     photos: [
       /* 10 and 31 shared one caption until 22 Oct 2026; each now says what
          its own frame shows (a baseline caption: one saved in the studio
@@ -306,7 +306,7 @@ const matungaParts: readonly ProjectGallery[] = [
   {
     project: MATUNGA_PARTS.mechanical,
     parent: "Matunga Workshop",
-    label: "Mechanical Works",
+    label: "Mechanical works",
     photos: [
       { file: "matunga-workshop-01.jpg", caption: "Vande Bharat trainset inside the maintenance shed" },
       { file: "matunga-workshop-02.jpg", caption: "LHB coach shed under its full-length arched roof" },
@@ -317,7 +317,7 @@ const matungaParts: readonly ProjectGallery[] = [
   {
     project: MATUNGA_PARTS.electrical,
     parent: "Matunga Workshop",
-    label: "Electrical Works",
+    label: "Electrical works",
     photos: [
       { file: "matunga-workshop-09.jpg", caption: "Workshop entrance monument at dusk" },
       { file: "matunga-workshop-11.jpg", caption: "Tensile canopy over the forecourt, lit at dusk" },
@@ -373,7 +373,7 @@ export const vindhanePlantPhotos: readonly GalleryPhoto[] = [
   { file: "vindhane-plant-06.jpg", caption: "A painted girder lifted onto a trailer for dispatch" },
   { file: "vindhane-plant-07.jpg", caption: "Fabricated members on a trailer, ready to leave the yard" },
   { file: "vindhane-plant-08.jpg", caption: "Arched members fabricated and primed in the yard" },
-  { file: "vindhane-plant-09.jpg", caption: "The metalizing shop" },
+  { file: "vindhane-plant-09.jpg", caption: "The metallising shop" },
   { file: "vindhane-plant-10.jpg", caption: "The painting shop, its entry hung with strip curtains" },
   { file: "vindhane-plant-11.jpg", caption: "The plant's diesel generator, keeping the shops running on their own power" },
   { file: "vindhane-plant-12.jpg", caption: "Concreting the plant's approach road" },
@@ -449,16 +449,16 @@ export const hseDrillPhotos: readonly GalleryPhoto[] = [
      then the seven in the report on the snake-bite drill at the Karjat
      RMC plant, 27 August 2026. The tenth fire photograph is also a tile
      on /hse (pages.ts). */
-  { file: "hse-mohape-fire-drill-01.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive aims the extinguisher's hose at the test fire" },
+  { file: "hse-mohape-fire-drill-01.jpg", caption: "Fire mock drill at Mohape: the HSE executive aims the extinguisher's hose at the test fire" },
   { file: "hse-mohape-fire-drill-02.jpg", caption: "Fire mock drill at Mohape: a worker holds the extinguisher ready beside the burning tray" },
   { file: "hse-mohape-fire-drill-03.jpg", caption: "Fire mock drill at Mohape: a supervisor readies the extinguisher at the test fire" },
-  { file: "hse-mohape-fire-drill-04.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive explains the extinguisher to the crew" },
-  { file: "hse-mohape-fire-drill-05.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive holds up the extinguisher for the crew to see" },
-  { file: "hse-mohape-fire-drill-06.jpg", caption: "Fire mock drill at Mohape: the crew gathers round K.D.'s HSE executive and the extinguisher" },
-  { file: "hse-mohape-fire-drill-07.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive turns the extinguisher towards the fire" },
-  { file: "hse-mohape-fire-drill-08.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive shows the hold, hose in hand" },
-  { file: "hse-mohape-fire-drill-09.jpg", caption: "Fire mock drill at Mohape: K.D.'s HSE executive crouches at the fire with the extinguisher" },
-  { file: "hse-mohape-fire-drill-10.jpg", caption: "Fire mock drill at Mohape: the crew leans in as K.D.'s HSE executive reaches the fire" },
+  { file: "hse-mohape-fire-drill-04.jpg", caption: "Fire mock drill at Mohape: the HSE executive explains the extinguisher to the crew" },
+  { file: "hse-mohape-fire-drill-05.jpg", caption: "Fire mock drill at Mohape: the HSE executive holds up the extinguisher for the crew to see" },
+  { file: "hse-mohape-fire-drill-06.jpg", caption: "Fire mock drill at Mohape: the crew gathers round the HSE executive and the extinguisher" },
+  { file: "hse-mohape-fire-drill-07.jpg", caption: "Fire mock drill at Mohape: the HSE executive turns the extinguisher towards the fire" },
+  { file: "hse-mohape-fire-drill-08.jpg", caption: "Fire mock drill at Mohape: the HSE executive shows the hold, hose in hand" },
+  { file: "hse-mohape-fire-drill-09.jpg", caption: "Fire mock drill at Mohape: the HSE executive crouches at the fire with the extinguisher" },
+  { file: "hse-mohape-fire-drill-10.jpg", caption: "Fire mock drill at Mohape: the crew leans in as the HSE executive reaches the fire" },
   { file: "hse-mohape-fire-drill-11.jpg", caption: "Fire mock drill at Mohape: the powder jet hits the fire" },
   { file: "hse-mohape-fire-drill-12.jpg", caption: "Fire mock drill at Mohape: a supervisor puts the fire out, and the tray smokes under the powder" },
   { file: "hse-mohape-fire-drill-13.jpg", caption: "Fire mock drill at Mohape: a worker takes his turn with the extinguisher" },

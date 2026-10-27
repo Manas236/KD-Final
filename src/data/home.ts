@@ -234,7 +234,7 @@ export const home = {
 
   capabilities: {
     kicker: "Core Capabilities",
-    heading: "Integrated EPC Delivery",
+    heading: "Integrated EPC delivery",
     cards: [
       {
         num: "01",
@@ -272,8 +272,8 @@ export const home = {
 
   projects: {
     kicker: "Selected Work",
-    heading: "Featured Projects",
-    link: { label: "View All Projects", href: "/projects" } as NavLink,
+    heading: "Featured projects",
+    link: { label: "View Projects", href: "/projects" } as NavLink,
     featured: {
       title: "Matunga Workshop",
       badge: "Civil · Mechanical · Electrical",
@@ -307,19 +307,19 @@ export const home = {
     heading: "Why K.D. Constructions",
     cards: [
       {
-        title: "Legacy & Trust",
+        title: "Legacy & trust",
         body:
           "53 years of engineering integrity across Maharashtra PWD, Indian " +
           "Railways, CIDCO, and NMMC. Trusted. Enduring.",
       },
       {
-        title: "Financial Discipline",
+        title: "Financial discipline",
         body:
           "Retained earnings reinvested, never distributed. A zero-tolerance " +
           "quality culture aligned with Railway Board standards.",
       },
       {
-        title: "Full EPC Delivery",
+        title: "Full EPC delivery",
         body:
           "Civil, structural steel, mechanical, electrical, signalling & " +
           "telecom, and track engineering delivered in-house. Self-owned " +
@@ -331,7 +331,7 @@ export const home = {
   cta: {
     kicker: "Active Tenders",
     headline: "₹362.90 Cr in active pipeline. Let's build together.",
-    button: { label: "View Our Projects", href: "/projects" } as NavLink,
+    button: { label: "View Projects", href: "/projects" } as NavLink,
   },
 
   footer: {
@@ -365,7 +365,7 @@ export const home = {
         ] as readonly string[],
       },
       disciplines: {
-        head: "Core Disciplines",
+        head: "Core disciplines",
         items: [
           "Civil Engineering",
           "Steel Fabrication & Erection",

@@ -198,19 +198,19 @@ export const capabilities: InfoPageCopy = {
       heading: "Our own steel, concrete and equipment.",
       items: [
         {
-          title: "Steel Fabrication",
+          title: "Steel fabrication",
           body:
             "Our own plant at Vindhane, Raigad fabricates 100 to 120 MT of steel a month for " +
             "railway structures, bridges, FOBs and girders.",
         },
         {
-          title: "Ready-Mix Concrete",
+          title: "Ready-mix concrete",
           body:
             "Our RMC plant at Karjat batches concrete under cover, with its cement held in twin " +
             "silos on site.",
         },
         {
-          title: "Heavy Equipment",
+          title: "Heavy equipment",
           body:
             "A self-owned fleet of 50+ heavy equipment units keeps execution capacity high and " +
             "dependence on rented equipment low.",
@@ -225,10 +225,10 @@ export const capabilities: InfoPageCopy = {
         "procurement through construction and commissioning, on its own steel, concrete and " +
         "equipment.",
       items: [
-        { title: "Engineering Expertise" },
-        { title: "In-House Manufacturing" },
-        { title: "Owned Resources" },
-        { title: "Project Management" },
+        { title: "Engineering expertise" },
+        { title: "In-house manufacturing" },
+        { title: "Owned resources" },
+        { title: "Project management" },
       ],
     },
   ],
@@ -286,13 +286,13 @@ export const resources: InfoPageCopy = {
         "Representative categories in the fleet include:",
       items: [
         { title: "Excavators" },
-        { title: "Mobile Cranes" },
-        { title: "Transit Mixers" },
-        { title: "Tipper Trucks" },
+        { title: "Mobile cranes" },
+        { title: "Transit mixers" },
+        { title: "Tipper trucks" },
         { title: "Dumpers" },
-        { title: "Backhoe Loaders" },
-        { title: "Road Rollers" },
-        { title: "Utility Vehicles" },
+        { title: "Backhoe loaders" },
+        { title: "Road rollers" },
+        { title: "Utility vehicles" },
       ],
     },
   ],
@@ -392,8 +392,9 @@ export const hse: HseCopy = {
        of 7 March 2026, not a company-wide figure; the drills are "8+"
        for 2026 so far (the register shows seven of them); the camp was
        50 workers and staff, not 88. The note under the tiles is Sir's
-       own wording, 19 Oct 2026, character for character (his curly
-       apostrophe included); OPEN-QUESTIONS.md #56. */
+       own wording, 19 Oct 2026 (OPEN-QUESTIONS.md #56), word for word; its
+       apostrophe was a curly one until 27 Oct 2026, when it was made the
+       straight one the rest of the site uses. */
     stats: [
       { value: "3,00,000", label: "Safe man-hours at Karjat site (as of March 2026)" },
       { value: "3", label: "ISO-certified management systems" },
@@ -401,7 +402,7 @@ export const hse: HseCopy = {
       { value: "50", label: "Workers and staff in one medical camp" },
     ],
     statsNote:
-      "Thanks to the commitment of every worker at Karjat, we’ve reached 3,00,000 safe " +
+      "Thanks to the commitment of every worker at Karjat, we've reached 3,00,000 safe " +
       "man-hours as of March 2026. Safety first, always.",
   },
   sections: [
@@ -410,25 +411,25 @@ export const hse: HseCopy = {
       heading: "Four commitments, no exceptions.",
       items: [
         {
-          title: "Worker Welfare",
+          title: "Worker welfare",
           body:
             "Medical fitness screening, HIV/AIDS awareness programmes, and clean water access on " +
             "every site.",
         },
         {
-          title: "High-Risk Management",
+          title: "High-risk management",
           body:
             "Full-body harnesses for height work, fire protocols, and lux-meter monitoring on every " +
             "active site.",
         },
         {
-          title: "Strict Compliance",
+          title: "Strict compliance",
           body:
             "Zero tolerance for alcohol, drugs, or smoking, with a mandatory six-hour abstinence " +
             "period before every shift.",
         },
         {
-          title: "Environmental Stewardship",
+          title: "Environmental stewardship",
           body:
             "Noise limits on night operations, structured waste disposal systems, and " +
             "mosquito/vector prevention programmes.",
@@ -539,8 +540,8 @@ export const hse: HseCopy = {
         {
           title: "Registered with CIDCO",
           body:
-            "K.D. Constructions is registered with CIDCO (City and Industrial Development " +
-            "Corporation of Maharashtra).",
+            "K.D. Constructions is registered with the City and Industrial Development " +
+            "Corporation of Maharashtra Limited (CIDCO).",
           cert: "cidco-registration",
         },
       ],
@@ -954,20 +955,20 @@ export const csr: InfoPageCopy = {
       heading: "The same discipline, beyond the site.",
       items: [
         {
-          title: "Workforce Health & Safety",
+          title: "Workforce health & safety",
           body:
             "Medical fitness screening, HIV/AIDS awareness programmes, and guaranteed clean " +
             "water access for every worker on every site, not as compliance, but as culture.",
         },
         {
-          title: "Community Impact",
+          title: "Community impact",
           body:
             "Our infrastructure work directly serves the public, from the Matunga Z-Bridge " +
             "restoring a daily commute for lakhs of residents, to station redevelopments " +
             "serving 45,000+ commuters a day. We see every project as a community investment.",
         },
         {
-          title: "Environmental Responsibility",
+          title: "Environmental responsibility",
           body:
             "Structured waste management, noise control, and sustainable material practices " +
             "on-site, with a broader commitment to low-carbon engineering as part of our " +
@@ -1094,7 +1095,7 @@ export const company: InfoPageCopy = {
     },
     {
       kicker: "Board of Directors",
-      heading: "The Stewards of the Vision",
+      heading: "The stewards of the vision",
       items: [
         {
           title: "Kailash S. Gindodia",
@@ -1377,7 +1378,7 @@ export const contact: ContactCopy = {
           ],
         },
         {
-          title: "Business Enquiries",
+          title: "Business enquiries",
           body: "Tenders, partnerships and project enquiries.",
           links: [
             { label: "infra@kdconstructions.net", href: "mailto:infra@kdconstructions.net" },
@@ -1528,7 +1529,7 @@ export const careers: CareersCopy = {
       ],
     },
     {
-      kicker: "Why K.D.",
+      kicker: "Why K.D. Constructions",
       heading: "Work that stands for decades.",
       items: [
         {

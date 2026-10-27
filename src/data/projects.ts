@@ -146,7 +146,7 @@ export const projects = {
 
   hero: {
     kicker: "Portfolio",
-    heading: "Our Work",
+    heading: "Our work",
     sub:
       "Five decades. Six disciplines. Railway, urban transit and government " +
       "infrastructure, built across Maharashtra.",
@@ -226,7 +226,7 @@ export const projects = {
         statusBadge: "Ongoing, 60%+ Complete",
         badges: ["Civil"],
         title: "Mumbai Harbour Line Station Redevelopment",
-        meta: "Mumbai Railway Vikas Corporation Ltd · 4 Stations",
+        meta: "MRVC · 4 Stations",
         /* Stand-in — no dedicated photograph exists for this project.
            See OPEN-QUESTIONS.md #19b. Said to be one since 22 Oct 2026
            (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
@@ -276,7 +276,7 @@ export const projects = {
            to the name it is known by at the user's request 2026-09-29
            (OPEN-QUESTIONS.md #41). Its own photograph since 2026-09-28
            (#38), no longer a stand-in. */
-        meta: "Central Railway · 303m Span",
+        meta: "Central Railway · 303\u00a0m Span",
         alt: "Aerial view of the Matunga Z-Bridge by K.D. Constructions, its covered deck running the length of the workshop yard",
       },
       {

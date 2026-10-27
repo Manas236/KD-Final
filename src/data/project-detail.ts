@@ -263,7 +263,9 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
   {
     title: "Harbour Line FOBs & Trespass-Control",
     eyebrow: "Signature Project",
-    client: "MRVC / Central Railway",
+    /* "Central Railway" is kept on one line (\u00a0): the full MRVC name,
+       the site's form on first use since 27 Oct 2026, wraps here. */
+    client: "Mumbai Railway Vikas Corporation Limited (MRVC) / Central\u00a0Railway",
     badges: ["Civil"],
     live: false,
     statusBadge: "",
@@ -293,8 +295,11 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        longer leaves a gap. */
     stats: [
       { value: "4", label: "Locations" },
-      { value: "44.5m + 24.9m", label: "Vashi–Sanpada Spans" },
-      { value: "38m + 29.9m", label: "Nerul–Seawood Spans" },
+      /* Number, space, unit (27 Oct 2026), one unit for the pair: "44.5m +
+         24.9m" was as wide as the tile allows, so a second "m" would wrap.
+         The spaces before a unit do not break (\u00a0). */
+      { value: "44.5 + 24.9\u00a0m", label: "Vashi–Sanpada Spans" },
+      { value: "38 + 29.9\u00a0m", label: "Nerul–Seawood Spans" },
       { value: "Truss + Plate", label: "Girder Systems" },
     ],
     image: harbourFobImg,
@@ -303,7 +308,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
   {
     title: "Mumbai Harbour Line Station Redevelopment",
     eyebrow: "Ongoing Project",
-    client: "Mumbai Railway Vikas Corporation (MRVC)",
+    client: "Mumbai Railway Vikas Corporation Limited (MRVC)",
     badges: ["Civil"],
     live: true,
     statusBadge: "Ongoing, 60%+ Complete",
@@ -315,7 +320,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "Nagar, Chembur, Govandi and Mankhurd, executed within an " +
         "operational railway environment. The scope includes FOBs, " +
         "elevated decks, skywalks, service buildings, improved station " +
-        "access and associated infrastructure, including a 10m-wide FOB " +
+        "access and associated infrastructure, including a 10\u00a0m wide FOB " +
         "at Mankhurd.",
       "With railway operations continuing throughout execution, the " +
         "project demands rigorous planning, safety and interface " +
@@ -332,7 +337,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     ],
     stats: [
       { value: "4", label: "Stations" },
-      { value: "10m", label: "Mankhurd FOB Width" },
+      { value: "10\u00a0m", label: "Mankhurd FOB Width" },
       { value: "45,000+", label: "Commuters a Day" },
     ],
     image: harbourRedevImg,
@@ -419,7 +424,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "by lakhs of commuters, students and residents.",
     ],
     stats: [
-      { value: "303m", label: "FOB Length" },
+      { value: "303\u00a0m", label: "FOB Length" },
       { value: "704.88 MT", label: "Structural Steel" },
       { value: "1,584 m³", label: "RCC" },
     ],

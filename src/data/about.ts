@@ -131,7 +131,7 @@ export const about = {
 
   story: {
     kicker: "Our Story",
-    heading: "Five Decades of Engineering Integrity",
+    heading: "Five decades of engineering integrity",
     lead: STORY_LEAD,
     body1:
       "What began in 1973 as a partnership firm delivering early Maharashtra " +
@@ -166,11 +166,11 @@ export const about = {
 
   journey: {
     kicker: "Our Journey",
-    heading: "Three Chapters. One Legacy.",
+    heading: "Three chapters. One legacy.",
     chapters: [
       {
         chapter: "Chapter I · 1973",
-        title: "Founded on Principle",
+        title: "Founded on principle",
         phase: "Origin",
         points: [
           "Established as a partnership firm in Dhule",
@@ -181,18 +181,18 @@ export const about = {
       },
       {
         chapter: "Chapter II · 2004",
-        title: "Built for Scale",
-        phase: "Formalization",
+        title: "Built for scale",
+        phase: "Formalisation",
         points: [
           "Incorporated as a Private Limited company",
           "Pre-qualified for Indian Railway infrastructure",
           "Delivered for CIDCO, NMMC, and allied government bodies",
-          "Adopted HSE compliance and standardized practice",
+          "Adopted HSE compliance and standardised practice",
         ],
       },
       {
         chapter: "Chapter III · 2017–",
-        title: "The Next Horizon",
+        title: "The next horizon",
         phase: "Modern Era",
         points: [
           "Expanded into multi-disciplinary EPC delivery",
@@ -247,26 +247,26 @@ export const about = {
     heading: '"It is better to be safe than sorry."',
     cards: [
       {
-        title: "Grit Over Shortcuts",
+        title: "Grit over shortcuts",
         body:
           "We believe challenging projects demand perseverance, resilience " +
           "and the determination to see them through.",
       },
       {
-        title: "Integrity Over Expedience",
+        title: "Integrity over expedience",
         body:
           "We conduct our work with honesty, accountability, financial " +
           "prudence and engineering integrity.",
       },
       {
-        title: "Intelligence Over Convention",
+        title: "Intelligence over convention",
         body:
           "We combine engineering expertise, practical experience, " +
           "technology and informed decision-making to build smarter " +
           "execution strategies.",
       },
       {
-        title: "Safety Without Exception",
+        title: "Safety without exception",
         body: "HSE is not a separate priority; it is part of every priority.",
       },
     ] as readonly PhilosophyCard[],
@@ -330,25 +330,25 @@ export const about = {
     heading: '"Everyone Goes Home."',
     cards: [
       {
-        title: "Worker Welfare",
+        title: "Worker welfare",
         body:
           "Medical fitness screening, HIV/AIDS awareness programmes, and " +
           "clean water access on every site.",
       },
       {
-        title: "High-Risk Management",
+        title: "High-risk management",
         body:
           "Full-body harnesses for height work, fire protocols, and lux-meter " +
           "monitoring on every active site.",
       },
       {
-        title: "Strict Compliance",
+        title: "Strict compliance",
         body:
           "Zero tolerance for alcohol, drugs, or smoking, with a mandatory " +
           "six-hour abstinence period before every shift.",
       },
       {
-        title: "Environmental Stewardship",
+        title: "Environmental stewardship",
         body:
           "Noise limits on night operations, structured waste disposal " +
           "systems, and mosquito/vector prevention programmes.",
@@ -359,7 +359,7 @@ export const about = {
   cta: {
     kicker: "Vision 2030",
     headline: "Building the infrastructure India needs, next.",
-    button: { label: "See Our Projects", href: "/projects" } as NavLink,
+    button: { label: "View Projects", href: "/projects" } as NavLink,
   },
 } as const;
 
