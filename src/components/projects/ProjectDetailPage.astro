@@ -214,6 +214,18 @@ const breadcrumbs = [
           )}
         </div>
       </div>
+
+      {/* A stand-in hero says so where it is seen, as the "Beyond the
+          railway" pages' representative images do (SocialProjectPage):
+          over the photograph, bottom right, out of the flow. */}
+      {project.representative && (
+        <span
+          class="absolute right-24 sm:right-48 bottom-24 inline-block text-badge-sm uppercase text-kd-mist bg-kd-ink px-8 py-6"
+          data-edit="projects.detail.representative"
+        >
+          {project.representative}
+        </span>
+      )}
     </section>
 
     <section class="bg-white py-96">

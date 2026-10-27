@@ -33,7 +33,11 @@
    untouched. Bodies may now run to three paragraphs; the template maps
    over the array, so no markup changed.
    ============================================================ */
-import featuredImg from "../assets/about-mankhurd-workforce.jpg";
+/* Panvel–Karjat's own photograph since 27 Oct 2026, from its gallery: a
+   steel girder going in at Chowk, with the RCC box segments for the
+   corridor's push-through subways staged in front. Until then the hero
+   was a stand-in, the Mankhurd workforce photograph. */
+import panvelKarjatImg from "../assets/gallery/panvel-karjat-01.jpg";
 import matungaImg from "../assets/project-matunga-workshop.jpg";
 import nhavaShevaUranImg from "../assets/project-nhava-sheva-uran.jpg";
 import harbourFobImg from "../assets/project-fob-truss-span.jpg";
@@ -81,6 +85,11 @@ export interface ProjectDetail {
       an architect's rendering, so the page's structured data names no
       creator for it (BaseLayout.astro, primaryImage). */
   readonly imageKind?: "stand-in" | "render";
+  /** On a stand-in: the caption on the hero, the same label and style as
+      the "Beyond the railway" pages' representative images (27 Oct 2026),
+      so a visitor sees what the alt text says. Key
+      `projects.detail.representative`, as on those pages. */
+  readonly representative?: string;
   /** A photograph of this project's own, from its gallery
       (src/assets/gallery/), for the share card in place of a stand-in
       hero. The hero itself does not change. Used only while the
@@ -119,12 +128,8 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
       { value: "4,686 MT", label: "Structural Steel" },
       { value: "146,814 m³", label: "Earthwork" },
     ],
-    image: featuredImg,
-    imageKind: "stand-in",
-    alt: "Representative image: K.D. Constructions workforce on site at Mankhurd",
-    /* The track-panel lift on the corridor: the project's own photograph
-       for link previews, the hero staying as it is (#62). */
-    shareFile: "panvel-karjat-03.jpg",
+    image: panvelKarjatImg,
+    alt: "Steel girder lifted in at Chowk on the Panvel–Karjat line by K.D. Constructions, RCC box segments staged in front",
   },
   {
     title: "Matunga Workshop",
@@ -341,6 +346,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        these four stations. Representative until Sir confirms or replaces
        it (#62). */
     imageKind: "stand-in",
+    representative: "Representative image",
     alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
   },
   {
@@ -455,6 +461,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     /* PHOTOS.md B1: the Vande Bharat rake in a Matunga shed, not Solapur.
        Representative until Sir confirms or replaces it (#62). */
     imageKind: "stand-in",
+    representative: "Representative image",
     alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
   },
   {
@@ -481,6 +488,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     /* PHOTOS.md A10: a platform from the Nhava Sheva folder, not Lower
        Parel. Representative until Sir confirms or replaces it (#62). */
     imageKind: "stand-in",
+    representative: "Representative image",
     alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
   },
 ];

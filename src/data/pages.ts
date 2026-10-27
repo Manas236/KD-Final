@@ -789,7 +789,7 @@ export const hse: HseCopy = {
         media: [
           {
             file: "hse-medical-camp-mankhurd.jpg",
-            alt: "Workers queue outside the Mankhurd site office beside the free medical camp banner and K.D. safety posters",
+            alt: "K.D. Constructions workers queue outside the Mankhurd site office beside the free medical camp banner and safety posters",
             title: "Free medical camp for 50 workers and staff",
             where: "Mankhurd Station · 12 September 2026",
           },
@@ -883,7 +883,7 @@ export const hse: HseCopy = {
         media: [
           {
             file: "hse-national-safety-week-karjat.jpg",
-            alt: "Rows of workers in K.D. helmets and hi-vis harnesses seated on site for National Safety Week at Karjat",
+            alt: "K.D. Constructions workers in company helmets and hi-vis harnesses, seated in rows on site for National Safety Week at Karjat",
             title: "3,00,000 safe man-hours without a lost-time injury",
             where: "National Safety Week · Karjat",
           },

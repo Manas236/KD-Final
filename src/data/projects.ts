@@ -77,6 +77,10 @@ export interface ProjectEntry {
       (2026-10-09) and is kept as a record; a boolean, so
       check-edit-keys.mjs never looks for a slot for it (see `live`). */
   readonly steel?: boolean;
+  /** Set on a card whose photograph is a stand-in (another K.D. work's,
+      22 Oct 2026, #62): the caption on the tile, the label the "Beyond
+      the railway" tiles use for theirs (27 Oct 2026). */
+  readonly representative?: string;
 }
 
 export interface FeaturedProject extends ProjectEntry {
@@ -181,12 +185,10 @@ export const projects = {
         "Delivering direct CSMT–Panvel–Karjat suburban connectivity under " +
         "MUTP-III. Stations: Chikhale, Mohape, Chowk, Karjat.",
       footnote: "4 Stations · January 2026",
-      /* No dedicated photograph exists for this project, see
-         OPEN-QUESTIONS.md #18. The alt text describes the stand-in
-         image actually in the box, not the project, the same way the
-         Matunga Z-Bridge card's alt text did (#19b). Since 22 Oct 2026
-         it also says it is a representative image (#62). */
-      alt: "Representative image: K.D. Constructions workforce on site at Mankhurd",
+      /* The project's own photograph since 27 Oct 2026, the frame its
+         page's hero uses (a girder going in at Chowk). Until then a
+         stand-in, the Mankhurd workforce photograph (#18, #62). */
+      alt: "Steel girder lifted in at Chowk on the Panvel–Karjat line by K.D. Constructions, RCC box segments staged in front",
     } as FeaturedProject,
 
     medium: [
@@ -229,6 +231,7 @@ export const projects = {
            See OPEN-QUESTIONS.md #19b. Said to be one since 22 Oct 2026
            (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
         alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
+        representative: "Representative image",
       },
       {
         /* A signature project the doc has always carried ("Creation of LHB
@@ -290,6 +293,7 @@ export const projects = {
            OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
            2026 (#62). */
         alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
+        representative: "Representative image",
       },
       {
         live: true,
@@ -301,6 +305,7 @@ export const projects = {
            OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
            2026 (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
         alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
+        representative: "Representative image",
       },
     ] as readonly ProjectEntry[],
 

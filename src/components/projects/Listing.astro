@@ -70,7 +70,9 @@
    asked for "Plants" in its place.
    ============================================================ */
 import { Image } from "astro:assets";
-import featuredImg from "../../assets/about-mankhurd-workforce.jpg";
+/* Panvel–Karjat's own photograph since 27 Oct 2026, the same frame as
+   its page's hero (src/data/project-detail.ts). */
+import featuredImg from "../../assets/gallery/panvel-karjat-01.jpg";
 import matungaImg from "../../assets/project-matunga-workshop.jpg";
 import nhavaShevaUranImg from "../../assets/project-nhava-sheva-uran.jpg";
 import harbourFobImg from "../../assets/project-fob-truss-span.jpg";
@@ -192,6 +194,18 @@ const isOddOneOut = (i: number, count: number) =>
               {project.statusBadge}
             </span>
           )}
+          {/* A stand-in photograph says so, as a "Beyond the railway" tile
+              does (Social.astro): top right, clear of the status badge, and
+              on a phone, where the two do not fit side by side, under it
+              (the badge is 25.5px tall from top-24, so 58 leaves 8). */}
+          {project.representative && (
+            <span
+              class="inline-block absolute right-24 top-24 max-sm:left-24 max-sm:right-auto max-sm:top-58 text-badge-sm uppercase text-kd-mist bg-kd-ink px-8 py-6"
+              data-edit={`projects.listing.medium.${i}.representative`}
+            >
+              {project.representative}
+            </span>
+          )}
 
           <div class="absolute inset-x-0 bottom-0 p-32">
             <div class="flex flex-wrap items-center gap-8">
@@ -238,6 +252,14 @@ const isOddOneOut = (i: number, count: number) =>
             class="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
+          {project.representative && (
+            <span
+              class="inline-block absolute left-20 top-20 text-badge-sm uppercase text-kd-mist bg-kd-ink px-8 py-6"
+              data-edit={`projects.listing.small.${i}.representative`}
+            >
+              {project.representative}
+            </span>
+          )}
           <div class="absolute inset-x-0 bottom-0 p-20">
             <div class="flex flex-wrap items-center gap-6">
               {project.badges.map((badge, j) => (
