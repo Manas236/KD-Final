@@ -30,7 +30,7 @@
    carries no video source and nothing autoplays: the script at the foot
    of this file loads and plays it once the page has loaded, and only at
    1080px and up (phones keep the still unless HERO_VIDEO_ON_PHONES is
-   switched on, and then get the 720p file), and never with reduced
+   switched on, and then get the same file), and never with reduced
    motion, Save-Data, edit mode or without `kd-motion`. It is invisible
    until it is actually playing,
    then fades in over the still (motion.css §5), and pauses while the
@@ -162,9 +162,11 @@ const { hero } = home;
 <script>
   /* The drone video behind the hero: see the note at the top of this file. */
 
-  /* Phones keep the still. Set this to true to give them the 720p file. */
+  /* Phones keep the still. Set this to true to play them the video too.
+     One file for both since 27 Oct 2026: 1280x720, 2.5 MB at most
+     (scripts/build-hero-video.mjs). */
   const HERO_VIDEO_ON_PHONES = false;
-  const SOURCE = { desktop: "/video/hero-uran-1080.mp4", phone: "/video/hero-uran-720.mp4" };
+  const SOURCE = { desktop: "/video/hero-uran-720.mp4", phone: "/video/hero-uran-720.mp4" };
 
   const root = document.documentElement;
   const video = document.querySelector<HTMLVideoElement>("video[data-hero-video]");

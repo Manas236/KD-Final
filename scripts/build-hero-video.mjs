@@ -14,27 +14,40 @@
    into its first.
 
    Writes:
-     public/video/hero-uran-1080.mp4   1920x1080, what desktop plays
-     public/video/hero-uran-720.mp4    1280x720, for phones, used only if
+     public/video/hero-uran-720.mp4    1280x720, at most 2.5 MB: what
+                                       desktop plays, and phones too if
                                        Hero.astro's HERO_VIDEO_ON_PHONES
                                        is switched on
      src/assets/hero-uran-poster.jpg   the video's first frame, the still
-                                       the <Image> under the video shows
+                                       the <Image> under the video shows,
+                                       only with --poster (it is kept as
+                                       it is otherwise)
+
+   ONE FILE, 2.5 MB, SINCE 27 OCT 2026. Until then desktop played a
+   1920x1080 file of 7.1 MB (CRF 27) and phones had a 1280x720 one of
+   3.1 MB. The launch audit asked for 2.5 MB or less. At that size, scored
+   with SSIM against the master and looked at frame by frame, 1280x720
+   came out ahead of 1440x810, 1600x900 and 1920x1080: the same bytes over
+   fewer pixels give fewer artefacts than the larger frame gains in
+   detail, and the hero is drawn under its overlay. So the 1080 file is
+   gone and both widths play this one.
 
    How:
      1. A near-lossless master in the temp folder. Each shot is trimmed
         with input seeking (-ss and -t before -i), so only the seconds
         used are decoded, then brought to one frame rate (the source's,
         or 30 if that is higher) and size, and dissolved together.
-     2. Both MP4s are encoded from the master: H.264 High, 8-bit
-        yuv420p, BT.709 tags, no audio, +faststart. A file over its
-        budget is re-encoded at CRF + CRF_STEP, up to CRF_RETRIES times;
-        if it is still over, the longest shot loses a second and
-        everything is cut again.
-     3. The poster is the master's first frame, through sharp as in
-        build-gallery.mjs.
+     2. The MP4 is encoded from the master in two passes to a bitrate
+        worked out from its budget and the cut's length: H.264 High,
+        8-bit yuv420p, BT.709 tags, x264 veryslow with film tuning and
+        adaptive quantisation mode 3 (fewer bands in the sky and the
+        shade under the platform roof), no audio, +faststart. A file
+        still over its budget is encoded again at a bitrate 5% lower, up
+        to BITRATE_RETRIES times. The cut is never shortened.
+     3. With --poster, the poster is the master's first frame, through
+        sharp as in build-gallery.mjs.
 
-   Usage:  node scripts/build-hero-video.mjs
+   Usage:  node scripts/build-hero-video.mjs [--poster]
    Needs ffmpeg and ffprobe on PATH. ffmpeg's own output goes to
    build.log in the work folder; on a failure the last 10 lines of it
    are printed.
@@ -70,28 +83,21 @@ const SHOTS = [
 const XFADE_SECONDS = 0.8;
 const MAX_FPS = 30;
 
-/* Encoding. CRF is the starting quality; the budget loop only ever
-   raises it. MB here is a million bytes. */
-const CRF = 27;
-const CRF_STEP = 2;
-const CRF_RETRIES = 3;
-const MAXRATE = "2.5M";
-const BUFSIZE = "5M";
-const PRESET = "slow";
+/* Encoding. The bitrate is the budget spread over the cut, less
+   HEADROOM for the MP4 container; MAXRATE caps a peak at twice it. MB
+   here is a million bytes. */
+const PRESET = "veryslow";
+const HEADROOM = 0.98;
+const BITRATE_STEP = 0.95;
+const BITRATE_RETRIES = 3;
 const MB = 1000 * 1000;
-const OUTPUTS = [
-  { file: "public/video/hero-uran-1080.mp4", width: 1920, height: 1080, budget: 9 * MB },
-  { file: "public/video/hero-uran-720.mp4", width: 1280, height: 720, budget: 3.5 * MB },
-];
+const OUTPUT = { file: "public/video/hero-uran-720.mp4", width: 1280, height: 720, budget: 2.5 * MB };
 const POSTER = { file: "src/assets/hero-uran-poster.jpg", width: 1920, quality: 90 };
+const WRITE_POSTER = process.argv.includes("--poster");
 
 /* The master: as big as the largest output, near-lossless, temp only. */
 const MASTER_SIZE = { width: 1920, height: 1080 };
 const MASTER_CRF = 10;
-
-/* The last resort, shortening shots, stops here. */
-const MAX_SHORTENINGS = 3;
-const MIN_SHOT_SECONDS = 4;
 
 const COLOUR = ["-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv"];
 
@@ -166,21 +172,27 @@ function buildMaster(shots) {
   return length;
 }
 
-/* Step 2, one output at one CRF. Returns its size in bytes. */
-function encode(output, crf) {
+/* Step 2, the output at one bitrate (bits a second), in two passes.
+   Returns its size in bytes. */
+function encode(output, bitrate) {
   const dest = path.join(ROOT, output.file);
   mkdirSync(path.dirname(dest), { recursive: true });
-  const args = ["-hide_banner", "-nostats", "-y", "-i", MASTER, "-map", "0:v:0", "-an", "-sn", "-dn", "-map_metadata", "-1"];
-  if (output.width !== MASTER_SIZE.width || output.height !== MASTER_SIZE.height) {
-    args.push("-vf", `scale=${output.width}:${output.height}:flags=lanczos`);
+  const passlog = path.join(WORK, "x264-pass");
+  for (const pass of [1, 2]) {
+    const args = ["-hide_banner", "-nostats", "-y", "-i", MASTER, "-map", "0:v:0", "-an", "-sn", "-dn", "-map_metadata", "-1"];
+    if (output.width !== MASTER_SIZE.width || output.height !== MASTER_SIZE.height) {
+      args.push("-vf", `scale=${output.width}:${output.height}:flags=lanczos`);
+    }
+    args.push(
+      "-c:v", "libx264", "-profile:v", "high", "-preset", PRESET, "-tune", "film", "-x264-params", "aq-mode=3",
+      "-b:v", String(Math.round(bitrate)), "-maxrate", String(Math.round(bitrate * 2)), "-bufsize", String(Math.round(bitrate * 4)),
+      "-pass", String(pass), "-passlogfile", passlog,
+      "-pix_fmt", "yuv420p", ...COLOUR, "-movflags", "+faststart",
+    );
+    // Pass 1 only writes the log; its video goes nowhere.
+    args.push(...(pass === 1 ? ["-f", "mp4", process.platform === "win32" ? "NUL" : "/dev/null"] : [dest]));
+    run("ffmpeg", args);
   }
-  args.push(
-    "-c:v", "libx264", "-profile:v", "high", "-preset", PRESET,
-    "-crf", String(crf), "-maxrate", MAXRATE, "-bufsize", BUFSIZE,
-    "-pix_fmt", "yuv420p", ...COLOUR, "-movflags", "+faststart",
-    dest,
-  );
-  run("ffmpeg", args);
   return statSync(dest).size;
 }
 
@@ -198,49 +210,33 @@ async function writePoster() {
     .toFile(path.join(ROOT, POSTER.file));
 }
 
-const shots = SHOTS.map((s) => ({ ...s }));
-for (let shortened = 0; ; shortened++) {
-  const length = buildMaster(shots);
-  console.log(`cut: ${shots.length} shots, ${(length / FPS.value).toFixed(2)} s at ${FPS.value} fps (${length} frames), log ${LOG}`);
+const length = buildMaster(SHOTS);
+console.log(`cut: ${SHOTS.length} shots, ${(length / FPS.value).toFixed(2)} s at ${FPS.value} fps (${length} frames), log ${LOG}`);
 
-  const done = [];
-  let over = null;
-  for (const output of OUTPUTS) {
-    let crf = CRF;
-    let size = encode(output, crf);
-    for (let retry = 1; size > output.budget && retry <= CRF_RETRIES; retry++) {
-      console.log(`  ${output.file}: ${mb(size)} at CRF ${crf}, over ${mb(output.budget)}; trying CRF ${crf + CRF_STEP}`);
-      crf += CRF_STEP;
-      size = encode(output, crf);
-    }
-    if (size > output.budget) {
-      over = { output, size, crf };
-      break;
-    }
-    done.push({ output, size, crf });
-  }
-
-  if (!over) {
-    const poster = await writePoster();
-    for (const { output, size, crf } of done) {
-      const info = probe(path.join(ROOT, output.file), "stream=codec_type,codec_name,profile,pix_fmt,width,height,r_frame_rate:format=duration");
-      const video = info.streams.find((st) => st.codec_type === "video");
-      const audio = info.streams.filter((st) => st.codec_type === "audio").length;
-      console.log(
-        `${output.file.padEnd(34)} ${video.width}x${video.height} ${video.codec_name} ${video.profile} ${video.pix_fmt} ` +
-          `${video.r_frame_rate} fps, ${Number(info.format.duration).toFixed(2)} s, ${audio} audio, CRF ${crf}, ${mb(size)} (budget ${mb(output.budget)})`,
-      );
-    }
-    console.log(`${POSTER.file.padEnd(34)} ${poster.width}x${poster.height} ${Math.round(poster.size / 1024)} KB`);
-    console.log("shots:", shots.map((s) => `${s.file} ${s.in}-${s.out}`).join(", "));
-    break;
-  }
-
-  const longest = shots.reduce((a, s) => (s.out - s.in > a.out - a.in ? s : a));
-  if (shortened === MAX_SHORTENINGS || longest.out - longest.in - 1 < MIN_SHOT_SECONDS) {
-    console.error(`${over.output.file} is still ${mb(over.size)} at CRF ${over.crf}, over its ${mb(over.output.budget)} budget. Giving up.`);
-    process.exit(1);
-  }
-  console.log(`  ${over.output.file} still over at CRF ${over.crf}: shortening ${longest.file} to ${longest.in}-${longest.out - 1}`);
-  longest.out -= 1;
+let bitrate = ((OUTPUT.budget * 8) / (length / FPS.value)) * HEADROOM;
+let size = encode(OUTPUT, bitrate);
+for (let retry = 1; size > OUTPUT.budget && retry <= BITRATE_RETRIES; retry++) {
+  console.log(`  ${OUTPUT.file}: ${mb(size)} at ${Math.round(bitrate / 1000)} kbit/s, over ${mb(OUTPUT.budget)}; trying 5% less`);
+  bitrate *= BITRATE_STEP;
+  size = encode(OUTPUT, bitrate);
 }
+if (size > OUTPUT.budget) {
+  console.error(`${OUTPUT.file} is still ${mb(size)}, over its ${mb(OUTPUT.budget)} budget. Giving up.`);
+  process.exit(1);
+}
+
+const info = probe(path.join(ROOT, OUTPUT.file), "stream=codec_type,codec_name,profile,pix_fmt,width,height,r_frame_rate:format=duration");
+const video = info.streams.find((st) => st.codec_type === "video");
+const audio = info.streams.filter((st) => st.codec_type === "audio").length;
+console.log(
+  `${OUTPUT.file.padEnd(34)} ${video.width}x${video.height} ${video.codec_name} ${video.profile} ${video.pix_fmt} ` +
+    `${video.r_frame_rate} fps, ${Number(info.format.duration).toFixed(2)} s, ${audio} audio, ` +
+    `${Math.round(bitrate / 1000)} kbit/s, ${mb(size)} (budget ${mb(OUTPUT.budget)})`,
+);
+if (WRITE_POSTER) {
+  const poster = await writePoster();
+  console.log(`${POSTER.file.padEnd(34)} ${poster.width}x${poster.height} ${Math.round(poster.size / 1024)} KB`);
+} else {
+  console.log(`${POSTER.file.padEnd(34)} kept as it is (--poster writes it again)`);
+}
+console.log("shots:", SHOTS.map((s) => `${s.file} ${s.in}-${s.out}`).join(", "));
