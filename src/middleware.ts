@@ -12,22 +12,37 @@
       redirect to another site.
 
    2. Staging: keep a test deployment out of every search index. See
-      src/lib/staging.ts. A no-op unless SITE_NOINDEX=1. */
+      src/lib/staging.ts. A no-op unless SITE_NOINDEX=1.
+
+   3. SAVED EDITS IN THE HTML (27 Oct 2026). An editable page (a path
+      normalizePath() accepts) that renders 200 has its saved edits
+      written into it before it is sent: src/lib/server-edits.ts. Asked
+      only once a page has rendered 200, so an address that is not a
+      page never costs a query or a cache entry. A page with none, a
+      database that does not answer, or SERVER_EDITS=0 sends the page
+      exactly as rendered, still streaming. */
 import { defineMiddleware } from "astro:middleware";
 import { isNoindexDeployment } from "./lib/staging";
+import { normalizePath } from "./lib/editable";
+import { editsForPage, serverEditsEnabled, withSavedEdits } from "./lib/server-edits";
 
 const UNTOUCHED = /^\/(?:studio|api|_astro|_image|media|video)(?:\/|$)/;
 const FILE = /\.[a-z0-9]+\/*$/i;
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname, search } = context.url;
-  const response =
-    pathname.length > 1 && pathname.endsWith("/") && !UNTOUCHED.test(pathname) && !FILE.test(pathname)
-      ? new Response(null, {
-          status: 301,
-          headers: { Location: "/" + pathname.replace(/^\/+/, "").replace(/\/+$/, "") + search },
-        })
-      : await next();
+  const redirect =
+    pathname.length > 1 && pathname.endsWith("/") && !UNTOUCHED.test(pathname) && !FILE.test(pathname);
+  const editable = !redirect && context.request.method === "GET" && serverEditsEnabled() ? normalizePath(pathname) : null;
+  let response = redirect
+    ? new Response(null, {
+        status: 301,
+        headers: { Location: "/" + pathname.replace(/^\/+/, "").replace(/\/+$/, "") + search },
+      })
+    : await next();
+  if (editable && response.status === 200 && (response.headers.get("content-type") ?? "").includes("text/html")) {
+    response = await withSavedEdits(response, editable, editsForPage(editable));
+  }
   if (isNoindexDeployment()) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
   }

@@ -40,6 +40,7 @@ import {
   userAgentFrom,
   validateEdit,
 } from "../../lib/editable";
+import { forgetEdits, readLatest } from "../../lib/server-edits";
 
 export const prerender = false;
 
@@ -59,20 +60,12 @@ function json(body: unknown, status = 200): Response {
 
    The inner query finds the highest id per key (that is "current"),
    the join pulls the text back out. idx_page keeps it to the rows for
-   this one page.
+   this one page. The query is SELECT_LATEST in src/lib/server-edits.ts,
+   which since 27 Oct 2026 also writes the same rows into the page on
+   the server; it is read here uncached, as it always was. Its columns
+   are named one by one, and client_ip / user_agent are not among them.
+   This response goes to the browser — never widen it to SELECT *.
    ------------------------------------------------------------ */
-/* Columns are named one by one, and client_ip / user_agent are not among
-   them. This response goes to the browser — never widen it to SELECT *. */
-const SELECT_LATEST = `
-  SELECT e.id, e.edit_key, e.original_text, e.new_text
-    FROM content_edits e
-    JOIN (
-      SELECT edit_key, MAX(id) AS max_id
-        FROM content_edits
-       WHERE page_path = ?
-       GROUP BY edit_key
-    ) latest ON latest.max_id = e.id
-`;
 
 export const GET: APIRoute = async ({ url }) => {
   const path = normalizePath(url.searchParams.get("path"));
@@ -83,20 +76,7 @@ export const GET: APIRoute = async ({ url }) => {
   if (!path) return json({ edits: {} });
 
   try {
-    const [rows] = await pool.execute<RowDataPacket[]>(SELECT_LATEST, [path]);
-
-    const edits: Record<
-      string,
-      { text: string; original: string; id: number }
-    > = {};
-    for (const row of rows) {
-      edits[row.edit_key] = {
-        text: row.new_text,
-        original: row.original_text,
-        id: row.id,
-      };
-    }
-    return json({ edits });
+    return json({ edits: await readLatest(path) });
   } catch (err) {
     console.error("Failed to read content edits:", err);
     // 503, not 500: the client keeps showing its localStorage copy
@@ -252,6 +232,8 @@ export const POST: APIRoute = async (context) => {
       clientIpFrom(request, socket),
       userAgentFrom(request),
     ]);
+    // The page's server-side copy of its edits is stale now (src/lib/server-edits.ts).
+    forgetEdits(check.path);
     return json({ ok: true, id: res.insertId, text: check.text });
   } catch (err) {
     console.error("Failed to save content edit:", err);

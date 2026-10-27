@@ -27,6 +27,7 @@ import {
   normalizePath,
   userAgentFrom,
 } from "../../../lib/editable";
+import { forgetEdits } from "../../../lib/server-edits";
 
 export const prerender = false;
 
@@ -147,6 +148,8 @@ export const POST: APIRoute = async (context) => {
       clientIpFrom(request, socket),
       userAgentFrom(request),
     ]);
+    // The page's server-side copy of its edits is stale now (src/lib/server-edits.ts).
+    forgetEdits(path);
     return json({ ok: true, id: res.insertId, text: target });
   } catch (err) {
     console.error("Failed to revert content edit:", err);

@@ -112,6 +112,14 @@ const breadcrumbs = [
 ];
 
 const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";
+
+/* The tab title is the H1's text plus the house suffix, and a page with
+   no description of its own uses its first paragraph, so a saved edit to
+   either slot carries into the head (BaseLayout, `editSources`). */
+const editSources = {
+  title: `${K}.title`,
+  description: page.meta.description === detail.body[0] ? `${K}.body.0` : undefined,
+};
 ---
 
 <BaseLayout
@@ -121,6 +129,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
   imageAlt={shareImage ? detail.alt : undefined}
   breadcrumbs={breadcrumbs}
   primaryImage={primaryImage}
+  editSources={editSources}
 >
   <Nav page="projects" />
   <main data-gallery-project={detail.title}>

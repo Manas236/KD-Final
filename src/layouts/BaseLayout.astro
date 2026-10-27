@@ -13,6 +13,7 @@ import "../styles/global.css";
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { CACHE_PREFIX } from "../lib/editable";
+import { ntApplyCore } from "../lib/edit-apply.js";
 import { shareRendition } from "../lib/share-image";
 import { isNoindexDeployment } from "../lib/staging";
 import { organization } from "../data/organization";
@@ -65,9 +66,19 @@ interface Props {
     caption: string;
     credit: boolean;
   };
+  /** The edit slots this page's title and description are drawn from,
+      where they are (a project page's title is its H1, `projects.detail.
+      title`). Written on the tags as `data-nt-from`, so a saved edit to
+      the slot changes the tag too when the server writes the edits into
+      the page (src/lib/server-edits.ts). og:title follows the title only
+      where it is the title. */
+  editSources?: { title?: string; description?: string };
 }
 
-const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs, primaryImage } = Astro.props;
+const { title, ogTitle = title, description, noindex = false, image, imageAlt, breadcrumbs, primaryImage, editSources } = Astro.props;
+const titleFrom = editSources?.title;
+const ogTitleFrom = ogTitle === title ? titleFrom : undefined;
+const descriptionFrom = editSources?.description;
 
 /* One address per page. "/about/" answers too (src/middleware.ts sends
    it to "/about" with a 301), so the canonical drops a trailing slash
@@ -287,10 +298,23 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
        identity now; `original_text` is an audit note about what the
        page said at the time, not a latch.
 
+   SINCE 27 OCT 2026 THE SERVER WRITES THEM FIRST. src/middleware.ts
+   runs every editable page through src/lib/server-edits.ts, which writes
+   the saved edits into the HTML before it is sent, with the same apply
+   function this head script uses: isTextLeaf(), place() and applyOne()
+   now live in src/lib/edit-apply.js, and the tag just before the head
+   script defines window.__ntApplyCore from that function's own source.
+   A slot the server wrote carries `data-nt-server`; the read path below
+   (applyAll, both the cache pass and the server pass) leaves it alone
+   and still writes every edit the server did not, which is all of them
+   when the database did not answer the page. The editor is unchanged:
+   a server-written slot carries exactly the attributes place() sets.
+
    The prose lives up here rather than beside the tags because an inline
    script followed by a MULTI-LINE HTML comment does not survive the
    Astro compiler — it reports "Unexpected token" and fails the build.
    Keep any comment down there to a single line. */
+const applyCoreScript = `window.__ntApplyCore = ${ntApplyCore.toString()};`;
 
 /* ---------- Motion ----------
    Two more tags, same split as the editor's. src/styles/motion.css has
@@ -317,14 +341,14 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title data-nt-from={titleFrom}>{title}</title>
+    <meta name="description" content={description} data-nt-from={descriptionFrom} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     {largePreviews && <meta name="robots" content="max-image-preview:large" />}
     {!noindex && <link rel="canonical" href={canonical} />}
 
-    <meta property="og:title" content={ogTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={ogTitle} data-nt-from={ogTitleFrom} />
+    <meta property="og:description" content={description} data-nt-from={descriptionFrom} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={organization.name} />
@@ -369,6 +393,9 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
       })();
     </script>
 
+    <!-- The apply function shared with the server (src/lib/edit-apply.js). See the note in the frontmatter. -->
+    <script is:inline set:html={applyCoreScript}></script>
+
     <!-- In-page text editing, part 1 of 2. See the note in the frontmatter. -->
     <script is:inline define:vars={{ NT_CACHE_PREFIX: CACHE_PREFIX }}>
       window.__ntEdit = (function () {
@@ -398,21 +425,6 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
 
         function textOf(el) {
           return normalize(el.textContent);
-        }
-
-        /* Editable means one text node and nothing else: a leaf holding
-           a single run of words. Anything richer would lose its children
-           the moment we assigned textContent. */
-        function isTextLeaf(el) {
-          return (
-            el.childNodes.length === 1 &&
-            el.firstChild.nodeType === 3 &&
-            normalize(el.firstChild.nodeValue) !== ""
-          );
-        }
-
-        function setText(el, t) {
-          el.textContent = t;
         }
 
         /* Tags whose text is not copy, and the blocks the markup has
@@ -447,35 +459,25 @@ const jsonLd = (value: unknown) => JSON.stringify(value).replace(/<\//g, "<\\/")
           }
         }
 
-        function place(el, key, text, original) {
-          /* The anchor is what the page said when the edit was made. It
-             is recorded, not matched on. See the frontmatter note. */
-          if (!el.dataset.ntOriginal) el.dataset.ntOriginal = original;
-          el.dataset.ntKey = key;
-          el.dataset.ntApplied = text;
-          el.setAttribute("data-nt-edited", "");
-          setText(el, text);
-          return el;
-        }
+        /* isTextLeaf, setText, place and applyOne: one copy, shared with
+           the server (src/lib/edit-apply.js), which finds a slot the way
+           elFor() does. */
+        var core = window.__ntApplyCore(elFor, normalize);
+        var isTextLeaf = core.isTextLeaf;
+        var setText = core.setText;
+        var applyOne = core.applyOne;
 
-        /* Find the slot; write to it. There is no second guess and no
-           fallback scan: a named key either names an element on this
-           page or it names one that has been retired, and writing a
-           retired key's text onto some other element that happens to
-           match a string is exactly the accident this design removes. */
-        function applyOne(key, text, original) {
-          if (!text) return null;
-          var el = elFor(key);
-          if (!el || !isTextLeaf(el)) return null;
-          return place(el, key, text, original);
-        }
-
+        /* The read path. A slot marked data-nt-server already holds its
+           saved text in the HTML: writing it again could only put an
+           older cached copy over it. */
         function applyAll(map) {
           var n = 0;
           if (!map) return n;
           for (var key in map) {
             if (!Object.prototype.hasOwnProperty.call(map, key)) continue;
             var e = map[key];
+            var served = elFor(key);
+            if (served && served.hasAttribute("data-nt-server")) continue;
             if (e && applyOne(key, e.text, e.original)) n++;
           }
           return n;
