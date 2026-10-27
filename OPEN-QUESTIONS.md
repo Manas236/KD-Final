@@ -4768,3 +4768,52 @@ question goes to the HSE team.
 `/hse`. Not built or browsed here (made from GitHub without the local
 folder); the deploy to the test server builds it, checks saved edits on
 `hse.record.bands.0.cards.5.*` before the pull, and looks at `/hse`.
+
+## 68. Launch fixes from the 24 Oct audit: saved edits on the server, copy, accessibility, robots.txt, hero video
+
+2026-10-27. The launch-readiness audit of 24 Oct 2026 listed eight groups of
+fixes; all eight were made in one pass, one commit each.
+
+### What changed
+
+1. **Saved edits are in the HTML** (`src/lib/server-edits.ts`,
+   `src/lib/edit-apply.js`, `src/middleware.ts`; CLAUDE.md has the rules).
+   Every key goes the DOM route: the copy modules are shared by every
+   request and components import them directly, so writing an edit into
+   them would leak between requests and reach alt text and JSON-LD the
+   browser never touched. Meta follows a saved edit only where it is drawn
+   from a slot (`editSources`: project titles; a project page whose
+   description is its first paragraph). Checked in a throwaway local
+   schema with fixture rows (edits on /hse, /careers, /contact, both
+   director roles, a project title and first paragraph, a retired-style
+   row, an em dash): written once, retired rows nowhere, the same final
+   page as the browser's own path, no slot rewritten by the browser, a
+   stale localStorage copy never shown, edit mode and /studio as before, a
+   save visible on the next load without JavaScript, 200 and built-in text
+   with no database. New runtime dependency: parse5.
+2. **Panvel–Karjat on its own photograph** (`panvel-karjat-01.jpg`, hero
+   and /projects card); the three remaining stand-ins captioned
+   "Representative image" on hero and card; two HSE alts name the company.
+3. **Copy:** stock phrases replaced with plain, specific lines; 19 project
+   descriptions name K.D. Constructions' part. Left for Sir: Lush Meadows,
+   the Football Stadium, the Centre of Excellence ("world-class" stays
+   there), Ulwe Hospital's scope, Lower Parel's scope.
+4. **Consistency:** the curly apostrophe, Indian/UK spelling, "303 m",
+   one MRVC and one CIDCO long form, sentence-case headings (45), one label
+   for buttons to /projects, the company's name in full.
+5. **Accessibility:** skip link, no skipped heading level, distinct plant
+   links.
+6. **robots.txt:** Disallow /studio and /api, Allow /api/content, Sitemap on
+   the bare domain (PRE-LAUNCH.md, "Launch domain").
+7. **Hero video:** one 1280 × 720 file of 2,382,244 bytes for 7,062,327.
+8. **Docs:** PRE-LAUNCH.md (stale rows, the launch domain, the launch rule,
+   the deploy section), CLAUDE.md, and `docs/changed-defaults-2026-10-27.tsv`
+   with `scripts/check-changed-defaults.mjs` for the deploy.
+
+### Edit keys
+
+None moved or gone. New: `projects.detail.representative` (three railway
+pages), `projects.listing.medium.3.representative`,
+`projects.listing.small.2.representative`,
+`projects.listing.small.3.representative`. Changed defaults: the 157
+(page, key) pairs in `docs/changed-defaults-2026-10-27.tsv`.
