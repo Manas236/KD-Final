@@ -38,6 +38,8 @@
                      Organization block names too (since 22 Oct 2026)
      parentOrganization  the Organization block's @id, so a search engine
                      reads the office as that company's, not a second one
+     sameAs          the company's LinkedIn page, the footer's link,
+                     as the Organization block names it (28 Oct 2026)
 
    Nothing else: no opening hours, rating, price range or founding year,
    none of them is on the site. It sits in the body because this page
@@ -78,6 +80,7 @@ const officeLd = {
   telephone,
   email: organization.email,
   address: { "@type": "PostalAddress", ...organization.address },
+  sameAs: organization.sameAs,
   ...(pin && {
     geo: { "@type": "GeoCoordinates", latitude: Number(pin[1]), longitude: Number(pin[2]) },
   }),
