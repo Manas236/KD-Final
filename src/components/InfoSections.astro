@@ -210,7 +210,7 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
                         href={link.href}
                         class="text-ui text-kd-mint-2 pb-2 border-b border-b-transparent hover:border-b-kd-mint-2"
                         target={link.href.startsWith("http") ? "_blank" : undefined}
-                        rel={link.href.startsWith("http") ? "noopener" : undefined}
+                        rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                       >
                         <span data-edit={`${k}.links.${l}.label`}>
                           {link.label}
