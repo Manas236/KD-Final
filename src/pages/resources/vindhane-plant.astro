@@ -52,6 +52,7 @@ import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import Tile from "../../components/hse/Tile.astro";
 import heroImg from "../../assets/project-vindhane-plant.jpg";
+import { home } from "../../data/home";
 import { plant as copy } from "../../data/plant";
 import { slugify } from "../../lib/slug";
 import { livePlantPhotos, liveState } from "../../lib/gallery-live";
@@ -63,10 +64,15 @@ const { plant } = copy;
 const photos = livePlantPhotos(await liveState(), "/resources/vindhane-plant");
 const K = "resources.plant";
 
-/* Breadcrumb trail for search results — see BaseLayout's Props. */
+/* Breadcrumb trail for search results — see BaseLayout's Props. The
+   middle crumb is the nav's own label for /about, at /about itself:
+   Resources is a section of that page since 21 Oct 2026, and a crumb's
+   address is a page, not a fragment of one. The back link on the page
+   still says "Resources" and goes to the section. */
+const aboutLabel = home.nav.links.find((l) => l.href === "/about")?.label ?? "About";
 const breadcrumbs = [
   { name: "Home", path: "/" },
-  { name: plant.backLabel, path: "/about#resources" },
+  { name: aboutLabel, path: "/about" },
   { name: plant.title, path: "/resources/vindhane-plant" },
 ];
 const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";

@@ -23,6 +23,7 @@ import Kicker from "../../components/Kicker.astro";
 import Arrow from "../../components/Arrow.astro";
 import GalleryGrid from "../../components/GalleryGrid.astro";
 import Lightbox from "../../components/Lightbox.astro";
+import { home } from "../../data/home";
 import { rmcPlant as copy } from "../../data/rmc-plant";
 import { galleryImage } from "../../lib/gallery-images";
 import { livePlantPhotos, liveState } from "../../lib/gallery-live";
@@ -35,9 +36,13 @@ const photos = livePlantPhotos(await liveState(), "/resources/rmc-plant-karjat")
 const heroImg = galleryImage(rmc.file);
 const K = "resources.rmc";
 
+/* Breadcrumb trail for search results: Home › About › this page. The
+   middle crumb is the nav's own label for /about, the page Resources is
+   a section of; see the same note in vindhane-plant.astro. */
+const aboutLabel = home.nav.links.find((l) => l.href === "/about")?.label ?? "About";
 const breadcrumbs = [
   { name: "Home", path: "/" },
-  { name: rmc.backLabel, path: "/about#resources" },
+  { name: aboutLabel, path: "/about" },
   { name: rmc.title, path: "/resources/rmc-plant-karjat" },
 ];
 const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill border border-kd-badge-border";
