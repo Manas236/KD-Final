@@ -8,9 +8,17 @@
    WebP, which the previews cut down again, and whose declared size was
    wrong wherever the photograph is narrower than 1551.
 
-   A photograph smaller than 1200 × 630 is never enlarged: it gets the
-   largest 1.91:1 crop it holds (the Matunga LHB shed, 1024 × 538), and
-   the size written into og:image:width/height is the size served.
+   EVERY SHARE PICTURE IS 1200 × 630 (28 Oct 2026), the size the
+   previews ask for. Astro's image service never enlarges, so a
+   photograph smaller than that (the Matunga LHB shed, 1024 × 768) is
+   cut from an enlarged copy of itself in src/assets/share/, made by
+   scripts/build-share-images.mjs under the same file name. The copy is
+   for the share picture only; the page shows the original. Until
+   28 Oct such a photograph gave its largest 1.91:1 crop, 1024 × 538.
+   A photograph too small with no copy returns null, and BaseLayout
+   uses the designed card: never an undersized picture.
+   `npm run check:served-html` fails a page whose og:image is under
+   1200 × 630.
 
    FOCUS is per PHOTOGRAPH, not per page, so a photograph keeps its crop
    on whichever page shares it. Keyed by the file's name in src/assets
@@ -38,24 +46,33 @@ function nameOf(src: string): string {
   return base.replace(/\.[a-z0-9]+$/i, "").replace(/\.[A-Za-z0-9_-]{8}$/, "");
 }
 
+/* The enlarged copies, by the name of the photograph they stand in for. */
+const enlarged = new Map(
+  Object.entries(
+    import.meta.glob<ImageMetadata>("../assets/share/*.jpg", { eager: true, import: "default" }),
+  ).map(([file, image]) => [nameOf(file), image]),
+);
+
+const holdsShare = (image: ImageMetadata) => image.width >= SHARE.width && image.height >= SHARE.height;
+
 export interface ShareRendition {
   readonly src: string;
   readonly width: number;
   readonly height: number;
 }
 
-export async function shareRendition(image: ImageMetadata): Promise<ShareRendition> {
-  const ratio = SHARE.width / SHARE.height;
-  const width = Math.min(SHARE.width, image.width, Math.floor(image.height * ratio));
-  const height = Math.round(width / ratio);
-  const position = FOCUS[nameOf(image.src)];
+export async function shareRendition(image: ImageMetadata): Promise<ShareRendition | null> {
+  const name = nameOf(image.src);
+  const source = holdsShare(image) ? image : enlarged.get(name);
+  if (!source || !holdsShare(source)) return null;
+  const position = FOCUS[name];
   const { src } = await getImage({
-    src: image,
-    width,
-    height,
+    src: source,
+    width: SHARE.width,
+    height: SHARE.height,
     fit: "cover",
     ...(position && { position }),
     format: "jpg",
   });
-  return { src, width, height };
+  return { src, width: SHARE.width, height: SHARE.height };
 }

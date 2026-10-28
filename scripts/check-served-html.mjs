@@ -16,7 +16,15 @@
         <title> or meta tag that follows a saved edit (data-nt-from).
         Sir's saved text is his, em dashes included, so those are
         listed, never failed;
-     3. robots.txt is served as text.
+     3. robots.txt is served as text;
+     4. every page carries its share card (28 Oct 2026): og:title,
+        og:description, og:image, og:url and og:type once each, and
+        twitter:card summary_large_image; og:url and og:image on the
+        site's origin (PUBLIC_SITE_URL, as astro.config.mjs reads it);
+        og:url the page's canonical; og:image answering 200 as an
+        image of at least 1200 × 630, the size og:image:width and
+        :height say (src/lib/share-image.ts). The 404 has no canonical
+        and is checked for the rest.
 
    Usage:  node scripts/check-served-html.mjs [origin]
            origin defaults to http://localhost:<PORT from .env>
@@ -24,8 +32,10 @@
    ============================================================ */
 import "dotenv/config";
 import { parse } from "parse5";
+import sharp from "sharp";
 
 const ORIGIN = (process.argv[2] || `http://localhost:${process.env.PORT || 4322}`).replace(/\/+$/, "");
+const SITE = new URL(process.env.PUBLIC_SITE_URL || `http://localhost:${process.env.PORT || 4322}`).origin;
 const DASH = "—";
 
 let failures = 0;
@@ -49,12 +59,64 @@ function walk(node, visit, inSaved = false) {
   }
 }
 
+/* Check 4. The picture is fetched from the server being checked, at
+   og:image's own path, so a local run against a build made for the real
+   domain still reads the file. Each picture is read once. */
+const SHARE_TAGS = ["og:title", "og:description", "og:image", "og:url", "og:type", "twitter:card"];
+const pictures = new Map();
+async function pictureSize(url) {
+  const at = new URL(url);
+  const key = at.pathname + at.search;
+  if (!pictures.has(key)) {
+    pictures.set(
+      key,
+      fetch(ORIGIN + key).then(async (r) => {
+        if (r.status !== 200) return { status: r.status };
+        const { width, height } = await sharp(Buffer.from(await r.arrayBuffer())).metadata();
+        return { status: 200, width, height };
+      }),
+    );
+  }
+  return pictures.get(key);
+}
+
+async function checkShareCard(path, document) {
+  const tags = new Map();
+  let canonical;
+  walk(document, (n) => {
+    const attr = (name) => n.attrs?.find((a) => a.name === name)?.value;
+    if (n.nodeName === "meta" && (attr("property") || attr("name"))) {
+      const key = attr("property") || attr("name");
+      tags.set(key, [...(tags.get(key) ?? []), attr("content") ?? ""]);
+    }
+    if (n.nodeName === "link" && attr("rel") === "canonical") canonical = attr("href");
+  });
+  const one = (key) => tags.get(key)?.[0];
+  for (const key of SHARE_TAGS) {
+    const count = tags.get(key)?.length ?? 0;
+    if (count !== 1 || !one(key)) fail(`${path}: ${key} appears ${count} time(s)${count ? ", empty" : ""}`);
+  }
+  if (one("twitter:card") && one("twitter:card") !== "summary_large_image") fail(`${path}: twitter:card is ${one("twitter:card")}`);
+  if (canonical && one("og:url") !== canonical) fail(`${path}: og:url ${one("og:url")} is not the canonical ${canonical}`);
+  for (const key of ["og:url", "og:image"]) {
+    if (one(key) && !one(key).startsWith(SITE + "/")) fail(`${path}: ${key} ${one(key)} is not on ${SITE}`);
+  }
+  if (!one("og:image")) return;
+  const picture = await pictureSize(one("og:image"));
+  if (picture.status !== 200) return fail(`${path}: og:image answered ${picture.status}`);
+  if (picture.width < 1200 || picture.height < 630) fail(`${path}: og:image is ${picture.width} × ${picture.height}, under 1200 × 630`);
+  if (one("og:image:width") !== String(picture.width) || one("og:image:height") !== String(picture.height)) {
+    fail(`${path}: og:image:width/height say ${one("og:image:width")} × ${one("og:image:height")}, served ${picture.width} × ${picture.height}`);
+  }
+}
+
 let saved = 0;
 for (const path of [...paths, "/404"]) {
   const res = await fetch(ORIGIN + path, { redirect: "manual" });
   const want = path === "/404" ? 404 : 200;
   if (res.status !== want) fail(`${path} answered ${res.status}, expected ${want}`);
   const html = await res.text();
+  await checkShareCard(path, parse(html));
   if (!html.includes(DASH)) continue;
 
   const where = [];

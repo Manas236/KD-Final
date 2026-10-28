@@ -93,10 +93,12 @@ const canonical = new URL(Astro.url.pathname.replace(/\/+$/, "") || "/", Astro.s
    A page's own photograph, as a 1200 × 630 JPEG crop of it made for
    link previews (src/lib/share-image.ts), with the size actually served
    written into og:image:width/height. A page with no photograph
-   (/contact, /privacy, a project still waiting for its picture) gets
-   the designed card instead: public/share-card.png, the logo and the
-   company name, written by scripts/build-share-card.mjs. So every link
-   to the site previews with a picture.
+   (/contact, /privacy, a project still waiting for its picture), or
+   with one too small for a preview and no enlarged copy of it
+   (share-image.ts returns null), gets the designed card instead:
+   public/share-card.png, the logo and the company name, written by
+   scripts/build-share-card.mjs. So every link to the site previews
+   with a picture of at least 1200 × 630.
 
    Absolute either way, because og:image must be, and built on
    Astro.site (PUBLIC_SITE_URL), so it follows the site to whatever
