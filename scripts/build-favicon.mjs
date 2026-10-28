@@ -31,23 +31,40 @@
                                  PNG inside ICO; Astro's own template
                                  favicon.ico was one 32px PNG entry)
      public/apple-touch-icon.png 180px, iOS home screen and Safari tab
+     public/icon-192.png         192px and 512px (28 Oct 2026): the
+     public/icon-512.png         PNG icon in the page head, and the
+                                 web manifest's two icons
+     public/site.webmanifest     name, icons, and theme and background
+                                 colour, which is --kd-ink, the nav's
+                                 surface, read from src/styles/tokens.css
+                                 so it cannot drift from the stylesheet
+
+   The 512 is still a reduction: the monogram sits at 430px in it. The
+   icons are "any", not "maskable": the monogram fills 84% of the width,
+   and a launcher's round mask keeps only the middle 80%.
 
    Usage:  node scripts/build-favicon.mjs
    ============================================================ */
 import sharp from "sharp";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SRC = path.join(ROOT, "kd_logo.jpg");
 const OUT = path.join(ROOT, "public");
+const TOKENS = path.join(ROOT, "src", "styles", "tokens.css");
 
 /* Width of the square the monogram occupies. */
 const MONOGRAM_SHARE = 0.84;
 
 const ICO_SIZES = [16, 32, 48];
 const APPLE_SIZE = 180;
+const MANIFEST_SIZES = [192, 512];
+
+/* The name a phone shows under a home-screen icon: the company's name
+   as the site writes it (src/data/organization.ts). */
+const NAME = "K.D. Constructions";
 
 /* A pixel is background if every channel is within this of the corner
    pixel. JPEG ringing around the letters sits well under it; the
@@ -158,3 +175,23 @@ console.log(`wrote public/favicon.ico (${ICO_SIZES.join(", ")}px)`);
 
 writeFileSync(path.join(OUT, "apple-touch-icon.png"), await rendition(APPLE_SIZE));
 console.log(`wrote public/apple-touch-icon.png (${APPLE_SIZE}px)`);
+
+for (const size of MANIFEST_SIZES) {
+  if (size > side) throw new Error(`a ${size}px icon would enlarge the ${side}px master`);
+  writeFileSync(path.join(OUT, `icon-${size}.png`), await rendition(size));
+  console.log(`wrote public/icon-${size}.png`);
+}
+
+const ink = readFileSync(TOKENS, "utf8").match(/--kd-ink:\s*(#[0-9a-f]{6})\s*;/i)?.[1];
+if (!ink) throw new Error("--kd-ink not found in src/styles/tokens.css");
+const manifest = {
+  name: NAME,
+  short_name: NAME,
+  start_url: "/",
+  display: "browser",
+  theme_color: ink,
+  background_color: ink,
+  icons: MANIFEST_SIZES.map((size) => ({ src: `/icon-${size}.png`, sizes: `${size}x${size}`, type: "image/png" })),
+};
+writeFileSync(path.join(OUT, "site.webmanifest"), JSON.stringify(manifest, null, 2) + "\n");
+console.log(`wrote public/site.webmanifest (theme ${ink})`);

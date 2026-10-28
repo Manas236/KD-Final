@@ -377,7 +377,9 @@ const applyCoreScript = `window.__ntApplyCore = ${ntApplyCore.toString()};`;
 
     <!-- The KD monogram on mint, cut from the logo by scripts/build-favicon.mjs. -->
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <script type="application/ld+json" set:html={jsonLd(organizationLd)} />
     {websiteLd && <script type="application/ld+json" set:html={jsonLd(websiteLd)} />}
