@@ -1,4 +1,4 @@
-/* Every request passes through here, for two things.
+/* Every request the app answers passes through here, for four things.
 
    1. ONE ADDRESS PER PAGE (22 Oct 2026). "/about/" used to answer 200
       as a copy of "/about", and named itself as canonical, so a link
@@ -20,7 +20,18 @@
       only once a page has rendered 200, so an address that is not a
       page never costs a query or a cache entry. A page with none, a
       database that does not answer, or SERVER_EDITS=0 sends the page
-      exactly as rendered, still streaming. */
+      exactly as rendered, still streaming.
+
+   4. SECURITY HEADERS (28 Oct 2026), on every response that passes
+      through here: pages, the 404, redirects, the API, /media and
+      /_image. No HSTS and no CSP, by decision. Files the node adapter
+      serves straight from dist/client (public/ and /_astro/) never
+      reach the middleware, so they go without; nginx in front can add
+      the same four if they are wanted there too. The Maps embed on
+      /contact is a frame of Google's page inside ours, which
+      X-Frame-Options does not touch; the Permissions-Policy only
+      switches off camera, microphone and location, which nothing on
+      the site asks for. */
 import { defineMiddleware } from "astro:middleware";
 import { isNoindexDeployment } from "./lib/staging";
 import { normalizePath } from "./lib/editable";
@@ -28,6 +39,13 @@ import { editsForPage, serverEditsEnabled, withSavedEdits } from "./lib/server-e
 
 const UNTOUCHED = /^\/(?:studio|api|_astro|_image|media|video)(?:\/|$)/;
 const FILE = /\.[a-z0-9]+\/*$/i;
+
+const SECURITY_HEADERS: Readonly<Record<string, string>> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "SAMEORIGIN",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname, search } = context.url;
@@ -45,6 +63,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
   if (isNoindexDeployment()) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    response.headers.set(name, value);
   }
   return response;
 });
