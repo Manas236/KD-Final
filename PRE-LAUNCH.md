@@ -451,6 +451,36 @@ keys: the "Representative image" captions). **`package-lock.json` changed**
    `/video/hero-uran-720.mp4` is 2,382,244 bytes; `/video/hero-uran-1080.mp4`
    answers 404 (gone).
 
+### At the next deploy: the 2026-10-28 hardening pass
+
+Security headers, `rel="noopener noreferrer"` on new-tab links, the plant
+pages' breadcrumbs, the icon set and web manifest, the footer logo's
+decoding. No schema change, no migration, `package-lock.json` unchanged (no
+`npm ci`). No edit key added, moved or gone, and no built-in text changed,
+so no saved edit is affected. The usual steps 1 to 8, then, read-only:
+
+1. `curl -sI http://127.0.0.1:<port>/` and the same for `/contact`,
+   `/api/content` and `/no-such-page`: each carries
+   `X-Content-Type-Options: nosniff`,
+   `Referrer-Policy: strict-origin-when-cross-origin`,
+   `X-Frame-Options: SAMEORIGIN` and
+   `Permissions-Policy: camera=(), microphone=(), geolocation=()`, and
+   still `X-Robots-Tag: noindex, nofollow` on the test server. No
+   `Strict-Transport-Security` and no `Content-Security-Policy` header
+   comes from the app (decision of 2026-10-28; if nginx sends either,
+   report it, do not remove it without asking).
+2. `/site.webmanifest`, `/icon-192.png` and `/icon-512.png` answer 200; the
+   manifest is served as `application/manifest+json`.
+3. `node scripts/check-served-html.mjs` and
+   `node scripts/check-served-edits.mjs`: PASS, and the same anchoring count
+   as before the deploy.
+
+**Static files go without the headers.** The node adapter serves
+`public/` and `/_astro/` before the middleware runs, so the favicon, the
+logo, the hero video, the share card and the built CSS and scripts carry
+none of the four. nginx can add them there with `add_header` if wanted;
+nothing on the site depends on it, and it is not done.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by

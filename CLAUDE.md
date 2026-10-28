@@ -68,6 +68,14 @@ Light motion was added on 14 Oct 2026 at the client's request: nav menu items on
 - **New bands, cards and grids need nothing.** reveal.js walks every `main section > .max-w-kd` and takes `.grid` children as items. A block that rests with its own opacity or transform is skipped, so a block given one of those utilities will no longer reveal. A new card gets the hover rule with `data-card="light"` or `"dark"` (add `framed` if it has a 1px border all round). A new button gets a hover too: an arrow (Arrow.astro nudges on its own), or `data-button="rule"` on a mint button without one, or `hover:` and `focus-visible:` `text-kd-mint border-kd-mint` on a ghost button (DESIGN-SYSTEM §6).
 - **Do not fade the homepage hero's copy from zero.** The headline (the sub-paragraph on phones) is the page's LCP element, not the photograph, and text at opacity 0 does not count as painted. The fade starts at 35% so LCP stays at first paint.
 
+## Headers, links, icons and images (28 Oct 2026)
+
+- **Security headers live in `src/middleware.ts`** (`SECURITY_HEADERS`): nosniff, Referrer-Policy, X-Frame-Options SAMEORIGIN, a Permissions-Policy that switches off camera, microphone and location. **No HSTS and no CSP**, by decision; do not add either without asking. Files under `public/` and `/_astro/` are served before the middleware and carry none of them (PRE-LAUNCH.md, the 2026-10-28 deploy note).
+- **A link that opens a new tab** carries `rel="noopener noreferrer"`.
+- **Icons:** `npm run favicon:build` writes favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png and site.webmanifest from `kd_logo.jpg` and `--kd-ink` in tokens.css. Re-run it rather than editing any of them by hand.
+- **Images:** the hero is `loading="eager"` with `fetchpriority="high"`; everything below the fold is `loading="lazy"` and `decoding="async"` (Astro's `<Image>` adds the decoding itself); every `<img>` with a picture has a width and height.
+- **Breadcrumbs:** a page below the top level passes `breadcrumbs` to BaseLayout. The middle crumb is the nav's own label at a real page (`/projects`, `/about`), never a `#section` of one.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
