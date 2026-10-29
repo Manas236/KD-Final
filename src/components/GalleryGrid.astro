@@ -26,7 +26,9 @@
 
    The click listener sits on the <figure>, not only on the button:
    the stretched <button> gives keyboard and screen-reader users a real
-   control.
+   control. Its focus ring is drawn 4px inside the tile
+   (focus-visible:-outline-offset-4, 28 Oct 2026): the tile is
+   overflow-hidden, and a ring outside the button was clipped away.
    ============================================================ */
 import { Image, getImage } from "astro:assets";
 import { altKindOf, type GalleryPhoto } from "../data/gallery";
@@ -97,7 +99,7 @@ const tiles = await Promise.all(
           <div class="absolute inset-0" style="background-image: var(--kd-scrim-sm)" aria-hidden="true" />
           <button
             type="button"
-            class="absolute inset-0 w-full h-full cursor-pointer"
+            class="absolute inset-0 w-full h-full cursor-pointer focus-visible:-outline-offset-4"
             aria-haspopup="dialog"
             aria-label={alt}
           />

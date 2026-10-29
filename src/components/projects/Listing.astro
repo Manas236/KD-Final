@@ -49,7 +49,9 @@
    makes the whole card clickable without changing the article's
    sizing or its `position: relative` stacking context. `aria-label`
    carries the project name since the link covers, rather than wraps,
-   the visible title text.
+   the visible title text. Its keyboard focus ring is drawn 4px inside
+   the card (focus-visible:-outline-offset-4, 28 Oct 2026): the card is
+   overflow-hidden, and a ring outside the link was clipped away.
 
    `data-listing-view` on the band is how Filters.astro's Gallery tab
    swaps this band for projects/Gallery.astro and back.
@@ -163,7 +165,7 @@ const isOddOneOut = (i: number, count: number) =>
 
       <a
         href={`/projects/${slugify(listing.featured.title)}`}
-        class="absolute inset-0"
+        class="absolute inset-0 focus-visible:-outline-offset-4"
         aria-label={listing.featured.title}
       />
     </article>
@@ -228,7 +230,7 @@ const isOddOneOut = (i: number, count: number) =>
 
           <a
             href={`/projects/${slugify(project.title)}`}
-            class="absolute inset-0"
+            class="absolute inset-0 focus-visible:-outline-offset-4"
             aria-label={project.title}
           />
         </article>
@@ -281,7 +283,7 @@ const isOddOneOut = (i: number, count: number) =>
 
           <a
             href={`/projects/${slugify(project.title)}`}
-            class="absolute inset-0"
+            class="absolute inset-0 focus-visible:-outline-offset-4"
             aria-label={project.title}
           />
         </article>
@@ -326,7 +328,7 @@ const isOddOneOut = (i: number, count: number) =>
         </p>
       </div>
 
-      <a href="/resources/vindhane-plant" class="absolute inset-0" aria-label={plant.title}></a>
+      <a href="/resources/vindhane-plant" class="absolute inset-0 focus-visible:-outline-offset-4" aria-label={plant.title}></a>
     </article>
 
     <article
@@ -364,7 +366,7 @@ const isOddOneOut = (i: number, count: number) =>
         </p>
       </div>
 
-      <a href="/resources/rmc-plant-karjat" class="absolute inset-0" aria-label={rmc.title}></a>
+      <a href="/resources/rmc-plant-karjat" class="absolute inset-0 focus-visible:-outline-offset-4" aria-label={rmc.title}></a>
     </article>
 
     <div

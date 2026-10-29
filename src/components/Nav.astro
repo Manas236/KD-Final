@@ -116,6 +116,8 @@ const isHere = (href: string) => {
                 <a
                   href={link.href}
                   aria-current={here === link.href ? "page" : undefined}
+                  aria-expanded={kids.length > 0 ? "false" : undefined}
+                  aria-controls={kids.length > 0 ? `nav-menu-${i}` : undefined}
                   class:list={[
                     "flex items-center gap-6 text-nav pb-6 border-b",
                     active
@@ -142,9 +144,15 @@ const isHere = (href: string) => {
                     bottom edge, so the pointer never leaves the group on
                     its way down and the menu hangs from the bar. When it
                     opens, the panel fades in and unrolls downward as its
-                    items come in one by one, top to bottom: motion.css §1. */}
+                    items come in one by one, top to bottom: motion.css §1.
+                    The script below keeps the link's aria-expanded in
+                    step and closes it on Escape (the `hidden` attribute). */}
                 {kids.length > 0 && (
-                  <div class="absolute left-0 top-full pt-31 hidden group-hover:block group-focus-within:block">
+                  <div
+                    id={`nav-menu-${i}`}
+                    class="absolute left-0 top-full pt-31 hidden group-hover:block group-focus-within:block"
+                    data-nav-menu
+                  >
                     {/* kd-nav-menu: frosted over the hero, see global.css. */}
                     <ul class="kd-nav-menu min-w-200 bg-kd-ink border border-kd-nav-border py-8">
                       {kids.map(({ link: kid, i: j }) => (
@@ -224,10 +232,12 @@ const isHere = (href: string) => {
 
       It scrolls on its own below the bar: open, it is taller than most
       phones (about 880px), and the bar is fixed, so without its own
-      scroll its last links and the button could not be reached. */}
+      scroll its last links and the button could not be reached.
+      scroll-py-24: a link that Tab scrolls into view stops 24px short
+      of the drawer's edge, so its focus ring is not cut off there. */}
   <nav
     id="nav-drawer"
-    class="hidden min-[1080px]:hidden border-t border-t-kd-nav-border bg-kd-ink max-[1080px]:max-h-[calc(100dvh-var(--kd-nav-h))] max-[1080px]:overflow-y-auto max-[1080px]:overscroll-contain"
+    class="hidden min-[1080px]:hidden border-t border-t-kd-nav-border bg-kd-ink max-[1080px]:max-h-[calc(100dvh-var(--kd-nav-h))] max-[1080px]:overflow-y-auto max-[1080px]:overscroll-contain scroll-py-24"
     aria-label="Primary, mobile"
   >
     <ul class="flex flex-col px-24 py-24 gap-24">
@@ -315,6 +325,59 @@ const isHere = (href: string) => {
 
   drawer?.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest("a")) setOpen(false);
+  });
+
+  /* The bar's drop-downs (About, Projects) open on hover and on keyboard
+     focus, in CSS. This keeps each parent link's aria-expanded saying
+     whether its menu is showing, and lets Escape shut it: the `hidden`
+     attribute wins over the hover and focus rules until the pointer
+     comes back or focus re-enters from outside. Escape from inside a
+     menu puts focus back on its link. Escape also shuts the phone
+     drawer and returns focus to its button. In edit mode Escape is the
+     editor's (inline-edit.js), so this leaves it alone. */
+  const menus = [...document.querySelectorAll<HTMLElement>("header [data-nav-menu]")].map((menu) => ({
+    menu,
+    item: menu.parentElement as HTMLElement,
+    link: menu.previousElementSibling as HTMLElement,
+  }));
+
+  const sync = ({ menu, item, link }: (typeof menus)[number]) => {
+    const open = !menu.hidden && (item.matches(":hover") || item.matches(":focus-within"));
+    link.setAttribute("aria-expanded", String(open));
+  };
+
+  for (const entry of menus) {
+    const { menu, item } = entry;
+    item.addEventListener("pointerenter", () => {
+      menu.hidden = false;
+      sync(entry);
+    });
+    item.addEventListener("pointerleave", () => sync(entry));
+    item.addEventListener("focusin", (event) => {
+      if (!item.contains(event.relatedTarget as Node | null)) menu.hidden = false;
+      sync(entry);
+    });
+    /* Focus has left the item: only the pointer can keep it open now. */
+    item.addEventListener("focusout", (event) => {
+      if (item.contains(event.relatedTarget as Node | null)) return;
+      entry.link.setAttribute("aria-expanded", String(!menu.hidden && item.matches(":hover")));
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if (document.documentElement.hasAttribute("data-nt-mode")) return;
+    if (drawer && drawer.getClientRects().length > 0) {
+      setOpen(false);
+      toggle?.focus();
+      return;
+    }
+    for (const entry of menus) {
+      if (entry.link.getAttribute("aria-expanded") !== "true") continue;
+      if (entry.menu.contains(document.activeElement)) entry.link.focus();
+      entry.menu.hidden = true;
+      sync(entry);
+    }
   });
 
   /* A nav or footer link to a section of the page already open

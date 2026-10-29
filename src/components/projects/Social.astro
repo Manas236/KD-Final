@@ -17,9 +17,10 @@
    SocialProjectPage.astro, copy in src/data/social-projects.ts). The
    link is the listing cards' own: a plain `<a class="absolute inset-0">`
    as the tile's last child, `aria-label` carrying the name, the same
-   slugify() of the title. Until then a click opened the page's
-   Lightbox; the photographs now open from each page's own gallery, and
-   from the Gallery tab, where these projects have groups too.
+   slugify() of the title, its focus ring drawn 4px inside the tile
+   (28 Oct 2026). Until then a click opened the page's Lightbox; the
+   photographs now open from each page's own gallery, and from the
+   Gallery tab, where these projects have groups too.
 
    THE BAND IS MIST, between Listing (ink) and the closing CTA (ink).
    That is the surface DESIGN-SYSTEM §2's alternation asks for — and
@@ -120,7 +121,7 @@ const tiles = social.items.map((item) => ({
                     {item.location}
                   </p>
                 </div>
-                <a href={href} class="absolute inset-0" aria-label={item.title} />
+                <a href={href} class="absolute inset-0 focus-visible:-outline-offset-4" aria-label={item.title} />
               </div>
             </li>
           ) : (
@@ -151,7 +152,7 @@ const tiles = social.items.map((item) => ({
                   {item.location}
                 </p>
               </figcaption>
-              <a href={href} class="absolute inset-0" aria-label={item.title} />
+              <a href={href} class="absolute inset-0 focus-visible:-outline-offset-4" aria-label={item.title} />
             </figure>
           </li>
           )

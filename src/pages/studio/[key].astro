@@ -67,9 +67,11 @@ Astro.response.headers.set("Cache-Control", "no-store");
 
 const authed = isAuthed(Astro.request);
 
+/* Focus turns the border mint beside the browser's own focus ring, as
+   everywhere else on the site; until 28 Oct 2026 the ring was removed. */
 const field =
   "w-full bg-kd-ink-deep border border-kd-ghost-outline px-16 py-12 " +
-  "text-kd-mist text-body placeholder:text-kd-slate focus:outline-none " +
+  "text-kd-mist text-body placeholder:text-kd-slate " +
   "focus:border-kd-mint transition";
 
 const button = "inline-flex items-center text-ui px-24 py-12 transition";

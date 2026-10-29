@@ -20,7 +20,9 @@
 
    EVERY CARD LINKS TO ITS OWN PAGE, same stretched-link treatment as
    projects/Listing.astro — see the note there and OPEN-QUESTIONS.md
-   #21.
+   #21. Its keyboard focus ring is drawn 4px inside the card, as there
+   (focus-visible:-outline-offset-4, 29 Oct 2026): the card is
+   overflow-hidden, and a ring outside the link was clipped away.
 
    MOBILE: stacks to one column below 900px — not a Tailwind default,
    but the width at which the 704px column stops fitting. See
@@ -100,7 +102,7 @@ const smallImages = [sanpada, fobSpan];
 
         <a
           href={`/projects/${slugify(projects.featured.title)}`}
-          class="absolute inset-0"
+          class="absolute inset-0 focus-visible:-outline-offset-4"
           aria-label={projects.featured.title}
         />
       </article>
@@ -145,7 +147,7 @@ const smallImages = [sanpada, fobSpan];
 
               <a
                 href={`/projects/${slugify(card.title)}`}
-                class="absolute inset-0"
+                class="absolute inset-0 focus-visible:-outline-offset-4"
                 aria-label={card.title}
               />
             </article>
