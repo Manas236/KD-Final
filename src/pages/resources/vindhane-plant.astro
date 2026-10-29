@@ -159,11 +159,16 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
                   class="border border-dashed border-kd-ghost-outline p-24 flex flex-col"
                   data-pending
                 >
-                  <span class:list={[chip, "self-start text-kd-mist"]} data-edit={`${K}.stats.${i}.pending`}>
-                    {stat.pending}
-                  </span>
-                  <dt class="font-display text-d8 text-kd-mist mt-16" data-edit={`${K}.stats.${i}.title`}>
-                    {stat.title}
+                  {/* The chip is part of the term, so the <dl> holds only
+                      <dt> and <dd>; the <dt> draws no box (`contents`),
+                      so chip and title sit in the tile as before. */}
+                  <dt class="contents">
+                    <span class:list={[chip, "self-start text-kd-mist"]} data-edit={`${K}.stats.${i}.pending`}>
+                      {stat.pending}
+                    </span>
+                    <span class="font-display text-d8 text-kd-mist mt-16" data-edit={`${K}.stats.${i}.title`}>
+                      {stat.title}
+                    </span>
                   </dt>
                   <dd class="text-body-sm text-kd-fog mt-8" data-edit={`${K}.stats.${i}.body`}>
                     {stat.body}

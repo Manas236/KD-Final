@@ -17,6 +17,7 @@
     "check:db-flows": "node scripts/check-db-flows.mjs",
     "check:served-edits": "node scripts/check-served-edits.mjs",
     "check:served-html": "node scripts/check-served-html.mjs",
+    "check:a11y": "node scripts/check-a11y.mjs",
     "check:keys": "node scripts/check-edit-keys.mjs",
     "check:keys:about": "node scripts/check-edit-keys.mjs \"\" /about",
     "check:keys:projects": "node scripts/check-edit-keys.mjs \"\" /projects",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@types/nodemailer": "^8.0.2",
+    "axe-core": "^4.14.0",
     "playwright": "^1.63.0"
   }
 }
