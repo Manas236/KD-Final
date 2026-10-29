@@ -109,7 +109,8 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
   breadcrumbs={breadcrumbs}
 >
   <Nav page="resources" />
-  <main id="main">
+  {/* data-print and data-no-print: the printed page, src/styles/print.css. */}
+  <main id="main" data-print>
     <section class="relative bg-kd-ink overflow-hidden">
       <div class="absolute inset-0" aria-hidden="true">
         <Image
@@ -127,7 +128,7 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
 
       <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
         <div class="w-568 max-w-full">
-          <a href="/about#resources" class="inline-flex items-center gap-8 text-ui text-kd-fog">
+          <a href="/about#resources" class="inline-flex items-center gap-8 text-ui text-kd-fog" data-no-print>
             <span aria-hidden="true" data-arrow="back">←</span>
             <span data-edit={`${K}.backLabel`}>{plant.backLabel}</span>
           </a>
@@ -355,6 +356,7 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
         <a
           href={plant.erection.button.href}
           class="inline-flex items-center gap-8 text-ui-lg bg-kd-mint text-kd-ink-deep px-32 py-16 mt-40"
+          data-no-print
         >
           <span data-edit={`${K}.erection.button.label`}>{plant.erection.button.label}</span>
           <Arrow />

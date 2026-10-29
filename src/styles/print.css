@@ -1,0 +1,129 @@
+/* ============================================================
+   Print: the project and plant pages (29 Oct 2026)
+   ------------------------------------------------------------
+   PRINT ONLY. Every rule is inside `@media print`, so nothing here can
+   reach a screen: the client-approved look is untouched.
+
+   A page opts in with `data-print` on its <main>: ProjectDetailPage,
+   SocialProjectPage, /resources/vindhane-plant and
+   /resources/rmc-plant-karjat. On those pages a printout is the page's
+   own content, black on white:
+
+     - the nav and the site footer are left off, and so is whatever
+       the page marks `data-no-print`: the back link, the closing
+       "Back to projects" band, a plant page's button;
+     - buttons and dialogs (the gallery's tile buttons, the Lightbox,
+       the editor's own furniture) are left off; certificates never
+       print anyway (global.css);
+     - every text is black and every surface clear, so the ink bands do
+       not come out as black blocks when "Background graphics" is on,
+       and mist text does not vanish when it is off. A kicker's rule and
+       the hero's stat tiles are outlined in black. Black and white are
+       the paper's, not the design's, which is why they are keywords and
+       not tokens: tokens.css holds the screen palette and nothing else;
+     - a photograph that is a layer of its box (the hero, a gallery
+       tile, the Vindhane clip) comes out of the layer: its column's
+       width, its own proportions, no taller than 9 cm, its caption
+       under it instead of on a scrim over it. The hero photograph
+       leads the page, then a stand-in's "Representative image" label,
+       then the title;
+     - the hero's H1 is set at the section-heading size (d4): at the
+       paper's width the screen's d1 fills half a page;
+     - the bands lose their screen padding (the hero's clears the fixed
+       nav, which is not printed).
+
+   The homepage hero's drone loop is never printed, on any page.
+   ============================================================ */
+@media print {
+  video[data-hero-video],
+  [data-nt-ui] {
+    display: none !important;
+  }
+
+  body:has(> main[data-print]) > :is(header, footer),
+  main[data-print] :is([data-no-print], button, dialog, [style*="--kd-scrim"], [style*="--kd-hero-overlay"]) {
+    display: none !important;
+  }
+
+  html:has(main[data-print]),
+  body:has(> main[data-print]) {
+    background: white !important;
+  }
+
+  main[data-print] *,
+  main[data-print] *::before,
+  main[data-print] *::after {
+    color: black !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    outline: none !important;
+  }
+
+  /* Photographs out of their layers. */
+  main[data-print] :has(> img, > video) {
+    position: static !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    overflow: visible !important;
+  }
+  main[data-print] :has(> img, > video) > * {
+    position: static !important;
+  }
+  main[data-print] :has(> img, > video) > :not(img, video) {
+    padding: 4pt 0 0 !important;
+  }
+  main[data-print] :is(img, video) {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 9cm;
+    object-fit: cover;
+    opacity: 1 !important;
+  }
+
+  /* The hero: photograph, label, then the text. */
+  main[data-print] > section:first-child {
+    display: flex;
+    flex-direction: column;
+    overflow: visible !important;
+  }
+  main[data-print] > section:first-child > span {
+    position: static !important;
+    order: 1;
+    align-self: flex-start;
+    margin-top: 4pt;
+  }
+  main[data-print] > section:first-child > div:not([aria-hidden]) {
+    order: 2;
+  }
+  main[data-print] h1 {
+    font-size: var(--text-d4) !important;
+    line-height: var(--text-d4--line-height) !important;
+  }
+
+  main[data-print] section {
+    padding-block: 0 !important;
+  }
+  main[data-print] .max-w-kd {
+    max-width: none !important;
+    margin-inline: 0 !important;
+    padding: 12pt 0 !important;
+  }
+
+  /* A kicker's rule and a tile's outline are drawn in colours the
+     paper loses (a filled 1px span, a border meant for ink): in black. */
+  main[data-print] span[aria-hidden="true"]:empty {
+    border-top: 1px solid black !important;
+  }
+  main[data-print] dl > div {
+    border-color: black !important;
+  }
+
+  main[data-print] :is(li, figure, dl > div, [data-pending]) {
+    break-inside: avoid;
+  }
+  main[data-print] :is(h1, h2, h3) {
+    break-after: avoid;
+  }
+}

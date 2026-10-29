@@ -10,6 +10,7 @@
    ============================================================ */
 @import "./tokens.css";
 @import "./motion.css";
+@import "./print.css";
 
 @layer base {
   /* The page's own ground. The document begins on ink (nav) and ends on

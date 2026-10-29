@@ -132,7 +132,8 @@ const editSources = {
   editSources={editSources}
 >
   <Nav page="projects" />
-  <main id="main" data-gallery-project={detail.title}>
+  {/* data-print and data-no-print: the printed page, src/styles/print.css. */}
+  <main id="main" data-gallery-project={detail.title} data-print>
     <section class="relative bg-kd-ink overflow-hidden">
       {heroImage && (
         <div class="absolute inset-0" aria-hidden="true">
@@ -152,7 +153,7 @@ const editSources = {
 
       <div class="relative max-w-kd mx-auto px-24 sm:px-48 pt-144 pb-80">
         <div class="w-568 max-w-full">
-          <a href="/projects" class="inline-flex items-center gap-8 text-ui text-kd-fog">
+          <a href="/projects" class="inline-flex items-center gap-8 text-ui text-kd-fog" data-no-print>
             <span aria-hidden="true" data-arrow="back">←</span>
             <span data-edit={`${K}.backLabel`}>{detail.backLabel}</span>
           </a>
@@ -273,7 +274,7 @@ const editSources = {
       </div>
     </section>
 
-    <section class="bg-kd-ink py-96">
+    <section class="bg-kd-ink py-96" data-no-print>
       <div class="max-w-kd mx-auto px-24 sm:px-48 flex flex-col items-center text-center">
         <Kicker label={detail.ctaKicker} editKey={`${K}.ctaKicker`} variant="centred" />
 
