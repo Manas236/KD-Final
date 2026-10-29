@@ -481,6 +481,40 @@ logo, the hero video, the share card and the built CSS and scripts carry
 none of the four. nginx can add them there with `add_header` if wanted;
 nothing on the site depends on it, and it is not done.
 
+### At the next deploy: the 2026-10-29 share, accessibility and print pass
+
+Share pictures of at least 1200 × 630 on every page (three new enlarged
+copies in `src/assets/share/`), sameAs on /contact's office block, nav menu
+`aria-expanded` and Escape, focus rings, the `<dl>` fix on the pending stat
+tiles, and a print view for the project and plant pages. No schema change,
+no migration, no built-in text changed, no edit key added or gone, so no
+saved edit is affected. **`package-lock.json` changed** only for axe-core, a
+dev dependency the accessibility check uses; the site does not need it, so
+`npm ci` is optional unless the check is to run on the server.
+
+A pending stat tile's title slot moved inside its element, keeping its key
+and text: on the social project pages `projects.detail.facts.N.title` and on
+`/resources/rmc-plant-karjat` `resources.rmc.stats.N.title` (and
+`resources.plant.stats.N.title` on the Vindhane page, where no tile is
+pending today), from the tile's `<dt>` to a `<span>` inside it. A saved edit
+on any of them still anchors.
+The usual steps 1 to 8, then, read-only:
+
+1. `node scripts/check-served-html.mjs`: PASS, which now includes every
+   page's share card (og:image answering 200 at 1200 × 630 or more, og:url
+   the canonical, both on the site's origin).
+2. `node scripts/check-served-edits.mjs`: PASS, the same anchoring count as
+   before the deploy.
+
+**Reported, not changed (for Sir):** the slate label colour (`--kd-slate`,
+#8A96A6) is under the WCAG AA contrast ratio of 4.5:1 for text its size:
+2.34:1 on mist (homepage and /about stat labels, /about journey phases, the
+/projects filter tabs), 3:1 on white (/about stat labels, the plant pages'
+list headings), 3.34:1 on the stat tiles (/hse hero stats, a Vindhane
+heading, the Kharghar Centre of Excellence facts) and 3.91:1 on ink (the
+"Last updated" line on /privacy and /terms). A colour change is a design
+change, so it waits for the client.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by

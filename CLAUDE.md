@@ -76,6 +76,15 @@ Light motion was added on 14 Oct 2026 at the client's request: nav menu items on
 - **Images:** the hero is `loading="eager"` with `fetchpriority="high"`; everything below the fold is `loading="lazy"` and `decoding="async"` (Astro's `<Image>` adds the decoding itself); every `<img>` with a picture has a width and height.
 - **Breadcrumbs:** a page below the top level passes `breadcrumbs` to BaseLayout. The middle crumb is the nav's own label at a real page (`/projects`, `/about`), never a `#section` of one.
 
+## Share cards, accessibility and print (29 Oct 2026)
+
+- **Share cards:** every og:image is at least 1200 × 630 (`npm run check:served-html` fails one that is not). Astro never enlarges, so a page photograph smaller than that needs an enlarged copy in `src/assets/share/` (`npm run share-images:build`, src/lib/share-image.ts); without one the page gets the designed card. Canonical, og:url and og:image follow `PUBLIC_SITE_URL`. Titles and meta descriptions are unique per page.
+- **Accessibility scan:** `npm run check:a11y -- <origin>` (scripts/check-a11y.mjs, axe-core) on every sitemap page at 1280 and 390 must PASS. Colour contrast is listed, never failed and never fixed here: the colours are the client's.
+- **A `<dl>` holds only `<dt>`, `<dd>` and `<div>` groups of them.** A pending tile's "To be added" chip sits inside its `<dt class="contents">` with the title in a span, so the tile looks as it did.
+- **Focus:** never remove the focus ring (`outline-none`, `focus:outline-none`) on anything a visitor can tab to. A stretched link or button over an `overflow-hidden` card takes `focus-visible:-outline-offset-4`, or its ring is clipped away. A control with no visible text has an `aria-label`.
+- **Nav menus:** the script in Nav.astro keeps each drop-down link's `aria-expanded` true while its menu shows (hover or focus, in CSS) and shuts it on Escape with the `hidden` attribute; Escape also shuts the phone drawer. In edit mode Escape is the editor's.
+- **Print:** src/styles/print.css, every rule inside `@media print`. A page opts in with `data-print` on `<main>` (the project and plant pages); anything else to leave off the paper gets `data-no-print`. Black and white there are keywords, not tokens.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
