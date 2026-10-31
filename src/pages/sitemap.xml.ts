@@ -22,7 +22,9 @@
         sections now, not pages, and are left out.
      2. PROJECT PAGES — one URL per entry in project-detail.ts and one
         per "Beyond the railway" page in social-projects.ts, the same
-        `slugify()` the cards and the route use (src/lib/slug.ts).
+        `slugify()` the cards and the route use (src/lib/slug.ts). In
+        launch mode (HIDE_PENDING=1) an unconfirmed project, which then
+        answers 404, is left out (src/lib/launch.ts).
      3. IMAGES — the hero and every gallery photograph of each project
         page and of the plant page, as `<image:image>` entries, at the
         exact rendition the page puts in its <img src> so the crawler
@@ -52,6 +54,7 @@ import { galleryPage } from "../data/gallery-page";
 import { altKindOf } from "../data/gallery";
 import { aboutSections, hse } from "../data/pages";
 import { galleryAlt, type AltKind } from "../lib/gallery-alt";
+import { projectHidden } from "../lib/launch";
 
 export const prerender = false;
 
@@ -206,7 +209,7 @@ function render(entries: readonly SitemapEntry[]): string {
   );
 }
 
-export const GET: APIRoute = async ({ site }) => {
+export const GET: APIRoute = async ({ site, locals, url }) => {
   /* `site` is always set — astro.config.mjs falls back to localhost —
      but the type says it may not be, and a sitemap with no origin is
      not a sitemap. */
@@ -246,6 +249,8 @@ export const GET: APIRoute = async ({ site }) => {
   }
 
   for (const [slug, { detail }] of Object.entries(socialPages)) {
+    /* Launch mode: an unconfirmed project has no page (src/lib/launch.ts). */
+    if (await projectHidden(locals, url.pathname, detail.title)) continue;
     entries.push({
       loc: new URL(`/projects/${slug}`, site).href,
       /* A representative image is not listed: an image search shows it
