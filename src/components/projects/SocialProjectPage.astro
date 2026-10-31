@@ -50,6 +50,14 @@
    Keys are `projects.detail.*`, as on the railway project pages —
    plain, because every page is its own path. These pages are in
    scripts/check-edit-keys.mjs, one route per slug.
+
+   LAUNCH MODE (HIDE_PENDING=1, src/lib/launch.ts). A pending fact tile,
+   a pending note and the "Photograph to be added" block are left out
+   unless a saved edit is on them; every other item keeps its index, so
+   no key moves. The tiles that remain fill the 2-column grid: an odd
+   last one spans both, and with none left there is no grid. A page
+   whose /projects tile is pending is unconfirmed work and is not on the
+   site at all, or, kept for something of Sir's on it, drawn as review.
    ============================================================ */
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -66,6 +74,8 @@ import { home } from "../../data/home";
 import { detailChrome } from "../../data/detail-chrome";
 import { livePhotos, liveState } from "../../lib/gallery-live";
 import { blocksFor } from "../../lib/project-blocks";
+import { launchFor, REVIEW } from "../../lib/launch";
+import { projects } from "../../data/projects";
 import TextBlocks from "./TextBlocks.astro";
 
 interface Props {
@@ -101,6 +111,19 @@ const lightbox = photos.length > 0 ? (detail.lightbox ?? detailChrome.lightbox) 
 
 /* Headings and paragraphs an editor added to this page (edit mode). */
 const blocks = await blocksFor(slug);
+
+/* What launch mode leaves out (see the header). */
+const unconfirmed = projects.social.items.some((item) => item.title === detail.title && item.pending);
+const launch = unconfirmed ? REVIEW : await launchFor(Astro.locals, Astro.url.pathname);
+const facts = detail.facts
+  .map((fact, i) => ({ fact, i }))
+  .filter(({ fact, i }) => !(fact.pending && launch.hides(`${K}.facts.${i}`)));
+/* The last of an odd number left spans the row: only once a tile is gone. */
+const spanLast = facts.length < detail.facts.length && facts.length % 2 === 1;
+const notes = detail.notes
+  .map((note, i) => ({ note, i }))
+  .filter(({ i }) => !launch.hides(`${K}.notes.${i}`));
+const photoNote = detail.photoNote && !launch.hides(`${K}.photoNote`, `${K}.galleryKicker`) ? detail.photoNote : undefined;
 
 /* The nav's own label for /projects as the middle crumb — see the same
    note in ProjectDetailPage.astro. */
@@ -170,10 +193,10 @@ const editSources = {
             {detail.location}
           </p>
 
-          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
-            {detail.facts.map((fact, i) =>
+          {facts.length > 0 && <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+            {facts.map(({ fact, i }, n) =>
               fact.pending ? (
-                <div class="border border-dashed border-kd-ghost-outline p-24 flex flex-col" data-pending>
+                <div class:list={["border border-dashed border-kd-ghost-outline p-24 flex flex-col", spanLast && n === facts.length - 1 && "sm:col-span-2"]} data-pending>
                   {/* The chip is part of the term, so the <dl> holds only
                       <dt> and <dd>; the <dt> draws no box (`contents`),
                       so chip and title sit in the tile as before. */}
@@ -190,7 +213,7 @@ const editSources = {
                   </dd>
                 </div>
               ) : (
-                <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                <div class:list={["bg-kd-stat-fill border border-kd-stat-border p-24", spanLast && n === facts.length - 1 && "sm:col-span-2"]}>
                   <dd class="font-display text-d5 text-kd-mint" data-edit={`${K}.facts.${i}.value`}>
                     {fact.value}
                   </dd>
@@ -200,7 +223,7 @@ const editSources = {
                 </div>
               )
             )}
-          </dl>
+          </dl>}
         </div>
       </div>
 
@@ -219,7 +242,7 @@ const editSources = {
         <Kicker label={detail.overviewKicker} editKey={`${K}.overviewKicker`} tone="light" />
 
         <div class="mt-32 max-w-560 flex flex-col gap-20">
-          {detail.notes.map((note, i) => (
+          {notes.map(({ note, i }) => (
             <div class="border border-dashed border-kd-card-border-light p-24" data-pending>
               <span class:list={[chip, "text-kd-ink"]} data-edit={`${K}.notes.${i}.pending`}>
                 {note.pending}
@@ -242,27 +265,27 @@ const editSources = {
           <TextBlocks slug={slug} blocks={blocks} />
         </div>
 
-        {(photos.length > 0 || detail.photoNote) && (
+        {(photos.length > 0 || photoNote) && (
           <div class="mt-56 pt-56 border-t border-kd-divider-light">
             <Kicker label={detail.galleryKicker ?? detailChrome.galleryKicker} editKey={`${K}.galleryKicker`} tone="light" />
             <div class="mt-32">
               {photos.length > 0 ? (
                 <GalleryGrid project={detail.title} photos={photos} group={slug} />
               ) : (
-                detail.photoNote && (
+                photoNote && (
                   <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
                     <li
                       class="h-265 border border-dashed border-kd-card-border-light p-20 flex flex-col"
                       data-pending
                     >
                       <span class:list={[chip, "self-start text-kd-ink"]} data-edit={`${K}.photoNote.pending`}>
-                        {detail.photoNote.pending}
+                        {photoNote.pending}
                       </span>
                       <h3 class="font-display text-d8 text-kd-ink mt-16" data-edit={`${K}.photoNote.title`}>
-                        {detail.photoNote.title}
+                        {photoNote.title}
                       </h3>
                       <p class="text-body-sm text-kd-slate-2 mt-8" data-edit={`${K}.photoNote.body`}>
-                        {detail.photoNote.body}
+                        {photoNote.body}
                       </p>
                     </li>
                   </ul>

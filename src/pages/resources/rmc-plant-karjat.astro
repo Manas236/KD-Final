@@ -27,6 +27,7 @@ import { home } from "../../data/home";
 import { rmcPlant as copy } from "../../data/rmc-plant";
 import { galleryImage } from "../../lib/gallery-images";
 import { livePlantPhotos, liveState } from "../../lib/gallery-live";
+import { launchFor } from "../../lib/launch";
 
 export const prerender = false;
 
@@ -35,6 +36,20 @@ const { rmc } = copy;
 const photos = livePlantPhotos(await liveState(), "/resources/rmc-plant-karjat");
 const heroImg = galleryImage(rmc.file);
 const K = "resources.rmc";
+
+/* Launch mode (HIDE_PENDING=1, src/lib/launch.ts): a pending tile or row
+   is left out unless a saved edit is on it, every other one keeping its
+   index. The tiles left fill the grid (an odd last one spans it); with
+   none left the hero stands without figures. */
+const launch = await launchFor(Astro.locals, Astro.url.pathname);
+const stats = rmc.stats
+  .map((stat, i) => ({ stat, i }))
+  .filter(({ stat, i }) => !(stat.pending && launch.hides(`${K}.stats.${i}`)));
+const spanLast = stats.length < rmc.stats.length && stats.length % 2 === 1;
+const rows = (list: "supplies" | "equipment") =>
+  rmc[list].items
+    .map((item, i) => ({ item, i }))
+    .filter(({ item, i }) => !(item.pending && launch.hides(`${K}.${list}.items.${i}`)));
 
 /* Breadcrumb trail for search results: Home › About › this page. The
    middle crumb is the nav's own label for /about, the page Resources is
@@ -100,10 +115,10 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
             ))}
           </div>
 
-          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
-            {rmc.stats.map((stat, i) =>
+          {stats.length > 0 && <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+            {stats.map(({ stat, i }, n) =>
               stat.pending ? (
-                <div class="border border-dashed border-kd-ghost-outline p-24 flex flex-col" data-pending>
+                <div class:list={["border border-dashed border-kd-ghost-outline p-24 flex flex-col", spanLast && n === stats.length - 1 && "sm:col-span-2"]} data-pending>
                   {/* The chip is part of the term, so the <dl> holds only
                       <dt> and <dd>; the <dt> draws no box (`contents`),
                       so chip and title sit in the tile as before. */}
@@ -120,7 +135,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
                   </dd>
                 </div>
               ) : (
-                <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                <div class:list={["bg-kd-stat-fill border border-kd-stat-border p-24", spanLast && n === stats.length - 1 && "sm:col-span-2"]}>
                   <dd class="font-display text-d5 text-kd-mint" data-edit={`${K}.stats.${i}.value`}>
                     {stat.value}
                   </dd>
@@ -130,7 +145,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
                 </div>
               )
             )}
-          </dl>
+          </dl>}
         </div>
       </div>
     </section>
@@ -154,7 +169,7 @@ const chip = "inline-block text-badge uppercase px-8 py-6 bg-kd-badge-fill borde
                 {rmc[list].head}
               </h2>
               <ul class="mt-16">
-                {rmc[list].items.map((item, i) =>
+                {rows(list).map(({ item, i }) =>
                   item.pending ? (
                     <li class="border border-dashed border-kd-card-border-light p-24 mt-16" data-pending>
                       <span class:list={[chip, "text-kd-ink"]} data-edit={`${K}.${list}.items.${i}.pending`}>

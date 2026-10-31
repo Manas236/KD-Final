@@ -43,6 +43,7 @@ import Arrow from "../Arrow.astro";
 import Tile from "./Tile.astro";
 import Card from "./Card.astro";
 import type { HseBand, HseCard } from "../../data/pages";
+import { launchFor } from "../../lib/launch";
 
 interface Props {
   bands: readonly HseBand[];
@@ -52,12 +53,24 @@ const { bands } = Astro.props;
 const K = "hse.record.bands";
 const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as const;
 const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
+/* Launch mode (HIDE_PENDING=1, src/lib/launch.ts), read in each band below. */
+const launch = await launchFor(Astro.locals, Astro.url.pathname);
 ---
 
 {
   bands.map((band, b) => {
     const ink = band.tone === "ink";
-    const media = band.media ?? [];
+    /* Launch mode: a pending tile is left out, every other tile on its
+       own index (`mi`), and a band left with nothing goes, header and
+       all, unless a saved edit is on its header: then it is drawn as
+       review. */
+    const all = band.media ?? [];
+    const header = ["kicker", "heading", "intro", "link.label"].map((f) => `${K}.${b}.${f}`);
+    const kept = all.map((_, i) => i).filter((i) => !(all[i].pending && launch.hides(`${K}.${b}.media.${i}`)));
+    const emptied = all.length > 0 && kept.length === 0 && !band.cards?.length && !band.stats?.length;
+    if (emptied && launch.hides(...header)) return null;
+    const mi = emptied ? all.map((_, i) => i) : kept;
+    const media = mi.map((i) => all[i]);
     const cards = band.cards ?? [];
     const shown = (band.order ?? cards.map((_, i) => i)).map((i) => ({ c: cards[i] as HseCard, i }));
 
@@ -76,7 +89,7 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
     const narrow = cards.filter((c) => !c.wide).length;
     const spans = (c: HseCard) => c.wide || cards.length === 1;
 
-    const tileKeys = (i: number) => ({ whereKey: `${K}.${b}.media.${i}.where`, titleKey: `${K}.${b}.media.${i}.title` });
+    const tileKeys = (i: number) => ({ whereKey: `${K}.${b}.media.${mi[i]}.where`, titleKey: `${K}.${b}.media.${mi[i]}.title` });
     const cardKeys = (i: number) => ({ whereKey: `${K}.${b}.cards.${i}.where`, titleKey: `${K}.${b}.cards.${i}.title` });
 
     return (
@@ -126,13 +139,16 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
               {entries.map(({ c, i }, n) => {
                 const k = `${K}.${b}.cards.${i}`;
                 const lead = leadEntry && n === 0;
-                /* A placeholder (`pending`): its badge beside the place, the card dashed. */
-                const pending = { pending: c.pending, pendingKey: `${k}.pending` };
-                const text = c.pending ? "flex-1 border-dashed" : "flex-1";
+                /* A placeholder (`pending`): its badge beside the place, the card dashed.
+                   Launch mode drops the badge alone, unless a saved edit is on it: the
+                   card is real, only that fact is missing. */
+                const missing = c.pending && !launch.hides(`${k}.pending`) ? c.pending : undefined;
+                const pending = { pending: missing, pendingKey: `${k}.pending` };
+                const text = missing ? "flex-1 border-dashed" : "flex-1";
                 return lead ? (
                   <li
                     class="flex flex-col sm:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-subgrid"
-                    data-pending={c.pending ? "" : undefined}
+                    data-pending={missing ? "" : undefined}
                   >
                     <div class="relative overflow-hidden h-265 sm:h-360 lg:h-auto lg:min-h-480 lg:col-span-2">
                       <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} {...pending} large width={1040} height={667} />
@@ -140,7 +156,7 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
                     <Card card={c} k={k} ink={ink} head={false} open as="div" class={text} />
                   </li>
                 ) : (
-                  <li class="flex flex-col" data-pending={c.pending ? "" : undefined}>
+                  <li class="flex flex-col" data-pending={missing ? "" : undefined}>
                     <div class="relative overflow-hidden h-240">
                       <Tile media={c.media!} where={c.where} title={c.title} {...cardKeys(i)} {...pending} width={760} height={480} />
                     </div>
@@ -212,17 +228,17 @@ const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
                       <div class="absolute inset-0 p-24 flex flex-col justify-end">
                         <span
                           class="self-start text-badge uppercase text-kd-ink bg-kd-badge-fill border border-kd-badge-border px-8 py-6"
-                          data-edit={`${K}.${b}.media.${i}.pending`}
+                          data-edit={`${K}.${b}.media.${mi[i]}.pending`}
                         >
                           {m.pending}
                         </span>
-                        <p class="text-meta-sm text-kd-slate-2 mt-16" data-edit={`${K}.${b}.media.${i}.where`}>
+                        <p class="text-meta-sm text-kd-slate-2 mt-16" data-edit={`${K}.${b}.media.${mi[i]}.where`}>
                           {m.where}
                         </p>
-                        <p class="font-display text-d8 text-kd-ink mt-6" data-edit={`${K}.${b}.media.${i}.title`}>
+                        <p class="font-display text-d8 text-kd-ink mt-6" data-edit={`${K}.${b}.media.${mi[i]}.title`}>
                           {m.title}
                         </p>
-                        <p class="text-body-sm text-kd-slate-2 mt-12" data-edit={`${K}.${b}.media.${i}.note`}>
+                        <p class="text-body-sm text-kd-slate-2 mt-12" data-edit={`${K}.${b}.media.${mi[i]}.note`}>
                           {m.note}
                         </p>
                       </div>

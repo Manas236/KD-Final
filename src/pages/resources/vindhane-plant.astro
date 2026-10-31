@@ -56,6 +56,7 @@ import { home } from "../../data/home";
 import { plant as copy } from "../../data/plant";
 import { slugify } from "../../lib/slug";
 import { livePlantPhotos, liveState } from "../../lib/gallery-live";
+import { launchFor } from "../../lib/launch";
 
 export const prerender = false;
 
@@ -98,6 +99,19 @@ const columns = [
 /* From 900px a column is a subgrid of its pair's grid, spanning the
    number of the pair's rows its own --rows says. */
 const column = "min-[900px]:grid min-[900px]:grid-rows-subgrid min-[900px]:row-span-(--rows)";
+
+/* Launch mode (HIDE_PENDING=1, src/lib/launch.ts): a pending tile or row
+   is left out unless a saved edit is on it; every other one keeps the
+   key of the list and index it is stored at. The tiles left fill the
+   grid (an odd last one spans it); with none left there is no grid. */
+const launch = await launchFor(Astro.locals, Astro.url.pathname);
+const stats = plant.stats
+  .map((stat, i) => ({ stat, i }))
+  .filter(({ stat, i }) => !(stat.pending && launch.hides(`${K}.stats.${i}`)));
+const spanLast = stats.length < plant.stats.length && stats.length % 2 === 1;
+for (const c of columns) {
+  c.rows = c.rows.filter(({ list, i }) => !(plant[list].items[i].pending && launch.hides(`${K}.${list}.items.${i}`)));
+}
 const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline justify-between gap-16 text-body-sm";
 ---
 
@@ -153,11 +167,11 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
             ))}
           </div>
 
-          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
-            {plant.stats.map((stat, i) =>
+          {stats.length > 0 && <dl class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-56">
+            {stats.map(({ stat, i }, n) =>
               stat.pending ? (
                 <div
-                  class="border border-dashed border-kd-ghost-outline p-24 flex flex-col"
+                  class:list={["border border-dashed border-kd-ghost-outline p-24 flex flex-col", spanLast && n === stats.length - 1 && "sm:col-span-2"]}
                   data-pending
                 >
                   {/* The chip is part of the term, so the <dl> holds only
@@ -176,7 +190,7 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
                   </dd>
                 </div>
               ) : (
-                <div class="bg-kd-stat-fill border border-kd-stat-border p-24">
+                <div class:list={["bg-kd-stat-fill border border-kd-stat-border p-24", spanLast && n === stats.length - 1 && "sm:col-span-2"]}>
                   <dd class="font-display text-d5 text-kd-mint" data-edit={`${K}.stats.${i}.value`}>
                     {stat.value}
                   </dd>
@@ -186,7 +200,7 @@ const figureRow = "border-t border-t-kd-divider-light py-16 flex items-baseline 
                 </div>
               )
             )}
-          </dl>
+          </dl>}
         </div>
       </div>
     </section>

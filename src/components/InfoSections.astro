@@ -31,14 +31,23 @@
    2026). In edit mode the stretch lets clicks through to the text
    (global.css). The viewer itself is drawn once per page by the footer
    (SiteFooter.astro), which opens certificates too.
+
+   LAUNCH MODE (HIDE_PENDING=1, src/lib/launch.ts). A `pending` card is
+   left out unless a saved edit is on it, like a retired one: every
+   other card keeps its index. A section left with no card goes, its
+   kicker and heading with it, and the sections after it keep the
+   white / mist alternation among the ones drawn; one whose header
+   carries a saved edit is drawn as review instead. A lone card left
+   where one was taken out spans the row, as an odd last card does.
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "./Kicker.astro";
 import { certificateViewer } from "../data/home";
-import type { InfoSection } from "../data/pages";
+import type { InfoItem, InfoSection } from "../data/pages";
 import { certificate } from "../lib/certificates";
 import { clientLogo, logoSize } from "../lib/client-logos";
 import { portrait } from "../lib/portraits";
+import { launchFor } from "../lib/launch";
 
 interface Props {
   /** First segment of every slot key. */
@@ -51,16 +60,29 @@ interface Props {
 
 const { page, sections, slotAfter } = Astro.props;
 const placed = !!slotAfter && sections.some((section) => section.id === slotAfter);
+const keyOf = (item: InfoItem, s: number, i: number) =>
+  item.slot ? `${page}.${item.slot}` : `${page}.sections.${s}.items.${i}`;
+/* Launch mode: the cards and sections left out (see the header). */
+const launch = await launchFor(Astro.locals, Astro.url.pathname);
+const cut = sections.map((section, s) => {
+  const cards = section.items.map((item, i) => !item.retired && !!item.pending && launch.hides(keyOf(item, s, i)));
+  if (!cards.some(Boolean) || section.items.some((item, i) => !item.retired && !cards[i])) return { section: false, cards };
+  const header = ["kicker", "heading", "intro"].map((f) => `${page}.sections.${s}.${f}`);
+  return launch.hides(...header) ? { section: true, cards } : { section: false, cards: cards.map(() => false) };
+});
+/* The surface follows the sections drawn, so none repeats. */
+const tone = sections.map((_, s) => cut.slice(0, s).filter((c) => !c.section).length);
 /* The cards each section draws: a retired one keeps its slot only. */
-const shown = sections.map((section) => section.items.filter((item) => !item.retired));
+const shown = sections.map((section, s) => section.items.filter((item, i) => !item.retired && !cut[s].cards[i]));
+const lone = shown.map((items, s) => items.length === 1 && cut[s].cards.some(Boolean));
 const withLogos = shown.map((items) => items.some((item) => item.logo));
 const withPortraits = shown.map((items) => items.some((item) => item.portrait));
 ---
 
 {
-  sections.map((section, s) => (
+  sections.map((section, s) => cut[s].section ? placed && section.id === slotAfter && <slot /> : (
     <Fragment>
-    <section id={section.id} class:list={["py-96", s % 2 === 0 ? "bg-white" : "bg-kd-mist"]}>
+    <section id={section.id} class:list={["py-96", tone[s] % 2 === 0 ? "bg-white" : "bg-kd-mist"]}>
       <div class="max-w-kd mx-auto px-24 sm:px-48">
         <Kicker
           label={section.kicker}
@@ -92,7 +114,7 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
             // Pure CSS, so it holds for the careers cards added at runtime too.
             withPortraits[s]
               ? "lg:grid-cols-4"
-              : shown[s].length === 2 || shown[s].length === 4
+              : shown[s].length === 2 || shown[s].length === 4 || lone[s]
               ? "sm:[&>li:last-child:nth-child(odd)]:col-span-2"
               : [
                   "lg:grid-cols-3",
@@ -105,8 +127,8 @@ const withPortraits = shown.map((items) => items.some((item) => item.portrait));
           ]}
         >
           {section.items.map((item, i) => {
-            if (item.retired) return null;
-            const k = item.slot ? `${page}.${item.slot}` : `${page}.sections.${s}.items.${i}`;
+            if (item.retired || cut[s].cards[i]) return null;
+            const k = keyOf(item, s, i);
             const cert = certificate(item.cert);
             return (
             <li
