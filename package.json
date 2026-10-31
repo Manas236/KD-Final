@@ -14,6 +14,7 @@
     "build:release": "npm run check:site-url && npm run check:placeholders && astro build",
     "check:site-url": "node scripts/check-site-url.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
+    "report:pending": "node scripts/pending-report.mjs",
     "check:db-flows": "node scripts/check-db-flows.mjs",
     "check:served-edits": "node scripts/check-served-edits.mjs",
     "check:served-html": "node scripts/check-served-html.mjs",

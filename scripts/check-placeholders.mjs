@@ -15,57 +15,35 @@
    the item's title and its label, so the line can be matched to
    PRE-LAUNCH.md by eye.
 
+   LAUNCH MODE (31 Oct 2026). With HIDE_PENDING=1 (in the environment
+   or .env, as the build reads it) the build leaves every unanswered
+   placeholder off the site (src/lib/launch.ts), so a placeholder still
+   in the data does not ship. Then this passes as long as each one is a
+   kind of item launch mode knows how to leave out, lists them, and
+   fails on any it does not. Whether one stays because Sir typed into it
+   is for the database to say: scripts/pending-report.mjs, after the
+   build.
+
    Usage:  node scripts/check-placeholders.mjs
    ============================================================ */
+import dotenv from "dotenv";
+import { MODULES, pagesOf, pendingItems, launchKind } from "./placeholder-modules.mjs";
 
-/* One row per copy export, with the route it renders on — stated, not
-   derived from the export name, because the two differ as soon as a
-   page lives under another (`plant` → /resources/vindhane-plant). Keep
-   in step with PAGES in check-edit-keys.mjs. */
-const MODULES = [
-  { file: "../src/data/home.ts", exportName: "home", route: "/" },
-  { file: "../src/data/about.ts", exportName: "about", route: "/about" },
-  { file: "../src/data/projects.ts", exportName: "projects", route: "/projects" },
-  /* Sections of /about since 21 Oct 2026 (aboutSections in pages.ts). */
-  { file: "../src/data/pages.ts", exportName: "capabilities", route: "/about" },
-  { file: "../src/data/pages.ts", exportName: "resources", route: "/about" },
-  { file: "../src/data/pages.ts", exportName: "hse", route: "/hse" },
-  { file: "../src/data/pages.ts", exportName: "clients", route: "/about" },
-  { file: "../src/data/pages.ts", exportName: "contact", route: "/contact" },
-  { file: "../src/data/pages.ts", exportName: "csr", route: "/about" },
-  { file: "../src/data/pages.ts", exportName: "company", route: "/about" },
-  { file: "../src/data/pages.ts", exportName: "careers", route: "/careers" },
-  { file: "../src/data/plant.ts", exportName: "plant", route: "/resources/vindhane-plant" },
-  { file: "../src/data/rmc-plant.ts", exportName: "rmcPlant", route: "/resources/rmc-plant-karjat" },
-  { file: "../src/data/gallery-page.ts", exportName: "galleryPage", route: "/gallery" },
-  { file: "../src/data/legal.ts", exportName: "privacy", route: "/privacy" },
-  { file: "../src/data/legal.ts", exportName: "terms", route: "/terms" },
-  { file: "../src/data/not-found.ts", exportName: "notFound", route: "/404" },
-  /* Keyed by slug, one page per key — `each` gives every page its own
-     route, /projects/<slug>, instead of one route for the export. */
-  { file: "../src/data/social-projects.ts", exportName: "socialPages", route: "/projects", each: true },
-];
+dotenv.config({ quiet: true });
 
-/* Walk any object; yield every object that carries a `pending` field,
-   with the path that reached it. A `retired` object renders nowhere
-   (its slot is only kept so later indexes do not move), so nothing in it
-   is on the site. */
-function* pendingItems(value, path = []) {
-  if (!value || typeof value !== "object") return;
-  if (value.retired === true) return;
-  if (typeof value.pending === "string") yield { path, item: value };
-  for (const [k, v] of Object.entries(value)) yield* pendingItems(v, [...path, k]);
-}
+const launch = ["1", "true"].includes(String(process.env.HIDE_PENDING ?? "").trim().toLowerCase());
 
 const found = [];
-for (const { file, exportName, route, each } of MODULES) {
-  const mod = await import(file);
-  const pages = each
-    ? Object.entries(mod[exportName]).map(([k, v]) => ({ route: `${route}/${k}`, base: [exportName, k], copy: v }))
-    : [{ route, base: [exportName], copy: mod[exportName] }];
-  for (const page of pages) {
+for (const row of MODULES) {
+  for (const page of await pagesOf(row)) {
     for (const { path, item } of pendingItems(page.copy)) {
-      found.push({ route: page.route, key: [...page.base, ...path].join("."), title: item.title, label: item.pending });
+      found.push({
+        route: page.route,
+        key: [...page.base, ...path].join("."),
+        title: item.title,
+        label: item.pending,
+        kind: launchKind(row.exportName, path),
+      });
     }
   }
 }
@@ -73,6 +51,21 @@ for (const { file, exportName, route, each } of MODULES) {
 if (found.length === 0) {
   console.log("  PASS  no placeholders — nothing on the site is marked pending");
   process.exit(0);
+}
+
+if (launch) {
+  const unknown = found.filter((f) => !f.kind);
+  if (!unknown.length) {
+    console.log(
+      `  PASS  HIDE_PENDING=1: the build leaves these ${found.length} placeholders off the site, ` +
+        `except any with a saved edit on it (node scripts/pending-report.mjs <origin> says which):\n`
+    );
+    for (const f of found) console.log(`        ${f.route}  ·  ${f.title}  ·  [${f.label}]  ·  ${f.kind}`);
+    process.exit(0);
+  }
+  console.log(`  FAIL  HIDE_PENDING=1, but launch mode cannot leave ${unknown.length} placeholder${unknown.length === 1 ? "" : "s"} off the site (src/lib/launch.ts):\n`);
+  for (const f of unknown) console.log(`        ${f.route}  ·  ${f.title}  ·  [${f.label}]  ·  ${f.key}`);
+  process.exit(1);
 }
 
 console.log(`  FAIL  ${found.length} placeholder${found.length === 1 ? "" : "s"} still on the site — fill or remove each before go-live (PRE-LAUNCH.md):\n`);
