@@ -85,6 +85,16 @@ Light motion was added on 14 Oct 2026 at the client's request: nav menu items on
 - **Nav menus:** the script in Nav.astro keeps each drop-down link's `aria-expanded` true while its menu shows (hover or focus, in CSS) and shuts it on Escape with the `hidden` attribute; Escape also shuts the phone drawer. In edit mode Escape is the editor's.
 - **Print:** src/styles/print.css, every rule inside `@media print`. A page opts in with `data-print` on `<main>` (the project and plant pages); anything else to leave off the paper gets `data-no-print`. Black and white there are keywords, not tokens.
 
+## Launch mode: placeholders off the public site (31 Oct 2026)
+
+The launch rule (PRE-LAUNCH.md): anything Sir has not answered by launch is removed. `HIDE_PENDING=1` at build time does it without deleting data; `src/lib/launch.ts` has the rules.
+
+- **Read at build time** (astro.config.mjs, a Vite define), not per request: switching needs a rebuild. Off by default, and off the review build must stay byte-identical, so compare the served HTML of every sitemap page with the commit before.
+- **Hide by skipping, never by renumbering.** A renderer filters a pending item out and keeps every other item on its own array index, as with `retired`.
+- **Never strand a saved edit.** A unit (card, tile, row, section, gallery block, project) goes only while no `content_edits` key lands inside it (`launch.hides(prefix)`); otherwise it is drawn exactly as in review. An unconfirmed project kept that way is drawn as review whole, its question included.
+- **A new renderer of a `pending` item** asks `launchFor()` and gets a line in `launchKind()` (scripts/placeholder-modules.mjs), or `check:placeholders` (launch mode) and `report:pending` fail on it.
+- **Checks:** `npm run report:pending` (what goes, page by page, against PRE-LAUNCH.md's count); after a launch build, `node scripts/pending-report.mjs <origin> --served` must PASS.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

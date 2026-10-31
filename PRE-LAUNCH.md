@@ -17,13 +17,42 @@ on the site and fails while one exists. `npm run build:release` runs it first
 and refuses to build a launch bundle with any remaining. Run it before every
 client review too — it is the fastest way to say what is still owed.
 
+**Launch mode, `HIDE_PENDING=1` (2026-10-31): the launch rule as a build
+switch.** Built with `HIDE_PENDING=1`, the site leaves every open placeholder
+row below off the public site without deleting a line of data
+(`src/lib/launch.ts`): the placeholder card, tile or row goes with its label
+and title (no empty "Year completed" tile), a section of nothing but
+placeholders goes with its kicker and heading (About's CSR "Content Pending"),
+and a work not confirmed as K.D.'s (row 3b, the Kharghar Centre of Excellence)
+loses its tile, its page (its address answers the ordinary 404) and its
+sitemap entry. Every other item keeps its edit key. **A placeholder Sir has
+typed into counts as answered**: it stays, drawn exactly as in review with his
+text in it, so no saved edit loses its slot; its text then belongs in the copy
+module, the "How to close a row" below. The switch is read when the site is
+built, so it takes a rebuild to turn on or off; unset (the default) the site is
+byte for byte as before. What it does **not** do: it touches only
+placeholders. Sign-offs (S rows) are not marked in the data, so their content
+still shows and each needs its own decision; and where a row's "If it does not
+exist" action is more than deleting the item, it does only the deleting: 5f
+leaves the Lush Meadows portal figures on the page with the card that questions
+them gone, and 5c and 5d leave a page with a name, a place and its photographs.
+
+`npm run report:pending` (scripts/pending-report.mjs) lists, page by page,
+exactly what launch mode leaves out, with the total against the count on the
+"Last updated" line below. On 2026-10-31 it is **39 placeholders on 19 pages,
+the same as that count**, and nothing it cannot hide. Given the origin of a
+running build (`node scripts/pending-report.mjs http://127.0.0.1:<port>`) it
+reads the saved edits there and lists any placeholder Sir typed into as kept;
+`--served` added after the origin checks that a launch build serves exactly
+that. The launch steps are step 4 of "Deploy and migration order", below.
+
 **How to close a row:** either the content arrives — replace the placeholder
 item in `src/data/<page>.ts` with real copy and delete its `pending` field — or
 K.D. confirms it does not exist — delete the item. Then run
 `npm run check:placeholders` and `npm run check:keys` for that page, and strike
 the row here.
 
-**Last updated:** 2026-10-27 · **39 placeholders on the site** — the number `npm run check:placeholders` prints. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 24 open rows below (25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 16 on the older "Beyond the railway" project pages, rows 5b–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 4 for the Kharghar Centre of Excellence, rows 3b and 5h; 4 in About's CSR section, rows 1a–1d; 3 on the Karjat RMC plant's page, rows 4d–4f; 1 on `/careers`, row 6. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **23 sign-offs** (S1–S23; S4, S12, S13 and S16 answered, S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **8 go-live configuration rows, 7 still open** (G3 closed 2026-10-12) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
+**Last updated:** 2026-10-31 · **39 placeholders on the site** — the number `npm run check:placeholders` prints, and the total of `npm run report:pending` (launch mode, above), unchanged since 2026-10-27. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 24 open rows below (25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 16 on the older "Beyond the railway" project pages, rows 5b–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 4 for the Kharghar Centre of Excellence, rows 3b and 5h; 4 in About's CSR section, rows 1a–1d; 3 on the Karjat RMC plant's page, rows 4d–4f; 1 on `/careers`, row 6. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **23 sign-offs** (S1–S23; S4, S12, S13 and S16 answered, S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **8 go-live configuration rows, 7 still open** (G3 closed 2026-10-12) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
 
 ---
 
@@ -319,6 +348,22 @@ safety net, not leave to keep them there.
    is left or `PUBLIC_SITE_URL` is wrong (G1). If the build fails, copy
    step 1's backup back from `/srv/kd-backups/` as described there and
    stop: the old process is still running from it.
+
+   **At launch, in launch mode** (the launch rule, above): copy `.env` to
+   `/srv/kd-backups/.env.bak-<date-time>`, add the line `HIDE_PENDING=1` to
+   `.env` (or set it in the build's environment), and build with
+   `npm run build:release`. Its placeholder gate then passes as long as
+   every placeholder is one launch mode leaves out, and lists them. After
+   the restart (step 5), read-only:
+   `node scripts/pending-report.mjs http://127.0.0.1:<port> --served` must
+   PASS. It lists what was left out and anything kept because Sir typed into
+   it (each kept one is a "How to close a row" job before the public is
+   told), and checks that no left-out slot is on its page, no `data-pending`
+   is left but the kept ones, `/projects/kharghar-centre-of-excellence`
+   answers 404 and is not in `/sitemap.xml`, and every sitemap page answers
+   200. `node scripts/check-served-edits.mjs` must give the same anchoring
+   count as before the switch. To go back to review, remove the line and
+   rebuild. The test server stays in review (no `HIDE_PENDING`) until then.
 5. **Restart** the service (`kd-site` on the test server).
 6. **Check the five database flows.** `npm run check:db-flows`, run as the
    user that can read `.env`, against the running site. It sends a test
@@ -515,6 +560,20 @@ heading, the Kharghar Centre of Excellence facts) and 3.91:1 on ink (the
 "Last updated" line on /privacy and /terms). A colour change is a design
 change, so it waits for the client.
 
+### At the next deploy: the 2026-10-31 launch switch
+
+`HIDE_PENDING` and `src/lib/launch.ts` (above, under the launch rule). No
+schema change, no migration, no edit key added, moved or gone, no built-in
+text changed. The test server builds without `HIDE_PENDING`, as before, and
+then serves every page byte for byte as the build before it (checked on the
+development PC on all 37 sitemap pages, `sitemap.xml`, `robots.txt` and the
+404s). The usual steps 1 to 8, then, read-only:
+`node scripts/pending-report.mjs http://127.0.0.1:<port>` and report its
+output: it reads the server's saved edits, so it says whether Sir has typed
+into any placeholder (those would stay at launch), and its total should match
+the count on the "Last updated" line. Do not add `HIDE_PENDING` on the test
+server.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by
@@ -557,9 +616,18 @@ previews may not draw.
   `src/pages/resources/vindhane-plant.astro` (both treatments, on its ink hero
   and its white lists) and `src/components/projects/SocialProjectPage.astro`
   (the same two, on its hero tiles and its white overview and gallery). All carry `data-pending` for the scanner.
-- `scripts/check-placeholders.mjs` walks every copy export in its `MODULES`
-  list, one row per export with the route it renders on. **Add a row there
-  when you add a page**, or its placeholders are invisible to the gate.
+- `scripts/check-placeholders.mjs` walks every copy export in the `MODULES`
+  list of `scripts/placeholder-modules.mjs` (shared with
+  `scripts/pending-report.mjs` since 2026-10-31), one row per export with the
+  route it renders on. **Add a row there when you add a page**, or its
+  placeholders are invisible to the gate.
+- **Launch mode** (`HIDE_PENDING=1`, `src/lib/launch.ts`): each renderer above
+  asks `launchFor()` whether to leave a pending item out, and the /projects
+  tile, `/projects/[slug]` and the sitemap ask `projectHidden()`. A new
+  renderer of a `pending` item does the same, and gets a line in
+  `launchKind()` in `scripts/placeholder-modules.mjs`; until it has one,
+  `check:placeholders` in launch mode and `report:pending` fail on its
+  placeholders, because launch mode would still show them.
 - The pattern is described in DESIGN-SYSTEM.md §9 (review-only, never a design
   element).
 
