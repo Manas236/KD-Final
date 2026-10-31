@@ -20,7 +20,9 @@
       only once a page has rendered 200, so an address that is not a
       page never costs a query or a cache entry. A page with none, a
       database that does not answer, or SERVER_EDITS=0 sends the page
-      exactly as rendered, still streaming.
+      exactly as rendered, still streaming. A page built in launch mode
+      (HIDE_PENDING=1, src/lib/launch.ts) reads its edits while it
+      renders, and those same rows are written here.
 
    4. SECURITY HEADERS (28 Oct 2026), on every response that passes
       through here: pages, the 404, redirects, the API, /media and
@@ -59,7 +61,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       })
     : await next();
   if (editable && response.status === 200 && (response.headers.get("content-type") ?? "").includes("text/html")) {
-    response = await withSavedEdits(response, editable, editsForPage(editable));
+    /* In launch mode the page has already read its edits, to know which
+       placeholders were answered (src/lib/launch.ts): write those rows. */
+    response = await withSavedEdits(response, editable, context.locals.kdSavedEdits ?? editsForPage(editable));
   }
   if (isNoindexDeployment()) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
