@@ -31,6 +31,10 @@
    as before the fold, the redirect is gone, and the stadium's third
    paragraph is retired (OPEN-QUESTIONS.md #58).
 
+   UPDATE 2026-11-02: Sir answered the question sheet (OPEN-QUESTIONS.md
+   #69): the Ulwe CIDCO School's client, scope and year, the Ulwe
+   Hospital's scope and year, and the Football Stadium's status.
+
    WHAT IS KNOWN, AND FROM WHERE. For six of the eight, the source doc
    (K.D.Website_Details.md §Further Projects) gives a name, a location
    and a folder of photographs — nothing else; the company confirmed
@@ -203,16 +207,15 @@ const SOURCES: readonly SocialDetailSource[] = [
        and stack parking, completed within stipulated timelines." Its
        photograph is this tile's building (`Ulwa Hospital/1.jpg`) — same
        elevation, same gate. #28b read the card as Karanjade's by name;
-       the picture says otherwise. PRE-LAUNCH.md S7 asks. */
+       the picture says otherwise. PRE-LAUNCH.md S7 asks.
+       2026-11-02, Sir: scope and year (OPEN-QUESTIONS.md #69). He has NOT
+       confirmed the client: the tile below is still the deck's word, left
+       as it was, and the question is with him. */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "20,000 sq ft", label: "Facility Area" },
-      {
-        pending: TBA,
-        title: "Scope of works",
-        body: "What K.D. Constructions delivered: civil and structural works, finishes, fire systems, services, or part of that.",
-      },
-      { pending: TBA, title: "Year completed", body: "The year the building was handed over." },
+      { value: "Hospital Building", label: "Scope of works" },
+      { value: "2018", label: "Year completed" },
     ],
     description:
       "A CIDCO urban health centre at Ulwe, Navi Mumbai: a 20,000 sq ft facility with " +
@@ -225,19 +228,13 @@ const SOURCES: readonly SocialDetailSource[] = [
   {
     title: "Ulwe CIDCO School",
     eyebrow: "Education",
+    /* 2026-11-02, Sir: client, scope and year (OPEN-QUESTIONS.md #69). No
+       area was given, so that tile is still a placeholder. */
     facts: [
-      {
-        pending: TBA,
-        title: "Client",
-        body: "Who the school was built for: CIDCO, as its name suggests, or another body.",
-      },
+      { value: "CIDCO", label: "Client" },
       { pending: TBA, title: "Built-up area", body: "Built-up area, floors and number of classrooms." },
-      {
-        pending: TBA,
-        title: "Scope of works",
-        body: "What K.D. Constructions delivered: the whole building, or civil and structural works only.",
-      },
-      { pending: TBA, title: "Year completed", body: "The year the school was handed over." },
+      { value: "School Building", label: "Scope of works" },
+      { value: "2018", label: "Year completed" },
     ],
     body: ["A completed school building at Ulwe, Navi Mumbai, delivered by K.D. Constructions."],
   },
@@ -358,7 +355,9 @@ const SOURCES: readonly SocialDetailSource[] = [
        its own project again, and both are as they were before the fold.
        The third paragraph is retired, not removed: projects.detail.body.2
        on this page is never given to other text (OPEN-QUESTIONS.md #56,
-       #58). */
+       #58).
+       2026-11-02, Sir: the work is ongoing, so the last tile is its status,
+       with no year (OPEN-QUESTIONS.md #69). */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "40,000", label: "Planned capacity" },
@@ -367,7 +366,7 @@ const SOURCES: readonly SocialDetailSource[] = [
         title: "Scope of works",
         body: "What K.D. Constructions delivered on the stadium: earthworks, pitch, stands, structure, or part of that.",
       },
-      { pending: TBA, title: "Year completed", body: "The year K.D.'s works were handed over." },
+      { value: "Ongoing", label: "Status" },
     ],
     description:
       "Part of CIDCO's Football Maharashtra Centre of Excellence in Kharghar, the " +
