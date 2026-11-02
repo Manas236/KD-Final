@@ -40,10 +40,13 @@ import { projects } from "./projects.ts";
 import { vindhanePlantPhotos } from "./gallery.ts";
 
 /** A hero tile: either a figure and what it counts (DESIGN-SYSTEM
-    §4.1), or a placeholder for one the company has not supplied. */
+    §4.1), or a placeholder for one the company has not supplied. A
+    `retired` tile is off the page and keeps its array slot, so no later
+    tile's keys move (DESIGN-SYSTEM §9). */
 export type PlantStat =
-  | { readonly value: string; readonly label: string; readonly pending?: undefined }
-  | { readonly pending: string; readonly title: string; readonly body: string };
+  | { readonly value: string; readonly label: string; readonly pending?: undefined; readonly retired?: undefined }
+  | { readonly pending: string; readonly title: string; readonly body: string; readonly retired?: undefined }
+  | { readonly retired: true; readonly pending?: undefined; readonly value?: undefined; readonly label?: undefined };
 
 /** A row in the products / machinery lists: a plain line, or a
     placeholder for the inventory the company has not supplied. */
@@ -78,20 +81,23 @@ export const plant = {
       "Hydra crane alongside",
 
     /* Tiles 1 and 2 are the plant in-charge's figures, 2026-10-24
-       (OPEN-QUESTIONS.md #65): capacity per month as given, and the
-       five covered areas summed (the `areas` list below gives each). No
-       yard area was given, so none is counted. "11,600+ MT" is
-       the steel ledger's total on /projects (the doc's five tonnages sum
-       to 11,664.88) and is labelled as what it is — steel delivered on
-       projects, not plant output. "2 × 650 t" is the Vashi FOB lift, the
+       (OPEN-QUESTIONS.md #65): capacity per month, and the five covered
+       areas summed (the `areas` list below gives each). No yard area was
+       given, so none is counted. 2026-11-02, Sir (OPEN-QUESTIONS.md #69):
+       tile 1 leads with the top of the in-charge's 100 to 120 MT range, and
+       no number above 120 is ever written. Slot 2 was "11,600+ MT", the
+       steel ledger's total on /projects: K.D.'s delivery across five
+       projects, not this plant's output, so it is on /projects only, and
+       this slot is retired so resources.plant.stats.3.* keep their keys.
+       "2 × 650 t" is the Vashi FOB lift, the
        one erection figure the doc gives. 2026-11-02, Sir: those two cranes
        are hired, so the tile says deployed, never owned (OPEN-QUESTIONS.md
        #69). The doc calls them telescopic and the brief for this change
        crawler, so the site names no type until Sir says which. */
     stats: [
-      { value: "100 to 120 MT", label: "Fabrication per month" },
+      { value: "Up to 120 MT", label: "Structural steel fabricated every month" },
       { value: "14,800 sq ft", label: "Covered area, fabricating since Sep 2024" },
-      { value: "11,600+ MT", label: "Structural steel across five projects" },
+      { retired: true },
       { value: "2 × 650 t", label: "Cranes deployed for heavy lifts on our projects" },
     ] as readonly PlantStat[],
 
