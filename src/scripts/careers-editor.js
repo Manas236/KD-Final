@@ -9,7 +9,7 @@
    public/editor-ui.css until "Edit text" is on:
 
      · an "Add a job posting" card at the end: title, details, the
-       LinkedIn link, and how many days (1–30) to list it
+       LinkedIn link if there is one, and how many days (1–30) to list it
      · on every posting card, the date it comes down by itself and a
        "Remove posting" button
 
@@ -79,7 +79,7 @@ function addCard() {
       <label>Details <span>optional</span>
         <input name="details" maxlength="200" placeholder="Navi Mumbai · 3–5 years · Full-time" />
       </label>
-      <label>LinkedIn post link
+      <label>LinkedIn post link <span>optional</span>
         <input name="linkedin" type="url" inputmode="url" placeholder="https://www.linkedin.com/jobs/view/…" />
       </label>
       <label>Show it for

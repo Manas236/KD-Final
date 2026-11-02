@@ -1,8 +1,9 @@
 /* ============================================================
    Job postings on /careers — server side
    ------------------------------------------------------------
-   Each open role is a card on /careers linking to its LinkedIn post. The
-   cards are added and removed from the page itself, in edit mode
+   Each open role is a card on /careers, linking to its LinkedIn post if
+   it has one: a posting needs no link at all (2 Nov 2026). The cards are
+   added and removed from the page itself, in edit mode
    (src/scripts/careers-editor.js → src/pages/api/careers.ts), and stored
    in job_posting_events (db/migrate.sql), which is append-only: a removal
    is a row of its own, never a DELETE.
@@ -119,7 +120,7 @@ export type PostingCheck =
       ok: true;
       title: string;
       details: string;
-      linkedin: string;
+      linkedin: string | null;
       days: number;
     }
   | { ok: false; reason: string };
@@ -136,11 +137,10 @@ export function validatePosting(input: Record<string, unknown>): PostingCheck {
 
   const linkedin = postingUrl(input.linkedin, "linkedin");
   if (linkedin === null) return { ok: false, reason: "The LinkedIn link must be a linkedin.com address." };
-  if (!linkedin) return { ok: false, reason: "Add the LinkedIn link." };
 
   const days = Number(input.days);
   if (!Number.isInteger(days) || days < MIN_DAYS || days > MAX_DAYS)
     return { ok: false, reason: `Choose how long to show it: ${MIN_DAYS} to ${MAX_DAYS} days.` };
 
-  return { ok: true, title, details, linkedin, days };
+  return { ok: true, title, details, linkedin: linkedin || null, days };
 }
