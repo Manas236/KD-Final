@@ -4817,3 +4817,66 @@ pages), `projects.listing.medium.3.representative`,
 `projects.listing.small.2.representative`,
 `projects.listing.small.3.representative`. Changed defaults: the 157
 (page, key) pairs in `docs/changed-defaults-2026-10-27.tsv`.
+
+## 69. Sir's question sheet of 2 Nov 2026
+
+2026-11-02. Sir's answers, applied in one pass; PRE-LAUNCH.md, "Sir's answers,
+2026-11-02", has the list. Placeholders 39 to 33.
+
+### What changed
+
+1. **Ulwe CIDCO School:** client CIDCO, scope School Building, completed 2018.
+   No area was given, so tile 2 stays a placeholder.
+2. **Ulwe Hospital:** scope Hospital Building, completed 2018. **Sir did not
+   confirm the client.** The brief for this pass took that tile for a
+   placeholder, but it has read CIDCO since the Company Profile deck (slide 10,
+   #28b; S7), and the paragraph and description say a CIDCO urban health centre.
+   None of that was touched, and the question stays open in S7.
+3. **Kharghar Football Stadium:** tile 4 reads Ongoing · Status. The scope stays
+   a placeholder. The Centre of Excellence is not touched.
+4. **The two 650-tonne cranes are hired.** Every line saying or implying they
+   are K.D.'s went: Vindhane's hero tile, fourth paragraph and erection band, and
+   Harbour Line's third paragraph. The rewritten lines name no crane type:
+   `K.D.Website_Details.md` says telescopic, the brief's example said crawler
+   (S24). Home's "Zero rental leakage." and About's "Zero · Rental Leakage, Full
+   Fleet Ownership" tile said nothing is ever rented, so they went too, a call
+   made in this pass: the card keeps its other sentences, and the tile takes the
+   approved copy's claim, **Minimal · Dependence on Rented Equipment**
+   (`K.D.Website_Details.md`: "minimise dependence on rented equipment"). KD_INFO.md
+   had already marked "zero rental leakage" as superseded.
+5. **The 50+ is not changed.** Whether it counts these cranes is not on file (S24).
+6. **Vindhane's figures.** Hero tile 1 reads **Up to 120 MT · Structural steel
+   fabricated every month**. The 11,600+ MT tile is retired: left in place, however
+   worded, it would have stood under the plant's name. The figure was already a
+   company figure on `/projects`, the steel ledger, "11,600+ MT · Structural steel
+   delivered across five projects, including FOBs fabricated, launched and erected
+   over running railway lines", so moving it took no new key. The hero's existing
+   rule draws the three tiles two over one. Launch mode off and on serve this page
+   byte for byte the same. Left as they are, because they are true and were not
+   asked about: "100 to 120 MT" twice on `/about`, and the erection band's ledger
+   on the plant's page, whose per-project tonnages add up to that total.
+7. **Indeed.** The two sentences naming it, the "Apply on Indeed" button and the
+   editor's field are gone, and a new posting needs its LinkedIn link. The
+   column stays (`kd_app` cannot drop one, and rows are kept), unread. **The
+   placeholder card stays for now:** row #3 on the test server is a saved edit on
+   its badge, and the brief says a key with a saved edit is not changed. PRE-LAUNCH.md
+   row 6 has the one-step close.
+
+### Verified
+
+- Before this pass, the launch-mode commits passed their gate: 8a9cd0f and 9b2df88,
+  both built with launch mode off, served 42 paths byte for byte the same (37
+  sitemap URLs, sitemap.xml, robots.txt and three 404s).
+- Against 9b2df88 only 8 of the 42 paths changed. Sitemap 37 URLs, as before.
+- The test server's 28 saved edits, read through its open GET route and copied
+  to a scratch schema: anchored 25 of 28, retired #20, #26, #27, before and after,
+  the reports identical.
+- At 360, 390 and 1280: no sideways overflow, CLS 0, nothing moved beyond the
+  reflow of the changed text. At 1280, `/`, `/about` and `/careers` are unchanged.
+
+### Edit keys
+
+None moved. `docs/changed-defaults-2026-11-02.tsv` has all 43 (page, key) pairs:
+changed, gone (a filled placeholder's `pending`, `title`, `body`; the retired tile)
+and new (its `value`, `label`). No saved edit is on any of them; row #3 is on a key
+this pass left alone.

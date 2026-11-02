@@ -492,7 +492,7 @@ Rules:
   with `retired: true` and its renderer skips it, so no later index (and no
   stored key) moves; both gates expect nothing from a retired object. In use
   on nav links, the homepage hero stats, InfoPage cards (`InfoSections`),
-  `about.board` and the merged pages' CTAs.
+  `about.board`, the merged pages' CTAs and the Vindhane plant's hero tiles.
 - Dot-separated, `[A-Za-z0-9-]` within a segment. Lowercase, except that a
   segment naming a camelCase property keeps its capitals
   (`projects.detail.overviewKicker`). Array items are indexed:

@@ -1,0 +1,44 @@
+page_path	edit_key	old_default	new_default
+/	home.differentiators.cards.2.body	Civil, structural steel, mechanical, electrical, signalling & telecom, and track engineering delivered in-house. Self-owned 50+ unit equipment fleet. Zero rental leakage.	Civil, structural steel, mechanical, electrical, signalling & telecom, and track engineering delivered in-house. Self-owned 50+ unit equipment fleet.
+/about	about.story.stats.3.label	Rental Leakage, Full Fleet Ownership	Dependence on Rented Equipment
+/about	about.story.stats.3.value	Zero	Minimal
+/careers	careers.sections.0.intro	Each card below links to the live posting on LinkedIn or Indeed, where you can read the full role. To apply, use the form below or apply on the posting itself.	Each card below links to the live posting on LinkedIn, where you can read the full role. To apply, use the form below or apply on the posting itself.
+/careers	careers.sections.3.items.1.body	Open a role above and apply directly through LinkedIn or Indeed.	Open a role above and apply directly through LinkedIn.
+/resources/vindhane-plant	resources.plant.stats.0.value	100 to 120 MT	Up to 120 MT
+/resources/vindhane-plant	resources.plant.stats.0.label	Fabrication per month	Structural steel fabricated every month
+/resources/vindhane-plant	resources.plant.stats.2.value	11,600+ MT	(slot gone)
+/resources/vindhane-plant	resources.plant.stats.2.label	Structural steel across five projects	(slot gone)
+/resources/vindhane-plant	resources.plant.stats.3.label	Telescopic cranes, Vashi FOB lift	Cranes deployed for heavy lifts on our projects
+/resources/vindhane-plant	resources.plant.body.3	With fabrication in-house and an owned crane fleet for erection, K.D. Constructions controls the full chain from shop floor to final alignment, which matters most where a launch happens within a live railway environment with overhead OHE.	With fabrication in-house and its own crews on erection, K.D. Constructions controls the full chain from shop floor to final alignment, which matters most where a launch happens within a live railway environment with overhead OHE.
+/resources/vindhane-plant	resources.plant.erection.body	Girders and trusses fabricated at Vindhane are launched and erected by K.D.'s own crane fleet, including over running railway lines with overhead OHE. At the Vashi FOB the structure was lifted into place with two 650-tonne telescopic cranes; on the Harbour Line, FOBs were launched at four locations, with spans of 44.5 m + 24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.	Girders and trusses fabricated at Vindhane are launched and erected by K.D.'s own crews, including over running railway lines with overhead OHE. At the Vashi FOB the structure was lifted into place with two 650-tonne cranes deployed for the lift; on the Harbour Line, FOBs were launched at four locations, with spans of 44.5 m + 24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.
+/projects/harbour-line-fobs-and-trespass-control	projects.detail.body.2	At the Vashi FOB, the structure was lifted into place with two 650-tonne telescopic cranes. The erection was carried out over running railway lines, with the fabrication, launch and final alignment all handled in-house.	At the Vashi FOB, the structure was lifted into place with two 650-tonne cranes deployed for the lift. The erection was carried out over running railway lines, with the fabrication, launch and final alignment all managed by K.D. Constructions.
+/projects/ulwe-hospital	projects.detail.facts.2.pending	To be added	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.2.title	Scope of works	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.2.body	What K.D. Constructions delivered: civil and structural works, finishes, fire systems, services, or part of that.	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.3.pending	To be added	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.3.title	Year completed	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.3.body	The year the building was handed over.	(slot gone)
+/projects/ulwe-hospital	projects.detail.facts.2.value	(no slot)	Hospital Building
+/projects/ulwe-hospital	projects.detail.facts.2.label	(no slot)	Scope of works
+/projects/ulwe-hospital	projects.detail.facts.3.value	(no slot)	2018
+/projects/ulwe-hospital	projects.detail.facts.3.label	(no slot)	Year completed
+/projects/ulwe-cidco-school	projects.detail.facts.0.pending	To be added	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.0.title	Client	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.0.body	Who the school was built for: CIDCO, as its name suggests, or another body.	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.2.pending	To be added	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.2.title	Scope of works	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.2.body	What K.D. Constructions delivered: the whole building, or civil and structural works only.	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.3.pending	To be added	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.3.title	Year completed	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.3.body	The year the school was handed over.	(slot gone)
+/projects/ulwe-cidco-school	projects.detail.facts.0.value	(no slot)	CIDCO
+/projects/ulwe-cidco-school	projects.detail.facts.0.label	(no slot)	Client
+/projects/ulwe-cidco-school	projects.detail.facts.2.value	(no slot)	School Building
+/projects/ulwe-cidco-school	projects.detail.facts.2.label	(no slot)	Scope of works
+/projects/ulwe-cidco-school	projects.detail.facts.3.value	(no slot)	2018
+/projects/ulwe-cidco-school	projects.detail.facts.3.label	(no slot)	Year completed
+/projects/kharghar-football-stadium	projects.detail.facts.3.pending	To be added	(slot gone)
+/projects/kharghar-football-stadium	projects.detail.facts.3.title	Year completed	(slot gone)
+/projects/kharghar-football-stadium	projects.detail.facts.3.body	The year K.D.'s works were handed over.	(slot gone)
+/projects/kharghar-football-stadium	projects.detail.facts.3.value	(no slot)	Ongoing
+/projects/kharghar-football-stadium	projects.detail.facts.3.label	(no slot)	Status
