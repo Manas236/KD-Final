@@ -187,7 +187,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
     ],
     image: matungaImg,
     imageKind: "render",
-    alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
+    alt: "Architectural rendering of the Matunga Workshop administrative building",
   },
   {
     /* "Creation of LHB Coach Maintenance Facilities, Matunga" in
@@ -346,7 +346,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        it (#62). */
     imageKind: "stand-in",
     representative: "Representative image",
-    alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
+    alt: "Representative image: a railway station under construction, materials staged trackside",
   },
   {
     title: "Sanpada Carshed",
@@ -459,7 +459,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        Representative until Sir confirms or replaces it (#62). */
     imageKind: "stand-in",
     representative: "Representative image",
-    alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
+    alt: "Representative image: railway shed work, a Vande Bharat trainset inside a maintenance shed",
   },
   {
     title: "Lower Parel Railway Redevelopment",
@@ -486,7 +486,7 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
        Parel. Representative until Sir confirms or replaces it (#62). */
     imageKind: "stand-in",
     representative: "Representative image",
-    alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
+    alt: "Representative image: station work, a platform under a full-length canopy",
   },
 ];
 

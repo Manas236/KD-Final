@@ -201,7 +201,7 @@ export const projects = {
            maintenance facility, a separate contract in the doc, which now
            has its own entry below. See OPEN-QUESTIONS.md #24. */
         meta: "Indian Railways · POH 350 → 575 Bogies/Month",
-        alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
+        alt: "Architectural rendering of the Matunga Workshop administrative building",
       },
       {
         live: false,
@@ -230,7 +230,7 @@ export const projects = {
         /* Stand-in — no dedicated photograph exists for this project.
            See OPEN-QUESTIONS.md #19b. Said to be one since 22 Oct 2026
            (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
-        alt: "Representative image: a railway station under construction by K.D. Constructions, materials staged trackside",
+        alt: "Representative image: a railway station under construction, materials staged trackside",
         representative: "Representative image",
       },
       {
@@ -292,7 +292,7 @@ export const projects = {
            captioned as what it shows rather than as Solapur. See
            OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
            2026 (#62). */
-        alt: "Representative image: K.D. Constructions railway shed work, a Vande Bharat trainset inside a maintenance shed",
+        alt: "Representative image: railway shed work, a Vande Bharat trainset inside a maintenance shed",
         representative: "Representative image",
       },
       {
@@ -304,7 +304,7 @@ export const projects = {
         /* Stand-in — no dedicated photograph exists. See
            OPEN-QUESTIONS.md #19b. Said to be representative since 22 Oct
            2026 (#62); PHOTOS.md has the frame from the Nhava Sheva folder. */
-        alt: "Representative image: K.D. Constructions station work, a platform under a full-length canopy",
+        alt: "Representative image: station work, a platform under a full-length canopy",
         representative: "Representative image",
       },
     ] as readonly ProjectEntry[],

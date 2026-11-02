@@ -13,6 +13,8 @@
      project photos   "<Project> by K.D. Constructions. <caption>"
      plant photos     "K.D. Constructions' <Plant>. <caption>"
      HSE photos       "K.D. Constructions HSE. <caption>"
+     not K.D.'s work  "<Project>. <caption>" (NOT_KD_WORK, below; pass
+                      the photograph's file)
 
    Joined with ". " like every composed string on the site (CLAUDE.md),
    so a caption with a colon never produces two.
@@ -30,8 +32,27 @@
 
 export type AltKind = "project" | "plant" | "hse";
 
-export function galleryAlt(project: string, caption: string, kind: AltKind): string {
+/* Photographs in a project's group that do not show K.D.'s own work,
+   so their alt names no builder: "<Project>. <caption>" (31 Oct 2026,
+   the 22 Oct rule that an alt names K.D. Constructions only where the
+   picture shows K.D.'s work). At Kharghar Golf Course K.D. built the
+   clubhouse, not the course: these are the course, its fairway and a
+   path across it, the course's name wall, and a pavilion that is not
+   the clubhouse. Keyed by file name, which is the studio's key and
+   never changes; the caption, saved in the studio or not, is untouched.
+   The same photographs carry no K.D. credit in their file either
+   (scripts/credit-photos.mjs). */
+export const NOT_KD_WORK: ReadonlySet<string> = new Set([
+  "kharghar-golf-course-03.jpg",
+  "kharghar-golf-course-04.jpg",
+  "kharghar-golf-course-07.jpg",
+  "kharghar-golf-course-12.jpg",
+  "kharghar-golf-course-13.jpg",
+]);
+
+export function galleryAlt(project: string, caption: string, kind: AltKind, file?: string): string {
   const text = caption.trim();
+  if (file && NOT_KD_WORK.has(file)) return `${project}. ${text}`;
   switch (kind) {
     case "plant":
       return `K.D. Constructions' ${project}. ${text}`;

@@ -287,7 +287,7 @@ export const home = {
          facility's, a separate contract with its own page. See
          OPEN-QUESTIONS.md #24. */
       meta: "Indian Railways · POH 350 → 575 Bogies/Month",
-      alt: "Architectural rendering of the Matunga Workshop administrative building, a K.D. Constructions project",
+      alt: "Architectural rendering of the Matunga Workshop administrative building",
     } as ProjectCard,
     cards: [
       {

@@ -133,7 +133,7 @@ async function projectImages(
   for (const photo of photos ?? []) {
     out.push({
       loc: await tileUrl(photo.file, origin),
-      title: galleryAlt(title, photo.caption, kind),
+      title: galleryAlt(title, photo.caption, kind, photo.file),
     });
   }
   return out;
@@ -149,7 +149,7 @@ async function galleryPageImages(origin: URL, live: LiveState): Promise<SitemapI
       for (const photo of group.photos) {
         out.push({
           loc: await tileUrl(photo.file, origin),
-          title: galleryAlt(group.project, photo.caption, altKindOf(group.project)),
+          title: galleryAlt(group.project, photo.caption, altKindOf(group.project), photo.file),
         });
       }
     }
