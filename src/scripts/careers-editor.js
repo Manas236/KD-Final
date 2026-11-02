@@ -9,7 +9,7 @@
    public/editor-ui.css until "Edit text" is on:
 
      · an "Add a job posting" card at the end: title, details, the
-       LinkedIn and/or Indeed link, and how many days (1–30) to list it
+       LinkedIn link, and how many days (1–30) to list it
      · on every posting card, the date it comes down by itself and a
        "Remove posting" button
 
@@ -82,10 +82,6 @@ function addCard() {
       <label>LinkedIn post link
         <input name="linkedin" type="url" inputmode="url" placeholder="https://www.linkedin.com/jobs/view/…" />
       </label>
-      <label>Indeed post link
-        <input name="indeed" type="url" inputmode="url" placeholder="https://in.indeed.com/viewjob?jk=…" />
-      </label>
-      <p class="nt-jobs-note">One link is enough; add both if the role is on both sites.</p>
       <label>Show it for
         <select name="days">${dayOptions()}</select>
       </label>

@@ -1434,7 +1434,8 @@ export const contact: ContactCopy = {
 };
 
 /* /careers — added 2026-09-29 at the company's request: a page linking
-   to K.D.'s hiring posts on LinkedIn and Indeed, one card per post.
+   to K.D.'s hiring posts on LinkedIn, one card per post (Sir has no Indeed
+   page, 2026-11-02, OPEN-QUESTIONS.md #69).
    No careers content was ever supplied (WEBSITE_INFO.md §14 row 9), so
    "Why K.D." is assembled only from facts already on the site. hr@ is
    the careers address (KD_INFO.md, WEBSITE_INFO.md).
@@ -1457,7 +1458,7 @@ const LINKEDIN_JOBS = "https://www.linkedin.com/company/k-d-constructions/jobs/"
 export interface CareersCopy extends InfoPageCopy {
   readonly openings: {
     readonly empty: InfoItem;
-    readonly apply: { readonly linkedin: string; readonly indeed: string };
+    readonly apply: { readonly linkedin: string };
   };
   readonly form: {
     readonly kicker: string;
@@ -1506,7 +1507,7 @@ export const careers: CareersCopy = {
       kicker: "Open Positions",
       heading: "Current openings.",
       intro:
-        "Each card below links to the live posting on LinkedIn or Indeed, where you can read " +
+        "Each card below links to the live posting on LinkedIn, where you can read " +
         "the full role. To apply, use the form below or apply on the posting itself.",
       items: [],
     },
@@ -1519,6 +1520,10 @@ export const careers: CareersCopy = {
           body: "Every role we are hiring for, on our LinkedIn company page.",
           links: [{ label: "View jobs on LinkedIn", href: LINKEDIN_JOBS }],
         },
+        /* Sir, 2026-11-02: there is no Indeed page, so this card is to go
+           (OPEN-QUESTIONS.md #69). It is still here because a saved edit sits
+           on its badge on the test server: row #3 on
+           careers.sections.1.items.1.pending, the same words as below. */
         {
           pending: "To be added",
           title: "K.D. Constructions on Indeed",
@@ -1571,7 +1576,7 @@ export const careers: CareersCopy = {
         },
         {
           title: "Apply to a posting",
-          body: "Open a role above and apply directly through LinkedIn or Indeed.",
+          body: "Open a role above and apply directly through LinkedIn.",
           links: [{ label: "See current openings", href: "#openings" }],
         },
       ],
@@ -1588,7 +1593,7 @@ export const careers: CareersCopy = {
         { label: "View jobs on LinkedIn", href: LINKEDIN_JOBS },
       ],
     },
-    apply: { linkedin: "Apply on LinkedIn", indeed: "Apply on Indeed" },
+    apply: { linkedin: "Apply on LinkedIn" },
   },
   form: {
     kicker: "Apply Here",

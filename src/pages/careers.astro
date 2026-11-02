@@ -29,7 +29,6 @@ const cards: InfoItem[] = postings.length
       body: p.details || undefined,
       links: [
         ...(p.linkedin ? [{ label: openings.apply.linkedin, href: p.linkedin }] : []),
-        ...(p.indeed ? [{ label: openings.apply.indeed, href: p.indeed }] : []),
       ],
     }))
   : [{ ...openings.empty, slot: "openings.empty" }];

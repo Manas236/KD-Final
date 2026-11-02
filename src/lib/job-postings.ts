@@ -1,15 +1,20 @@
 /* ============================================================
    Job postings on /careers — server side
    ------------------------------------------------------------
-   Each open role is a card on /careers linking to its LinkedIn and/or
-   Indeed post. The cards are added and removed from the page itself, in
-   edit mode (src/scripts/careers-editor.js → src/pages/api/careers.ts),
-   and stored in job_posting_events (db/migrate.sql), which is
-   append-only: a removal is a row of its own, never a DELETE.
+   Each open role is a card on /careers linking to its LinkedIn post. The
+   cards are added and removed from the page itself, in edit mode
+   (src/scripts/careers-editor.js → src/pages/api/careers.ts), and stored
+   in job_posting_events (db/migrate.sql), which is append-only: a removal
+   is a row of its own, never a DELETE.
 
-   EXPIRY (8 Oct 2026). A link on LinkedIn or Indeed can close while
-   nobody remembers to take its card down, and neither site can be
-   checked by a script (both block automated visitors). So every posting
+   INDEED (2 Nov 2026). Sir has no Indeed page, so a posting no longer
+   carries an Indeed link (OPEN-QUESTIONS.md #69). The table keeps its
+   indeed_url column and the rows already in it, as they were; nothing
+   reads or writes the column now.
+
+   EXPIRY (8 Oct 2026). A link on LinkedIn can close while nobody
+   remembers to take its card down, and LinkedIn cannot be checked by a
+   script (it blocks automated visitors). So every posting
    is given a life when it is added — open_days, 1 to 30, chosen in the
    add form — and the card simply stops being listed once
    created_at + open_days has passed. Postings added before the column
@@ -29,7 +34,6 @@ export interface JobPosting {
   readonly title: string;
   readonly details: string;
   readonly linkedin: string | null;
-  readonly indeed: string | null;
   /** When the card stops being listed, ISO 8601 (UTC). */
   readonly expires: string;
 }
@@ -55,7 +59,7 @@ export const OPEN_WHERE = `
 /* Newest first — a role just posted is the one a visitor is most
    likely to be looking for. */
 const SELECT_OPEN = `
-  SELECT a.id, a.title, a.details, a.linkedin_url, a.indeed_url,
+  SELECT a.id, a.title, a.details, a.linkedin_url,
          UNIX_TIMESTAMP(${EXPIRES}) AS expires
     FROM job_posting_events a
    WHERE ${OPEN_WHERE}
@@ -72,7 +76,6 @@ export async function openPostings(): Promise<JobPosting[] | null> {
       title: r.title ?? "",
       details: r.details ?? "",
       linkedin: r.linkedin_url || null,
-      indeed: r.indeed_url || null,
       expires: new Date(Number(r.expires) * 1000).toISOString(),
     }));
   } catch (err) {
@@ -81,12 +84,11 @@ export async function openPostings(): Promise<JobPosting[] | null> {
   }
 }
 
-/* Where each link may point. Held to the two job sites so that an
-   editor's typo — or a pasted link to somewhere else entirely — cannot
-   put an arbitrary destination behind an "Apply" button. */
+/* Where each link may point. Held to the job site so that an editor's
+   typo — or a pasted link to somewhere else entirely — cannot put an
+   arbitrary destination behind an "Apply" button. */
 const HOSTS = {
   linkedin: ["linkedin.com", "lnkd.in"],
-  indeed: ["indeed.com", "indeed.co.in"],
 } as const;
 
 export type JobSite = keyof typeof HOSTS;
@@ -117,8 +119,7 @@ export type PostingCheck =
       ok: true;
       title: string;
       details: string;
-      linkedin: string | null;
-      indeed: string | null;
+      linkedin: string;
       days: number;
     }
   | { ok: false; reason: string };
@@ -135,14 +136,11 @@ export function validatePosting(input: Record<string, unknown>): PostingCheck {
 
   const linkedin = postingUrl(input.linkedin, "linkedin");
   if (linkedin === null) return { ok: false, reason: "The LinkedIn link must be a linkedin.com address." };
-  const indeed = postingUrl(input.indeed, "indeed");
-  if (indeed === null) return { ok: false, reason: "The Indeed link must be an indeed.com address." };
-  if (!linkedin && !indeed)
-    return { ok: false, reason: "Add the LinkedIn link, the Indeed link, or both." };
+  if (!linkedin) return { ok: false, reason: "Add the LinkedIn link." };
 
   const days = Number(input.days);
   if (!Number.isInteger(days) || days < MIN_DAYS || days > MAX_DAYS)
     return { ok: false, reason: `Choose how long to show it: ${MIN_DAYS} to ${MAX_DAYS} days.` };
 
-  return { ok: true, title, details, linkedin: linkedin || null, indeed: indeed || null, days };
+  return { ok: true, title, details, linkedin, days };
 }

@@ -204,7 +204,6 @@ async function jobPostingFlow() {
     title: MARK,
     details: "Automated test posting, removed by the same script.",
     linkedin: "https://www.linkedin.com/company/k-d-constructions/jobs/",
-    indeed: "",
     days: 1,
   });
   if (!(add.status === 200 && add.json?.id)) return record("5 job post", "FAIL", `add: ${said(add)}`);

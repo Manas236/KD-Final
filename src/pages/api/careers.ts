@@ -1,7 +1,7 @@
 /* ============================================================
    POST /api/careers — add or remove a job posting on /careers
    ------------------------------------------------------------
-   Body: { action: "add", title, details, linkedin, indeed, days }
+   Body: { action: "add", title, details, linkedin, days }
       or { action: "remove", id }
 
    Behind the same signed-cookie session as /api/content, checked before
@@ -31,8 +31,8 @@ function json(body: unknown, status = 200): Response {
 
 const INSERT_ADD = `
   INSERT INTO job_posting_events
-    (action, title, details, linkedin_url, indeed_url, open_days, client_ip, user_agent)
-  VALUES ('add', ?, ?, ?, ?, ?, ?, ?)
+    (action, title, details, linkedin_url, open_days, client_ip, user_agent)
+  VALUES ('add', ?, ?, ?, ?, ?, ?)
 `;
 
 const INSERT_REMOVE = `
@@ -84,7 +84,6 @@ export const POST: APIRoute = async (context) => {
         check.title,
         check.details,
         check.linkedin,
-        check.indeed,
         check.days,
         ip,
         ua,
