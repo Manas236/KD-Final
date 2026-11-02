@@ -254,17 +254,20 @@ export const plant = {
 
     /* The erection half, with the projects as proof. The rows are the
        steel ledger's own — one definition site, in projects.ts — each
-       linking to its project page. */
+       linking to its project page. 2026-11-02, the user: here the ledger is
+       labelled as steel K.D. delivered on these projects, and neither its
+       heading nor the paragraph above it says the steel came from this
+       plant (OPEN-QUESTIONS.md #69). No total is drawn. */
     erection: {
       kicker: "Fabrication & Erection",
       heading: "From shop floor to final alignment.",
       body:
-        "Girders and trusses fabricated at Vindhane are launched and erected by K.D.'s own " +
+        "Girders and trusses are launched and erected by K.D.'s own " +
         "crews, including over running railway lines with overhead OHE. At the Vashi FOB " +
         "the structure was lifted into place with two 650-tonne cranes deployed for the lift; on " +
         "the Harbour Line, FOBs were launched at four locations, with spans of 44.5 m + " +
         "24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.",
-      ledgerHead: "Structural steel, by project",
+      ledgerHead: "Steel delivered by K.D. Constructions on these projects",
       items: projects.listing.steel.ledger.items,
       /* /projects (All): the steel ledger lists every steel project there.
          The #steel tab became "Plants" on 2026-10-09. */
