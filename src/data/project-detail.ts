@@ -285,11 +285,14 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
          Fabrication & Erection section (from the Company Profile deck,
          OPEN-QUESTIONS.md #28b) but on no project page. The Vashi FOB
          is this contract's Vashi–Sanpada location (docs/KD_INFO.md
-         §7.7) — the same structure the page's own photograph shows. */
+         §7.7) — the same structure the page's own photograph shows.
+         2026-11-02, Sir: the two cranes are hired, so the lift is not called
+         in-house, and no crane type is named (plant.ts; OPEN-QUESTIONS.md
+         #69). */
       "At the Vashi FOB, the structure was lifted into place with two " +
-        "650-tonne telescopic cranes. The erection was carried out over " +
-        "running railway lines, with the fabrication, launch and final " +
-        "alignment all handled in-house.",
+        "650-tonne cranes deployed for the lift. The erection was carried " +
+        "out over running railway lines, with the fabrication, launch and " +
+        "final alignment all managed by K.D. Constructions.",
     ],
     /* Fourth tile from the doc's own wording, so the 2-column grid no
        longer leaves a gap. */

@@ -84,12 +84,15 @@ export const plant = {
        the steel ledger's total on /projects (the doc's five tonnages sum
        to 11,664.88) and is labelled as what it is — steel delivered on
        projects, not plant output. "2 × 650 t" is the Vashi FOB lift, the
-       one erection figure the doc gives. */
+       one erection figure the doc gives. 2026-11-02, Sir: those two cranes
+       are hired, so the tile says deployed, never owned (OPEN-QUESTIONS.md
+       #69). The doc calls them telescopic and the brief for this change
+       crawler, so the site names no type until Sir says which. */
     stats: [
       { value: "100 to 120 MT", label: "Fabrication per month" },
       { value: "14,800 sq ft", label: "Covered area, fabricating since Sep 2024" },
       { value: "11,600+ MT", label: "Structural steel across five projects" },
-      { value: "2 × 650 t", label: "Telescopic cranes, Vashi FOB lift" },
+      { value: "2 × 650 t", label: "Cranes deployed for heavy lifts on our projects" },
     ] as readonly PlantStat[],
 
     overviewKicker: "The Plant",
@@ -107,7 +110,7 @@ export const plant = {
       "A 20-tonne EOT crane, now fully operational, makes heavy lifts safer and material " +
         "handling faster, and the plant has recently fabricated the longest girder in its " +
         "history.",
-      "With fabrication in-house and an owned crane fleet for erection, K.D. Constructions controls the " +
+      "With fabrication in-house and its own crews on erection, K.D. Constructions controls the " +
         "full chain from shop floor to final alignment, which matters most where a launch " +
         "happens within a live railway environment with overhead OHE.",
     ],
@@ -251,8 +254,8 @@ export const plant = {
       heading: "From shop floor to final alignment.",
       body:
         "Girders and trusses fabricated at Vindhane are launched and erected by K.D.'s own " +
-        "crane fleet, including over running railway lines with overhead OHE. At the Vashi " +
-        "FOB the structure was lifted into place with two 650-tonne telescopic cranes; on " +
+        "crews, including over running railway lines with overhead OHE. At the Vashi FOB " +
+        "the structure was lifted into place with two 650-tonne cranes deployed for the lift; on " +
         "the Harbour Line, FOBs were launched at four locations, with spans of 44.5 m + " +
         "24.9 m at Vashi–Sanpada and 38 m + 29.9 m at Nerul–Seawood.",
       ledgerHead: "Structural steel, by project",

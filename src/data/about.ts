@@ -160,7 +160,11 @@ export const about = {
       { value: "₹500 Cr", label: "Vision 2030 Turnover Target" },
       { value: "50+", label: "Self-Owned Equipment Units" },
       { value: "11.2%", label: "Projected CAGR, Indian Construction" },
-      { value: "Zero", label: "Rental Leakage, Full Fleet Ownership" },
+      /* Was "Zero · Rental Leakage, Full Fleet Ownership", until Sir said on
+         2026-11-02 that the two 650-tonne cranes are hired (OPEN-QUESTIONS.md
+         #69). This is the approved copy's claim, K.D.Website_Details.md:
+         "minimise dependence on rented equipment". */
+      { value: "Minimal", label: "Dependence on Rented Equipment" },
     ] as readonly Stat[],
   },
 

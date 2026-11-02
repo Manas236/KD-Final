@@ -326,10 +326,13 @@ export const home = {
       },
       {
         title: "Full EPC delivery",
+        /* "Zero rental leakage." came off on 2026-11-02: Sir says the two
+           650-tonne cranes are hired (OPEN-QUESTIONS.md #69). The 50+ stays
+           until he says whether it counts them. */
         body:
           "Civil, structural steel, mechanical, electrical, signalling & " +
           "telecom, and track engineering delivered in-house. Self-owned " +
-          "50+ unit equipment fleet. Zero rental leakage.",
+          "50+ unit equipment fleet.",
       },
     ] as readonly DifferentiatorCard[],
   },
