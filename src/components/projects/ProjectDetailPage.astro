@@ -97,7 +97,7 @@ const description = project.description;
    alt; otherwise the hero. The hero itself never changes here. */
 const sharePhoto = project.shareFile ? livePhotoList.find((p) => p.file === project.shareFile) : undefined;
 const shareImage = sharePhoto ? galleryImage(sharePhoto.file) : project.image;
-const shareAlt = sharePhoto ? galleryAlt(project.title, sharePhoto.caption, "project") : project.alt;
+const shareAlt = sharePhoto ? galleryAlt(project.title, sharePhoto.caption, "project", sharePhoto.file) : project.alt;
 
 /* The page's main photograph for its structured data: the hero, at the
    size it is drawn. A rendering is not K.D.'s photograph, so it names no

@@ -53,7 +53,7 @@ const shareImg = galleryImage(firstPhoto.file);
   title={copy.meta.title}
   description={copy.meta.description}
   image={shareImg}
-  imageAlt={galleryAlt(first.project, first.photos[0].caption, altKindOf(first.project))}
+  imageAlt={galleryAlt(first.project, first.photos[0].caption, altKindOf(first.project), first.photos[0].file)}
   breadcrumbs={[
     { name: "Home", path: "/" },
     { name: hero.kicker, path: "/gallery" },

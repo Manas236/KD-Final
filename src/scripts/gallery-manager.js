@@ -522,7 +522,7 @@ $("gm-history-close").addEventListener("click", () => {
 /* ---------------- preview, jump, banner, toast ---------------- */
 /* The photograph's alt text as the site writes it (src/lib/gallery-alt.ts). */
 function altOf(group, photo) {
-  return galleryAlt(group.project, photo.caption, altKindOfSection(group.section));
+  return galleryAlt(group.project, photo.caption, altKindOfSection(group.section), photo.file);
 }
 
 function preview(photo, group) {
