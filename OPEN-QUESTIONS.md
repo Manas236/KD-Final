@@ -4988,3 +4988,57 @@ d99a443 byte for byte.
   editor gets it, so a saved edit counts as a difference.
 - Placeholders 33, and PRE-LAUNCH.md agrees. Launch mode with the test server's rows
   leaves 32 off the site and keeps 1 for a saved edit, the Indeed card.
+
+## 71. Alt text names K.D. only where the picture shows K.D.'s work, 3 Nov 2026
+
+2026-11-03. The alt text half of Task 2 of 2026-10-31. That session stopped at its
+usage limit with the work uncommitted, and it was parked on
+`wip/2026-10-31-alt-credits` (e0237ca) on 2026-11-02. The user asked for it on main.
+**No visible text, no layout, no edit key and no database row changes.** Placeholders
+33 to 33.
+
+### Changed
+
+- **Kharghar Golf Course.** Photographs 03, 04, 07, 12 and 13 (the course, a pavilion,
+  the name wall, a fairway, a path) now read `<Project>. <caption>`: K.D. built the
+  clubhouse, not the course. They are listed by file name in `NOT_KD_WORK`
+  (`src/lib/gallery-alt.ts`), and every caller that composes a gallery photograph's alt
+  passes the file. The hero and the clubhouse photographs keep the credit. Captions,
+  including any saved in the studio, are not touched. Only 04 is a judgement from the
+  picture, so it is S30 for Sir.
+- **Matunga Workshop rendering and the three representative images** (Harbour Line
+  Station, Solapur, Lower Parel): the alt no longer names K.D. Constructions.
+- These strings also feed the gallery's enlarge buttons (`aria-label`), `og:image:alt`,
+  `twitter:image:alt`, the JSON-LD image caption and the sitemap's image titles, and
+  those follow.
+- **Unchanged:** the JSON-LD still names K.D. as creator and credit of the three
+  stand-ins (#62), because they are K.D.'s photographs.
+
+### Left out on purpose
+
+- `exiftool-vendored`, and the comment naming `scripts/credit-photos.mjs`, which was
+  never written. Both stay on the WIP branch only.
+- The metadata credit. No photograph was touched: the gallery script strips metadata
+  and every served size is re-encoded without it (#66), so a credit in the source
+  files would not reach a visitor.
+
+### Verified, against 4d5d86a
+
+- `git cherry-pick -n e0237ca` applied with no conflict; one file auto-merged
+  (`src/data/project-detail.ts`, where #69 changed other lines).
+- Builds off and on: no warning or error lines. One client file changes, the studio's
+  gallery manager script.
+- Every sitemap URL, `sitemap.xml`, `robots.txt`, the 404s and `/studio/login` compared
+  byte for byte, four ways: built-in text and local saved edits, launch mode off and
+  on. Same build twice: 42 of 42 identical. Old build against new, with the nine
+  intended rewrites applied to the old: identical in all four, no residual. Without
+  the rewrites 9 paths differ, so the compare can fail.
+- In Chrome: the alts on the 8 changed pages' images read as intended, no script error;
+  signed in, `/studio/gallery` draws the same alts for all 13 golf photographs, with no
+  script error and no write request.
+- `check-served-html` passes, as it does on 4d5d86a. `check-edit-keys` passes on `/`,
+  `/projects`, `/projects/kharghar-golf-course` and `/gallery`; the railway project
+  pages have no copy module, and the byte compare covers them.
+- Test server, read-only: 28 saved edits on 37 pages, none on an alt key (alt text has
+  no edit slot, #62). `check-changed-defaults`: 41 pairs, 0 hits. Its golf page shows
+  the built-in captions on these five.

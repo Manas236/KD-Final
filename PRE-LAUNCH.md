@@ -138,6 +138,7 @@ document says the content is unverified, so they need a yes before launch.
 | S27 | `/projects/lower-parel-railway-redevelopment` · scope of work | **For Sir:** "You wrote 'On LinkedIn' for Lower Parel's scope of work. Which LinkedIn page or post?" Nothing was looked up or added. The page has one paragraph and a "Civil" badge, and no scope placeholder | Sir's sheet, read 2026-11-03 (OPEN-QUESTIONS.md #70) |
 | S28 | `/projects` · Beyond the railway · a work not on the site | **For Sir:** "A note at the foot of the sheet reads Kharghar, 'Blood Transmission Academy', 2018. What is the project's exact name, and who was the client?" Not added: the handwriting is in doubt, and it may mean a blood transfusion facility. With a name, it is a tile, a page and a link on the client's card | Sir's sheet, read 2026-11-03 (OPEN-QUESTIONS.md #70) |
 | S29 | `/resources/vindhane-plant`, `/projects` · the steel ledgers | **For Sir:** "Your note on the 11,600+ MT reads 'The rest of it was outsourced, but when showing ...' and the rest can't be read. How does it end?" No further change until he says: the figure is already off the plant's hero and reads as steel delivered (OPEN-QUESTIONS.md #69). A saved edit on the test server, `home.capabilities.cards.3.body`, says "fabricated at our own plant in Vindhane"; it is left as it is | Sir's sheet, read 2026-11-03 (OPEN-QUESTIONS.md #70) |
+| S30 | `/projects/kharghar-golf-course` · gallery photograph 04 | **For Sir:** "Did K.D. build the single-storey pavilion with the stone base at the golf course?" K.D.'s contract is the clubhouse, and the picture alone does not settle it. Until he answers, its alt text names no builder; on a yes, one line comes out of `NOT_KD_WORK` | Alt text pass, 2026-11-03 (OPEN-QUESTIONS.md #71) |
 
 ---
 
@@ -647,6 +648,15 @@ steps 1 to 8, and, read-only:
   listed on the test server's `/careers` on 2026-11-02. A posting with no
   LinkedIn link is allowed now and draws no button; report any that had only an
   Indeed link.
+
+### At the next deploy: the 2026-11-03 alt text
+
+OPEN-QUESTIONS.md #71. No schema change, no migration, no new dependency, no edit key:
+alt text has no edit slot, so no saved edit is involved and the 2026-11-02 key list
+stays at 41. The usual steps 1 to 8, and, read-only:
+
+- `/projects/kharghar-golf-course`: photographs 03, 04, 07, 12 and 13 read
+  `Kharghar Golf Course. <caption>`; the clubhouse photographs still credit K.D.
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
