@@ -4821,7 +4821,8 @@ pages), `projects.listing.medium.3.representative`,
 ## 69. Sir's question sheet of 2 Nov 2026
 
 2026-11-02. Sir's answers, applied in one pass; PRE-LAUNCH.md, "Sir's answers,
-2026-11-02", has the list. Placeholders 39 to 33.
+2026-11-02", has the list. Placeholders 39 to 33. The user's decisions later the
+same day are at the end of this entry; they change items 2, 4, 6 and 7.
 
 ### What changed
 
@@ -4831,7 +4832,8 @@ pages), `projects.listing.medium.3.representative`,
    confirm the client.** The brief for this pass took that tile for a
    placeholder, but it has read CIDCO since the Company Profile deck (slide 10,
    #28b; S7), and the paragraph and description say a CIDCO urban health centre.
-   None of that was touched, and the question stays open in S7.
+   None of that was touched. Later that day the user closed S7: the client stays
+   CIDCO.
 3. **Kharghar Football Stadium:** tile 4 reads Ongoing · Status. The scope stays
    a placeholder. The Centre of Excellence is not touched.
 4. **The two 650-tonne cranes are hired.** Every line saying or implying they
@@ -4843,7 +4845,8 @@ pages), `projects.listing.medium.3.representative`,
    made in this pass: the card keeps its other sentences, and the tile takes the
    approved copy's claim, **Minimal · Dependence on Rented Equipment**
    (`K.D.Website_Details.md`: "minimise dependence on rented equipment"). KD_INFO.md
-   had already marked "zero rental leakage" as superseded.
+   had already marked "zero rental leakage" as superseded. **Both came back later
+   that day, the user's decision (below).**
 5. **The 50+ is not changed.** Whether it counts these cranes is not on file (S24).
 6. **Vindhane's figures.** Hero tile 1 reads **Up to 120 MT · Structural steel
    fabricated every month**. The 11,600+ MT tile is retired: left in place, however
@@ -4854,13 +4857,15 @@ pages), `projects.listing.medium.3.representative`,
    rule draws the three tiles two over one. Launch mode off and on serve this page
    byte for byte the same. Left as they are, because they are true and were not
    asked about: "100 to 120 MT" twice on `/about`, and the erection band's ledger
-   on the plant's page, whose per-project tonnages add up to that total.
+   on the plant's page, whose per-project tonnages add up to that total. The
+   ledger's heading and the paragraph above it changed later that day (below).
 7. **Indeed.** The two sentences naming it, the "Apply on Indeed" button and the
-   editor's field are gone, and a new posting needs its LinkedIn link. The
+   editor's field are gone, and a new posting needed its LinkedIn link (optional
+   since `b5c23ec`, below). The
    column stays (`kd_app` cannot drop one, and rows are kept), unread. **The
    placeholder card stays for now:** row #3 on the test server is a saved edit on
    its badge, and the brief says a key with a saved edit is not changed. PRE-LAUNCH.md
-   row 6 has the one-step close.
+   row 6 has the one-step close. The user's word later that day: keep it for now.
 
 ### Verified
 
@@ -4876,7 +4881,61 @@ pages), `projects.listing.medium.3.representative`,
 
 ### Edit keys
 
-None moved. `docs/changed-defaults-2026-11-02.tsv` has all 43 (page, key) pairs:
+None moved. `docs/changed-defaults-2026-11-02.tsv` has all 41 (page, key) pairs
+(43 until the decisions below):
 changed, gone (a filled placeholder's `pending`, `title`, `body`; the retired tile)
 and new (its `value`, `label`). No saved edit is on any of them; row #3 is on a key
 this pass left alone.
+
+### Later on 2 Nov: the user's decisions
+
+Questions from this pass's report, answered the same day. Commits `51de71f`,
+`5ee251e`, `b5c23ec`. That session hit its usage limit before it updated these
+docs or wrote its report, so this was finished on 2026-11-03.
+
+1. **The Indeed card** stays as it is for now.
+2. **Ulwe Hospital's client** stays CIDCO. S7 is closed and off Sir's list.
+3. **"Zero rental leakage" and the Zero tile are back** (`51de71f`): both files
+   are as they were at 9b2df88, so `home.differentiators.cards.2.body` and
+   `about.story.stats.3.*` left the key list. Harbour Line's "all managed by K.D.
+   Constructions" stands.
+4. **Vindhane's ledger** (`5ee251e`). The rows stay. The heading,
+   `resources.plant.erection.ledgerHead`, reads "Steel delivered by K.D.
+   Constructions on these projects", and the paragraph above it,
+   `resources.plant.erection.body`, no longer says the girders and trusses were
+   fabricated at Vindhane. The brief also asked to stop showing the 11,664.88
+   total row and reserve its slot. No total row was ever drawn on this page (no
+   11,664 in the served HTML, launch mode off or on), so nothing was hidden and no
+   slot reserved. Neither key had a saved edit, locally or on the test server.
+5. **A job posting saves with no link** (`b5c23ec`). The field is optional. A link
+   that is given must still be on LinkedIn. A card with no link draws no button
+   and no empty list.
+
+**What changed in `scripts/check-db-flows.mjs`, and why.** `25850d7` removed one
+line, `indeed: ""`, from the job-post test's request, in the commit that took the
+Indeed field away. It did not make the check pass: the script with that line and
+without it passes against both the code that required a link and the code that
+does not. So it stays removed. The script still posts with a link, so it does not
+prove the no-link case. That was proved on a scratch schema, through the API
+(field absent, field blank) and through the real editor form in Chrome.
+
+### Verified at `b5c23ec`
+
+- Builds off and on: no warning or error lines. Against 9b2df88 with built-in
+  text, 33 of 39 paths are byte for byte the same; the 6 changed are `/careers`,
+  `/resources/vindhane-plant`, `/projects/harbour-line-fobs-and-trespass-control`,
+  `/projects/ulwe-hospital`, `/projects/ulwe-cidco-school` and
+  `/projects/kharghar-football-stadium`. `/` and `/about` are among the 33.
+- CLS: 72 runs, 8 routes at 360, 390 and 1280 on three network profiles, all
+  exactly 0. A block pushed in after load read 0.22 at 360 and 0.16 at 1280, so
+  the probe does see a shift.
+- Layout, run 2026-11-03: the same 8 routes and widths against 9b2df88, on the
+  local database and on a scratch schema with the test server's 28 saved edits.
+  `/`, `/about` and `/careers` are unchanged. The other five moved only with
+  their changed text, and Vindhane's hero draws its three tiles two over one. No
+  sideways overflow, no text spilling out of a tile.
+- The key list, 43 to 41: `resources.plant.erection.ledgerHead` added;
+  `home.differentiators.cards.2.body`, `about.story.stats.3.label` and `.value`
+  out; `resources.plant.erection.body` has new text. Checked against the test
+  server on 2026-11-03: no saved edit on any of the 41.
+- Em dashes 0 in the built-in text, placeholders 33 and PRE-LAUNCH.md agrees.
