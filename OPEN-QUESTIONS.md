@@ -4939,3 +4939,52 @@ prove the no-link case. That was proved on a scratch schema, through the API
   out; `resources.plant.erection.body` has new text. Checked against the test
   server on 2026-11-03: no saved edit on any of the 41.
 - Em dashes 0 in the built-in text, placeholders 33 and PRE-LAUNCH.md agrees.
+
+## 70. Sir's question sheet read line by line, 3 Nov 2026
+
+2026-11-03. The user sent a fuller reading of the three photographs of Sir's sheet
+(#69). **Nothing on the site changed and no key moved.** What the sheet states was
+already in the code from #69, and the rest states no value. PRE-LAUNCH.md, "The
+same sheet, line by line", has every line and where it went. Placeholders 33 to 33.
+
+### Recorded
+
+- **Representative images.** Solapur and Lower Parel keep their current images, so
+  S21 is closed for both, and their "Representative image" captions stay. These two
+  are K.D.'s own photographs of other works, which the 2026-10-13 rule does not
+  allow without Sir's yes; this is his yes. Harbour Line Station Redevelopment has
+  no tick, so S21 stays open for it.
+- **New questions for Sir:** S25, the 11.2% (its label says the Indian construction
+  market, his answer says the balance sheet); S26, Ulwe Hospital's name; S27, which
+  LinkedIn page for Lower Parel; S28, the Kharghar academy's name; S29, how the
+  note on the 11,600+ MT ends.
+- **Not applied, on purpose.** "Blood Transmission Academy" is not added: the name
+  is in doubt. Lower Parel's scope is not looked up: the sheet gives no value and no
+  link. Ulwe Hospital is not renamed: the note may only describe the building.
+- **Saved edits, left as they are.** Three rows on `/` on the test server hold an
+  em dash (`home.hero.sub`, `home.capabilities.cards.0.body`,
+  `home.capabilities.cards.3.body`). The last also says "fabricated at our own plant
+  in Vindhane". No answer hits a key with a saved edit in a way that changes text.
+
+### Verified at d99a443
+
+The commit recording this entry changes docs only; its build was compared with
+d99a443 byte for byte.
+
+- Builds off and on: no warning or error lines.
+- Em dashes in the served HTML, built-in text: 0 on 39 paths off, 0 on 38 paths on
+  (launch mode takes one project page out). With the test server's 28 saved edits:
+  the three rows above, on `/`, and no others.
+- CLS on a scratch schema holding the test server's 28 saved edits: 72 runs, 8 routes
+  at 360, 390 and 1280 on three network profiles, all exactly 0. A block pushed in
+  after load read 0.22 at 360 and 0.16 at 1280.
+- Edit mode, in Chrome, signed in, on the same 8 routes: the bar loads, the mode turns
+  on, a named slot opens and Escape closes it, no page error and no write request.
+  Signed out: no editor on any of them.
+- `check-edit-keys` passes on `/`, `/careers` and `/resources/vindhane-plant`. On
+  `/about` it reports two slots whose text differs from the copy, the local database's
+  test rows #14 and #24, which the test server does not have; on the scratch schema
+  it reports only Sir's two saved role edits there. The check reads the page as an
+  editor gets it, so a saved edit counts as a difference.
+- Placeholders 33, and PRE-LAUNCH.md agrees. Launch mode with the test server's rows
+  leaves 32 off the site and keeps 1 for a saved edit, the Indeed card.
