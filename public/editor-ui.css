@@ -508,11 +508,23 @@ kd-open {
    rounded. The yellow is not a site colour on purpose, so it can never be
    mistaken for part of the page, and it lives only here.
    ============================================================ */
+/* Out of the bar's flow, beside it: the bar is often on screen before this
+   arrives, and growing it would count as a layout shift. No transform here, or
+   the phone panel's position: fixed would be measured from this box. */
 .nt-lv {
   --nt-yellow: #ffd60a;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(100% + 8px);
+  width: max-content;
   display: flex;
   align-items: center;
   font-family: var(--font-sans, system-ui, sans-serif);
+}
+/* The bar of its own the buttons use until the editor's arrives. */
+.nt-lv-own {
+  min-height: 32px;
 }
 .nt-lv-panel {
   display: flex;
@@ -589,17 +601,18 @@ kd-open {
   display: none !important;
 }
 
-/* Too narrow for a row beside "Edit text": one button, which opens the rest
-   above the bar. In edit mode "Undo" and "Done editing" need that room. */
-@media (max-width: 1023px) {
+/* Too narrow for a row beside "Edit text" (the nav folds at the same width):
+   one button, which opens the rest above the bar. In edit mode "Undo" and
+   "Done editing" need that room. */
+@media (max-width: 1079px) {
   .nt-lv-fold {
     display: block;
   }
   .nt-lv-panel {
     display: none;
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 8px);
+    position: fixed;
+    right: 16px;
+    bottom: 56px;
     flex-direction: column;
     align-items: stretch;
     width: min(18rem, calc(100vw - 32px));

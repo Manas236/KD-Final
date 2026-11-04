@@ -5212,8 +5212,8 @@ editor only. They exclude each other and change one browser's view, nothing else
   normal", so one bar does it on every page, the 404 included.
 - A signed-in 404 in the ordinary view gains the script's tag, one difference from main's bytes, so
   the buttons are on the 404 too. Every other signed-in page in the ordinary view is unchanged.
-- Under 1024px wide the buttons fold into one button that opens above the bar, and it names the view
-  that is on. In edit mode on such a screen it hides, as "Undo" and "Done editing" need that room.
+- Under 1080px wide, where the nav folds too, the buttons fold into one button that opens above the bar,
+  and it names the view that is on. In edit mode on such a screen it hides, as "Undo" and "Done editing" need that room.
 - Inside a marked item fog text turns mist, because the yellow would dull it on a dark band. It is
   colour only, so nothing moves.
 - A placeholder a saved edit keeps stays dashed in Launch preview, because the public gets it dashed.

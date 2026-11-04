@@ -158,7 +158,7 @@
      until then, and for a browser without the kd_edit_ui hint, they sit in a
      bar of their own. */
   var LABEL = {
-    preview: "Launch preview: the public's view with launch mode ON. Only you see this.",
+    preview: "Launch preview is on. Only you see this.",
     removed: "Removed at launch: " + (TOTALS || "see /studio/launch") + ". Only you see this.",
   };
   var FOLDED = { all: "Launch views", preview: "Launch preview on", removed: "Removed view on" };
@@ -276,7 +276,7 @@
     editors.appendChild(views);
   } else {
     own = document.createElement("div");
-    own.className = "nt-bar";
+    own.className = "nt-bar nt-lv-own";
     own.setAttribute("data-nt-ui", "");
     own.appendChild(views);
     document.body.appendChild(own);
