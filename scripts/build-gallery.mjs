@@ -30,6 +30,9 @@
      crop         [left, top, right, bottom] as fractions — one panel of
                   a WhatsApp collage, or a GPS-camera overlay cut away.
 
+   These files come out with no metadata: run `npm run photos:credit`
+   afterwards, or `npm run check:photo-credit` fails (CLAUDE.md).
+
    Usage:  node scripts/build-gallery.mjs [prefix]
    Needs ffmpeg on PATH for the video frames. With a prefix, only the
    outputs whose name starts with it are written — so a new group can

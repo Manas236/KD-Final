@@ -96,6 +96,17 @@ The launch rule (PRE-LAUNCH.md): anything Sir has not answered by launch is remo
 - **A new renderer of a `pending` item** asks `launchFor()` and gets a line in `launchKind()` (scripts/placeholder-modules.mjs), or `check:placeholders` (launch mode) and `report:pending` fail on it.
 - **Checks:** `npm run report:pending` (what goes, page by page, against PRE-LAUNCH.md's count); after a launch build, `node scripts/pending-report.mjs <origin> --served` must PASS.
 
+## Photo credit in the files (4 Nov 2026)
+
+K.D.'s own photographs carry "K.D. Constructions" inside the file, and keep it when served: EXIF Artist and Copyright, IPTC By-line, Credit and Copyright Notice, XMP creator, credit and rights (copyright lines read "© K.D. Constructions"). OPEN-QUESTIONS.md #72.
+
+- **Which files:** `scripts/photo-classes.mjs` sorts every image under src/assets and public into REAL, AI, GRAPHIC or UNSURE, and only REAL is credited. A new file in a photograph folder counts as REAL; a work that is not plainly K.D.'s gets a line there with its reason.
+- **One writer:** `src/lib/photo-credit.ts` splices the credit into a JPEG's or WebP's container, after encoding, and writes nothing read from a file. No picture data is touched, so it can never be a re-encode. Do not use sharp's `keepMetadata()` anywhere: it would bring back a phone's GPS.
+- **After `build-gallery`, `build-share-images` or `build-hero-video --poster`** run `npm run photos:credit`: they write fresh files with no metadata. `npm run check:photo-credit` fails until then.
+- **Served files:** `/_image` runs Astro's sharp service, then `src/lib/image-service.ts` hands the source's credit on to the rendition, the same compressed bytes plus the credit. A source without it comes out as before. Files under public/ and /_astro are served as they are.
+- **URLs did not move:** `scripts/keep-photo-urls.mjs` keeps each credited photograph's old hash in its file name (`scripts/photo-asset-names.json`), so the credit did not change a byte of any page. A later change to a photograph stops matching and gets a new name by itself.
+- **Studio uploads:** `store()` in src/lib/gallery-media.ts credits all three renditions as it writes them, and cannot tell K.D.'s photograph from anyone else's. Uploads made before this date have no credit and are not rewritten by a deploy.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

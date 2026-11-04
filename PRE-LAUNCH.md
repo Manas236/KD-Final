@@ -658,6 +658,28 @@ stays at 41. The usual steps 1 to 8, and, read-only:
 - `/projects/kharghar-golf-course`: photographs 03, 04, 07, 12 and 13 read
   `Kharghar Golf Course. <caption>`; the clubhouse photographs still credit K.D.
 
+### At the next deploy: the 2026-11-04 photo credit
+
+OPEN-QUESTIONS.md #72. No schema change, no migration, no new dependency,
+`package-lock.json` unchanged, no edit key and no built-in text changed, so no
+saved edit is involved. 365 photographs in the repo gain the credit; every page's
+HTML is byte for byte what it was. The usual steps 1 to 8, and, read-only:
+
+- `npm run check:photo-credit` prints PASS.
+- Fetch one rendition from a page, for instance the first `/_image` URL on
+  `/projects/bonkode-fob`: the file holds the text `K.D. Constructions`
+  (`curl -s <url> | grep -ac "K.D. Constructions"` is not 0). A client logo's
+  rendition on `/about` does not.
+
+**Follow-ups, nothing done on the server.** (1) Uploads made in `/studio/gallery`
+before this deploy keep no credit: on 2026-11-04 the test server's public `/gallery`
+shows no `up-` file at all, but list `SELECT file, created_at FROM gallery_uploads`
+in the report; whether to credit any of them is a decision for after that list.
+New uploads are credited as they are stored, whoever's photograph they are. (2)
+The URLs did not change, so a browser that already holds a rendition keeps its
+copy without the credit until `/_image`'s one-year cache runs out. The picture is
+the same; nothing needs doing.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by

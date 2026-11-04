@@ -5042,3 +5042,74 @@ usage limit with the work uncommitted, and it was parked on
 - Test server, read-only: 28 saved edits on 37 pages, none on an alt key (alt text has
   no edit slot, #62). `check-changed-defaults`: 41 pairs, 0 hits. Its golf page shows
   the built-in captions on these five.
+
+
+## 72. The K.D. Constructions credit, inside the photo files, 4 Nov 2026
+
+Manas's brief of 4 Nov: embed the credit in K.D.'s real photographs, lossless, and keep
+it on what the site serves. This replaces "no credit is embedded in the file" in #66 and
+"the metadata credit" left out in #71; it adds to the alt text rule, which stands. Rules for later work: CLAUDE.md, "Photo
+credit in the files".
+
+**What is in a credited file.** EXIF Artist `K.D. Constructions`, EXIF Copyright
+`© K.D. Constructions`; IPTC By-line and Credit `K.D. Constructions`, Copyright Notice
+`© K.D. Constructions`, coded UTF-8; XMP dc:creator, photoshop:Credit and dc:rights the
+same. A WebP has no IPTC, so it carries the EXIF and the XMP. Read back with ExifTool, no
+warning.
+
+**The 421 images under src/assets and public, by class** (`scripts/photo-classes.mjs`):
+
+| Class | Count | What |
+| --- | --- | --- |
+| REAL | 365 | Credited. K.D.'s photographs of its works, plants and sites, HSE included, with the stand-ins on Lower Parel, Solapur and Harbour Line Station (K.D.'s own photographs of other works, as #71 says), the video posters in `public/video/`, and the enlarged share copies |
+| AI | 8 | `representative-*` |
+| GRAPHIC | 27 | 12 client logos, 4 certificates, K.D.'s logos and icons, and 3 renderings: the Matunga Workshop building, `bonkode-fob-05`, `lush-meadows-03` (a property portal's elevation) |
+| UNSURE | 21 | Nothing written. Listed below |
+
+The raw client folders at the project root are not served and were not touched: they are
+only ever read (PHOTOS.md).
+
+**UNSURE, for Manas or Sir.** A yes moves a file to REAL: delete its line, run
+`npm run photos:credit`.
+
+- All 13 Kharghar Golf Course photographs, 02 to 13 and `social-kharghar-golf-course`:
+  K.D. built the clubhouse, not the course. By the alt text rule (#71) eight of them are
+  the clubhouse; the brief asked for all of them to wait.
+- The four directors' portraits: not works, and who took them is not on record.
+- `bonkode-fob-06`: a board, the design rendering above a photograph.
+- `lush-meadows-02`: a Canva board with the portal's rendering in it, signed Kailash
+  Developers.
+- `rmc-plant-10`: the tipper dealer's handover picture, under its "Proud owner" banner.
+- `vindhane-plant-02`: a posed portrait off the annual deck's slide; nothing says who made
+  it.
+
+**The proof.** `reports/2026-11-04-photo-credit-proof.tsv`, one line per file: the decoded
+pixels hash the same before and after on all 365, and taking the inserted segments out gives
+back the old file byte for byte. The script stops on the first file where either fails.
+
+**Served files.** Astro's sharp service re-encodes every rendition and strips all metadata,
+so the credit would have stopped at `/_image`. `src/lib/image-service.ts` now splices it into
+the finished rendition when the source has it. Checked on all 600 distinct `/_image` URLs in
+the sitemap pages and the 404: 525 carry the credit, 75 do not (their sources are logos,
+renderings, representative images and UNSURE files), and on all 600 the response with the
+credit taken out is byte for byte the one from before, pixels included. Three outputs are not
+written by that service and carry the credit as files: `/_astro/*.jpg`, `public/video/*.jpg`,
+and studio uploads.
+
+**Why the HTML did not change.** Astro puts a hash of each file's bytes in its URL, and the
+credit changes the bytes, so every `<img>` on the site would have changed. Each credited
+photograph keeps its old hash (`scripts/keep-photo-urls.mjs`). Keeping the whole old file name
+instead made builds flaky: byte-identical photographs raced for one name and one came out as
+`hse-422.…`. Keeping only the hash leaves Astro's own pattern, and 8 builds in a row gave the
+same 388 names as the build before.
+
+**Studio uploads.** The route already re-encodes, so `store()` credits all three renditions.
+Tested with a photo carrying phone EXIF: credit in all three, the phone's data in none. The
+route cannot judge a photograph, so anything uploaded is credited. Uploads already on the
+server have none: PRE-LAUNCH.md, the 2026-11-04 deploy note.
+
+**Checked.** All 37 sitemap pages, the 404, a made-up path, `sitemap.xml` and `robots.txt`,
+byte for byte against the build before: identical. CSS and script file names identical.
+`check-served-html` passes. Every image with a source decodes in Chrome on `/`, `/gallery`,
+`/projects`, `/hse` and two project and plant pages. No edit key, built-in text or dependency
+changed.
