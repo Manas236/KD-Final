@@ -75,7 +75,7 @@ export const HIDE_PENDING: boolean = typeof __KD_HIDE_PENDING__ === "boolean" &&
 
 /** Does this request get the page with launch mode's cuts? */
 async function hiding(locals: App.Locals): Promise<boolean> {
-  if (locals.kdLaunchView === "all") return false;
+  if (locals.kdLaunchView === "all" || locals.kdLaunchView === "removed") return false;
   if (locals.kdLaunchView) return true; // an editor previewing the public's view
   return HIDE_PENDING || launchSwitchOn();
 }

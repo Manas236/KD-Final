@@ -18,7 +18,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthed, readCookie } from "../../lib/edit-auth";
 import { HIDE_PENDING } from "../../lib/launch";
-import { PREVIEW_COOKIE } from "../../lib/launch-editor";
+import { VIEW_COOKIE } from "../../lib/launch-editor";
 import { launchSummary } from "../../lib/launch-summary";
 import { launchSwitchOn, switchEvents } from "../../lib/launch-switch";
 
@@ -35,7 +35,7 @@ const switchOn = await launchSwitchOn();
 const on = HIDE_PENDING || switchOn;
 const events = await switchEvents();
 const summary = await launchSummary();
-const previewing = readCookie(Astro.request, PREVIEW_COOKIE) === "1";
+const previewing = readCookie(Astro.request, VIEW_COOKIE) === "preview";
 
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 const counted = [

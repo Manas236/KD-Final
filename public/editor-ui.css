@@ -500,3 +500,152 @@ kd-open {
   text-align: center;
   pointer-events: none;
 }
+
+/* ============================================================
+   Launch views (4 Nov 2026): the two buttons in the floating bar, and the
+   yellow marking of "This is what was removed". public/launch-badges.js,
+   signed-in editors only. Square, not pills: only the frozen port above is
+   rounded. The yellow is not a site colour on purpose, so it can never be
+   mistaken for part of the page, and it lives only here.
+   ============================================================ */
+.nt-lv {
+  --nt-yellow: #ffd60a;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+.nt-lv-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nt-lv-say {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--kd-mint, #d7f8dd);
+  background-color: var(--kd-ink-deep, #1e2b30);
+  color: var(--kd-mist, #dbe5e7);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.nt-lv-btn,
+.nt-lv-fold {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 0.6rem 0.95rem;
+  border: 1px solid var(--kd-mint, #d7f8dd);
+  border-radius: 0;
+  background-color: var(--kd-ink-deep, #1e2b30);
+  color: var(--kd-mint, #d7f8dd);
+  cursor: pointer;
+}
+.nt-lv-btn:hover,
+.nt-lv-fold:hover {
+  background-color: var(--kd-ink, #2c3a40);
+}
+.nt-lv-btn[aria-pressed="true"] {
+  background-color: var(--kd-mint, #d7f8dd);
+  color: var(--kd-ink-deep, #1e2b30);
+}
+.nt-lv-btn[data-view="removed"][aria-pressed="true"] {
+  border-color: var(--nt-yellow);
+  background-color: var(--nt-yellow);
+}
+/* Two rings, so the focus shows on a dark band and a light one alike. */
+.nt-lv-btn:focus-visible,
+.nt-lv-fold:focus-visible {
+  outline: 2px solid var(--kd-ink-deep, #1e2b30);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--kd-mint, #d7f8dd);
+}
+.nt-lv-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.nt-lv-fold {
+  display: none;
+}
+:root[data-nt-launch-view="removed"] .nt-lv-fold {
+  border-color: var(--nt-yellow);
+  color: var(--nt-yellow);
+}
+
+/* In either view "Edit text" stays in the bar, switched off. */
+:root[data-nt-launch-view] .nt-pill-mode {
+  opacity: 0.45;
+  background-color: rgba(30, 43, 48, 0.82);
+  cursor: not-allowed;
+}
+
+/* Launch preview is what a visitor gets: none of the editor's furniture but
+   the bar itself. */
+:root[data-nt-launch-view="preview"] [data-nt-ui]:not(.nt-bar) {
+  display: none !important;
+}
+
+/* Too narrow for a row beside "Edit text": one button, which opens the rest
+   above the bar. In edit mode "Undo" and "Done editing" need that room. */
+@media (max-width: 1023px) {
+  .nt-lv-fold {
+    display: block;
+  }
+  .nt-lv-panel {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    flex-direction: column;
+    align-items: stretch;
+    width: min(18rem, calc(100vw - 32px));
+  }
+  .nt-lv.is-open .nt-lv-panel {
+    display: flex;
+  }
+  .nt-lv-btn {
+    white-space: normal;
+    text-align: left;
+  }
+  :root[data-nt-mode] .nt-lv {
+    display: none;
+  }
+}
+
+/* Outline and box-shadow only: nothing on the page moves. An inset shadow
+   paints over the item's own background and under its text, so the text keeps
+   its colour; one layer only, where a card sits inside a section that goes. */
+@media screen {
+  .nt-launch-gone {
+    outline: 3px solid #ffd60a !important;
+    outline-offset: 0 !important;
+    box-shadow: inset 0 0 0 100vmax rgba(255, 214, 10, 0.2) !important;
+  }
+  .nt-launch-gone .nt-launch-gone {
+    box-shadow: none !important;
+  }
+  /* The one text colour the yellow would dull: fog on a dark band. */
+  .nt-launch-gone .text-kd-fog {
+    color: var(--kd-mist, #dbe5e7) !important;
+  }
+}
+.nt-launch-strip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 88px;
+  z-index: 40;
+  padding: 8px 16px;
+  background-color: #ffd60a;
+  color: var(--kd-ink-deep, #1e2b30);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  pointer-events: none;
+}

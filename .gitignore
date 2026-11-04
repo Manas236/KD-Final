@@ -81,6 +81,9 @@ kd-schema-*.sql
 # local database dumps taken on the development PC before a pass
 /backups/
 
+# local review screenshots of the launch views; never committed
+/launch-review/
+
 # certificate scans as received (scripts/build-certificates.mjs reads them
 # and writes only watermarked copies into src/assets/certificates/); the
 # originals are never committed and never served

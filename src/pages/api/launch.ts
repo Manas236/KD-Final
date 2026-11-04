@@ -5,6 +5,9 @@
    POST  { action: "set", on }       flip the switch; logged
          { action: "preview", on }   this browser previews launch mode,
                                      or stops; nothing public changes
+         { action: "view", view }    this browser's view, off, preview or
+                                     removed (the floating bar's buttons);
+                                     nothing public changes, nothing logged
 
    Every answer to anyone without a valid session is the same 401, with
    nothing written. The switch itself: src/lib/launch-switch.ts.
@@ -13,7 +16,7 @@ import type { APIRoute } from "astro";
 import { isAuthed } from "../../lib/edit-auth";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
 import { HIDE_PENDING } from "../../lib/launch";
-import { PREVIEW_COOKIE } from "../../lib/launch-editor";
+import { isViewFlag, viewCookieLine } from "../../lib/launch-editor";
 import { launchSwitchOn, setLaunchSwitch, switchEvents } from "../../lib/launch-switch";
 
 export const prerender = false;
@@ -39,22 +42,23 @@ export const POST: APIRoute = async (context) => {
   const { request } = context;
   if (!isAuthed(request)) return json(SIGNED_OUT, 401);
 
-  let body: { action?: unknown; on?: unknown } | null = null;
+  let body: { action?: unknown; on?: unknown; view?: unknown } | null = null;
   try {
     body = await request.json();
   } catch {
     body = null;
   }
+
+  /* The cookie means nothing without a session (src/lib/launch-editor.ts). */
+  if (body?.action === "view") {
+    if (!isViewFlag(body.view)) return json({ error: "Say off, preview or removed." }, 400);
+    return json({ ok: true, view: body.view }, 200, viewCookieLine(body.view, request));
+  }
+
   if (typeof body?.on !== "boolean") return json({ error: "Say on or off." }, 400);
 
   if (body.action === "preview") {
-    const secure = request.headers.get("x-forwarded-proto") === "https" ? "; Secure" : "";
-    /* HttpOnly, and with no Max-Age it ends with the browser. It means
-       nothing without a session (src/lib/launch-editor.ts). */
-    const line = body.on
-      ? `${PREVIEW_COOKIE}=1; Path=/; SameSite=Lax; HttpOnly${secure}`
-      : `${PREVIEW_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax; HttpOnly${secure}`;
-    return json({ ok: true, preview: body.on }, 200, line);
+    return json({ ok: true, preview: body.on }, 200, viewCookieLine(body.on ? "preview" : "off", request));
   }
 
   if (body.action !== "set") return json({ error: "Unknown action." }, 400);
