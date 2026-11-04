@@ -17,8 +17,11 @@ on the site and fails while one exists. `npm run build:release` runs it first
 and refuses to build a launch bundle with any remaining. Run it before every
 client review too — it is the fastest way to say what is still owed.
 
-**Launch mode, `HIDE_PENDING=1` (2026-10-31): the launch rule as a build
-switch.** Built with `HIDE_PENDING=1`, the site leaves every open placeholder
+**Launch mode (2026-10-31; a live switch since 2026-11-04): the launch rule as a
+switch.** An editor turns it on or off at `/studio/launch`, with no rebuild,
+restart or deploy, and each flip is logged there; `HIDE_PENDING=1` at build time
+still works, and forces it on (OPEN-QUESTIONS.md #73). With launch mode on, the
+site leaves every open placeholder
 row below off the public site without deleting a line of data
 (`src/lib/launch.ts`): the placeholder card, tile or row goes with its label
 and title (no empty "Year completed" tile), a section of nothing but
@@ -28,9 +31,9 @@ loses its tile, its page (its address answers the ordinary 404) and its
 sitemap entry. Every other item keeps its edit key. **A placeholder Sir has
 typed into counts as answered**: it stays, drawn exactly as in review with his
 text in it, so no saved edit loses its slot; its text then belongs in the copy
-module, the "How to close a row" below. The switch is read when the site is
-built, so it takes a rebuild to turn on or off; unset (the default) the site is
-byte for byte as before. What it does **not** do: it touches only
+module, the "How to close a row" below. Off (the default) the site is byte for
+byte as before; so it is with the tables missing, the grants missing or the
+database down. What it does **not** do: it touches only
 placeholders. Sign-offs (S rows) are not marked in the data, so their content
 still shows and each needs its own decision; and where a row's "If it does not
 exist" action is more than deleting the item, it does only the deleting: 5f
@@ -139,6 +142,7 @@ document says the content is unverified, so they need a yes before launch.
 | S28 | `/projects` · Beyond the railway · a work not on the site | **For Sir:** "A note at the foot of the sheet reads Kharghar, 'Blood Transmission Academy', 2018. What is the project's exact name, and who was the client?" Not added: the handwriting is in doubt, and it may mean a blood transfusion facility. With a name, it is a tile, a page and a link on the client's card | Sir's sheet, read 2026-11-03 (OPEN-QUESTIONS.md #70) |
 | S29 | `/resources/vindhane-plant`, `/projects` · the steel ledgers | **For Sir:** "Your note on the 11,600+ MT reads 'The rest of it was outsourced, but when showing ...' and the rest can't be read. How does it end?" No further change until he says: the figure is already off the plant's hero and reads as steel delivered (OPEN-QUESTIONS.md #69). A saved edit on the test server, `home.capabilities.cards.3.body`, says "fabricated at our own plant in Vindhane"; it is left as it is | Sir's sheet, read 2026-11-03 (OPEN-QUESTIONS.md #70) |
 | S30 | `/projects/kharghar-golf-course` · gallery photograph 04 | **For Sir:** "Did K.D. build the single-storey pavilion with the stone base at the golf course?" K.D.'s contract is the clubhouse, and the picture alone does not settle it. Until he answers, its alt text names no builder; on a yes, one line comes out of `NOT_KD_WORK` | Alt text pass, 2026-11-03 (OPEN-QUESTIONS.md #71) |
+| S31 | 21 photographs left without the K.D. Constructions credit in the file | **For Manas or Sir:** say which of these are K.D.'s own work; each yes gets the credit (delete its line in `scripts/photo-classes.mjs`, run `npm run photos:credit`). The 13 Kharghar Golf Course photographs (K.D. built the clubhouse, not the course); the 4 directors' portraits (who took them?); `bonkode-fob-06` (a board, a rendering above a photograph); `lush-meadows-02` (a board with a portal's rendering, signed Kailash Developers); `rmc-plant-10` (the tipper dealer's handover picture); `vindhane-plant-02` (a posed portrait off the annual deck). Nothing is visible on the site either way | The photo credit, 2026-11-04 (OPEN-QUESTIONS.md #72) |
 
 ---
 
@@ -403,12 +407,17 @@ safety net, not leave to keep them there.
    step 1's backup back from `/srv/kd-backups/` as described there and
    stop: the old process is still running from it.
 
-   **At launch, in launch mode** (the launch rule, above): copy `.env` to
-   `/srv/kd-backups/.env.bak-<date-time>`, add the line `HIDE_PENDING=1` to
-   `.env` (or set it in the build's environment), and build with
-   `npm run build:release`. Its placeholder gate then passes as long as
-   every placeholder is one launch mode leaves out, and lists them. After
-   the restart (step 5), read-only:
+   **At launch, in launch mode** (the launch rule, above), one of two ways.
+   *The switch, which can be undone in seconds:* `npm run check:site-url`
+   and `npm run build`, then, once the site is up, turn it on at
+   `/studio/launch`. `build:release` is not used here, because its placeholder
+   gate fails while one is left: the switch is what hides them, and the check
+   below is what proves it. *Forced in the build, which only a rebuild undoes:*
+   copy `.env` to `/srv/kd-backups/.env.bak-<date-time>`, add the line
+   `HIDE_PENDING=1` to `.env` (or set it in the build's environment), and
+   build with `npm run build:release`. Its placeholder gate then passes as
+   long as every placeholder is one launch mode leaves out, and lists them.
+   Either way, once it is on, read-only:
    `node scripts/pending-report.mjs http://127.0.0.1:<port> --served` must
    PASS. It lists what was left out and anything kept because Sir typed into
    it (each kept one is a "How to close a row" job before the public is
@@ -416,15 +425,17 @@ safety net, not leave to keep them there.
    is left but the kept ones, `/projects/kharghar-centre-of-excellence`
    answers 404 and is not in `/sitemap.xml`, and every sitemap page answers
    200. `node scripts/check-served-edits.mjs` must give the same anchoring
-   count as before the switch. To go back to review, remove the line and
-   rebuild. The test server stays in review (no `HIDE_PENDING`) until then.
+   count as before the switch. The test server stays in review until then,
+   with the switch off.
 5. **Restart** the service (`kd-site` on the test server).
-6. **Check the five database flows.** `npm run check:db-flows`, run as the
+6. **Check the six database flows.** `npm run check:db-flows`, run as the
    user that can read `.env`, against the running site. It sends a test
    application, finds and deletes it, adds and removes a paragraph on a
-   project page, and adds and removes a job posting — all five must PASS,
-   and it cleans up after itself. While it runs, a few seconds, the test
-   posting shows on `/careers` and the test paragraph on one project page.
+   project page, adds and removes a job posting, and saves the launch mode
+   switch at the value it already has — all six must PASS, and it cleans up
+   after itself. While it runs, a few seconds, the test posting shows on
+   `/careers` and the test paragraph on one project page; the public site
+   never changes for the switch, and `/studio/launch`'s log gains one row.
    Where email is set up (G7) it skips the application steps unless given
    `--allow-email`, because the test application would then be emailed to
    HR; on production, tell HR before using it.
@@ -680,6 +691,33 @@ The URLs did not change, so a browser that already holds a rendition keeps its
 copy without the credit until `/_image`'s one-year cache runs out. The picture is
 the same; nothing needs doing.
 
+### At the next deploy: the 2026-11-04 launch switch
+
+OPEN-QUESTIONS.md #73. **A schema change: two new tables.** No migration of saved
+edits, no edit key added, moved or gone, no built-in text changed, no new dependency,
+`package-lock.json` unchanged (no `npm ci`). With the switch off the public's pages are
+byte for byte what they were, so nothing a visitor sees changes in this deploy. In this
+order:
+
+1. **Step 3 runs `db/migrate.sql` as the database administrator**, as ever, before the
+   build. Its table lists `site_settings` and `site_settings_events` as created, the
+   other six as already there.
+2. **Then the new grants, as the administrator, once:**
+   `GRANT SELECT, INSERT ON kd_construction.site_settings TO 'kd_app'@'localhost';`
+   `GRANT SELECT, INSERT ON kd_construction.site_settings_events TO 'kd_app'@'localhost';`
+   (also at the foot of `db/migrate.sql`). No UPDATE: both tables are append-only.
+   If either step is skipped the site still runs, with launch mode off and
+   `/studio/launch` saying why, and step 6's flow 6 fails.
+3. **The usual steps 4 to 8.** `check:db-flows` must PASS all six. Editors hard-refresh
+   once for `/editor-ui.css`.
+4. **Read-only, after:** signed in, `/studio/launch` shows OFF, "32 placeholders on 17
+   pages, including 1 whole section and 1 whole page" (32, not 33, while saved row #3 is
+   on the Indeed card), and one log row from the flows check. Signed out, it is a 404.
+   `node scripts/pending-report.mjs http://127.0.0.1:<port>` agrees.
+5. **Do not turn it on** as part of the deploy. That is Manas's or Sir's call, from the
+   page. `/sitemap.xml` is sent with a one-hour cache, so a crawler can see the old list
+   for up to an hour after a flip; pages follow at once.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by
@@ -723,15 +761,15 @@ previews may not draw.
   and its white lists) and `src/components/projects/SocialProjectPage.astro`
   (the same two, on its hero tiles and its white overview and gallery). All carry `data-pending` for the scanner.
 - `scripts/check-placeholders.mjs` walks every copy export in the `MODULES`
-  list of `scripts/placeholder-modules.mjs` (shared with
-  `scripts/pending-report.mjs` since 2026-10-31), one row per export with the
+  list of `src/lib/launch-report.ts` (shared with
+  `scripts/pending-report.mjs` and `/studio/launch`), one row per export with the
   route it renders on. **Add a row there when you add a page**, or its
   placeholders are invisible to the gate.
-- **Launch mode** (`HIDE_PENDING=1`, `src/lib/launch.ts`): each renderer above
+- **Launch mode** (`src/lib/launch.ts`): each renderer above
   asks `launchFor()` whether to leave a pending item out, and the /projects
   tile, `/projects/[slug]` and the sitemap ask `projectHidden()`. A new
   renderer of a `pending` item does the same, and gets a line in
-  `launchKind()` in `scripts/placeholder-modules.mjs`; until it has one,
+  `launchKind()` in `src/lib/launch-report.ts`; until it has one,
   `check:placeholders` in launch mode and `report:pending` fail on its
   placeholders, because launch mode would still show them.
 - The pattern is described in DESIGN-SYSTEM.md §9 (review-only, never a design

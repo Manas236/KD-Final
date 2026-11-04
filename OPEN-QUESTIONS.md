@@ -5113,3 +5113,73 @@ byte for byte against the build before: identical. CSS and script file names ide
 `check-served-html` passes. Every image with a source decodes in Chrome on `/`, `/gallery`,
 `/projects`, `/hse` and two project and plant pages. No edit key, built-in text or dependency
 changed.
+
+## 73. Launch mode is a live switch in /studio, 4 Nov 2026
+
+Manas's brief of 4 Nov: launch mode flips from the studio, with no rebuild, restart or
+deploy. Rules for later work: CLAUDE.md, "Launch mode". The deploy's steps: PRE-LAUNCH.md,
+"At the next deploy: the 2026-11-04 launch switch". On the branch `feature/launch-toggle`
+until its gates passed.
+
+**The mechanism.** The brief asked which was used. Both pieces are the existing ones.
+
+- *The same hide rules:* `launchFor()` and `projectHidden()` in `src/lib/launch.ts`, with no
+  new rule and no renderer changed. Only where they get the yes or no moved, from a build
+  flag to a per-request question. The proof: with the switch on, this branch serves every
+  page, the sitemap and robots.txt byte for byte as `main` built with `HIDE_PENDING=1`.
+- *The same server-side path as saved edits:* every page already renders on request and
+  passes through `src/middleware.ts`, with the rows it was rendered against on
+  `Astro.locals`. The public's page is never post-processed for this; it is simply rendered
+  without the item. Only an editor's page is spliced, the way `server-edits.ts` splices.
+
+**Decisions the brief left open, for Manas to overrule:**
+
+- `site_settings` has an `id` beyond the brief's `key, value, updated_at`, and is
+  append-only: `kd_app` has no UPDATE (CLAUDE.md), and an upsert would need one. A flip is a
+  new row, the highest id is current.
+- The page is `/studio/launch`, linked from the sign-in page. Bare `/studio` is a 404 on
+  purpose (`src/pages/studio/[key].astro`).
+- Any signed-in browser sees everything, in or out of edit mode, with the badges: the server
+  cannot tell edit mode, which lives in the browser's sessionStorage. Someone signed in who
+  wants the public's view uses Preview.
+- Saving into a hidden placeholder while the switch is on publishes that card on the next
+  load. It is the existing rule that a saved edit counts as answered; the studio page's
+  count follows it.
+
+**With the switch on, what goes** (with the test server's 28 saved rows, read through its
+open route onto a scratch schema): 32 placeholders on 17 pages, 175 edit slots.
+
+| Route | What goes |
+| --- | --- |
+| `/about` | CSR's "Content Pending" section whole: kicker, heading, intro, 4 cards |
+| `/projects` | The Kharghar Centre of Excellence tile |
+| `/projects/kharghar-centre-of-excellence` | **The page: answers the themed 404, leaves the sitemap** |
+| `/resources/rmc-plant-karjat` | 2 hero tiles, 1 equipment row |
+| `/projects/karanjade-health-care` | All 4 hero tiles |
+| `/projects/lush-meadows` | 2 hero tiles, the portal-figures card |
+| `/projects/ulwe-mass-housing-infrastructure`, `ulwe-sector-8-infrastructure`, `rabale-skywalk` | 2 hero tiles each |
+| `/projects/ulwe-cidco-school`, `kharghar-golf-course`, `kharghar-football-stadium`, `ghansoli-roads-and-services`, `kamothe-peripheral-roads`, `vashi-station-approach-road`, `kharghar-33-kv-substation`, `nmmc-school-no-54-and-55` | 1 hero tile each |
+
+**Stays:** the Indeed card on `/careers`, while saved row #3 is on it. On a database with no
+saved edit on it the count is 33 on 18 pages, and it goes too.
+
+**Checked**, on scratch schemas, with a database user holding exactly `kd_app`'s grants:
+
+- Switch never set, and off: all 37 sitemap pages, the 404, a made-up address, `sitemap.xml`
+  and `robots.txt`, byte for byte against `main`. Also with the tables missing and with the
+  database down (each against `main` in the same state), and on a flip on then off with no
+  restart.
+- Switch on: the sitemap has 36 URLs, exactly one fewer; the hidden page is a 404 with the
+  site's own page; no internal link points at it, and every internal link answers. No new
+  key on any page, so a saved key cannot have moved. `pending-report --served` passes.
+- Visitor side, no session, forged session, hint cookie, preview cookie, peek header, in both
+  states: `/studio/launch` is the same 404 as any made-up address; `/api/launch` is a 401 for
+  read, flip and preview, and writes nothing; the pages' bytes are a visitor's.
+- Editor side, in Chrome, beside a visitor: confirm dialog with the counts, Cancel, confirm;
+  the visitor had it 0.2 s after the click, no restart; the log row has from, to, address and
+  browser; Preview shows the public's view to the editor alone, on the 404 too; badges on
+  every hidden item and a note on the hidden page; edit mode loads with 291 editable slots
+  and a hidden card editable; back off from the page.
+- `check-db-flows` passes all six with those grants. `HIDE_PENDING=1` on this branch forces it
+  on over a stored off, with the same bytes as the switch, and the API answers 409.
+- CLS 0.0000 at 360, 390 and 1280 on `/`, `/about`, `/projects` and `/careers`, in both states.

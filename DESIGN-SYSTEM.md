@@ -519,12 +519,15 @@ slot (`…items.3.pending`), so the copy gate is unchanged. Every pending
 element carries `data-pending`; `npm run check:placeholders` lists them and
 fails while any exists, and `PRE-LAUNCH.md` says what closes each. None may
 exist at go-live. The dashed border is not in the approved design and is
-there precisely so it gets removed. OPEN-QUESTIONS.md #32. Built with
-`HIDE_PENDING=1` (launch mode, `src/lib/launch.ts`, 31 Oct 2026) the site
-leaves every unanswered placeholder out instead: the item and its label go,
+there precisely so it gets removed. OPEN-QUESTIONS.md #32. In launch mode
+(`src/lib/launch.ts`, the switch on `/studio/launch` or `HIDE_PENDING=1` at
+build time) the public site leaves every unanswered placeholder out instead: the item and its label go,
 a section of nothing but placeholders goes with its heading, the stat tiles
 left in a two-column grid fill it (an odd last one spans both, none left
-means no grid), and a lone card left in a section spans its row.
+means no grid), and a lone card left in a section spans its row. A signed-in
+editor still sees all of it, with a "Hidden at launch" chip on each item;
+that chip is editor tooling (`public/editor-ui.css`), not a design element,
+and no visitor ever gets it.
 
 ### Representative images — a caption, not a placeholder
 

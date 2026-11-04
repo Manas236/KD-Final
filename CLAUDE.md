@@ -28,7 +28,7 @@ The site's database user (`kd_app` on a server) has SELECT and INSERT on every t
 - A new table or column goes into `db/migrate.sql`: idempotent, a table created only if missing, a column added only after an `information_schema` check.
 - A new table also gets its grant line at the foot of that file.
 - A new kind of write needs nothing beyond SELECT and INSERT (DELETE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants.
-- PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the five write flows work with `kd_app`'s rights.
+- PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the six write flows work with `kd_app`'s rights.
 
 ## No em dashes in anything a visitor or a search engine can see
 
@@ -86,15 +86,21 @@ Light motion was added on 14 Oct 2026 at the client's request: nav menu items on
 - **Nav menus:** the script in Nav.astro keeps each drop-down link's `aria-expanded` true while its menu shows (hover or focus, in CSS) and shuts it on Escape with the `hidden` attribute; Escape also shuts the phone drawer. In edit mode Escape is the editor's.
 - **Print:** src/styles/print.css, every rule inside `@media print`. A page opts in with `data-print` on `<main>` (the project and plant pages); anything else to leave off the paper gets `data-no-print`. Black and white there are keywords, not tokens.
 
-## Launch mode: placeholders off the public site (31 Oct 2026)
+## Launch mode: placeholders off the public site (31 Oct 2026, a live switch since 4 Nov 2026)
 
-The launch rule (PRE-LAUNCH.md): anything Sir has not answered by launch is removed. `HIDE_PENDING=1` at build time does it without deleting data; `src/lib/launch.ts` has the rules.
+The launch rule (PRE-LAUNCH.md): anything Sir has not answered by launch is removed. Launch mode does it without deleting data; `src/lib/launch.ts` has the rules. OPEN-QUESTIONS.md #73.
 
-- **Read at build time** (astro.config.mjs, a Vite define), not per request: switching needs a rebuild. Off by default, and off the review build must stay byte-identical, so compare the served HTML of every sitemap page with the commit before.
+- **A live switch:** `/studio/launch`, signed-in editors only, 404 to anyone else, with no rebuild, restart or deploy (`src/lib/launch-switch.ts`). Every page renders on request, so the renderers ask per request; it shows on the next load in the process that took the flip, within 5 s in any other. Every flip is logged in `site_settings_events` and listed on the page.
+- **Fails to off:** no table, no row, no grant, no database or no answer in 1 s means off, with one log line and never a 500. The site is then what it was before the switch existed.
+- **`site_settings` is append-only**, like `content_edits`, because `kd_app` has no UPDATE: a flip is a new row and the highest id per key is current. Do not change it to an upsert; that needs a grant the app must not have.
+- **`HIDE_PENDING=1` at build time stays as the override** (astro.config.mjs, a Vite define): it forces launch mode on for every visitor, the API refuses to flip, and only a rebuild without it turns it off. `check-placeholders` and `build:release` still read it.
+- **A signed-in editor sees everything**, launch mode or not, in or out of edit mode, because the server cannot tell edit mode (`src/lib/launch-editor.ts`). `/launch-badges.js` marks what launch mode would take off by asking for the same page as launch mode leaves it, so it knows no rules. "Preview" gives an editor the public's view, with a bar. A valid `kd_edit` session is what decides all of this, never `kd_edit_ui`.
+- **Filling a hidden placeholder publishes it:** a saved edit counts as answered, so with the switch on that card comes back to the public on the next load.
+- **Off, the public's HTML stays byte-identical**, so compare the served HTML of every sitemap page with the commit before. Editor tooling therefore never goes in a bundled script or a component: a change to `inline-edit.js` or anything BaseLayout imports changes a hashed file name in every page. It goes in `public/` or is spliced in by `launch-editor.ts`. Tailwind scans all of `src/`, comments included, so a new word that is also a utility class (`invisible`, say) changes the stylesheet's hash too.
 - **Hide by skipping, never by renumbering.** A renderer filters a pending item out and keeps every other item on its own array index, as with `retired`.
 - **Never strand a saved edit.** A unit (card, tile, row, section, gallery block, project) goes only while no `content_edits` key lands inside it (`launch.hides(prefix)`); otherwise it is drawn exactly as in review. An unconfirmed project kept that way is drawn as review whole, its question included.
-- **A new renderer of a `pending` item** asks `launchFor()` and gets a line in `launchKind()` (scripts/placeholder-modules.mjs), or `check:placeholders` (launch mode) and `report:pending` fail on it.
-- **Checks:** `npm run report:pending` (what goes, page by page, against PRE-LAUNCH.md's count); after a launch build, `node scripts/pending-report.mjs <origin> --served` must PASS.
+- **A new renderer of a `pending` item** asks `launchFor()` and gets a line in `launchKind()` (src/lib/launch-report.ts), or `check:placeholders` (launch mode) and `report:pending` fail on it.
+- **Checks:** `npm run report:pending` (what goes, page by page, against PRE-LAUNCH.md's count; the rules are `src/lib/launch-report.ts`, which the switch's confirm dialog reads too); with launch mode on, `node scripts/pending-report.mjs <origin> --served` must PASS.
 
 ## Photo credit in the files (4 Nov 2026)
 
