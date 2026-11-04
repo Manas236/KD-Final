@@ -5,6 +5,8 @@ import { loadEnv } from 'vite';
 import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
 
+import { keepPhotoUrls } from './scripts/keep-photo-urls.mjs';
+
 /* Config-time env. `loadEnv` is Vite's reader rather than dotenv's: it is
    what runs before the config object exists, so values here — the port the
    dev server binds, the canonical origin the sitemap is written against —
@@ -65,8 +67,15 @@ export default defineConfig({
     port: PORT
   },
 
+  /* PHOTO CREDIT (4 Nov 2026). Astro's sharp service, which also hands on
+     the K.D. Constructions credit a source photograph carries in its file:
+     src/lib/image-service.ts. Same pixels, sizes and URLs. */
+  image: {
+    service: { entrypoint: './src/lib/image-service.ts' }
+  },
+
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), keepPhotoUrls()],
     define: {
       __KD_HIDE_PENDING__: JSON.stringify(HIDE_PENDING)
     }

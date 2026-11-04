@@ -21,6 +21,11 @@
    GPS, XMP or ICC unless asked, so a phone photo's location never
    reaches the public site. `rotate()` first applies the phone's
    orientation flag, so nothing comes out sideways.
+
+   WHAT IS ADDED (4 Nov 2026): the K.D. Constructions credit, in all three
+   renditions, spliced in after they are encoded (src/lib/photo-credit.ts).
+   This route cannot tell K.D.'s photograph from anyone else's, so an
+   upload that is not K.D.'s work is credited too.
    ============================================================ */
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
@@ -28,6 +33,7 @@ import path from "node:path";
 import sharp from "sharp";
 import "dotenv/config";
 import { dhash } from "./dhash";
+import { withCredit } from "./photo-credit";
 
 export const MAX_UPLOAD_BYTES = 25 * 1024 * 1024;
 /** Smaller than this on the long edge looks soft in an 800px tile. */
@@ -106,15 +112,16 @@ export async function store(image: sharp.Sharp): Promise<Omit<Processed, "hash">
     .webp({ quality: 82 })
     .toBuffer();
 
-  const put = async (name: string, data: Buffer) => {
+  const put = async (name: string, data: Uint8Array) => {
     const target = path.join(dir, name);
     const tmp = `${target}.part`;
     await writeFile(tmp, data, { mode: 0o644 });
     await rename(tmp, target);
   };
-  await put(`${base}.tile.webp`, tile);
-  await put(`${base}.full.webp`, full);
-  await put(`${base}.jpg`, master.data);
+  const masterFile = withCredit(master.data);
+  await put(`${base}.tile.webp`, withCredit(tile));
+  await put(`${base}.full.webp`, withCredit(full));
+  await put(`${base}.jpg`, masterFile);
 
-  return { file: `${base}.jpg`, width: master.info.width, height: master.info.height, bytes: master.data.length };
+  return { file: `${base}.jpg`, width: master.info.width, height: master.info.height, bytes: masterFile.length };
 }
