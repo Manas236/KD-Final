@@ -37,7 +37,7 @@ const photos = livePlantPhotos(await liveState(), "/resources/rmc-plant-karjat")
 const heroImg = galleryImage(rmc.file);
 const K = "resources.rmc";
 
-/* Launch mode (HIDE_PENDING=1, src/lib/launch.ts): a pending tile or row
+/* Launch mode (src/lib/launch.ts): a pending tile or row
    is left out unless a saved edit is on it, every other one keeping its
    index. The tiles left fill the grid (an odd last one spans it); with
    none left the hero stands without figures. */

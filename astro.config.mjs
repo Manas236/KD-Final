@@ -28,11 +28,12 @@ const PORT = Number(env.PORT) || 4322;
    the real domain is a copy. */
 const SITE = env.PUBLIC_SITE_URL || `http://localhost:${PORT}`;
 
-/* LAUNCH MODE (31 Oct 2026). HIDE_PENDING=1 at build time takes every
-   placeholder nobody has answered off the public site: src/lib/launch.ts
-   says what goes and why, PRE-LAUNCH.md has the launch steps. Baked into
-   the bundle here, not read per request, so a build is one mode or the
-   other; switching needs a rebuild. Off unless set to 1 or true. */
+/* LAUNCH MODE. Since 4 Nov 2026 it is a live switch on /studio/launch, with
+   no rebuild (src/lib/launch-switch.ts). HIDE_PENDING=1 at build time stays
+   as the override: baked into the bundle here, it forces launch mode on for
+   every visitor, and the switch cannot turn it off until the site is rebuilt
+   without it. src/lib/launch.ts says what goes and why, PRE-LAUNCH.md has
+   the launch steps. Not forced unless set to 1 or true. */
 const HIDE_PENDING = ['1', 'true'].includes(String(env.HIDE_PENDING ?? '').trim().toLowerCase());
 
 // https://astro.build/config

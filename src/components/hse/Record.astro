@@ -53,7 +53,7 @@ const { bands } = Astro.props;
 const K = "hse.record.bands";
 const surface = { white: "bg-white", mist: "bg-kd-mist", ink: "bg-kd-ink" } as const;
 const lgCols = { 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" } as const;
-/* Launch mode (HIDE_PENDING=1, src/lib/launch.ts), read in each band below. */
+/* Launch mode (src/lib/launch.ts), read in each band below. */
 const launch = await launchFor(Astro.locals, Astro.url.pathname);
 ---
 

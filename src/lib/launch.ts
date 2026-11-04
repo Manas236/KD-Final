@@ -1,12 +1,12 @@
 /* ============================================================
-   Launch mode: placeholders off the public site (HIDE_PENDING)
+   Launch mode: placeholders off the public site
    ------------------------------------------------------------
    The launch rule (the user, 2026-10-27; PRE-LAUNCH.md): anything Sir
    has not answered by launch is removed from the site. Until then every
    piece of content K.D. has not supplied is a visible placeholder, a
-   `pending` item in a copy module (OPEN-QUESTIONS.md #32). This is the
-   switch that takes them off without deleting a line of data: build
-   with HIDE_PENDING=1 and the renderers leave out
+   `pending` item in a copy module (OPEN-QUESTIONS.md #32). This takes
+   them off without deleting a line of data. With launch mode on, the
+   renderers leave out
 
      · a placeholder card, tile or row: the whole item, its label and
        title with it, so no "Year completed" tile and no empty row;
@@ -22,8 +22,17 @@
        is real, one detail of it is not.
 
    Off (the default), nothing here runs and every page is byte for byte
-   what it was. astro.config.mjs reads the flag at build time and bakes
-   it into the bundle (`__KD_HIDE_PENDING__`).
+   what it was.
+
+   WHO DECIDES, per request since 4 Nov 2026 (hiding(), below):
+
+     · a visitor follows the switch on /studio/launch
+       (src/lib/launch-switch.ts), or HIDE_PENDING=1 at build time
+       (astro.config.mjs bakes it in as `__KD_HIDE_PENDING__`), which
+       forces it on whatever the switch says;
+     · a signed-in editor sees everything, so a placeholder can still be
+       filled, or the public's view while previewing it
+       (src/lib/launch-editor.ts sets Astro.locals.kdLaunchView).
 
    SAVED EDITS ARE NEVER STRANDED. A unit, a card, a section, a gallery
    block or a project, is taken off only while no saved edit
@@ -54,13 +63,22 @@ import { editsForPage, type SavedEdits } from "./server-edits";
 import { normalizePath } from "./editable";
 import { blocksFor } from "./project-blocks";
 import { livePhotos, liveState } from "./gallery-live";
+import { launchSwitchOn } from "./launch-switch";
 import { projects } from "../data/projects";
 import { slugify } from "./slug";
 
 declare const __KD_HIDE_PENDING__: boolean;
 
-/** Set by HIDE_PENDING=1 at build time (astro.config.mjs). */
+/** Set by HIDE_PENDING=1 at build time (astro.config.mjs): launch mode is
+    on for every visitor, and the switch cannot turn it off. */
 export const HIDE_PENDING: boolean = typeof __KD_HIDE_PENDING__ === "boolean" && __KD_HIDE_PENDING__;
+
+/** Does this request get the page with launch mode's cuts? */
+async function hiding(locals: App.Locals): Promise<boolean> {
+  if (locals.kdLaunchView === "all") return false;
+  if (locals.kdLaunchView) return true; // an editor previewing the public's view
+  return HIDE_PENDING || launchSwitchOn();
+}
 
 export interface Launch {
   /** True when launch mode takes this unit off the page: the mode is
@@ -90,10 +108,10 @@ function pageEdits(locals: App.Locals, path: string): Promise<SavedEdits | null>
 }
 
 /** What launch mode hides on the page at `pathname`. Review (nothing)
-    while HIDE_PENDING is off, and on a path that is not an editable
-    page, which has no saved edits to keep anchored. */
+    while launch mode is off for this request, and on a path that is not
+    an editable page, which has no saved edits to keep anchored. */
 export async function launchFor(locals: App.Locals, pathname: string): Promise<Launch> {
-  if (!HIDE_PENDING) return REVIEW;
+  if (!(await hiding(locals))) return REVIEW;
   const path = normalizePath(pathname);
   return launchOver(path ? await pageEdits(locals, path) : null);
 }
@@ -104,27 +122,38 @@ function tileIndex(title: string): number {
 }
 
 /**
- * True when launch mode takes a Beyond the railway project off the site:
- * its /projects tile is a placeholder (`pending`, no picture: the work
- * is not confirmed as K.D.'s) and nothing of Sir's is on it. The tile,
- * the page and the sitemap all ask this, so the three agree.
+ * Why an unconfirmed project stays on the site: something of Sir's is on
+ * it. Null when nothing is. `read` is how a page's saved edits are read.
  */
-export async function projectHidden(locals: App.Locals, pathname: string, title: string): Promise<boolean> {
-  if (!HIDE_PENDING) return false;
-  const i = tileIndex(title);
-  if (i < 0 || !projects.social.items[i].pending) return false;
+export async function projectKept(
+  title: string,
+  read: (path: string) => Promise<SavedEdits | null> = editsForPage
+): Promise<string | null> {
   const slug = slugify(title);
-  /* The tile's slots are /projects' edits, the page's its own. Asked from
-     either page, that page's read is the one the middleware is handed. */
-  const here = normalizePath(pathname);
-  const read = (path: string) => (path === here ? pageEdits(locals, path) : editsForPage(path));
   const [tileEdits, ownEdits, blocks, live] = await Promise.all([
     read("/projects"),
     read(`/projects/${slug}`),
     blocksFor(slug),
     liveState(),
   ]);
-  if (!launchOver(tileEdits).hides(`projects.social.items.${i}`)) return false;
-  if (ownEdits && Object.keys(ownEdits).length) return false;
-  return blocks.length === 0 && livePhotos(live, title).length === 0;
+  if (!launchOver(tileEdits).hides(`projects.social.items.${tileIndex(title)}`)) return "saved edit on its /projects tile";
+  if (ownEdits && Object.keys(ownEdits).length) return "saved edit on its page";
+  if (blocks.length) return "a paragraph added to its page";
+  return livePhotos(live, title).length ? "a photograph on its page" : null;
+}
+
+/**
+ * True when launch mode takes a Beyond the railway project off the site:
+ * its /projects tile is a placeholder (`pending`, no picture: the work
+ * is not confirmed as K.D.'s) and nothing of Sir's is on it. The tile,
+ * the page and the sitemap all ask this, so the three agree.
+ */
+export async function projectHidden(locals: App.Locals, pathname: string, title: string): Promise<boolean> {
+  if (!(await hiding(locals))) return false;
+  const i = tileIndex(title);
+  if (i < 0 || !projects.social.items[i].pending) return false;
+  /* The tile's slots are /projects' edits, the page's its own. Asked from
+     either page, that page's read is the one the middleware is handed. */
+  const here = normalizePath(pathname);
+  return !(await projectKept(title, (path) => (path === here ? pageEdits(locals, path) : editsForPage(path))));
 }

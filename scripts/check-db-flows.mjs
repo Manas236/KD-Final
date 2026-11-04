@@ -2,7 +2,7 @@
    Check — every flow that writes to the database, end to end
    ------------------------------------------------------------
    Drives the running site over HTTP the way an applicant and an editor
-   do, and says PASS or FAIL for each of five flows:
+   do, and says PASS or FAIL for each of six flows:
 
      1. apply      an application with a resume, through /api/apply
      2. list       it appears on /studio/applications
@@ -11,6 +11,9 @@
                    page, and is removed again
      5. job post   a posting added in edit mode shows on /careers, and
                    is removed again
+     6. launch     the launch mode switch is saved at the value it already
+                   has, and that is in the log. The public site never
+                   changes: it proves the rights without flipping anything
 
    Written for a deploy (PRE-LAUNCH.md, "Deploy and migration order"):
    it is the proof that the app works with its database user's own
@@ -222,6 +225,18 @@ async function jobPostingFlow() {
   else record("5 job post", "PASS", `posting #${add.json.id}, added and removed`);
 }
 
+async function launchSwitchFlow() {
+  const before = await call("GET", "/api/launch");
+  if (before.status !== 200) return record("6 launch", "FAIL", `read: ${said(before)}`);
+  if (before.json.forced) return record("6 launch", "SKIP", "HIDE_PENDING=1 forces launch mode on in this build");
+  const saved = await call("POST", "/api/launch", { action: "set", on: before.json.on });
+  if (!(saved.status === 200 && saved.json?.ok)) return record("6 launch", "FAIL", `save: ${said(saved)}`);
+  const after = await call("GET", "/api/launch");
+  if (after.json?.on !== before.json.on) record("6 launch", "FAIL", "the switch changed");
+  else if (!after.json?.lastEvent || after.json.lastEvent === before.json.lastEvent) record("6 launch", "FAIL", "saved, but the log has no new row");
+  else record("6 launch", "PASS", `still ${before.json.on ? "on" : "off"}, log row #${after.json.lastEvent}`);
+}
+
 /* ---------- Run ---------- */
 console.log(`Database flows on ${ORIGIN}, marker "${MARK}"\n`);
 
@@ -240,6 +255,7 @@ try {
     await applicationFlows();
     await textBlockFlow();
     await jobPostingFlow();
+    await launchSwitchFlow();
   }
 } catch (err) {
   record("run", "FAIL", `could not reach ${ORIGIN}: ${err.cause?.code || err.message}`);

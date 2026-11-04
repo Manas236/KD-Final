@@ -23,7 +23,7 @@
      2. PROJECT PAGES — one URL per entry in project-detail.ts and one
         per "Beyond the railway" page in social-projects.ts, the same
         `slugify()` the cards and the route use (src/lib/slug.ts). In
-        launch mode (HIDE_PENDING=1) an unconfirmed project, which then
+        launch mode (src/lib/launch.ts) an unconfirmed project, which then
         answers 404, is left out (src/lib/launch.ts).
      3. IMAGES — the hero and every gallery photograph of each project
         page and of the plant page, as `<image:image>` entries, at the

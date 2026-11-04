@@ -1,0 +1,306 @@
+---
+/* ============================================================
+   GET /studio/launch — launch mode: the switch, the preview, the log
+   ------------------------------------------------------------
+   Launch mode takes every unanswered placeholder off the public site
+   (src/lib/launch.ts). This page turns it on or off with no rebuild,
+   restart or deploy (src/lib/launch-switch.ts), shows what that would
+   take off, and lists every flip.
+
+   SIGNED-IN EDITORS ONLY: anyone else gets the bodyless 404 the other
+   studio pages give (see the note at the top of studio/gallery.astro).
+   Editor tooling, so its strings live here, not in a copy module, and it
+   reuses the gallery manager's header styles.
+
+   THE NUMBERS come from src/lib/launch-summary.ts, the same rules
+   scripts/pending-report.mjs prints.
+   ============================================================ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isAuthed, readCookie } from "../../lib/edit-auth";
+import { HIDE_PENDING } from "../../lib/launch";
+import { PREVIEW_COOKIE } from "../../lib/launch-editor";
+import { launchSummary } from "../../lib/launch-summary";
+import { launchSwitchOn, switchEvents } from "../../lib/launch-switch";
+
+export const prerender = false;
+
+if (!isAuthed(Astro.request)) {
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
+}
+
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Cache-Control", "no-store");
+
+const switchOn = await launchSwitchOn();
+const on = HIDE_PENDING || switchOn;
+const events = await switchEvents();
+const summary = await launchSummary();
+const previewing = readCookie(Astro.request, PREVIEW_COOKIE) === "1";
+
+const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+const counted = [
+  `${plural(summary.hidden, "placeholder")} on ${plural(summary.pages, "page")}`,
+  plural(summary.hiddenSections.length, "whole section"),
+  plural(summary.hiddenProjects.length, "whole page"),
+];
+const sentence = `${counted[0]}, including ${counted[1]} and ${counted[2]}`;
+const nameSections = summary.hiddenSections.map((s) => `${s.kicker} on ${s.route}`).join(", ");
+const nameProjects = summary.hiddenProjects.map((p) => p.title).join(", ");
+
+const byRoute = [...new Set(summary.rows.map((r) => r.route))].map((route) => ({
+  route,
+  rows: summary.rows.filter((r) => r.route === route),
+}));
+
+const label = (value: string | null) => (value === "1" ? "ON" : value === "0" ? "OFF" : "never set");
+const when = (d: Date) =>
+  d.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+---
+
+<BaseLayout title="Launch mode | K.D. Constructions" description="Turn launch mode on or off." noindex skip={false}>
+  <link rel="stylesheet" href="/gallery-manager.css" />
+  <main class="gm">
+    <header class="gm-top">
+      <div class="gm-top-inner">
+        <div class="gm-title">
+          <span class="gm-kicker">K.D. Constructions · Studio</span>
+          <h1>Launch mode</h1>
+        </div>
+        <div class="gm-actions">
+          <a class="gm-btn" href="/studio/gallery">Gallery manager</a>
+          <a class="gm-btn gm-btn-primary" href="/">View the site</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="gm-help">
+      <p class="lm-state">Launch mode is <strong id="lm-state">{on ? "ON" : "OFF"}</strong>.</p>
+      {
+        HIDE_PENDING ? (
+          <p>
+            <strong>Forced on by this build</strong> (HIDE_PENDING=1 when it was built), so the switch below does nothing
+            until HIDE_PENDING is taken out and the site is rebuilt.
+          </p>
+        ) : on ? (
+          <p>Visitors do not see the placeholders listed below. Turning it off brings them back within seconds.</p>
+        ) : (
+          <p>Visitors see the site as it is today, placeholders included. Turning it on takes effect within seconds, with no rebuild, restart or deploy.</p>
+        )
+      }
+      <p>
+        Launch mode would take off <strong>{sentence}</strong>.
+        {nameSections && ` Sections: ${nameSections}.`}
+        {nameProjects && ` Pages: ${nameProjects}, which then answers the site's 404 and leaves the sitemap.`}
+        {summary.kept > 0 && ` ${plural(summary.kept, "placeholder")} stays because a saved edit is on it.`}
+      </p>
+      <p>
+        Signed in, you always see every page with nothing hidden, and each item launch mode takes off carries a small
+        <strong>Hidden at launch</strong> badge, so it can still be filled. Saved edits are never touched.
+      </p>
+    </section>
+
+    {events === null && (
+      <div class="gm-banner" role="alert">
+        The settings tables cannot be read, so launch mode stays off and cannot be turned on. Has db/migrate.sql been run on this database, with its grants?
+      </div>
+    )}
+
+    <section class="gm-help lm-actions">
+      <button type="button" class="gm-btn" id="lm-preview" data-on={previewing ? "1" : "0"}>
+        {previewing ? "Stop previewing" : "Preview as public with launch mode ON"}
+      </button>
+      {!HIDE_PENDING && (
+        <button type="button" class="gm-btn gm-btn-primary lm-switch" id="lm-open" disabled={events === null}>
+          {switchOn ? "Turn launch mode OFF" : "Turn launch mode ON"}
+        </button>
+      )}
+      <p id="lm-error" class="lm-error" role="alert" hidden></p>
+    </section>
+
+    <dialog id="lm-confirm" class="lm-dialog" data-to={switchOn ? "0" : "1"}>
+      <h2>{switchOn ? "Turn launch mode OFF?" : "Turn launch mode ON?"}</h2>
+      <p>
+        {switchOn
+          ? `The public site gets back ${sentence}.`
+          : `The public site loses ${sentence}.`}
+      </p>
+      {nameProjects && <p>{switchOn ? "Back" : "Answering 404"}: {nameProjects}.</p>}
+      <p>It takes effect within seconds, and is logged here. Nothing is deleted.</p>
+      <div class="lm-dialog-actions">
+        <button type="button" class="gm-btn gm-btn-primary" id="lm-yes">{switchOn ? "Yes, turn it off" : "Yes, turn it on"}</button>
+        <button type="button" class="gm-btn" id="lm-no">Cancel</button>
+      </div>
+    </dialog>
+
+    <section class="gm-help">
+      <details>
+        <summary>Everything it would take off, page by page</summary>
+        {
+          byRoute.map(({ route, rows }) => (
+            <div class="lm-route">
+              <strong>{route}</strong>
+              <ul class="lm-rows">
+                {rows.map((r) => (
+                  <li>
+                    {r.title}: {r.kind}
+                    {r.status === "kept" && <em> (stays: {r.why})</em>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </details>
+    </section>
+
+    <section class="gm-help lm-log">
+      <h2>Every flip</h2>
+      {
+        events && events.length > 0 ? (
+          <div class="lm-log-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Address</th>
+                  <th>Browser</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((e) => (
+                  <tr>
+                    <td>{when(e.at)}</td>
+                    <td>{label(e.from)}</td>
+                    <td>{label(e.to)}</td>
+                    <td>{e.ip ?? ""}</td>
+                    <td>{e.browser ?? ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>{events ? "Never flipped." : "Not available."}</p>
+        )
+      }
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const error = document.getElementById("lm-error") as HTMLElement;
+  const dialog = document.getElementById("lm-confirm") as HTMLDialogElement;
+
+  async function post(body: unknown): Promise<boolean> {
+    error.hidden = true;
+    try {
+      const res = await fetch("/api/launch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) return true;
+      const { error: why } = await res.json().catch(() => ({ error: "Something went wrong." }));
+      error.textContent = why || "Something went wrong.";
+    } catch {
+      error.textContent = "Could not reach the server. Nothing changed.";
+    }
+    error.hidden = false;
+    return false;
+  }
+
+  document.getElementById("lm-open")?.addEventListener("click", () => dialog.showModal());
+  document.getElementById("lm-no")?.addEventListener("click", () => dialog.close());
+  document.getElementById("lm-yes")?.addEventListener("click", async () => {
+    dialog.close();
+    if (await post({ action: "set", on: dialog.dataset.to === "1" })) location.reload();
+  });
+
+  const preview = document.getElementById("lm-preview") as HTMLButtonElement;
+  preview.addEventListener("click", async () => {
+    const stop = preview.dataset.on === "1";
+    if (!(await post({ action: "preview", on: !stop }))) return;
+    if (stop) location.reload();
+    else location.assign("/");
+  });
+</script>
+
+<style>
+  .lm-state {
+    font-size: var(--text-d8);
+    color: var(--kd-ink);
+  }
+  .lm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--kd-gap-12);
+    align-items: center;
+  }
+  .lm-switch:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .lm-error {
+    width: 100%;
+    color: var(--kd-ink);
+    font-weight: 700;
+  }
+  .lm-dialog {
+    max-width: 520px;
+    padding: var(--kd-gap-32);
+    border: var(--kd-hairline) solid var(--kd-card-border-light);
+    color: var(--kd-ink);
+    font-size: var(--text-body-sm);
+  }
+  .lm-dialog h2 {
+    margin: 0 0 var(--kd-gap-12);
+    font-size: var(--text-d8);
+  }
+  .lm-dialog p {
+    margin: 0 0 var(--kd-gap-12);
+  }
+  .lm-dialog-actions {
+    display: flex;
+    gap: var(--kd-gap-12);
+    margin-top: var(--kd-gap-20);
+  }
+  .lm-route {
+    margin-top: var(--kd-gap-16);
+  }
+  .lm-rows {
+    display: block;
+    margin-top: 4px;
+  }
+  .lm-log h2 {
+    margin: var(--kd-gap-24) 0 var(--kd-gap-12);
+    font-size: var(--text-d9);
+    color: var(--kd-ink);
+  }
+  .lm-log-wrap {
+    overflow-x: auto;
+    padding-bottom: var(--kd-gap-56);
+  }
+  .lm-log table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    color: var(--kd-ink);
+  }
+  .lm-log th,
+  .lm-log td {
+    text-align: left;
+    vertical-align: top;
+    padding: var(--kd-gap-12) var(--kd-gap-16);
+    border-bottom: var(--kd-hairline) solid var(--kd-card-border-light);
+  }
+</style>

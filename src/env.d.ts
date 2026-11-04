@@ -4,5 +4,8 @@ declare namespace App {
     /** Launch mode only (src/lib/launch.ts): the saved edits the page was
         rendered against, which the middleware then writes into it. */
     kdSavedEdits?: Promise<import("./lib/server-edits").SavedEdits | null>;
+    /** Set for a signed-in editor (src/lib/launch-editor.ts). Unset for
+        everyone else, who follow the launch mode switch. */
+    kdLaunchView?: import("./lib/launch-editor").LaunchView;
   }
 }

@@ -1,4 +1,4 @@
-/* Every request the app answers passes through here, for four things.
+/* Every request the app answers passes through here, for five things.
 
    1. ONE ADDRESS PER PAGE (22 Oct 2026). "/about/" used to answer 200
       as a copy of "/about", and named itself as canonical, so a link
@@ -20,9 +20,9 @@
       only once a page has rendered 200, so an address that is not a
       page never costs a query or a cache entry. A page with none, a
       database that does not answer, or SERVER_EDITS=0 sends the page
-      exactly as rendered, still streaming. A page built in launch mode
-      (HIDE_PENDING=1, src/lib/launch.ts) reads its edits while it
-      renders, and those same rows are written here.
+      exactly as rendered, still streaming. A page rendered in launch mode
+      (src/lib/launch.ts) reads its edits while it renders, and those same
+      rows are written here.
 
    4. SECURITY HEADERS (28 Oct 2026), on every response that passes
       through here: pages, the 404, redirects, the API, /media and
@@ -33,10 +33,17 @@
       /contact is a frame of Google's page inside ours, which
       X-Frame-Options does not touch; the Permissions-Policy only
       switches off camera, microphone and location, which nothing on
-      the site asks for. */
+      the site asks for.
+
+   5. WHO IS ASKING, for launch mode (4 Nov 2026). A page request with a
+      valid editor session is told so here, before the page renders: an
+      editor sees everything, or previews the public's view, and gets the
+      tools for that added to the finished page
+      (src/lib/launch-editor.ts). Anyone else is not touched at all. */
 import { defineMiddleware } from "astro:middleware";
 import { isNoindexDeployment } from "./lib/staging";
 import { normalizePath } from "./lib/editable";
+import { editorView, forEditor } from "./lib/launch-editor";
 import { editsForPage, serverEditsEnabled, withSavedEdits } from "./lib/server-edits";
 
 const UNTOUCHED = /^\/(?:studio|api|_astro|_image|media|video)(?:\/|$)/;
@@ -54,6 +61,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const redirect =
     pathname.length > 1 && pathname.endsWith("/") && !UNTOUCHED.test(pathname) && !FILE.test(pathname);
   const editable = !redirect && context.request.method === "GET" && serverEditsEnabled() ? normalizePath(pathname) : null;
+  const view =
+    !redirect && context.request.method === "GET" && !UNTOUCHED.test(pathname) && !FILE.test(pathname)
+      ? await editorView(context.request)
+      : undefined;
+  if (view) context.locals.kdLaunchView = view;
   let response = redirect
     ? new Response(null, {
         status: 301,
@@ -65,6 +77,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
        placeholders were answered (src/lib/launch.ts): write those rows. */
     response = await withSavedEdits(response, editable, context.locals.kdSavedEdits ?? editsForPage(editable));
   }
+  if (view) response = await forEditor(response, view);
   if (isNoindexDeployment()) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
   }
