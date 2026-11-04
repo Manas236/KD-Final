@@ -1,25 +1,14 @@
 /* ============================================================
    Pending report — what launch mode takes off the public site
    ------------------------------------------------------------
-   Launch mode (HIDE_PENDING=1 at build time, src/lib/launch.ts) leaves
-   every placeholder nobody has answered off the site. This lists,
-   page by page, exactly what that is: each placeholder card, tile and
-   row, the section headings and gallery blocks that go with them, and
-   any project that goes whole (its tile, its page and its sitemap
-   entry). Then the total, set against the open count in PRE-LAUNCH.md.
-
-   It mirrors the renderers' rules, read off the same copy modules
-   (scripts/placeholder-modules.mjs, shared with check-placeholders):
-
-     · a placeholder goes unless a saved edit names a slot inside it;
-       one that has one is KEPT, drawn exactly as in review, and its
-       text belongs in the copy module before launch;
-     · a section of nothing but placeholders goes with its kicker and
-       heading, unless its header has a saved edit (then all of it is
-       kept, as review);
-     · a /projects tile that is a placeholder (unconfirmed work) takes
-       its whole project off, unless something of Sir's is on the tile
-       or the page (a saved edit, an added paragraph, a photograph).
+   Launch mode (the switch on /studio/launch, or HIDE_PENDING=1 at build
+   time; src/lib/launch.ts) leaves every placeholder nobody has answered
+   off the site. This lists, page by page, exactly what that is: each
+   placeholder card, tile and row, the section headings and gallery blocks
+   that go with them, and any project that goes whole (its tile, its page
+   and its sitemap entry). Then the total, set against the open count in
+   PRE-LAUNCH.md. The rules are src/lib/launch-report.ts, which the switch's
+   confirm dialog reads too.
 
    Usage:
      node scripts/pending-report.mjs
@@ -35,13 +24,15 @@
          slot of anything reported hidden is on its page, no
          `data-pending` but the kept ones, a hidden project answers 404,
          is not in sitemap.xml and no page links to it, every sitemap
-         page answers 200. Run it after building with HIDE_PENDING=1.
+         page answers 200. Run it with the switch on, or after building
+         with HIDE_PENDING=1.
    Run it from PowerShell on Windows (Git Bash rewrites "/paths").
    Exit status 1 when a placeholder is one launch mode cannot hide, or
    on any --served failure. Read-only everywhere.
    ============================================================ */
 import { readFileSync } from "node:fs";
-import { MODULES, pagesOf, pendingItems, launchKind } from "./placeholder-modules.mjs";
+import { pagesOf } from "./placeholder-modules.mjs";
+import { buildLaunchReport } from "../src/lib/launch-report.ts";
 import { slugify } from "../src/lib/slug.ts";
 
 const args = process.argv.slice(2);
@@ -66,29 +57,18 @@ async function savedKeys(route) {
   }
   return savedCache.get(route);
 }
-/** A saved edit on the key itself or on any key below it. */
-const under = (keys, ...prefixes) =>
-  prefixes.some((p) => {
-    const q = p.toLowerCase();
-    return keys.some((k) => k === q || k.startsWith(q + "."));
-  });
 
 /* ------------------------------------------------------------
    Every placeholder, with what launch mode does with it
    ------------------------------------------------------------ */
-const rows = []; // { route, title, label, kind, unit, status, why }
-const extras = []; // { route, text } — what goes with them
-const hiddenUnits = []; // { route, unit } — slot prefixes that must be off the served page
-const hiddenProjects = []; // { title, slug, route }
-
 const social = (await import("../src/data/projects.ts")).projects.social;
-const socialPagesMod = MODULES.find((m) => m.exportName === "socialPages");
-const socialPages = await pagesOf(socialPagesMod);
+const socialPages = await pagesOf({ file: "../src/data/social-projects.ts", exportName: "socialPages", route: "/projects", each: true });
 
 /** Is the unconfirmed project at tile index `i` kept? Why, or null. */
 async function projectKept(i) {
   const title = social.items[i].title;
   const slug = slugify(title);
+  const under = (keys, prefix) => keys.some((k) => k === prefix || k.startsWith(prefix + "."));
   if (under(await savedKeys("/projects"), `projects.social.items.${i}`)) return "saved edit on its /projects tile";
   if ((await savedKeys(`/projects/${slug}`)).length) return "saved edit on its page";
   if (ORIGIN) {
@@ -101,100 +81,14 @@ async function projectKept(i) {
   return null;
 }
 
-/* The unconfirmed projects first: their pages' placeholders go with them. */
-const projectRoutes = new Map(); // route -> { kept, why }
-for (const [i, item] of social.items.entries()) {
-  if (item.retired || !item.pending) continue;
-  const why = await projectKept(i);
-  projectRoutes.set(`/projects/${slugify(item.title)}`, { kept: !!why, why, title: item.title });
-}
-
-for (const row of MODULES) {
-  for (const page of await pagesOf(row)) {
-    const keys = await savedKeys(page.route);
-    const found = [...pendingItems(page.copy)];
-    const project = projectRoutes.get(page.route);
-
-    /* Sections of nothing but placeholders (InfoSections.astro). */
-    const sectionOf = new Map(); // section index -> found rows in it
-    for (const f of found) {
-      const m = f.path.join(".").match(/^sections\.(\d+)\.items\.\d+$/);
-      if (m && launchKind(row.exportName, f.path) === "card") {
-        sectionOf.set(+m[1], [...(sectionOf.get(+m[1]) ?? []), f]);
-      }
-    }
-    const sectionVerdict = new Map(); // s -> "gone" | "kept"
-    for (const [s, list] of sectionOf) {
-      const section = page.copy.sections[s];
-      const live = section.items.filter((it) => !it.retired);
-      const unanswered = list.filter((f) => !under(keys, `${row.prefix}.${f.path.join(".")}`));
-      if (unanswered.length !== live.length) continue;
-      const header = ["kicker", "heading", "intro"].map((x) => `${row.prefix}.sections.${s}.${x}`);
-      if (under(keys, ...header)) {
-        sectionVerdict.set(s, "kept");
-      } else {
-        sectionVerdict.set(s, "gone");
-        extras.push({ route: page.route, text: `the section "${section.kicker}": "${section.heading}", its kicker and heading go with its cards (${row.prefix}.sections.${s})` });
-        hiddenUnits.push(...header.map((unit) => ({ route: page.route, unit })));
-      }
-    }
-
-    let factsGone = 0;
-    for (const { path, item } of found) {
-      const kind = launchKind(row.exportName, path);
-      const slot = `${row.prefix}.${path.join(".")}`;
-      const base = { route: page.route, title: item.title, label: item.pending, kind: kind ?? "not handled", unit: slot };
-      if (!kind) {
-        rows.push({ ...base, status: "NOT HIDDEN", why: "no launch-mode renderer for this item" });
-        continue;
-      }
-      if (project) {
-        rows.push({ ...base, status: project.kept ? "kept" : "hidden", why: project.kept ? `the project is kept: ${project.why}` : "with its page" });
-        continue;
-      }
-      if (kind === "project") {
-        const p = projectRoutes.get(`/projects/${slugify(item.title)}`);
-        rows.push({ ...base, status: p.kept ? "kept" : "hidden", why: p.kept ? p.why : "the project goes: tile, page and sitemap entry" });
-        if (!p.kept) {
-          hiddenUnits.push({ route: page.route, unit: slot });
-          hiddenProjects.push({ title: item.title, slug: slugify(item.title), route: `/projects/${slugify(item.title)}` });
-        }
-        continue;
-      }
-      const s = path[0] === "sections" ? +path[1] : -1;
-      if (sectionVerdict.get(s) === "kept") {
-        rows.push({ ...base, status: "kept", why: "its section's header has a saved edit" });
-        continue;
-      }
-      /* The unit a saved edit keeps: the item, or for a drill card only its badge,
-         or for the photograph card the gallery block with its kicker. */
-      const unit =
-        kind === "drill card's missing fact"
-          ? [`${slot}.pending`]
-          : kind === "photograph card"
-            ? [slot, `${row.prefix}.detail.galleryKicker`]
-            : [slot];
-      if (under(keys, ...unit)) {
-        rows.push({ ...base, status: "kept", why: "saved edit on it" });
-        continue;
-      }
-      rows.push({ ...base, status: "hidden", why: kind === "drill card's missing fact" ? "the badge only; the card stays" : "" });
-      hiddenUnits.push(...unit.map((u) => ({ route: page.route, unit: u })));
-      if (kind === "photograph card") extras.push({ route: page.route, text: "the gallery block goes with it, its kicker included" });
-      if (kind === "hero tile") factsGone++;
-    }
-    const tiles = page.copy.detail?.facts ?? page.copy.rmc?.stats ?? page.copy.plant?.stats;
-    if (tiles && factsGone === tiles.length) extras.push({ route: page.route, text: "no figure tile is left: the hero has none" });
-    if (project && !project.kept) extras.push({ route: page.route, text: "the whole page: its address answers the site's 404, and it leaves the sitemap" });
-  }
-}
+const { rows, extras, hiddenUnits, hiddenProjects } = await buildLaunchReport({ pagesOf, social, savedKeys, projectKept });
 
 /* ------------------------------------------------------------
    The report
    ------------------------------------------------------------ */
 const routes = [...new Set([...rows.map((r) => r.route), ...extras.map((e) => e.route)])];
 console.log(
-  `Launch mode (HIDE_PENDING=1): what it takes off the public site` +
+  `Launch mode: what it takes off the public site` +
     (ORIGIN ? `, with the saved edits on ${ORIGIN}` : ", from the copy modules (no saved edits read)") +
     "\n"
 );
