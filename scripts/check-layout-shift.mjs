@@ -15,13 +15,16 @@
    render after the font landed) is worth telling apart from a CLS of 0
    because the preloads did their job.
 
-   Usage:  node scripts/check-layout-shift.mjs [origin] [path]
+   Usage:  node scripts/check-layout-shift.mjs [origin] [path] [width]
+           width is the viewport's, in px, 1551 unless given. A gate that
+           says 360, 390 or 1280 has to pass it. The width is printed.
    ============================================================ */
 import { chromium } from "playwright";
 import "dotenv/config";
 
 const ORIGIN = process.argv[2] || `http://localhost:${process.env.PORT || 4322}`;
 const PAGE = process.argv[3] || "/";
+const WIDTH = Number(process.argv[4]) || 1551;
 
 /* Google's "good" threshold is 0.1. This page has fixed line heights on
    every type token, so anything above noise would mean a font swap is
@@ -54,7 +57,7 @@ const INSTRUMENT = `
 `;
 
 async function run(browser, label, cold, throttle) {
-  const ctx = await browser.newContext({ viewport: { width: 1551, height: 900 } });
+  const ctx = await browser.newContext({ viewport: { width: WIDTH, height: 900 } });
   const page = await ctx.newPage();
   await page.addInitScript(INSTRUMENT);
   if (cold) await ctx.clearCookies();
@@ -111,6 +114,7 @@ async function run(browser, label, cold, throttle) {
 const SLOW_3G = { down: (400 * 1024) / 8, up: (400 * 1024) / 8, latency: 400 };
 const FAST_3G = { down: (1.6 * 1024 * 1024) / 8, up: (750 * 1024) / 8, latency: 150 };
 
+console.log(`\n  ${PAGE} at ${WIDTH}px wide`);
 const browser = await launch();
 const results = [
   await run(browser, "SLOW 3G, empty cache — the run that matters", true, SLOW_3G),
@@ -121,6 +125,6 @@ await browser.close();
 
 const worst = Math.max(...results);
 console.log(
-  `\n  ${worst <= BUDGET ? "PASS" : "FAIL"}  worst CLS ${worst.toFixed(4)} against a budget of ${BUDGET}`
+  `\n  ${worst <= BUDGET ? "PASS" : "FAIL"}  worst CLS ${worst.toFixed(4)} at ${WIDTH}px against a budget of ${BUDGET}`
 );
 process.exit(worst <= BUDGET ? 0 : 1);
