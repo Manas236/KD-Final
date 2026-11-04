@@ -718,6 +718,19 @@ order:
    page. `/sitemap.xml` is sent with a one-hour cache, so a crawler can see the old list
    for up to an hour after a flip; pages follow at once.
 
+### At the next deploy: the 2026-11-04 launch views
+
+OPEN-QUESTIONS.md #74. **A plain build and restart, nothing else:** no schema change, no
+grant, no `npm ci`, no migration of saved edits, no edit key added, moved or gone, no
+built-in text changed. A visitor's pages are byte for byte what they were, with any cookie.
+The buttons do not need the launch switch's tables, and they never write to them. Editors
+hard-refresh once for `/editor-ui.css` and `/launch-badges.js`.
+
+**Read-only, after:** signed in, the floating bar has "This is what was removed" and "Launch
+preview" beside "Edit text", and the first says the same count as `/studio/launch`. Press
+"Back to normal" before leaving: the view is per browser and stays on until switched off or
+the browser closes.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by

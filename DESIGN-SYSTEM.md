@@ -527,7 +527,10 @@ left in a two-column grid fill it (an odd last one spans both, none left
 means no grid), and a lone card left in a section spans its row. A signed-in
 editor still sees all of it, with a "Hidden at launch" chip on each item;
 that chip is editor tooling (`public/editor-ui.css`), not a design element,
-and no visitor ever gets it.
+and no visitor ever gets it. So are the floating bar's two launch view buttons
+and the yellow of "This is what was removed": square, on the existing tokens, the
+yellow deliberately no colour of the site's, so it can never read as part of a page
+(OPEN-QUESTIONS.md #74).
 
 ### Representative images — a caption, not a placeholder
 

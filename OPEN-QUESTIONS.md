@@ -5183,3 +5183,41 @@ saved edit on it the count is 33 on 18 pages, and it goes too.
 - `check-db-flows` passes all six with those grants. `HIDE_PENDING=1` on this branch forces it
   on over a stored off, with the same bytes as the switch, and the API answers 409.
 - CLS 0.0000 at 360, 390 and 1280 on `/`, `/about`, `/projects` and `/careers`, in both states.
+## 74. Two launch views in the floating editor bar, 4 Nov 2026
+
+Asked by Manas, the same day: see what launch mode does to each page without touching the
+switch. Two buttons beside "Edit text", on every public page and the 404, for a signed-in
+editor only. They exclude each other and change one browser's view, nothing else.
+
+- **Launch preview** is the page a visitor gets with the switch on: the same `hiding()` and
+  the same renderers (`src/lib/launch.ts`), so hidden items are out of the HTML, the layout
+  reflows and a hidden page is the themed 404. It is the old Preview on /studio/launch, which
+  now sets the same cookie.
+- **This is what was removed** is the ordinary page with every item that goes marked in yellow,
+  a translucent fill and a solid outline, by box-shadow and outline, so nothing moves. Whatever
+  goes whole is marked at its largest (a tile with its list item, a figures grid, a section with
+  its heading); each card inside keeps its own outline. A wholly hidden page has a strip across
+  the top, "This whole page is removed at launch". A link launch mode drops is marked too; no
+  nav or footer link points at a hidden page today. The bar gives the total, the same
+  `launchSummary()` count /studio/launch prints.
+- **No second hide rule.** `public/launch-badges.js` asks the server for the page as launch mode
+  leaves it (the peek the badges already used) and marks what is missing from the answer.
+
+**Decisions, all reversible:**
+
+- The cookie is `kd_launch_view`, `off`, `preview` or `removed`, HttpOnly, SameSite=Lax, and has no
+  Max-Age: it holds across pages until switched off or the browser closes. It replaces
+  `kd_launch_preview`, which never reached a server.
+- The full-width bar the old Preview had is gone. The floating bar carries the label and "Back to
+  normal", so one bar does it on every page, the 404 included.
+- A signed-in 404 in the ordinary view gains the script's tag, one difference from main's bytes, so
+  the buttons are on the 404 too. Every other signed-in page in the ordinary view is unchanged.
+- Under 1024px wide the buttons fold into one button that opens above the bar, and it names the view
+  that is on. In edit mode on such a screen it hides, as "Undo" and "Done editing" need that room.
+- Inside a marked item fog text turns mist, because the yellow would dull it on a dark band. It is
+  colour only, so nothing moves.
+- A placeholder a saved edit keeps stays dashed in Launch preview, because the public gets it dashed.
+  With the test server's rows that is the Indeed card on `/careers` (saved row #3), PRE-LAUNCH row 6.
+
+No layout was changed to make a page look better with its items gone. How each one reads is Manas's
+call, from the screenshots in the local, git-ignored `launch-review/` folder.
