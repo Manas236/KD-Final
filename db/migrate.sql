@@ -256,6 +256,34 @@ CREATE TABLE IF NOT EXISTS job_applications (
   created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- site_settings — switches an editor flips in /studio, read at request
+-- time (src/lib/launch-switch.ts). One key so far: launch_mode, '1' or '0'.
+--
+-- APPEND-ONLY, like content_edits, because kd_app has no UPDATE: a flip is
+-- a new row, and the current value for a key = the row with the highest
+-- id. No row, or no table, means off.
+CREATE TABLE IF NOT EXISTS site_settings (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  `key`         VARCHAR(64)   NOT NULL,
+  value         VARCHAR(255)  NOT NULL,
+  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_key (`key`, id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- site_settings_events — one row per flip, written in the same transaction
+-- as the site_settings row, shown on /studio/launch to signed-in editors.
+-- old_value is NULL when the key had never been set.
+CREATE TABLE IF NOT EXISTS site_settings_events (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  `key`         VARCHAR(64)   NOT NULL,
+  old_value     VARCHAR(255)  NULL,
+  new_value     VARCHAR(255)  NOT NULL,
+  client_ip     VARCHAR(45)   NULL,
+  user_agent    VARCHAR(255)  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_key (`key`, id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ------------------------------------------------------------
 -- 2. Columns that tables created before a given date lack.
 --
@@ -310,6 +338,8 @@ SELECT name AS `table`,
     UNION ALL SELECT 'gallery_uploads'
     UNION ALL SELECT 'project_text_events'
     UNION ALL SELECT 'job_applications'
+    UNION ALL SELECT 'site_settings'
+    UNION ALL SELECT 'site_settings_events'
   ) AS wanted;
 
 SELECT 'job_posting_events.open_days' AS `column`,
@@ -325,7 +355,7 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 --
 -- kd_app is created once per server, by an administrator, and needs
 -- exactly these rights and no others. SELECT and INSERT are all the app
--- uses on the first five tables, which are append-only (a revert or an
+-- uses on every table but one, as they are append-only (a revert or an
 -- undo INSERTs a new row); job_applications also needs DELETE, for the
 -- deletion /privacy promises. No CREATE and no ALTER: schema changes
 -- come from this file, run by an administrator.
@@ -336,6 +366,8 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 --   GRANT SELECT, INSERT ON kd_construction.gallery_uploads TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.project_text_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT, DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.site_settings TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.site_settings_events TO 'kd_app'@'localhost';
 --
 -- A table added to this file later needs its own GRANT line here, and
 -- run on every server, or the app cannot read it.
