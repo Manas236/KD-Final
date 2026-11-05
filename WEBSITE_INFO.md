@@ -19,7 +19,7 @@ in-person verification session of the same date.
 | 1 | **No contract values anywhere.** No ₹ Cr per project — not in copy, cards, meta descriptions or schema. | Company decision, 2026-08-18. Deliberate, not an omission. Project cards run on engineering quantities instead. |
 | 2 | **No net worth. Revenue only.** | Company decision. ₹220 Cr turnover and the ₹500 Cr 2030 target are the only financial figures. |
 | 3 | **Never say or imply "RDSO certified."** | Certification is in progress, not held, and the approved document does not mention RDSO at all. |
-| 4 | **"Kavach installed" is permitted — at Mankhurd station, and only there.** | Confirmed verbally. Do not generalise it to the portfolio. |
+| 4 | **Never say or imply that K.D. installed Kavach, at Mankhurd or anywhere.** | Sir, 5 Nov 2026, in person: the statement is false. The 18 Aug answer "installed, at Mankhurd" is WITHDRAWN. |
 | 5 | **Never publish "World Bank-funded"** on Panvel–Karjat. | Appeared only in an unapproved draft; dropped. |
 | 6 | **Never ship a `[To be added]` bullet.** | The CSR skeleton still carries one. |
 | 7 | **Industry statistics must be visually distinguished from company claims,** with a cited source. | Stated in all three structure documents. This site faces government tender evaluators. |
@@ -238,13 +238,13 @@ the approved vision.
 | 2 | **Track Engineering** | Permanent-way construction and associated railway track systems, integrated seamlessly with civil works and broader railway operations. | P-Way at Sanpada · 3,089 m BG track + 2,749 m pit/traverser track at Matunga LHB |
 | 3 | **Electrical Engineering** | Railway and building electrical works, integrating power, electrical systems and associated infrastructure with civil and mechanical execution — **including projects within operational railway environments**. | 6,000 kVA system at Matunga LHB · OHE/PSI across Panvel–Karjat |
 | 4 | **Mechanical Engineering** | Railway sheds, inspection facilities, heavy repair facilities, workshops and associated mechanical installations. **Plus:** sources specialised railway machinery from reputed OEMs and provides comprehensive maintenance and technical support **throughout the DLP period**. | 80-tonne CNC traverser · EOT cranes · CNC shot-blasting at Matunga |
-| 5 | **Signalling & Telecommunication** | Railway signalling and telecommunication works delivered within multidisciplinary infrastructure projects, integrating critical railway communication and control systems. Extends to **installation of Kavach**, India's indigenous **Automatic Train Protection (ATP)** system. | **Kavach installed at Mankhurd station.** S&T contract scope sits at **Matunga only** |
+| 5 | **Signalling & Telecommunication** | Railway signalling and telecommunication works delivered within multidisciplinary infrastructure projects, integrating critical railway communication and control systems. ~~Extends to installation of Kavach~~ *(withdrawn, Sir, 5 Nov 2026, in person)* | S&T works at **Matunga and Sanpada Carshed** (Sir, 5 Nov 2026, in person); details pending from Tanmoy sir |
 
 > The Mechanical vertical is materially wider than "mechanical construction" — it is a **procurement +
 > O&M offering**. Say so.
 >
-> ⚠️ One line to tighten: Mankhurd is a Harbour Line location, while S&T scope was given as Matunga-only.
-> Confirm which contract the Mankhurd Kavach work sat under before naming a contract on the S&T page.
+> ✅ The old question, which contract the Mankhurd Kavach work sat under, is void: Sir, 5 Nov 2026, in person, K.D. did
+> not install it. OPEN-QUESTIONS.md #75.
 
 ### 7b. Integrated Manufacturing & Resources — three assets
 
@@ -452,8 +452,8 @@ gallery, never as case studies with empty fields.
 > specialist** — it is a **railway-led infrastructure EPC contractor with a real social-infrastructure
 > and public-amenity record**. Give that a strand of its own.
 
-**Named in the approved document but neither described nor confirmed:** **Kharghar Centre of Excellence.**
-One yes/no closes it.
+**Named in the approved document, and closed:** **Kharghar Centre of Excellence.** Sir, 5 Nov 2026, in person: it is a
+smart city development, and K.D.'s only work inside it is the Kharghar Football Stadium.
 
 ---
 
@@ -536,7 +536,7 @@ answer.**
 | **Social & public infrastructure** | Ulwe Hospital, Karanjade Health Care, Ulwe CIDCO School | ✅ Photo-led gallery only |
 | **Sports & recreation** | Kharghar Golf Course, Kharghar Football Stadium | ✅ Photo-led gallery only |
 | **Residential** | Lush Meadows, Kharghar | ✅ Photo-led gallery only |
-| **Institutional** | Kharghar Centre of Excellence | ⚠️ Named only, unconfirmed |
+| ~~**Institutional**~~ | ~~Kharghar Centre of Excellence~~ | Closed, Sir, 5 Nov 2026, in person: not a K.D. project |
 | Ports | JNPT client name only, deferred | ❌ **Do not open a section** |
 | Metro | — | ❌ **No metro project exists. Drop any Metro filter.** |
 | Data centres / AI hubs | Dropped from the approved vision | ❌ |
@@ -600,7 +600,7 @@ arrive** — an unverifiable credential block is worse than none. `LocalBusiness
 | --- | --- |
 | Core identity | EPC contractor Navi Mumbai · infrastructure EPC company Mumbai · full-spectrum EPC contractor India |
 | Railway | railway infrastructure contractor India · railway station redevelopment contractor · railway workshop construction · coach maintenance depot construction · carshed construction contractor |
-| Signalling & telecom | railway signalling and telecommunication contractor · **Kavach installation contractor** · ATP system installation India |
+| Signalling & telecom | railway signalling and telecommunication contractor |
 | Bridges & FOBs | foot overbridge construction contractor · FOB launching over running railway line · plate girder FOB erection |
 | Discipline | civil engineering contractor Mumbai · structural steel fabrication Raigad · ready-mix concrete plant Karjat · track engineering / P-Way contractor |
 | Credential | ISO 9001 14001 45001 certified construction company · Chamber of Railway Industries member · MUTP-III contractor |
@@ -610,14 +610,15 @@ arrive** — an unverifiable credential block is worse than none. `LocalBusiness
 > competing content. "Matunga LHB coach maintenance facility" and "Solapur Vande Bharat maintenance
 > depot" are close to uncontested.
 >
-> **Never target "RDSO certified."** "Kavach installation contractor" is permitted, tied to Mankhurd.
+> **Never target "RDSO certified."** Never target Kavach or ATP either: the 18 Aug answer was withdrawn
+> (Sir, 5 Nov 2026, in person).
 
 ### Editorial library — seed titles
 
 Future of Railway Infrastructure in India · Smart Cities and EPC Companies · Modern Bridge Construction ·
 Railway Station Redevelopment · Sustainable Construction Practices · BIM in Infrastructure Projects ·
 India's Infrastructure Growth Story · Safety Culture in Construction · Green Building Technologies ·
-Project Management in EPC · **Kavach and the Future of Train Protection in India** · **Building Inside a
+Project Management in EPC · **Building Inside a
 Live Railway: How FOBs Are Launched Over Running Lines** · **What ISO 9001, 14001 and 45001 Actually Mean
 on a Construction Site** · **Inside a Vande Bharat Maintenance Depot**
 
@@ -646,7 +647,7 @@ Ranked. The first two block more of the site than everything else combined.
 | 12 | Client, scope and year for the seven photo-only projects | Converts a gallery into seven case studies |
 | 13 | Employee headcount · cities and states of operation · director designations | Counters and About detail |
 | 14 | Vashi HQ year · registered vs corporate office | Timeline placement and statutory footer text |
-| 15 | Kharghar Centre of Excellence — ours, yes or no | Whether it appears at all |
+| 15 | ~~Kharghar Centre of Excellence — ours, yes or no~~ | Closed, Sir, 5 Nov 2026, in person: not a K.D. project; K.D.'s only work inside it is the football stadium |
 | 16 | Whether to name Shri Vivek Gupta on the Sanpada page | That paragraph |
 | 17 | Matunga Workshop heritage claims — 1915, first railway workshop, GreenCo Platinum, 200+ coaches | Four strong claims currently unusable |
 | 18 | Company profile PDF / brochure / tender pre-qualification document | Likely answers half this list by itself |

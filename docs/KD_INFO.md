@@ -25,11 +25,21 @@
 > A company representative answered the outstanding questions verbally. Those answers are marked 🗣 and
 > carry the same authority as the approved document — where one resolves a conflict, the conflict is
 > closed in place. The session in one line: **the Matunga FOB and the Z-Bridge are one structure** ·
-> **Kavach has been installed, at Mankhurd** · **S&T scope sits at Matunga only** · **contract values are
+> ~~Kavach has been installed, at Mankhurd~~ (**WITHDRAWN 5 Nov 2026**, revision 5) · ~~S&T scope sits at
+> Matunga only~~ (**superseded 5 Nov 2026**, revision 5) · **contract values are
 > dropped from the site everywhere** · **the five photography-only projects are the company's own** ·
 > **net worth is not published — revenue only**.
 
-**Last updated:** 2026-08-18 · **Revision 4**
+> ### Revision 5 — 2026-11-05 · three rulings from Sir
+>
+> Sir, 5 Nov 2026, in person. **A.** K.D. has **not** installed Kavach at Mankhurd; Sir says the statement is false, so the
+> 18 Aug answer "installed, at Mankhurd" is **WITHDRAWN** (§4.5). **B.** Signalling & telecom work is
+> **Matunga and Sanpada Carshed**, not Matunga only; details later from Tanmoy sir (§4.5). **C.** The
+> Kharghar Centre of Excellence is a **smart city development**, and K.D.'s only work inside it is the
+> **Kharghar Football Stadium**; the centre is closed as a K.D. project (§7.12). Corrected in place below;
+> what was wrong is struck through and kept as the record. OPEN-QUESTIONS.md #75.
+
+**Last updated:** 2026-11-05 · **Revision 5**
 
 ---
 
@@ -138,7 +148,7 @@ The approved doc supplies this block for the About page:
 - **Core Clients** — Indian Railways, Central Railway, Western Railway, MRVC, CIDCO, NMMC, JNPT, Balbharati
 - **Core Capabilities** — Civil · Mechanical · Electrical · Signalling & Telecommunication · Track Engineering · Railway Infrastructure · Full-Spectrum EPC
 - **Integrated Infrastructure** — Owned Steel Fabrication Plant · RMC Plant · 50+ heavy equipment units
-- **Major Projects** — Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Centre of Excellence · Kharghar Golf Course · Kharghar Football Stadium
+- **Major Projects** — Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Golf Course · Kharghar Football Stadium *(the approved list also named the Kharghar Centre of Excellence: closed, §7.12)*
 - **Certifications** — ISO 9001:2015 · ISO 14001:2015 · ISO 45001:2018
 - **Industry Association** — Member · Chamber of Railway Industries (Rail Chamber)
 
@@ -325,21 +335,16 @@ period**, ensuring equipment reliability, operational readiness and long-term pe
 
 Railway **signalling and telecommunication works** delivered as part of multidisciplinary infrastructure
 projects, integrating critical railway communication and control systems into modern railway facilities.
-Capability **extends to the installation of Kavach**, India's indigenous **Automatic Train Protection
-(ATP)** system, supporting enhanced railway safety and operational reliability.
 
-**Kavach — installed, not merely offered.** 🗣 K.D. has **installed Kavach at Mankhurd station**. The
-approved document's hedged wording (*"our capabilities also extend to the installation of Kavach"*)
-understates the position: this is delivered work and may be stated as such.
+**Kavach: WITHDRAWN.** Sir, 5 Nov 2026, in person: K.D. has **not** installed Kavach at Mankhurd, and the statement is
+false. The 18 Aug 2026 answer ("installed, at Mankhurd station") is withdrawn, and with it the approved
+document's wording (*"our capabilities also extend to the installation of Kavach, India's indigenous
+Automatic Train Protection (ATP) system"*). Nothing on the site names Kavach or ATP, and no keyword targets
+them. Neither comes back without a new word from Sir.
 
-**Where the S&T scope sits.** 🗣 **Matunga only.** No other contract in the portfolio carried signalling
-and telecommunication scope, so the vertical's project evidence is the Matunga work (§7.4, §7.5) plus the
-Kavach installation at Mankhurd.
-
-> ⚠️ **One line to tighten before launch.** Mankhurd is a Harbour Line redevelopment location (§7.9),
-> while the S&T scope was given as Matunga-only — so the Kavach installation and the S&T contract scope
-> are being reported as two separate things. Publishable as written, but confirm which contract the
-> Mankhurd Kavach work sat under before the S&T page names a contract.
+**Where the S&T scope sits.** Sir, 5 Nov 2026, in person: **Matunga and Sanpada Carshed** (§7.3, §7.4, §7.5). This
+replaces the 18 Aug answer "Matunga only". **Details are pending from Tanmoy sir**; until then the site says
+the works were carried out at both, with no scope and no figures.
 
 ### INTEGRATED MANUFACTURING & RESOURCES
 
@@ -655,7 +660,7 @@ has done* — but there is not a sentence of scope for any of them:
 | --- | --- |
 | **Kharghar Golf Course** | 🗣 **Confirmed ours.** Photography exists (8 images + RAW): clubhouse and greens |
 | **Kharghar Football Stadium** | 🗣 **Confirmed ours.** No photography |
-| **Kharghar Centre of Excellence** | 🟡 **Not confirmed in the session** — named in the approved doc only, no photography |
+| ~~**Kharghar Centre of Excellence**~~ | **Closed. Sir, 5 Nov 2026, in person:** a smart city development, not a K.D. project. K.D.'s only work inside it is the Kharghar Football Stadium |
 | Chikhale · Mohape · Chowk · Karjat stations | Covered by the Panvel–Karjat corridor entry |
 | Matunga FOB · Vashi FOB | Covered by §7.2 and §7.7 |
 
@@ -665,9 +670,10 @@ has done* — but there is not a sentence of scope for any of them:
 > can carry a card; the football stadium has none and would be a name on a list, so hold it back until a
 > photograph exists rather than publishing an empty card.
 >
-> ⚠️ **The Centre of Excellence was not covered by the answer.** It is still approved-by-name in the
-> source document, so it is not wrong — but nobody has confirmed it in person, and it is the one Kharghar
-> entry with neither photography nor confirmation. **One yes/no closes it.**
+> ✅ **The Centre of Excellence is closed. Sir, 5 Nov 2026, in person:** the Kharghar Centre of Excellence is a smart
+> city development, and K.D.'s only work inside it is the Kharghar Football Stadium. The stadium's page
+> reads as K.D.'s contribution to that development: planned as a 40,000-capacity, FIFA-approved venue, with
+> no list of what else the development holds. Its scope is still to come. OPEN-QUESTIONS.md #75.
 
 ### 7.13 Still photography-only ⬜ — five of the original nine
 
@@ -912,7 +918,7 @@ harvesting · BIM-enabled sustainable construction.
 | **Ports** | JNPT named as a core client | 🟡 — no project, and 🗣 deferred; **do not open a section** |
 | **Education** | Ulwe CIDCO School 🗣 confirmed as K.D.'s own; Balbharati named as a client | 🗣 — publishable on the school, photo-led |
 | **Sports / recreational** | Kharghar Golf Course 🗣, Kharghar Football Stadium 🗣 | 🗣 confirmed ours; photo-led only, no scope |
-| **Institutional** | Kharghar Centre of Excellence | ★ named, ⬜ undescribed, not confirmed in session |
+| ~~**Institutional**~~ | ~~Kharghar Centre of Excellence~~ | Closed, Sir, 5 Nov 2026, in person: not a K.D. project (§7.12) |
 | **Social infrastructure** | Ulwe Hospital 🗣, Karanjade Health Care 🗣 | 🗣 confirmed ours; photo-led only |
 | **Residential** | Lush Meadows, Kharghar 🗣 | 🗣 confirmed ours — **not** a sister concern |
 | Smart Cities | Named in structure docs only | 🟡 |
@@ -951,7 +957,7 @@ The live tracker is **[NEEDED.md](NEEDED.md)**. What the approved document **clo
 | ✅ | Director roles | **Kailash = Founding Director** (corrected) |
 
 **Closed again by the 2026-08-18 verbal session** 🗣: the Matunga FOB / Z-Bridge identity (same
-structure) · Kavach (installed, at Mankhurd) · S&T scope (Matunga only) · contract values (dropped from
+structure) · ~~Kavach (installed, at Mankhurd)~~ *(withdrawn 5 Nov 2026)* · ~~S&T scope (Matunga only)~~ *(Matunga and Sanpada Carshed since 5 Nov 2026)* · contract values (dropped from
 the site everywhere — request withdrawn) · the five photography-only projects (all K.D.'s own) · the two
 Kharghar projects (golf course and football stadium, ours) · the financial series (revenue, not net
 worth) · per-category equipment counts (supplied, §5.1) · the Vindhane and Karjat plant details (nothing
@@ -963,7 +969,7 @@ year for the two Kharghar projects.
 **Still open, highest first:** ISO certificate numbers and copies · director portraits and biographies ·
 photography for the five projects that have none · the logo in vector · safety statistics · client-logo
 permission · the missing sixth year in the revenue series · client/scope/year for the five newly
-confirmed projects · Vashi HQ year · the Kharghar Centre of Excellence yes/no.
+confirmed projects · Vashi HQ year · signalling and telecom details from Tanmoy sir (§4.5).
 
 ---
 
@@ -974,10 +980,10 @@ The 2026-08-18 in-person session, in the order the questions were asked.
 | # | Question | Answer | Consequence |
 | --- | --- | --- | --- |
 | 1 | Matunga FOB vs Z-Bridge | **Same structure** | One project, formal name + local name. The Z-Bridge story is publishable (§7.2) |
-| 2 | Kavach — installed or capability? | **Installed, at Mankhurd station** | Headline railway credential; the hedged approved wording can be strengthened (§4.5) |
-| 3 | Which contracts carried S&T? | **Matunga only** | S&T page is evidenced by Matunga plus the Mankhurd Kavach work (§4.5) |
+| 2 | Kavach — installed or capability? | ~~**Installed, at Mankhurd station**~~ **WITHDRAWN. Sir, 5 Nov 2026, in person: not installed, the statement is false** | Off the site everywhere; no keyword target (§4.5) |
+| 3 | Which contracts carried S&T? | ~~**Matunga only**~~ **Matunga and Sanpada Carshed. Sir, 5 Nov 2026, in person**; details pending from Tanmoy sir | S&T is evidenced by those two (§4.5) |
 | 4 | Contract values | **Drop everywhere** | No ₹ figures on any page; project cards run on quantities (§7.1) |
-| 5 | The three Kharghar projects | **Golf course and football stadium are ours; detail skipped for now** | Name + photo only; Centre of Excellence unconfirmed (§7.12) |
+| 5 | The three Kharghar projects | **Golf course and football stadium are ours; detail skipped for now** | Name + photo only; Centre of Excellence closed, Sir, 5 Nov 2026, in person: a smart city development, K.D.'s only work inside it the stadium (§7.12) |
 | 6 | The five photography-only projects | **Ours** | Social & public infrastructure becomes a real strand (§7.13, §15) |
 | 7 | The financial series | **Revenue only — no net worth** | Growth chart unblocked; net worth never published (§10) |
 | 8 | JNPT and Balbharati | **Skip for now** | Both stay client-list-only; no Ports section (§6) |
@@ -1013,12 +1019,12 @@ Full before/after, for anyone who worked from revision 2.
 **Added — new facts with no prior record:**
 
 13. ISO 9001:2015, ISO 14001:2015, ISO 45001:2018 · Chamber of Railway Industries membership
-14. Signalling & Telecommunication vertical, including **Kavach ATP** capability
+14. Signalling & Telecommunication vertical *(the Kavach ATP capability it named was withdrawn, Sir, 5 Nov 2026, in person, §4.5)*
 15. OEM machinery sourcing and **DLP-period maintenance and technical support**
 16. **Matunga LHB Coach Maintenance Facilities** (Indian Railways / COFMOW) — an entire signature project
 17. **Harbour Line FOBs & Trespass-Control Infrastructure** across four Sewri–Panvel locations
 18. **Solapur Vande Bharat Maintenance Depot** (LoA received) and **Lower Parel Redevelopment** (Western Railway)
-19. **Kharghar Centre of Excellence, Kharghar Golf Course, Kharghar Football Stadium** — named only
+19. **Kharghar Centre of Excellence, Kharghar Golf Course, Kharghar Football Stadium** — named only *(the Centre of Excellence closed, Sir, 5 Nov 2026, in person, §7.12)*
 20. Engineering quantities for every signature project (RCC m³, steel MT, earthwork m³, track m)
 21. **PPP** as an explicit strategic direction
 22. Harbour Line redevelopment scope extended to **elevated decks and skywalks**; 10 m FOB at Mankhurd

@@ -20,7 +20,7 @@ SEO requirements and the planned editorial content library.
 > and nothing has been published under the old ones, so no redirects are owed.
 >
 > **Revision 3 — 2026-08-18.** The approved document changes what this site can credibly rank for. Three
-> new keyword clusters open up (**signalling & telecommunication / Kavach**, **ISO-certified EPC**,
+> new keyword clusters open up (**signalling & telecommunication**, **ISO-certified EPC**,
 > **Vande Bharat depot**), the project-name cluster doubles, and two route renames need redirect
 > planning. Details below.
 
@@ -130,19 +130,19 @@ volume before committing.
 | --- | --- |
 | Core identity | EPC contractor Navi Mumbai · infrastructure EPC company Mumbai · full-spectrum EPC contractor India |
 | Railway | railway infrastructure contractor India · railway station redevelopment contractor · railway workshop construction · **coach maintenance depot construction** · **carshed construction contractor** |
-| **Signalling & telecom ★ new** | **railway signalling and telecommunication contractor · Kavach installation contractor · ATP system installation India** |
+| **Signalling & telecom ★ new** | **railway signalling and telecommunication contractor** |
 | Bridges & FOBs | **foot overbridge construction contractor · FOB launching over running railway line · plate girder FOB erection** |
 | Discipline | civil engineering contractor Mumbai · structural steel fabrication Raigad · **ready-mix concrete plant Karjat** · track engineering / P-Way contractor |
 | **Credential ★ new** | **ISO 9001 14001 45001 certified construction company · Chamber of Railway Industries member** · Railway Board approved contractor · MUTP-III contractor · RDSO girder manufacturer *(only once certified)* |
 | Project-named | Sanpada Carshed · Matunga Workshop · **Matunga LHB facility** · **Nhava Sheva Uran railway station** · Panvel Karjat railway corridor · **Solapur Vande Bharat depot** · **Lower Parel railway redevelopment** |
 
-> ⚠️ **One hard rule, one cleared:**
+> ⚠️ **Two hard rules:**
 >
 > 1. Do not target "RDSO certified" keywords — certification is **in progress**, and the approved doc does
 >    not mention it at all.
-> 2. ✅ **Cleared 2026-08-18** 🗣 — Kavach was **installed at Mankhurd station**, so "Kavach installation
->    contractor" may be targeted as a *delivered service*, not merely a capability. Tie the claim to
->    Mankhurd wherever it appears; do not generalise it to the portfolio.
+> 2. ❌ **WITHDRAWN 5 Nov 2026.** Sir, 5 Nov 2026, in person: K.D. has not installed Kavach at Mankhurd, and the statement
+>    is false. The 18 Aug clearance is gone. Do not target Kavach or ATP keywords, and do not write the
+>    article proposed for them.
 >
 > **Best new opportunity:** the project-name cluster. Six newly documented projects with distinctive
 > names, real engineering quantities, and almost no competing content — "Matunga LHB coach maintenance
@@ -167,7 +167,7 @@ Four are added this revision, drawn from what the approved document actually giv
 | 8 | Safety Culture in Construction |
 | 9 | Green Building Technologies |
 | 10 | Project Management in EPC |
-| 11 | ★ **Kavach and the Future of Train Protection in India** |
+| 11 | ~~Kavach and the Future of Train Protection in India~~ *(dropped: the 18 Aug answer was withdrawn, 5 Nov 2026)* |
 | 12 | ★ **Building Inside a Live Railway: How FOBs Are Launched Over Running Lines** |
 | 13 | ★ **What ISO 9001, 14001 and 45001 Actually Mean on a Construction Site** |
 | 14 | ★ **Inside a Vande Bharat Maintenance Depot** |
@@ -186,7 +186,6 @@ That internal link is the whole point of the library.
 | Modern Bridge Construction | Matunga Workshop FOB (303 m) · Harbour Line FOBs |
 | **Building Inside a Live Railway** | Harbour Line FOBs · Panvel–Karjat box-pushing beneath live OHE |
 | Future of Railway Infrastructure in India | Panvel–Karjat, MUTP-III |
-| **Kavach and Train Protection** | Signalling & Telecommunication vertical 🗣 *(installed at Mankhurd — cleared)* |
 | Safety Culture in Construction | HSE — four pillars + **ISO 45001:2018** |
 | **What the ISO standards mean** | The three certifications, with site practice as illustration |
 | Green Building Technologies | **ISO 14001:2015** · Matunga Workshop GreenCo Platinum 🟡 |
@@ -211,7 +210,7 @@ In practice, for this build:
 
 Getting this wrong on a government-tender-facing website is a real risk, not a stylistic preference. The
 four market statistics on *Why K.D.* and the expanded *Sustainability* page are the two places most likely
-to breach it — and the **Kavach** sentence is now the third.
+to breach it. (The **Kavach** sentence was a third until it was withdrawn on 5 Nov 2026.)
 
 ---
 
@@ -229,7 +228,7 @@ to breach it — and the **Kavach** sentence is now the third.
 | ☐ | `LocalBusiness` schema on Contact *(unblocked; `geo` needs exact lat/long)* |
 | ☐ | Every image has meaningful ALT text — using the **approved** project and place spellings (Nhava Sheva, Ulwe) |
 | ☐ | Internal linking pass — services ↔ projects ↔ industries ↔ certifications |
-| ☐ | No "RDSO certified" phrasing anywhere. **"Kavach installed" is now permitted** 🗣 — at Mankhurd station, and only there |
+| ☐ | No "RDSO certified" phrasing anywhere. **No Kavach or ATP claim anywhere**: withdrawn, Sir, 5 Nov 2026, in person |
 | ☐ | Google Search Console + Analytics connected |
 | ☐ | Google Business Profile for the Vashi office |
 | ☐ | Core Web Vitals verified on the photography-heavy pages |

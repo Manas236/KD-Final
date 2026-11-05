@@ -86,7 +86,7 @@ right for the audience.
 | **Core Clients** | Indian Railways · Central Railway · Western Railway · Mumbai Railway Vikas Corporation Limited (MRVC) · City and Industrial Development Corporation of Maharashtra Limited (CIDCO) · Navi Mumbai Municipal Corporation (NMMC) · Jawaharlal Nehru Port Trust (JNPT) · Balbharati |
 | **Core Capabilities** | Civil · Mechanical · Electrical · Signalling & Telecommunication · Track Engineering · Railway Infrastructure · Full-Spectrum EPC |
 | **Integrated Infrastructure** | Owned Steel Fabrication Plant · RMC Plant · 50+ heavy equipment units |
-| **Major Projects** | Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Construction of Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Centre of Excellence · Kharghar Golf Course · Kharghar Football Stadium |
+| **Major Projects** | Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Construction of Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Golf Course · Kharghar Football Stadium |
 | **Certifications** | ISO 9001:2015 · ISO 14001:2015 · ISO 45001:2018 |
 | **Industry Association** | Member · Chamber of Railway Industries (Rail Chamber) |
 
@@ -274,16 +274,12 @@ a broader EPC horizon.
 
 > We undertake railway signalling and telecommunication works as part of multidisciplinary infrastructure
 > projects, integrating critical railway communication and control systems into modern railway facilities.
-> Our capabilities also extend to the installation of Kavach, India's indigenous Automatic Train
-> Protection (ATP) system, supporting enhanced railway safety and operational reliability.
 
-> ✅ **Confirmed 2026-08-18 🗣 — Kavach has been installed, at Mankhurd station.** The approved sentence
-> understates it. **Strengthen the copy** to state the installation as delivered work, e.g. *"Our work
-> extends to the installation of Kavach, India's indigenous Automatic Train Protection (ATP) system,
-> delivered at Mankhurd station."*
+> ❌ **WITHDRAWN. Sir, 5 Nov 2026, in person: K.D. has not installed Kavach at Mankhurd, and the statement is false.** The
+> approved document's sentence on the installation of Kavach and the 18 Aug answer are both off the
+> site. Do not bring either back ([KD_INFO §4.5](KD_INFO.md)).
 >
-> 🗣 S&T contract scope sits at **Matunga only** — that is the vertical's project evidence. Before the
-> page names a contract for the Kavach work, confirm which one it sat under ([NEEDED §52b](NEEDED.md)).
+> S&T works are at **Matunga and Sanpada Carshed** (Sir, 5 Nov 2026, in person), with details pending from Tanmoy sir.
 
 ### INTEGRATED MANUFACTURING & RESOURCES ★
 
@@ -484,8 +480,8 @@ it is marked 🟡 and comes from the earlier documents.
 
 > ❌ The ₹149 Cr+ value is **not for publication** — values are dropped site-wide 🗣.
 > 🟡 Held from rev 1: *"Serving 45,000+ daily commuters and 425+ train movements a day."*
-> 🗣 **Mankhurd is where Kavach was installed** — this project is the natural cross-link from the
-> Signalling & Telecommunication page.
+> ❌ ~~Mankhurd is where Kavach was installed~~: withdrawn, Sir, 5 Nov 2026, in person. No cross-link from the Signalling
+> & Telecommunication page.
 > ⬜ No construction photography exists for any of the four stations.
 
 ### Recently Awarded ★ — **new section**
@@ -521,9 +517,12 @@ it is marked 🟡 and comes from the earlier documents.
 
 ### Named but undescribed ⬜
 
-**Kharghar Centre of Excellence · Kharghar Golf Course · Kharghar Football Stadium** are approved as
+**Kharghar Golf Course · Kharghar Football Stadium** are approved as
 company projects in the At-a-glance list, with no copy at all. They cannot have pages until someone
 supplies client, scope, value and year — but they should not be quietly dropped either. Ask.
+
+**Kharghar Centre of Excellence** is closed. Sir, 5 Nov 2026, in person: it is a smart city development, and K.D.'s only
+work inside it is the Kharghar Football Stadium.
 
 ---
 

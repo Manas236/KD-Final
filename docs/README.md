@@ -84,7 +84,7 @@ inventory. The approved document sets what goes *on* those pages.
 | # | Was | Now |
 | --- | --- | --- |
 | 1 | Mohanlal S. Gindodia = Founding Director | **Kailash S. Gindodia = Founding Director** |
-| 2 | Four engineering verticals | **Five** — Signalling & Telecommunication added, incl. Kavach ATP |
+| 2 | Four engineering verticals | **Five** — Signalling & Telecommunication added *(its Kavach ATP line withdrawn, Sir, 5 Nov 2026, in person)* |
 | 3 | 41+ / 40+ equipment units | **50+** |
 | 4 | No certifications on record | **ISO 9001:2015 · 14001:2015 · 45001:2018** + Rail Chamber membership |
 | 5 | RMC plant unsourced, withheld | **Confirmed — owned, at Karjat** |
@@ -103,7 +103,7 @@ inventory. The approved document sets what goes *on* those pages.
 | Issue | Where |
 | --- | --- |
 | ✅ ~~Matunga Workshop FOB vs Matunga Z-Bridge~~ — **same structure**, confirmed 2026-08-18 🗣 | [KD_INFO §7.2](KD_INFO.md) |
-| ✅ ~~Kavach — installed or a capability?~~ — **installed, at Mankhurd station**, confirmed 2026-08-18 🗣 | [KD_INFO §4.5](KD_INFO.md) |
+| ✅ ~~Kavach — installed or a capability?~~ — **WITHDRAWN**: the 18 Aug "installed, at Mankhurd" is false, Sir, 5 Nov 2026, in person | [KD_INFO §4.5](KD_INFO.md) |
 | **Contract values dropped entirely** from the approved doc — deliberate, or missing? Six of ten projects have no value | [NEEDED §49](NEEDED.md) |
 | **Three Kharghar projects** named with no scope — and they are the only non-railway work in the approved portfolio | [KD_INFO §7.12](KD_INFO.md) |
 | ISO certificate **numbers and copies** still not in hand | [NEEDED §26b](NEEDED.md) |

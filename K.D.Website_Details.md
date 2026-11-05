@@ -31,7 +31,7 @@ Our commitment to **quality, environmental responsibility and occupational healt
 - **Core Clients** — Indian Railways, Central Railway, Western Railway, Mumbai Railway Vikas Corporation Limited (MRVC), City and Industrial Development Corporation of Maharashtra Limited (CIDCO), Navi Mumbai Municipal Corporation (NMMC), Jawaharlal Nehru Port Trust (JNPT), Balbharati.
 - **Core Capabilities** — Civil · Structural Steel Fabrication & Erection · Mechanical · Electrical · Signalling & Telecommunication · Track Engineering · Railway Infrastructure · Full-Spectrum EPC
 - **Integrated Infrastructure** — Owned Steel Fabrication Plant · RMC Plant · 50+ heavy equipment units
-- **Major Projects** — Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Construction of Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Centre of Excellence · Kharghar Golf Course · Kharghar Football Stadium
+- **Major Projects** — Mumbai Harbour Line Station Redevelopment · Sanpada Carshed · Matunga Workshop · Lower Parel Workshop · Solapur Vande Bharat Maintenance Depot · Construction of Nhava Sheva & Uran Railway Stations · Chikhale, Mohape, Chowk & Karjat Railway Stations · Matunga FOB · Vashi FOB · Kharghar Golf Course · Kharghar Football Stadium
 - **Certifications** — ISO 9001:2015 · ISO 14001:2015 · ISO 45001:2018
 - **Industry Association** — Member · **Chamber of Railway Industries (Rail Chamber)**
 
@@ -106,7 +106,8 @@ Our mechanical capabilities cover **railway sheds, inspection facilities, heavy 
 
 ### Signalling & Telecommunication
 
-We undertake **railway signalling and telecommunication works** as part of multidisciplinary infrastructure projects, integrating critical railway communication and control systems into modern railway facilities. Our capabilities also extend to the **installation of Kavach, India's indigenous Automatic Train Protection (ATP) system**, supporting enhanced railway safety and operational reliability.
+We undertake **railway signalling and telecommunication works** as part of multidisciplinary infrastructure projects, integrating critical railway communication and control systems into modern railway facilities.
+<!-- [Sir, 5 Nov 2026, in person] The sentence on the installation of Kavach is withdrawn: K.D. has not installed it, and the statement is false (ASK.md #2, KD_INFO §4.5, OPEN-QUESTIONS.md #75). -->
 
 ## INTEGRATED MANUFACTURING & RESOURCES
 
@@ -150,11 +151,13 @@ heritage/commuter claims those files hold but could not confirm).
   A comprehensive railway maintenance infrastructure development at **Sanpada Carshed**, comprising an **Inspection Shed with three pit lines, Heavy Repair Shed, Administration Building, Canteen, Time Office, Security Building, Battery Room and associated infrastructure**. The project involved substantial civil and structural execution, including **11,338 m³ of RCC and 1,412 MT of structural steel fabrication and erection**, along with **P-Way track laying works**, creating integrated facilities to support efficient railway maintenance and operations.
   <!-- [2026-10-13] From K.D.'s own list of completed works (rows 8, 9 and 12 — see "Civic works" below; OPEN-QUESTIONS.md #44). The list's wording, tidied; its values are not used. -->
   The work ran across **three Central Railway contracts**. Two were under **MUTP-II**: the extension of the **Heavy Repair Shed, Light Repair Shed and Inspection Shed over lines 4 to 8**, with a first floor for the Administration Building, laboratories, further buildings and the associated track modification; and a **second Heavy Repair Shed for EMU rakes**. The third delivered **Inspection Sheds with three and two pit lines and a Feeder Shed**.
+  <!-- [Sir, 5 Nov 2026, in person] Signalling and telecom work is Matunga and Sanpada Carshed (ASK.md #3). Details later from Tanmoy sir. -->
+  K.D. Constructions also carried out **signalling and telecommunication works** at Sanpada Carshed.
 
 - **Matunga Railway Workshop | Client: Indian Railways**
   At the historic **Matunga Railway Workshop**, K.D. Constructions executed a multidisciplinary development programme comprising **industrial sheds, administrative and training facilities, traverser infrastructure, underground water tanks, roads, drainage, roofing and associated electrical works**. The project supported the **augmentation of Bogie Periodic Overhaul (POH) capacity from 350 to 575 bogies per month**, while strengthening the workshop's facilities for coach maintenance and railway operations. The project reflects our ability to deliver complex **workshop infrastructure through integrated civil, structural, electrical and railway-specific execution**.
-  <!-- [2026-08-18 🗣] "Which contracts carried S&T? — Matunga only" (ASK.md #3, KD_INFO §4.5). The answer named the site, not which of the two Matunga contracts; it is recorded here, on the workshop programme. -->
-  The Matunga programme also carried K.D. Constructions' **signalling & telecommunication works** — the one contract in the portfolio to do so — integrating railway communication and control systems into the modernised workshop.
+  <!-- [2026-08-18 🗣] "Which contracts carried S&T? — Matunga only" (ASK.md #3, KD_INFO §4.5). The answer named the site, not which of the two Matunga contracts; it is recorded here, on the workshop programme. [Sir, 5 Nov 2026, in person] Matunga and Sanpada Carshed, so "the one contract in the portfolio" went. -->
+  The Matunga programme also carried K.D. Constructions' **signalling & telecommunication works**, integrating railway communication and control systems into the modernised workshop.
 
 - **Creation of LHB Coach Maintenance Facilities, Matunga | Client: Indian Railways / COFMOW**
   A major multidisciplinary development creating **LHB coach maintenance facilities at Matunga Workshop**, integrating **civil, structural, electrical and mechanical works**. The project included **27,090 m³ of RCC, 1,816 MT of structural steel, 2,749 m of inspection pit and traverser track, and 3,089 m of BG track**. The facility also incorporated a **6,000 kVA electrical system** and specialised railway equipment including an **80-tonne CNC traverser, EOT cranes and CNC shot-blasting equipment**, demonstrating our capability to deliver **integrated, technology-intensive railway maintenance infrastructure**.
@@ -174,8 +177,8 @@ heritage/commuter claims those files hold but could not confirm).
 
 - **Mumbai Harbour Line Station Redevelopment | Client: MRVC**
   A major **brownfield station redevelopment programme across GTB Nagar, Chembur, Govandi and Mankhurd**, executed within an operational railway environment. The scope includes **FOBs, elevated decks, skywalks, service buildings, improved station access and associated infrastructure**, including a **10 m-wide FOB at Mankhurd**. With railway operations continuing throughout execution, the project demands rigorous **planning, safety and interface management** and is now **over 60% complete**.
-  <!-- The commuter figure is this document's own CSR paragraph ("station redevelopments serving 45,000+ commuters a day"); this is the portfolio's only station redevelopment in execution. [2026-08-18 🗣] Kavach: "installed, at Mankhurd station" (ASK.md #2, KD_INFO §4.5) — tied to the location, because which contract it sat under was left open (ASK.md 🔴 #2). -->
-  The redeveloped stations serve **45,000+ commuters a day**. Mankhurd is also where K.D. Constructions has installed **Kavach**, India's indigenous **Automatic Train Protection (ATP)** system.
+  <!-- The commuter figure is this document's own CSR paragraph ("station redevelopments serving 45,000+ commuters a day"); this is the portfolio's only station redevelopment in execution. [Sir, 5 Nov 2026, in person] The sentence that K.D. installed Kavach at Mankhurd (the answer of 2026-08-18, ASK.md #2) is WITHDRAWN: the statement is false. -->
+  The redeveloped stations serve **45,000+ commuters a day**.
 
 ## Recently Awarded
 
@@ -213,13 +216,13 @@ text: on the site as sign-offs PRE-LAUNCH.md S6–S7 until confirmed.
 -->
 
 - **Kharghar Golf Course** — Kharghar (clubhouse and greens; photographs in `Kharghar Golf Course/`). (Company Profile) The clubhouse: a modern building with premium finishes, in landscaped surroundings. (List of completed works, 2026-10-13) K.D.'s contract was the construction of the clubhouse.
-- **Kharghar Football Stadium** — Kharghar (no photograph on record). On /projects since 2026-09-18 as a "Photograph to be added" placeholder tile — PRE-LAUNCH.md 3a — and on its own page since 2026-09-19 (5g).
+- **Kharghar Football Stadium** — Kharghar (no photograph on record). On /projects since 2026-09-18 as a "Photograph to be added" placeholder tile — PRE-LAUNCH.md 3a — and on its own page since 2026-09-19 (5g). **Sir, 5 Nov 2026, in person:** part of the Kharghar Centre of Excellence, a smart city development, and K.D.'s only work inside it.
 - **Bonkode FOB** — Bonkode, Navi Mumbai (the "White House" FOB, a road skywalk with a glass lift tower; photographs in `Bonkode FOB/`). Not part of the Harbour Line FOB contract. (Company Profile) A 72 m × 3 m skywalk on the Thane–Belapur road, connecting Bonkode village to the TTC industrial belt. (List of completed works, 2026-10-13) K.D.'s contract was the construction of the skywalk, listed as "at Khairane Bonkode".
 - **Ulwe Hospital** — Ulwe (photographs in `Ulwa Hospital/`; the approved spelling is Ulwe). (Company Profile) A CIDCO urban health centre: 20,000 sq ft, with fire systems and stack parking, completed within its stipulated timeline — attributed to Ulwe because the deck's photograph is `Ulwa Hospital/1.jpg`; the deck itself names no node.
 - **Ulwe CIDCO School** — Ulwe (photographs in `Ulwa CIDCO School/`)
 - **Karanjade Health Care** — Karanjade (photograph in `Karanjade Health Care/`)
 - **Lush Meadows** — Kharghar, residential (photographs in `Lush Meadows/`; K.D.'s own work, not a sister concern)
-- **Kharghar Centre of Excellence** — named in the at-a-glance list above, but not covered by the session and without photography. On /projects from 2026-09-18 as a "To be confirmed" placeholder tile (PRE-LAUNCH.md 3b) and on its own page from 2026-09-19 (5h). **2026-10-19, Sir:** the Kharghar Football Stadium and the Centre of Excellence are **one project**. The centre had no tile or page of its own from then; its facts were on the stadium's page, and its old address redirected there (OPEN-QUESTIONS.md #56). **2026-10-21, Sir:** the Centre of Excellence is **its own project again**. Its tile and page are back as they were before 19 Oct ("To be confirmed", no image), the redirect is gone, and the stadium's page is as it was before the fold (OPEN-QUESTIONS.md #58).
+- **Kharghar Centre of Excellence** — named in the at-a-glance list above, but not covered by the session and without photography. On /projects from 2026-09-18 as a "To be confirmed" placeholder tile (PRE-LAUNCH.md 3b) and on its own page from 2026-09-19 (5h). **2026-10-19, Sir:** the Kharghar Football Stadium and the Centre of Excellence are **one project**. The centre had no tile or page of its own from then; its facts were on the stadium's page, and its old address redirected there (OPEN-QUESTIONS.md #56). **2026-10-21, Sir:** the Centre of Excellence is **its own project again**. Its tile and page are back as they were before 19 Oct ("To be confirmed", no image), the redirect is gone, and the stadium's page is as it was before the fold (OPEN-QUESTIONS.md #58). **Sir, 5 Nov 2026, in person:** the Centre of Excellence is a **smart city development**, and K.D.'s only work inside it is the Kharghar Football Stadium. **Closed:** its tile and page are off the site, its name is off the at-a-glance list above, and its old address answers 301 to the stadium's page (OPEN-QUESTIONS.md #75).
 
 ## Civic works — from K.D.'s own list of completed works
 

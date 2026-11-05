@@ -11,10 +11,10 @@
 | # | Question | Answer |
 | --- | --- | --- |
 | 1 | Matunga FOB vs Z-Bridge | **Same structure** |
-| 2 | Kavach — installed or capability? | **Installed, at Mankhurd station** |
-| 3 | Which contracts carried S&T? | **Matunga only** |
+| 2 | Kavach — installed or capability? | ~~**Installed, at Mankhurd station**~~ **WITHDRAWN. Sir, 5 Nov 2026, in person: K.D. has not installed Kavach at Mankhurd; the statement is false** |
+| 3 | Which contracts carried S&T? | ~~**Matunga only**~~ **Matunga and Sanpada Carshed. Sir, 5 Nov 2026, in person**; details pending from Tanmoy sir |
 | 4 | Contract values | **Drop everywhere** |
-| 5 | The three Kharghar projects | **Golf course and football stadium are ours**; detail skipped for now |
+| 5 | The three Kharghar projects | **Golf course and football stadium are ours**; detail skipped for now. **Centre of Excellence: Sir, 5 Nov 2026, in person:** a smart city development; K.D.'s only work inside it is the football stadium |
 | 6 | The five photography-only projects | **Ours — all five** |
 | 7 | Net worth or revenue? | **Revenue only; no net worth** |
 | 8 | JNPT / Balbharati | **Skip for now** |
@@ -25,10 +25,10 @@
 
 ## 🔴 Ask before he leaves — three questions, one minute
 
-1. **Is the Kharghar Centre of Excellence ours too?** The golf course and stadium were confirmed; this
-   one did not come up. Yes/no is enough. *(#50b)*
-2. **Which contract did the Kavach work at Mankhurd sit under?** S&T scope was given as Matunga-only, but
-   Mankhurd is a Harbour Line location — the S&T page needs to name the right contract. *(#52b)*
+1. ~~**Is the Kharghar Centre of Excellence ours too?**~~ **Closed. Sir, 5 Nov 2026, in person:** it is a smart city
+   development, and K.D.'s only work inside it is the Kharghar Football Stadium. *(#50b; OPEN-QUESTIONS.md #75)*
+2. ~~**Which contract did the Kavach work at Mankhurd sit under?**~~ **Void. Sir, 5 Nov 2026, in person:** K.D. has not
+   installed Kavach at Mankhurd, so there is no contract to name. *(#52b; OPEN-QUESTIONS.md #75)*
 3. **The revenue series has five values across a six-year label (FY20–FY25) — which year is missing?**
    Everything else about the chart is now settled. *(#10b)*
 

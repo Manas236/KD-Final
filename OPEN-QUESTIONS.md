@@ -1567,11 +1567,11 @@ that file first (with a provenance comment per sentence), then into
 | Page | Addition | Grounding |
 | --- | --- | --- |
 | **Matunga Workshop FOB** | Third paragraph: locally known as the **Matunga Z-Bridge**; restored the Matunga East–West link after 1+ year closed, for lakhs of commuters, students and residents | 🗣 ASK.md #1 "same structure" — which is what released the story (CONTENT.md rev 4, KD_INFO §7.2). "Lakhs of residents" is also the source doc's own CSR line |
-| **Matunga Workshop** | Third paragraph: the programme carried the portfolio's **signalling & telecommunication** scope | 🗣 ASK.md #3 "Matunga only". Body copy, not a badge — see below |
+| **Matunga Workshop** | Third paragraph: the programme carried the portfolio's **signalling & telecommunication** scope | 🗣 ASK.md #3 "Matunga only" *(superseded: Matunga and Sanpada Carshed, Sir, 5 Nov 2026, in person, #75)*. Body copy, not a badge — see below |
 | **Matunga LHB** | Two more stat tiles: **2,749 m** pit/traverser track · **80 t** CNC traverser | ★ already in the body, now in the grid; six tiles fill the 2-col grid |
 | **Nhava Sheva & Uran** | Paragraph 2 now carries the quantities and **"subways at both ends"** | ★ doc wording that was in the grid but not the prose |
 | **Harbour Line FOBs** | Third paragraph: **two 650-tonne telescopic cranes** at the Vashi FOB · fourth stat tile "Truss + Plate / Girder Systems" | ★ already in the source doc's Steel section (#28b); Vashi FOB = this contract's Vashi–Sanpada location (KD_INFO §7.7, IMAGE_MAP §2) |
-| **Harbour Line Redevelopment** | Third paragraph + stat tile: **45,000+ commuters a day**; **Kavach installed at Mankhurd** | 45,000+ is the source doc's own CSR figure for "station redevelopments"; Kavach 🗣 ASK.md #2 |
+| **Harbour Line Redevelopment** | Third paragraph + stat tile: **45,000+ commuters a day**; ~~**Kavach installed at Mankhurd**~~ | 45,000+ is the source doc's own CSR figure for "station redevelopments"; Kavach 🗣 ASK.md #2, **WITHDRAWN 5 Nov: the statement is false** (Sir, 5 Nov 2026, in person, #75) |
 | **Sanpada Carshed** | Fourth stat tile "P-Way / Track Laying Works" | ★ in the body, now in the grid (KD_INFO §4.2 cites it as Track evidence) |
 | **Lower Parel** | "at Western Railway's **Lower Parel Workshop**" | ★ the doc's own name for the site in its About paragraph and at-a-glance list |
 | **Solapur** (+ listing) | Client "Central Railways" → **"Central Railway"**; Lower Parel listing "Western Railways" → "Western Railway" | The zone's name; the doc's own at-a-glance; `/clients` |
@@ -1609,6 +1609,8 @@ confirm first. One yes from the company adds each; none is on the site:
   asks which contract it sat under; until answered, the site ties Kavach to
   the *place*, and the S&T sentence sits on the Matunga Workshop entry.
   The verbal answer named the site, not which of the two Matunga contracts.
+  **Void, and the 18 Aug answer WITHDRAWN: Sir, 5 Nov 2026, in person, K.D. has not installed
+  Kavach at Mankhurd (#75).**
 
 ### The bigger gap the docs expose — the confirmed projects with no page
 
@@ -3657,6 +3659,11 @@ entry), answer 6's caption gave way to a neutral one until the plant
 engineer gives his, and the Indian Railways card on `/clients` is retired
 (answer 5's open question). This entry is kept as the record of 19 Oct.
 
+**Later, 2026-11-05 (#75):** answer 4 is settled the other way. Sir, 5 Nov 2026, in person: the
+Centre of Excellence is a smart city development, and K.D.'s only work inside
+it is the stadium. Closed. The tile is `retired` and the 301 is back, by this
+entry's pattern; the centre's facts did not come back to the stadium's page.
+
 ---
 
 ## 57. Edit mode: links stop navigating, Ctrl/Cmd + click and "Open" buttons go there
@@ -3852,6 +3859,10 @@ and the undo. #56 stays as the record of 19 Oct. Local database: no
 rows 4 and 5, a move into the centre's group and its undo, still cancel
 out). The server must be checked the same way (PRE-LAUNCH.md deploy
 notes).
+
+**Later, 2026-11-05 (#75):** item 7 no longer stands. Sir, 5 Nov 2026, in person: the Centre of
+Excellence is closed, its page gone for good and its address a 301 to the
+stadium's. This entry is kept as the record of 21 Oct.
 
 ### Certificates
 
@@ -5152,8 +5163,8 @@ open route onto a scratch schema): 32 placeholders on 17 pages, 175 edit slots.
 | Route | What goes |
 | --- | --- |
 | `/about` | CSR's "Content Pending" section whole: kicker, heading, intro, 4 cards |
-| `/projects` | The Kharghar Centre of Excellence tile |
-| `/projects/kharghar-centre-of-excellence` | **The page: answers the themed 404, leaves the sitemap** |
+| `/projects` | The Kharghar Centre of Excellence tile *(off for good since 2026-11-05, #75)* |
+| `/projects/kharghar-centre-of-excellence` | **The page: answers the themed 404, leaves the sitemap** *(a 301 to the stadium since 2026-11-05, #75)* |
 | `/resources/rmc-plant-karjat` | 2 hero tiles, 1 equipment row |
 | `/projects/karanjade-health-care` | All 4 hero tiles |
 | `/projects/lush-meadows` | 2 hero tiles, the portal-figures card |
@@ -5221,3 +5232,65 @@ editor only. They exclude each other and change one browser's view, nothing else
 
 No layout was changed to make a page look better with its items gone. How each one reads is Manas's
 call, from the screenshots in the local, git-ignored `launch-review/` folder.
+
+---
+
+## 75. Sir's rulings, 5 Nov 2026, in person: Kavach withdrawn, signalling and telecom at Matunga and Sanpada Carshed, the Kharghar Centre of Excellence closed
+
+Sir, 5 Nov 2026, in person, relayed by Manas in one prompt with every decision made. One pass, nothing deployed.
+PRE-LAUNCH.md has the list ("Sir's rulings, 2026-11-05") and the deploy note.
+
+| | Ruling | On the site |
+| --- | --- | --- |
+| **A** | K.D. has **not** installed Kavach at Mankhurd. The statement is false | The 18 Aug answer ("installed, at Mankhurd", ASK.md #2) is **WITHDRAWN**. Mumbai Harbour Line Station Redevelopment: the sentence is gone, "Together, the redeveloped stations serve 45,000+ commuters a day." stays, on the same key. About, Capabilities: "Railway signalling and telecommunication works." The words Kavach and ATP are in no file under `src` or `public`, comments included |
+| **B** | Signalling & telecom work is Matunga **and** Sanpada Carshed. Details later from Tanmoy sir | Replaces "Matunga only" (ASK.md #3). Matunga Workshop keeps that it carried the works and drops "the one contract in the portfolio to do so". Sanpada Carshed: "K.D. Constructions also carried out signalling and telecommunication works at Sanpada Carshed." appended as a new paragraph, with no scope and no figures |
+| **C** | The Kharghar Centre of Excellence is a smart city development. K.D.'s only work inside it is the Kharghar Football Stadium | Closes ASK.md #50b and settles #56 and #58. Tile and page gone, its URL a 301 to the stadium, sitemap 37 to 36 URLs. The stadium's description and first paragraph reframed; its second paragraph retired |
+
+### How no key moved
+
+The Beyond the railway tiles are keyed by array index, so the centre's tile stays at index 7 with
+`retired: true` and `foldedInto: "Kharghar Football Stadium"`, the pattern #56 used and #58 took out,
+put back on top of the launch-mode code written since: `Social.astro` skips it and every other tile keeps
+its own index, `socialPages` builds nothing for it, so the sitemap and the studio gallery manager drop it,
+`socialRedirects` answers the 301 ahead of the 404 any unknown slug gets, and `renamedGroup()` lands a
+gallery row naming it on the stadium. `work()` in pages.ts refuses a retired title. It matters today: the
+test server's saved row #37 sits on `projects.social.items.10.location`; a splice would have put "Vashi ·
+Navi Mumbai" on the wrong tile.
+
+The stadium's `body.1` is a `RetiredParagraph`, like `body.2`, so neither key is given to other text. The
+Harbour Line and Matunga paragraphs changed text in place, as the keys still mean the same paragraphs. So did
+the stadium's `body.0`. Sanpada's sentence is a new index, `body.3`.
+
+### Every edit key
+
+`docs/changed-defaults-2026-11-05.tsv` has all 94 pairs on 7 pages with old and new text, for
+`scripts/check-changed-defaults.mjs`: 84 of them are the centre's whole page, 4 its tile, 5 changed or
+retired text and 1 new. On 2026-11-05 the test server held **no saved edit on any of them**, and no saved
+edit anywhere with "kavach" in its text.
+
+A saved edit shows over the new text. So `projects.detail.body.2` on the Harbour Line page and
+`capabilities.sections.0.items.5.body` on `/about` are the two to look at before any deploy: a saved row on
+either could carry the false statement over this pass.
+
+### Calls made without asking
+
+- **The first paragraph's last sentence**, "It is K.D. Constructions' contribution to the wider
+  development.", is the prompt's framing put into the page's voice. The sentence before it is Sir's ruling
+  almost word for word. Neither adds a fact.
+- **The meta description does not name K.D.**, to stay under 155 characters with the ruling's wording; the
+  tab title does name it.
+- **`Football Maharashtra` and `developed by CIDCO` are gone** from the stadium's copy, as Sir's description of
+  the centre replaces them. The CIDCO client tile stays.
+- **The docs keep the word Kavach** only where they record the withdrawal, including the two copies each of
+  KD_INFO, WEBSITE_INFO and CONTENT, `docs/README.md` and `K.D.Website_Details.md`, which the prompt did not
+  list but which also said "installed".
+- **ASK.md #50b** is the only place #50b exists; this file has no entry of that number, so it is closed
+  there and here.
+- **The launch-mode branch for an unconfirmed project stays**, dormant, with no tile using it now. So does
+  `Social.astro`'s dashed tile. Taking them out is not part of this ruling, and a future unconfirmed work
+  would need them.
+
+### Open
+
+- **Tanmoy sir:** what the signalling and telecom works were at Matunga and at Sanpada Carshed.
+- The stadium's scope stays a placeholder (PRE-LAUNCH.md row 5g).

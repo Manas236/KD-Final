@@ -206,7 +206,7 @@ Model** strip.
 | Track Engineering | `/services/track-engineering` | ★ approved paragraph + P-Way/BG-track evidence |
 | Electrical Engineering | `/services/electrical-engineering` | ★ approved paragraph + 6,000 kVA evidence |
 | Mechanical Engineering | `/services/mechanical-engineering` | ★ approved paragraph + OEM/DLP capability |
-| **Signalling & Telecommunication** | `/services/signalling-telecommunication` | ★ **new** — approved paragraph incl. Kavach |
+| **Signalling & Telecommunication** | `/services/signalling-telecommunication` | ★ **new** — approved paragraph, without its Kavach sentence (withdrawn, Sir, 5 Nov 2026, in person) |
 
 **Integrated Manufacturing & Resources (all ★):** Steel Fabrication · Ready-Mix Concrete · Heavy Equipment
 & Machinery. Present as capabilities on the hub, linking to `/fabrication-plant` and `/equipment` — not as
@@ -386,12 +386,12 @@ future roadmap.
 
 ### Phase 2 — Industry research ⬜ *(not started)*
 
-EPC industry · railway infrastructure · **signalling & train protection (Kavach)** · civil engineering ·
+EPC industry · railway infrastructure · civil engineering ·
 sustainable construction · smart cities · PM Gati Shakti · NIP · **PPP models** · BIM · ESG ·
 infrastructure investment trends.
 
-> Two additions this revision — Kavach/ATP and PPP — both because the approved doc puts K.D. in those
-> conversations directly.
+> One addition this revision, PPP, because the approved doc puts K.D. in that conversation directly.
+> (Kavach/ATP was a second until it was withdrawn, Sir, 5 Nov 2026, in person.)
 >
 > **Standing rule from every source document:** research-backed additions must be clearly distinguished
 > from company-supplied information, everywhere they appear.
