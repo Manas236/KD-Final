@@ -363,7 +363,14 @@ const SOURCES: readonly SocialDetailSource[] = [
        on this page is never given to other text (OPEN-QUESTIONS.md #56,
        #58).
        2026-11-02, Sir: the work is ongoing, so the last tile is its status,
-       with no year (OPEN-QUESTIONS.md #69). */
+       with no year (OPEN-QUESTIONS.md #69).
+       2026-11-05, Sir, in person: the Kharghar Centre of Excellence is a smart
+       city development, and this stadium is K.D.'s only work inside it. So the
+       page is K.D.'s contribution to that development: the description and
+       first paragraph say so, with no list of what else it holds and no
+       superlative. The second paragraph, the wider complex, is retired, not
+       removed: projects.detail.body.1 and .2 on this page are never given to
+       other text (OPEN-QUESTIONS.md #75). */
     facts: [
       { value: "CIDCO", label: "Client" },
       { value: "40,000", label: "Planned capacity" },
@@ -375,14 +382,18 @@ const SOURCES: readonly SocialDetailSource[] = [
       { value: "Ongoing", label: "Status" },
     ],
     description:
-      "Part of CIDCO's Football Maharashtra Centre of Excellence in Kharghar, the " +
+      "Part of the Kharghar Centre of Excellence, a smart city development, the " +
       "stadium is planned as a 40,000-capacity, FIFA-approved venue.",
     body: [
-      "Part of the Football Maharashtra Centre of Excellence developed by CIDCO in Kharghar, " +
-        "the stadium is planned as a 40,000-capacity, FIFA-approved venue anchoring one of the " +
-        "region's largest sports complexes.",
-      "The wider complex brings together training pitches, a high-performance centre, a golf " +
-        "course, a rugby stadium and a shooting range.",
+      "The stadium is part of the Kharghar Centre of Excellence, a smart city development, and " +
+        "is planned as a 40,000-capacity, FIFA-approved venue. It is K.D. Constructions' " +
+        "contribution to the wider development.",
+      {
+        retired: true,
+        text:
+          "The wider complex brings together training pitches, a high-performance centre, a golf " +
+          "course, a rugby stadium and a shooting range.",
+      },
       {
         retired: true,
         text:
