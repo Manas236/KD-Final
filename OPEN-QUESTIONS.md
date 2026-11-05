@@ -5242,7 +5242,7 @@ PRE-LAUNCH.md has the list ("Sir's rulings, 2026-11-05") and the deploy note.
 
 | | Ruling | On the site |
 | --- | --- | --- |
-| **A** | K.D. has **not** installed Kavach at Mankhurd. The statement is false | The 18 Aug answer ("installed, at Mankhurd", ASK.md #2) is **WITHDRAWN**. Mumbai Harbour Line Station Redevelopment: the sentence is gone, "Together, the redeveloped stations serve 45,000+ commuters a day." stays, on the same key. About, Capabilities: "Railway signalling and telecommunication works." The words Kavach and ATP are in no file under `src` or `public`, comments included |
+| **A** | K.D. has **not** installed Kavach at Mankhurd. The statement is false | The 18 Aug answer ("installed, at Mankhurd", ASK.md #2) is **WITHDRAWN**. Mumbai Harbour Line Station Redevelopment: the sentence is gone, "Together, the redeveloped stations serve 45,000+ commuters a day." stays, on the same key. About, Capabilities: "Railway signalling and telecommunication works." The words Kavach and ATP are in no tracked file under `src` or `public`, comments included |
 | **B** | Signalling & telecom work is Matunga **and** Sanpada Carshed. Details later from Tanmoy sir | Replaces "Matunga only" (ASK.md #3). Matunga Workshop keeps that it carried the works and drops "the one contract in the portfolio to do so". Sanpada Carshed: "K.D. Constructions also carried out signalling and telecommunication works at Sanpada Carshed." appended as a new paragraph, with no scope and no figures |
 | **C** | The Kharghar Centre of Excellence is a smart city development. K.D.'s only work inside it is the Kharghar Football Stadium | Closes ASK.md #50b and settles #56 and #58. Tile and page gone, its URL a 301 to the stadium, sitemap 37 to 36 URLs. The stadium's description and first paragraph reframed; its second paragraph retired |
 
@@ -5290,7 +5290,33 @@ either could carry the false statement over this pass.
   `Social.astro`'s dashed tile. Taking them out is not part of this ruling, and a future unconfirmed work
   would need them.
 
+### Checks, 2026-11-05
+
+Run on built copies of this commit and of `64b7c68`, on one port, against scratch schemas seeded with the
+test server's 28 saved edits (and one with none). No real database was written to.
+
+| Check | Result |
+| --- | --- |
+| `git grep -i kavach -- src public` | None. None in the built output either |
+| `check:served-html`, switch off and on | PASS, 37 pages. No Kavach or ATP. 9 em dashes, all inside saved edits on `/` |
+| Routes | 36 sitemap URLs, each 200, none the centre. `/projects/kharghar-centre-of-excellence` 301 to the stadium, with the switch on or off and in Launch preview; with a trailing slash 301, then the same. `/404` and an unknown slug 404. No page links to the old address |
+| Served bytes against `64b7c68` | 33 of 41 captures identical, signed out and signed in. The 8 that differ are `/about`, `/projects`, the centre, the stadium, Matunga Workshop, Harbour Line Redevelopment, Sanpada Carshed and `sitemap.xml`, and every differing line is one of the changes above. Two captures of `64b7c68` matched, so that is not noise. The stylesheet's hash did not move |
+| Keys, 3,794 read on 39 pages | 94 differ: the list above. `check:keys` passes on all 27 routes it knows (it does not cover railway project pages, so they were compared by key) |
+| Layout, the 6 changed pages at 360, 390, 1280 | No sideways scroll, clipped keyed text, broken image or script error. Every box that stayed has the same position across, size and style, and moves up or down only by the text removed or added. The one exception is `/projects` at 1280: tiles after the gap move up one slot, and the grid ends on a full row |
+| `check:cls`, the same pages and widths | 0.0000 on all 18 |
+| Placeholders | `report:pending`: 29, the same as PRE-LAUNCH.md. `check:placeholders` lists 29 and exits 1, as it does by design while any exist; with `HIDE_PENDING=1` it passes. With the switch on, `pending-report --served` passes: 28 off, 1 kept (the Indeed card, saved row #3) |
+| Saved edits on retired slots | A scratch row on `projects.social.items.7.title` and on the stadium's `body.1`: the pages answer 200 and the text is nowhere |
+| Gallery | A scratch `move` row into "Kharghar Centre of Excellence" put the photograph on the stadium's page. `/studio/gallery` lists the stadium and not the centre |
+| Edit mode | On Sanpada's `body.3`, the stadium's `body.0`, Harbour Line's `body.2` and the `/about` card: editable, saves, a visitor's next load has it, restored. Launch preview and Back to normal work |
+| `/studio/launch`, `/studio/gallery`, `/studio/applications` | 200 signed in, `/studio/launch` 404 signed out. `check:db-flows`: 6 of 6 |
+| `check:a11y` | PASS, 37 pages at 1280 and 390. Colour contrast listed only, as always |
+| `check-changed-defaults`, test server | PASS: 94 pairs, none with a saved edit |
+| `check:served-edits` | Anchored 25 of 28. It exits 1 on 3 retired rows, the two `about.board` roles and `hse.sections.1.items.3.body`, whose words are also on the page. The same 3 on `64b7c68`: not from this pass |
+
 ### Open
 
 - **Tanmoy sir:** what the signalling and telecom works were at Matunga and at Sanpada Carshed.
 - The stadium's scope stays a placeholder (PRE-LAUNCH.md row 5g).
+- Two git-ignored local backups of 22 Oct, `src/data/pages.ts.bak.20261022-1520` and
+  `src/data/project-detail.ts.bak.20261022-1520`, still hold the word, so a plain `grep -r` of `src` finds
+  them, and `git grep` does not. They are never committed, built or served. Left for Manas to keep or delete.

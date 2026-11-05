@@ -524,6 +524,7 @@ Six rows are new or newly documented.
   laying**
 - **Quantities:** **11,338 m³** RCC · **1,412 MT** structural steel fabrication and erection
 - Integrated facilities supporting efficient railway maintenance and operations.
+- **Signalling & telecom:** K.D. carried out S&T works here too. Sir, 5 Nov 2026, in person; details pending from Tanmoy sir (§4.5)
 
 > Newly named structures: Canteen, Time Office, Security Building, Battery Room, and the three pit lines.
 >
@@ -540,6 +541,7 @@ Six rows are new or newly documented.
 - **Outcome ★:** supported augmentation of **Bogie Periodic Overhaul (POH) capacity from 350 to 575
   bogies per month**, and strengthened facilities for coach maintenance and railway operations
 - Described as *the historic Matunga Railway Workshop*
+- **Signalling & telecom:** K.D. carried out S&T works here, and not only here. Sir, 5 Nov 2026, in person; details pending from Tanmoy sir (§4.5)
 
 > 🟡 From the earlier documents only, and not restated in the approved doc: **established 1915 · India's
 > first railway workshop · first GreenCo Platinum-rated railway facility · overhauls 200+ mainline

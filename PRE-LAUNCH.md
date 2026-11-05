@@ -284,7 +284,7 @@ Sir, 5 Nov 2026, in person, relayed by Manas. OPEN-QUESTIONS.md #75 has how each
 
 | Ruling | On the site |
 | --- | --- |
-| **A.** K.D. has **not** installed Kavach at Mankhurd; the statement is false | The 18 Aug "installed, at Mankhurd" answer is WITHDRAWN. The sentence is off the Mumbai Harbour Line Station Redevelopment page (the 45,000+ commuters sentence stays) and About's Signalling & Telecommunication card reads "Railway signalling and telecommunication works." Keyword targets removed from the docs. No "Kavach" in `src` or `public` |
+| **A.** K.D. has **not** installed Kavach at Mankhurd; the statement is false | The 18 Aug "installed, at Mankhurd" answer is WITHDRAWN. The sentence is off the Mumbai Harbour Line Station Redevelopment page (the 45,000+ commuters sentence stays) and About's Signalling & Telecommunication card reads "Railway signalling and telecommunication works." Keyword targets removed from the docs. No "Kavach" in any tracked file under `src` or `public` |
 | **B.** Signalling & telecom work is Matunga **and** Sanpada Carshed. Details later from Tanmoy sir | Matunga Workshop keeps that it carried the works and drops "the one contract in the portfolio to do so". Sanpada Carshed gains one plain sentence, appended, with no scope and no figures |
 | **C.** The Kharghar Centre of Excellence is a smart city development; K.D.'s only work inside it is the Kharghar Football Stadium | The centre's tile and page are gone, it left the sitemap, and its address answers 301 to the stadium. The stadium reads as K.D.'s contribution to that development. Rows 3b and 5h closed, placeholders 33 to 29 |
 
