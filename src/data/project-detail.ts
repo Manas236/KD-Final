@@ -160,14 +160,15 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "shops, and miscellaneous track works.",
       "Civil, structural, electrical and railway-specific works were " +
         "delivered together, as one programme.",
-      /* 🗣 2026-08-18: "Which contracts carried S&T? — Matunga only"
-         (docs/ASK.md #3). Carried as body copy, not a fourth badge — a
+      /* Sir, 5 Nov 2026, in person: signalling & telecom work is Matunga
+         AND Sanpada Carshed, so "the one contract" went (it was the answer
+         of 2026-08-18, "Matunga only", docs/ASK.md #3). Details to come
+         from Tanmoy sir. Carried as body copy, not a fourth badge — a
          fourth, long badge would overflow the medium card on /projects,
          and the homepage's "Civil · Mechanical · Electrical" is locked. */
       "The Matunga programme also carried K.D. Constructions' signalling " +
-        "& telecommunication works, the one contract in the portfolio " +
-        "to do so, integrating railway communication and control " +
-        "systems into the modernised workshop.",
+        "& telecommunication works, integrating railway communication " +
+        "and control systems into the modernised workshop.",
     ],
     /* The doc gives this contract one measured outcome and no volumes.
        The RCC, steel and kVA figures that used to sit here are the LHB
@@ -381,6 +382,11 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "a second Heavy Repair Shed for EMU rakes. The third delivered " +
         "Inspection Sheds with three and two pit lines and a Feeder " +
         "Shed.",
+      /* Sir, 5 Nov 2026, in person (docs/ASK.md #3). One plain sentence
+         until Tanmoy sir gives the details: no scope, no figures. Appended,
+         so it is projects.detail.body.3 and no other key moves. */
+      "K.D. Constructions also carried out signalling and telecommunication " +
+        "works at Sanpada Carshed.",
     ],
     /* Fourth tile: the doc's P-Way track laying — the Track Engineering
        evidence docs/KD_INFO.md §4.2 cites for this project — was in the
