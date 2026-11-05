@@ -329,14 +329,12 @@ const RAW: readonly (Omit<ProjectDetail, "slug"> & { title: string })[] = [
         "project demands rigorous planning, safety and interface " +
         "management, and is now over 60% complete.",
       /* 45,000+ is the source doc's own CSR figure for "station
-         redevelopments", and this is the only one in execution. Kavach
-         is 🗣 2026-08-18 ("installed, at Mankhurd station", docs/ASK.md
-         #2) — worded to the place, not to this contract, because which
-         contract it sat under was left open (ASK.md 🔴 #2). */
-      "Together, the redeveloped stations serve 45,000+ commuters a " +
-        "day. Mankhurd is also where K.D. Constructions has installed " +
-        "Kavach, India's indigenous Automatic Train Protection (ATP) " +
-        "system.",
+         redevelopments", and this is the only one in execution. A second
+         sentence here claimed a train-protection installation at Mankhurd,
+         on the answer of 2026-08-18 (docs/ASK.md #2). Sir withdrew that
+         answer on 5 Nov 2026, in person: the statement is false. Only the
+         sentence went, so this stays projects.detail.body.2. */
+      "Together, the redeveloped stations serve 45,000+ commuters a day.",
     ],
     stats: [
       { value: "4", label: "Stations" },

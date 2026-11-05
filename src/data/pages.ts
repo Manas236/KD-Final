@@ -185,11 +185,11 @@ export const capabilities: InfoPageCopy = {
             "We build inspection and heavy repair sheds and workshops, and supply the OEM railway " +
             "machinery inside them, supported through the DLP period.",
         },
+        /* Plain since 5 Nov 2026, when Sir withdrew the train-protection
+           installation this line used to name (docs/ASK.md #2). */
         {
           title: "Signalling & Telecommunication",
-          body:
-            "Railway signalling and telecommunication works, including installation of Kavach, " +
-            "India's indigenous Automatic Train Protection (ATP) system.",
+          body: "Railway signalling and telecommunication works.",
         },
       ],
     },
