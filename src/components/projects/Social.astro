@@ -66,6 +66,9 @@
    LAUNCH MODE (src/lib/launch.ts): a pending tile is a
    work not confirmed as K.D.'s, and it is left out with its page. The
    other tiles keep their own index, so no key moves.
+
+   RETIRED (projects.ts): a tile off the band for good, left out the same
+   way, so the tiles after it keep their index and their edit keys.
    ============================================================ */
 import { Image } from "astro:assets";
 import Kicker from "../Kicker.astro";
@@ -82,7 +85,7 @@ const tiles = social.items.map((item) => ({
   href: `/projects/${slugify(item.title)}`,
 }));
 const hidden = await Promise.all(
-  social.items.map((item) => projectHidden(Astro.locals, Astro.url.pathname, item.title))
+  social.items.map((item) => item.retired || projectHidden(Astro.locals, Astro.url.pathname, item.title))
 );
 ---
 

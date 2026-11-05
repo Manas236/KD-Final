@@ -25,6 +25,10 @@
    way). It used to be a 302 to /projects, which a search engine reads as
    a soft 404: a page that is not there, answered as if it were.
 
+   A RETIRED PROJECT (social-projects.ts, socialRedirects) answers 301 to
+   the page that replaces it, for good: since 5 Nov 2026 the Kharghar
+   Centre of Excellence, to the Kharghar Football Stadium.
+
    LAUNCH MODE (src/lib/launch.ts): a project whose
    /projects tile is still a placeholder, not confirmed as K.D.'s work,
    is not on the site, so its address is that same 404.
@@ -32,7 +36,7 @@
 import ProjectDetailPage from "../../components/projects/ProjectDetailPage.astro";
 import SocialProjectPage from "../../components/projects/SocialProjectPage.astro";
 import { getProjectDetail } from "../../data/project-detail";
-import { getSocialPage } from "../../data/social-projects";
+import { getSocialPage, getSocialRedirect } from "../../data/social-projects";
 import { projectHidden } from "../../lib/launch";
 
 export const prerender = false;
@@ -43,6 +47,8 @@ const found = project ? undefined : getSocialPage(slug);
 const social = found && !(await projectHidden(Astro.locals, Astro.url.pathname, found.detail.title)) ? found : undefined;
 
 if (!project && !social) {
+  const foldedInto = getSocialRedirect(slug);
+  if (foldedInto) return Astro.redirect(`/projects/${foldedInto}`, 301);
   return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
 }
 ---

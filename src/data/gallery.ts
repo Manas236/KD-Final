@@ -40,10 +40,9 @@
    Solapur and Lower Parel have no photographs of their own at all, so
    they have no group; their pages show no gallery. (Matunga Workshop
    FOB was in that list until 2026-09-28.)
-   Nor do Kharghar Football Stadium, whose page header is a
-   representative image (OPEN-QUESTIONS.md #48), and Kharghar Centre of
-   Excellence, whose page shows a "Photograph to be added" placeholder
-   (folded into the stadium 2026-10-19, its own page again 2026-10-21).
+   Nor does Kharghar Football Stadium, whose page header is a
+   representative image (OPEN-QUESTIONS.md #48). Kharghar Centre of
+   Excellence has no page since 2026-11-05 (OPEN-QUESTIONS.md #75).
    ============================================================ */
 
 import { slugify } from "../lib/slug.ts";

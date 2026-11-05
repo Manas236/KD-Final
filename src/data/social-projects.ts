@@ -35,6 +35,12 @@
    #69): the Ulwe CIDCO School's client, scope and year, the Ulwe
    Hospital's scope and year, and the Football Stadium's status.
 
+   UPDATE 2026-11-05: Sir, in person: the Kharghar Centre of Excellence is a
+   smart city development, and K.D.'s only work inside it is the Football
+   Stadium. The centre's page went for good, its tile is `retired` and its
+   URL answers 301 to the stadium's page (socialRedirects, below;
+   OPEN-QUESTIONS.md #75).
+
    WHAT IS KNOWN, AND FROM WHERE. For six of the eight, the source doc
    (K.D.Website_Details.md §Further Projects) gives a name, a location
    and a folder of photographs — nothing else; the company confirmed
@@ -52,8 +58,8 @@
    to supply. No contract value is asked for: values are dropped
    site-wide (docs/KD_INFO.md §7.1). The two projects with no
    photograph carry a "Photograph to be added" card where the gallery
-   would be; the unconfirmed one carries a "To be confirmed" card
-   first. All of it is review-only: scripts/check-placeholders.mjs
+   would be; an unconfirmed one carries a "To be confirmed" card
+   first (none left since 2026-11-05). All of it is review-only: scripts/check-placeholders.mjs
    lists every `pending` here and refuses a release build while one
    remains (OPEN-QUESTIONS.md #32), and PRE-LAUNCH.md rows 5a–5h say
    what closes each page.
@@ -386,43 +392,9 @@ const SOURCES: readonly SocialDetailSource[] = [
       },
     ],
   },
-  {
-    /* Named ★ in the brief's at-a-glance list (docs/KD_INFO.md §7.12).
-       The facility's facts are now on record from the research the user
-       supplied on 2026-09-28 (WIFA; Free Press Journal); K.D.'s part in
-       it is not, so the "To be confirmed" card stays. The same FPJ
-       article (Jul 2026) reports the facility largely unused for years:
-       nothing here claims use or athlete numbers. */
-    title: "Kharghar Centre of Excellence",
-    eyebrow: "Sports & Recreation",
-    facts: [
-      { value: "CIDCO", label: "Client" },
-      { value: "2", label: "Training pitches" },
-      {
-        pending: TBA,
-        title: "Scope of works",
-        body: "What K.D. Constructions delivered: the pitches, the buildings, site works, or part of that.",
-      },
-      { value: "2022", label: "Pitches inaugurated" },
-    ],
-    body: [
-      "The Football Maharashtra Centre of Excellence is CIDCO's high-performance football " +
-        "facility in Sector 33, Kharghar.",
-      "Its two world-class training pitches were inaugurated in January 2022 and served as " +
-        "training venues for the AFC Women's Asian Cup and the FIFA U-17 Women's World Cup, " +
-        "both held in India that year.",
-    ],
-    notes: [
-      {
-        pending: "To be confirmed",
-        title: "K.D. Constructions' own work?",
-        body:
-          "The facility's facts are from public sources; K.D. Constructions' part in it is not " +
-          "yet confirmed. A yes keeps this page and fills the scope; a no removes the page and " +
-          "its tile on the Projects page.",
-      },
-    ],
-  },
+  /* The Kharghar Centre of Excellence had a page here until 2026-11-05: see
+     the header. Its tile is `retired` in projects.ts, and its URL answers
+     301 to the stadium's page (socialRedirects, below). */
   /* ---- The eight works from K.D.'s own list of completed works ----
      Added 2026-10-13 (OPEN-QUESTIONS.md #44). Client and scope are the
      list's "Name of Department" and "Description of Works"; the size
@@ -633,11 +605,31 @@ function build(item: SocialProject) {
 export type SocialPageCopy = ReturnType<typeof build>;
 
 /** Every Beyond the railway project's page copy, keyed by the same
-    slugify() of its title that the /projects tile links with. */
+    slugify() of its title that the /projects tile links with. A
+    `retired` tile has no page, so the sitemap, the studio gallery
+    manager and the page route (all of which read this) drop it too. */
 export const socialPages: Readonly<Record<string, SocialPageCopy>> = Object.fromEntries(
-  projects.social.items.map((item) => [slugify(item.title), build(item)])
+  projects.social.items.filter((item) => !item.retired).map((item) => [slugify(item.title), build(item)])
+);
+
+/** A retired tile's old slug, and the slug of the page that replaces it:
+    /projects/[slug] answers 301 from one to the other, so a link or a
+    search result to the old page lands on the right one. */
+export const socialRedirects: Readonly<Record<string, string>> = Object.fromEntries(
+  projects.social.items.flatMap((item) => {
+    if (!item.retired || !item.foldedInto) return [];
+    const target = slugify(item.foldedInto);
+    if (!Object.hasOwn(socialPages, target)) {
+      throw new Error(`social-projects.ts: "${item.title}" is folded into "${item.foldedInto}", which has no page`);
+    }
+    return [[slugify(item.title), target]];
+  })
 );
 
 export function getSocialPage(slug: string): SocialPageCopy | undefined {
   return Object.hasOwn(socialPages, slug) ? socialPages[slug] : undefined;
+}
+
+export function getSocialRedirect(slug: string): string | undefined {
+  return Object.hasOwn(socialRedirects, slug) ? socialRedirects[slug] : undefined;
 }

@@ -15,9 +15,10 @@
      · the gallery block of a page whose only content there is the
        "Photograph to be added" card, its kicker with it;
      · a /projects tile that is itself a placeholder (the work is not
-       confirmed as K.D.'s, so it has no picture: the Kharghar Centre of
-       Excellence), and with it the project's page, which then answers
-       the site's ordinary 404, and its sitemap entry;
+       confirmed as K.D.'s, so it has no picture; none since the Kharghar
+       Centre of Excellence was retired on 2026-11-05), and with it the
+       project's page, which then answers the site's ordinary 404, and
+       its sitemap entry;
      · on an /hse drill card, only the missing fact's badge: the card
        is real, one detail of it is not.
 
