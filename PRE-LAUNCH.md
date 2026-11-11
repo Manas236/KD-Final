@@ -129,7 +129,7 @@ document says the content is unverified, so they need a yes before launch.
 | S6 | `/projects/bonkode-fob` and `/projects/kharghar-golf-course` · hero tile and overview | Bonkode: "72 × 3 m", "on the Thane–Belapur road, connecting Bonkode village to the TTC industrial belt". Golf course: "a modern building with premium finishes, set in landscaped grounds". Right as stated? | The company's Company Profile deck, slide 10 — its own words, but not the approved brief, and the slide swaps the two captions (OPEN-QUESTIONS.md #36) |
 | ~~S7~~ | ~~`/projects/ulwe-hospital` · hero tiles 1–2 and overview~~ | ✅ **Closed 2026-11-02 by the user: the client stays CIDCO, and this comes off Sir's list** (OPEN-QUESTIONS.md #69). Sir gave the scope and year (row 5b) and did not confirm the client; the client tile, the paragraph and the description read CIDCO, from the deck, unchanged. The question was: that the building on the Ulwe Hospital tile is the deck's "CIDCO Urban Health Centre" — client **CIDCO**, **20,000 sq ft**, fire systems, stack parking, completed on time. If it is the Karanjade building instead, both pages' facts and photographs swap | Attributed by photograph: the deck's picture is `Ulwa Hospital/1.jpg`, but the deck names no node, and an earlier read (#28b) matched it to Karanjade by name. The two folders already disagree about one photograph (#30) |
 | S8 | `/projects/bonkode-fob`, `kharghar-golf-course`, `lush-meadows`, `kharghar-football-stadium` · hero tiles and overviews (`kharghar-centre-of-excellence` until 2026-11-05: row 5h) | Everything added on 2026-09-28: Bonkode (NMMC, 2012, 72 m tubular steel, lifts and ramps, architect THE FIRM); golf course (CIDCO, 103 ha, 18 holes, par 72, 7,137 yd, designer Vijit Nandrajog, reopened April 2026, PGTI); stadium (CIDCO, planned 40,000, FIFA-approved). The Centre of Excellence's facts (two pitches, 2022, the two cups) went with its page on 2026-11-05 | Public sources (WorldArchitecture, THE FIRM, CIDCO, Golf Course Architecture, WIFA, Free Press Journal), not K.D. — right facts, but K.D. should see them before they carry its name |
-| S9 | `/privacy` and `/terms` · the whole of both pages, and the consent line on the `/careers` form | **LAUNCH BLOCKER (Sir, 2026-10-19): a lawyer reviews both pages before launch**, and the review covers the careers form's 24-month consent line too (OPEN-QUESTIONS.md #56). **Legal review of the wording** by K.D. or its lawyer. They are a first draft (2026-10-09), written to describe what the site actually does, not legal advice. Specifically confirm: the **Grievance Officer** (drafted as "the Head of HR, hr@kdconstructions.net" — the DPDP Act and IT Rules 2011 expect a named contact); the **24-month** retention (if changed, change `RETENTION_MONTHS` in `src/lib/applications.ts` and the careers consent line too); **courts at Mumbai** in the terms; and that the site is on **HTTPS** at launch, which the privacy policy states. Edit in place (keys `privacy.*`, `terms.*`) or in `src/data/legal.ts`, and update the "Last updated" line | Neither page was in the brief or design; added when `/careers` began collecting applicants' personal data |
+| S9 | `/privacy` and `/terms` · the whole of both pages, and the consent line on the `/careers` form | **LAUNCH BLOCKER (Sir, 2026-10-19): a lawyer reviews both pages before launch**, and the review covers the careers form's 24-month consent line too (OPEN-QUESTIONS.md #56). **Legal review of the wording** by K.D. or its lawyer. They are a first draft (2026-10-09), written to describe what the site actually does, not legal advice. Specifically confirm: **Resend**, named since 2026-11-11 in "Who can see it" as the service that delivers each application to HR's mailbox (key `privacy.sections.3.body.0`; "Last updated" moved to 11 November 2026), and that Resend keeps its own record of sent emails for its plan's retention; the **Grievance Officer** (drafted as "the Head of HR, hr@kdconstructions.net" — the DPDP Act and IT Rules 2011 expect a named contact); the **24-month** retention (if changed, change `RETENTION_MONTHS` in `src/lib/applications.ts` and the careers consent line too); **courts at Mumbai** in the terms; and that the site is on **HTTPS** at launch, which the privacy policy states. Edit in place (keys `privacy.*`, `terms.*`) or in `src/data/legal.ts`, and update the "Last updated" line | Neither page was in the brief or design; added when `/careers` began collecting applicants' personal data |
 | S10 | `/about#clients` (was `/clients`) · Railways · WPO, IRCON; Public Sector · FCI | Added 2026-10-09 at the client's request. Say which works were for each — the cards carry only the organisations' names. **2026-10-19, WPO:** Sir's mail (a completion certificate, OCR'd, cut off at the end) is the **Matunga Workshop** contract, so the WPO card links to `/projects/matunga-workshop` and that page names WPO as its client, with three building areas from the certificate (OPEN-QUESTIONS.md #56). **2026-10-21, Sir:** the Indian Railways card is retired, so WPO's card is the one that links Matunga Workshop (and COFMOW's the LHB facilities), and every railway link reads as its page's title (OPEN-QUESTIONS.md #58). **Still for Sir:** confirmation that WPO's work is this contract and not another (the change is one commit and reverts cleanly); IRCON and FCI still list no works | Client feedback, 2026-10-09 |
 | S11 | `/about#company` (was `/company`) · Board of Directors · portraits | Sir to confirm the current photos or send alternate photos | Client feedback, 2026-10-09 |
 | ~~S12~~ | ~~`/projects/bonkode-fob`, `/projects/kharghar-golf-course`, `/projects/rabale-skywalk` · hero tile 1 (Client); `/clients` · the CIDCO and NMMC cards~~ | ✅ **Answered 2026-10-19 by Sir:** the **Bonkode** and **Rabale** skywalks were for **NMMC**; the **Kharghar golf course clubhouse** was for **CIDCO**. So the Bonkode and golf course pages keep the client they had; the Rabale page's client tile is now **NMMC** (it was a "To be confirmed" placeholder, row 7g); and the three works are linked on `/clients`: Kharghar Golf Course on the CIDCO card, Bonkode FOB and Rabale Skywalk on the NMMC card (OPEN-QUESTIONS.md #56). K.D.'s list of completed works had them the other way round (CIDCO for both skywalks, NMMC for the clubhouse), a filled-down department column | The list (a screenshot, 2026-10-13, OPEN-QUESTIONS.md #44) against the sources behind S8 |
@@ -313,7 +313,7 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
 | G5 | **The tables, and the app user's grants**, on the production database: `db/migrate.sql` run by a database administrator (see "Deploy and migration order" below), then `kd_app` given exactly the grants listed at the foot of that file: SELECT and INSERT on every table, no CREATE, no ALTER | Every write the site makes goes to one of these tables: job cards on `/careers`, applications, text added to project pages, gallery changes, in-page edits. The app no longer creates or changes a table itself, so a table the migration has not made is simply missing | `npm run check:db-flows -- https://kdconstructions.net` passes on production. **This box, production since 2026-11-11: grants in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
 | ~~G6~~ | ~~**`SITE_NOINDEX` removed** from the production `.env`~~ | ~~With `SITE_NOINDEX=1` (src/lib/staging.ts), as the test server ran before launch, every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything, and the site never enters the index~~ | ✅ **Done at launch, 2026-11-11.** noindex is off: `curl -I https://kdconstructions.net/` shows no `X-Robots-Tag`, and `/robots.txt` names the sitemap |
-| G7 | **Careers email**: `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications`, and nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | **Not configured at launch, 2026-11-11:** production's `.env` has no SMTP, so an application only reaches `/studio/applications` until the App Password for hr@ arrives. Done when: send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
+| G7 | **Careers email, through Resend** (since 2026-11-11; it replaces the SMTP plan, whose App Password never arrived): in the production `.env`, `RESEND_API_KEY` (the Resend API key), `CAREERS_MAIL_TO=hr@kdconstructions.net` and `CAREERS_MAIL_FROM="K.D. Constructions Careers <careers@updates.kdconstructions.net>"` (`.env.example` explains each); `db/migrate.sql` run and then `GRANT UPDATE (mail_status) ON kd_construction.job_applications TO 'kd_app'@'localhost';` ("At the next deploy: the 2026-11-11 careers email", below). The sending domain `updates.kdconstructions.net` is verified in Resend, which carries its own SPF and DKIM, so this no longer waits on the Workspace SPF/DKIM the SMTP plan needed | Without the key the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` (Email: "Not sent, email is not set up"), and nobody at HR is told | **Code pushed 2026-11-11, not deployed; production has no key yet.** Done when: with HR told, send a test application on `/careers`; it arrives in hr@'s inbox (not spam) from "K.D. Constructions Careers" with the resume attached under its own file name, and Reply addresses the applicant; `/studio/applications` shows it as **Sent** with Resend's id; the service log has one `careers-mail: application <id> sent` line. Then delete the test application |
 | G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (listed at the foot of `db/migrate.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged, and the policy would be untrue | `npm run check:db-flows` passes: it sends a test application, finds it on `/studio/applications`, deletes it and checks it is gone. **This box, production since 2026-11-11: in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
 
 ### Launch domain (decided 2026-10-27)
@@ -380,7 +380,8 @@ PC holds no SSH key for it.
 is no separate test server: a change is proven on the development PC first,
 and step 0's snapshot is the way back from a deploy that goes wrong. The
 site's database user, `kd_app`, may only SELECT and INSERT (plus DELETE on
-`job_applications`), so the app cannot create or change a table: the schema
+`job_applications`, and UPDATE of its one column `mail_status` since
+2026-11-11), so the app cannot create or change a table: the schema
 has to be in place before the new code starts. Until 2026-10-12 the app ran
 `CREATE TABLE IF NOT EXISTS` and `ALTER TABLE` itself, which MySQL refuses to
 a user without CREATE and ALTER — even when the table already exists.
@@ -482,10 +483,12 @@ safety net, not leave to keep them there.
    after itself. While it runs, a few seconds, the test posting shows on
    `/careers` and the test paragraph on one project page; the public site
    never changes for the switch, and `/studio/launch`'s log gains one row.
-   Where email is set up (G7) it skips the application steps unless given
-   `--allow-email`, because the test application would then be emailed to
-   HR; tell HR before using it. Not set up at launch (G7), so the
-   application steps run and nobody is emailed.
+   Where email is set up (G7: `RESEND_API_KEY` in `.env`) it skips the
+   application steps unless given `--allow-email`, because the test
+   application would then be emailed to HR; tell HR before using it.
+   Without a key the application steps run, nobody is emailed, and step 2
+   also proves the `mail_status` grant (it fails on a test application
+   whose email result was not recorded).
 7. **Read the service log since the restart.** No line may say
    "command denied".
 8. **Check the pages as they are served** (since 2026-10-27, read-only):
@@ -510,8 +513,9 @@ it at step 3. The app itself never runs a schema statement (CLAUDE.md).
 **The notes below, up to the 2026-11-11 CSR text, were all live at launch**
 (the CSR text is on the live `/about`). They stay as the record: their "test
 server" is this box before launch, and their noindex checks (the 2026-10-27
-and 2026-10-28 notes) no longer apply, since production is indexed. The note
-still to run is the last one, the 2026-11-11 launch follow-up.
+and 2026-10-28 notes) no longer apply, since production is indexed. The notes
+still to run are the last two, the 2026-11-11 launch follow-up and the
+2026-11-11 careers email.
 
 ### At the next deploy: the 2026-10-21 pass (OPEN-QUESTIONS.md #58)
 
@@ -847,6 +851,42 @@ retired (`careers.sections.1.items.1.pending`, `.title`, `.body`). In this order
    http://127.0.0.1:<port> --served` totals 24, keeps 0, and passes. `/careers` shows the LinkedIn card
    alone across the row and no Indeed card. `node scripts/check-served-html.mjs http://127.0.0.1:<port>`
    passes.
+
+### At the next deploy: the 2026-11-11 careers email
+
+G7. Each application is emailed to HR through Resend once it is saved (CLAUDE.md, "Careers email").
+**A column and a column grant:** no `npm ci` (no dependency added or removed), no saved-edit
+migration. One built-in text changed, on `/privacy`: `privacy.sections.3.body.0` (Resend named) and
+`privacy.updated`; production had no saved edit on `/privacy` when read from the development PC on
+2026-11-11, so check again before the pull. In this order:
+
+1. **Step 0's snapshot, step 1's build backup, step 2's pull**, as on every deploy (after the launch
+   follow-up's one-off reset, if that has not run yet).
+2. **Step 3, the migration**, as an administrator. It prints `job_applications.mail_status | added`
+   (`already right` on any later run); old rows get NULL, shown as "Not recorded". Then, also as an
+   administrator and only after the migration (a column grant needs its column):
+   `GRANT UPDATE (mail_status) ON kd_construction.job_applications TO 'kd_app'@'localhost';` and
+   `FLUSH PRIVILEGES;`. `SHOW GRANTS FOR 'kd_app'@'localhost'` must list
+   ``SELECT, INSERT, UPDATE (`mail_status`), DELETE`` on `job_applications` and nothing new anywhere
+   else. (FLUSH: on the development PC a column grant given again after a REVOKE was refused until
+   FLUSH PRIVILEGES; a first grant worked without it. Harmless either way.)
+3. **Steps 4 to 7 without the key.** Leave `RESEND_API_KEY` out of `.env` for this build and restart,
+   so step 6, `npm run check:db-flows -- https://kdconstructions.net`, runs its application steps and
+   emails nobody: all six PASS, step 2 saying `email skipped`. That is the proof of the grant; without
+   it step 2 fails with "its email result was not recorded". Step 7's log read: one
+   `careers-mail: application <id> skipped (RESEND_API_KEY is empty)` line for the test application,
+   and no line saying "command denied".
+4. **Then the key.** Copy `.env` to `/srv/kd-backups/.env.bak-<date-time>`, add `RESEND_API_KEY=<key>`,
+   `CAREERS_MAIL_TO=hr@kdconstructions.net` and
+   `CAREERS_MAIL_FROM="K.D. Constructions Careers <careers@updates.kdconstructions.net>"`, and restart
+   (no rebuild: they are read at send time). The old `SMTP_*` and `CAREERS_TO` lines can go; nothing
+   reads them. Never print the key, and never set `CAREERS_MAIL_DRY_RUN` on production: it writes
+   applicants' details to the log.
+5. **G7's test**, with HR told first: one application on `/careers` with a small PDF, then G7's "Done
+   when". If the log says `failed`, the reason is beside it (401 or 403: the key or the sending domain);
+   the application is saved and listed either way. Delete the test application on
+   `/studio/applications` afterwards.
+6. From then on `check:db-flows` skips its application steps unless given `--allow-email` (step 6).
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

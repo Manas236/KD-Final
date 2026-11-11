@@ -10,12 +10,15 @@
         MEDIA_DIR/gallery, the only folder /media/ serves, so a resume is
         never reachable by URL; editors download it through
         /api/applications/resume, behind the edit session,
-     3. emailed to HR with the resume attached (src/lib/mailer.ts),
-     4. recorded in job_applications with whether the email went.
+     3. recorded in job_applications,
+     4. and only then emailed to HR through Resend with the resume
+        attached (src/lib/application-mail.ts), which writes what
+        happened into the row's mail_status.
 
-   So nothing is lost when the email fails (SMTP not yet set up, Google
-   refusing the password): the row and the file are there, and
-   /studio/applications lists every application with its resume.
+   So nothing is lost when the email fails (no Resend key yet, Resend
+   refusing or not answering): the row and the file are there, and
+   /studio/applications lists every application with its resume and
+   what happened to its email.
 
    Server-only: database pool and node:fs.
    ============================================================ */
@@ -139,18 +142,38 @@ export function validateApplicant(input: Record<string, unknown>): ApplicantChec
 /* ------------------------------------------------------------
    Reading them back — /studio/applications
    ------------------------------------------------------------ */
+
+/** What happened to HR's email, from mail_status (application-mail.ts).
+    `none`: nothing recorded, so a row from before 2026-11-11 that the
+    SMTP mailer never sent, or one whose result could not be saved. */
+export interface MailState {
+  readonly status: "sent" | "failed" | "skipped" | "none";
+  /** Resend's id, the reason it failed, or "dry run". */
+  readonly detail: string;
+}
+
+export function readMailStatus(value: unknown, emailed: unknown): MailState {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (!raw) return { status: emailed ? "sent" : "none", detail: "" };
+  const at = raw.indexOf(":");
+  const word = (at < 0 ? raw : raw.slice(0, at)).trim();
+  const detail = at < 0 ? "" : raw.slice(at + 1).trim();
+  if (word === "sent" || word === "failed" || word === "skipped") return { status: word, detail };
+  return { status: "none", detail: raw };
+}
+
 export interface Application extends Applicant {
   readonly id: number;
   readonly file: string;
   readonly bytes: number;
-  readonly emailed: boolean;
+  readonly mail: MailState;
   readonly at: Date;
 }
 
 export async function listApplications(limit = 500): Promise<Application[] | null> {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT id, name, email, phone, role, message, resume_file, bytes, emailed, created_at
+      `SELECT id, name, email, phone, role, message, resume_file, bytes, emailed, mail_status, created_at
          FROM job_applications ORDER BY id DESC LIMIT ?`,
       [limit]
     );
@@ -163,7 +186,7 @@ export async function listApplications(limit = 500): Promise<Application[] | nul
       message: r.message ?? "",
       file: r.resume_file,
       bytes: r.bytes,
-      emailed: !!r.emailed,
+      mail: readMailStatus(r.mail_status, r.emailed),
       at: new Date(r.created_at),
     }));
   } catch (err) {
@@ -183,7 +206,8 @@ export async function listApplications(limit = 500): Promise<Application[] | nul
 
    Both remove the row AND the resume file. The copy emailed to HR is
    in Google Workspace and out of reach from here; the studio page says
-   so next to the button.
+   so next to the button. Resend, which delivered it, keeps its own
+   record of each email for the retention its account plan sets.
 
    Needs `GRANT DELETE ON kd_construction.job_applications` for the app
    user (listed at the foot of db/migrate.sql). Without it a delete

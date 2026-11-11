@@ -32,17 +32,28 @@ A Claude Code session runs on that box. The user relays between that session and
 - **Allowed hosts:** `security.allowedDomains` in astro.config.mjs lists `kdconstructions.net` and `www.kdconstructions.net`, https only. Astro believes nginx's forwarded headers only for a host listed there; for any other it takes the request for `http://localhost`, and its origin check answers 403 to every POST sent as a form (multipart, urlencoded or text/plain, such as the studio's photo upload) that came through nginx. A new host name for the site goes in that list.
 - **Indexed:** `SITE_NOINDEX` is off: no `X-Robots-Tag`, and `/robots.txt` names the sitemap. The switch (src/lib/staging.ts) is only for a test copy.
 - **Launch mode is on** (`/studio/launch`), so every placeholder still in the code is off the public site.
-- **Careers email is not configured yet:** production's `.env` has no SMTP. An application on `/careers` is saved and listed in `/studio/applications`, and nobody is emailed, until the App Password for hr@ arrives (PRE-LAUNCH.md G7).
+- **Careers email goes through Resend** since 2026-11-11 (the section below), replacing the SMTP plan that never went live. Until production has `RESEND_API_KEY` in its `.env` (PRE-LAUNCH.md G7, and the 2026-11-11 careers email deploy note), an application on `/careers` is saved and listed in `/studio/applications`, marked "Not sent, email is not set up", and nobody is emailed.
 - **Checks against production run on the live origin:** `npm run check:db-flows -- https://kdconstructions.net`, so the six write flows go through nginx as a visitor's do.
 
 ## The database schema comes from db/migrate.sql, never from the app
 
-The site's database user (`kd_app` on a server) has SELECT and INSERT on every table, plus DELETE on `job_applications`, and nothing else. App code must never run CREATE, ALTER, DROP or any other schema statement — MySQL refuses even `CREATE TABLE IF NOT EXISTS` on an existing table to a user without CREATE.
+The site's database user (`kd_app` on a server) has SELECT and INSERT on every table, plus DELETE on `job_applications` and UPDATE of its one column `mail_status` (a column grant, asked for and approved on 2026-11-11 for the careers email), and nothing else. App code must never run CREATE, ALTER, DROP or any other schema statement — MySQL refuses even `CREATE TABLE IF NOT EXISTS` on an existing table to a user without CREATE.
 
 - A new table or column goes into `db/migrate.sql`: idempotent, a table created only if missing, a column added only after an `information_schema` check.
 - A new table also gets its grant line at the foot of that file.
-- A new kind of write needs nothing beyond SELECT and INSERT (DELETE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants.
+- A new kind of write needs nothing beyond SELECT and INSERT (DELETE and the `mail_status` UPDATE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants. A column grant needs its column first: the migration, then the GRANT.
 - PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the six write flows work with `kd_app`'s rights (on production, against `https://kdconstructions.net`).
+
+## Careers email: saved first, then sent through Resend (11 Nov 2026)
+
+Each application from `/careers` is emailed to HR through Resend's HTTP API with the global fetch: no SDK, no SMTP, no npm dependency (`nodemailer` is still in package.json, imported by nothing). `src/lib/mailer.ts` is the Resend call, `src/lib/application-mail.ts` the email and its record, `POST /api/apply` the order.
+
+- **Saved first.** The resume file and the `job_applications` row are written exactly as before, and a failure there is the applicant's error. Only then is HR emailed. The email never changes the applicant's answer: `sendToCareers()` gives up after 10 s and never throws, and success is success whether the email went, failed or was skipped.
+- **The email:** to `CAREERS_MAIL_TO`, from `CAREERS_MAIL_FROM` (an address on `updates.kdconstructions.net`, the domain verified in Resend), `reply_to` the applicant, subject `New application: <name> for <role>`, HTML and text with every field the applicant filled, the time in IST and a link to `/studio/applications#application-<id>` on `PUBLIC_SITE_URL`. The resume goes under the applicant's own file name, with the extension and content type of what the file really is; over 10 MB (`MAX_ATTACH_BYTES`) it is left off and the body says it is in the studio. The form takes 5 MB, so today every resume is attached. No em dash in any of it.
+- **The record:** `job_applications.mail_status` is `sent: <Resend id>`, `failed: <reason>`, `skipped` (no key) or `skipped: dry run`; NULL is "not recorded" (before 2026-11-11, or the UPDATE was refused). `/studio/applications` shows it in the Email column, and `check:db-flows` step 2 fails on a "not recorded" test application, which is how a missing grant shows.
+- **The log:** one line per application, `careers-mail: application <id> <sent|failed|skipped> (<Resend id or reason>)`, plus `; mail_status not saved: <MySQL's message>` when the UPDATE fails. Never the key, never the applicant's details; a reason has anything shaped like a key or an address taken out. `CAREERS_MAIL_DRY_RUN=1` prints the whole request instead of sending it (the resume as its size): development only, since that line does hold the applicant's details.
+- **Settings** are read at send time (`.env.example`): a key change needs a restart, not a rebuild. With `RESEND_API_KEY` set, `check:db-flows` skips its application steps unless given `--allow-email`.
+- `/privacy` names Resend as the email's processor ("Who can see it"); a change of provider changes that sentence too (the fact list at the top of `src/data/legal.ts`).
 
 ## No em dashes in anything a visitor or a search engine can see
 

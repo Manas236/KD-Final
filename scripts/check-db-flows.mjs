@@ -5,7 +5,10 @@
    do, and says PASS or FAIL for each of six flows:
 
      1. apply      an application with a resume, through /api/apply
-     2. list       it appears on /studio/applications
+     2. list       it appears on /studio/applications, with its email's
+                   result recorded (mail_status, the one column kd_app
+                   may UPDATE: "Not recorded" there means that grant is
+                   missing)
      3. delete     the Delete button's request removes it again
      4. text block a paragraph added to a project page shows on that
                    page, and is removed again
@@ -30,9 +33,11 @@
    page. While it runs — a few seconds — the test posting is on
    /careers and the test paragraph is on one project page.
 
-   EMAIL. If the server can send mail (SMTP_USER and SMTP_PASS are set),
-   step 1 would email the test application to HR. So steps 1-3 are
-   skipped unless `--allow-email` is given.
+   EMAIL. If the server can send mail (RESEND_API_KEY is set), step 1
+   would email the test application to HR. So steps 1-3 are skipped
+   unless `--allow-email` is given. Without a key the application is
+   saved and its email recorded as skipped, which still proves the
+   mail_status grant.
 
    Signs in with EDIT_PASSPHRASE from the project's .env, which it never
    prints. Prints no personal data: the only application it reads back
@@ -114,7 +119,7 @@ let applicationUnaccounted = false;
 
 /* ---------- The flows ---------- */
 async function applicationFlows() {
-  if (process.env.SMTP_USER && process.env.SMTP_PASS && !ALLOW_EMAIL) {
+  if (process.env.RESEND_API_KEY?.trim() && !ALLOW_EMAIL) {
     const why = "this server emails applications to HR; rerun with --allow-email to include it";
     record("1 apply", "SKIP", why);
     record("2 list", "SKIP", why);
@@ -149,15 +154,25 @@ async function applicationFlows() {
   const list = await call("GET", "/studio/applications");
   const row = list.text.indexOf(LISTED);
   const id = row < 0 ? null : Number(list.text.slice(row).match(/data-delete="(\d+)"/)?.[1]);
+  /* /api/apply answers only after the email's result is written, so it
+     is on the list already: sent, failed or skipped. "none" is a
+     refused UPDATE. */
+  const mail = row < 0 ? null : list.text.slice(row).match(/data-mail="(\w+)"/)?.[1];
+  if (id) left.application = id;
   if (list.status !== 200) {
     record("2 list", "FAIL", `HTTP ${list.status}`);
   } else if (list.text.includes("Could not read the applications")) {
     record("2 list", "FAIL", "the page says it could not read the applications");
   } else if (!id) {
     record("2 list", "FAIL", "the test application is not in the list");
+  } else if (!mail || mail === "none") {
+    record(
+      "2 list",
+      "FAIL",
+      `application #${id} is listed, but its email result was not recorded: is GRANT UPDATE (mail_status) missing?`
+    );
   } else {
-    left.application = id;
-    record("2 list", "PASS", `application #${id}`);
+    record("2 list", "PASS", `application #${id}, email ${mail}`);
   }
   if (!id) {
     record("3 delete", "SKIP", "no row to delete");

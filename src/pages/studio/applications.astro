@@ -2,10 +2,16 @@
 /* ============================================================
    GET /studio/applications — every application sent from /careers
    ------------------------------------------------------------
-   Each one was also emailed to HR (src/pages/api/apply.ts); this page
-   is the copy that does not depend on the email arriving — and the only
-   place to find an application that came in before email was set up,
-   or while Google was refusing the password. "Email" says which.
+   Each one is also emailed to HR through Resend once it is saved
+   (src/lib/application-mail.ts); this page is the copy that does not
+   depend on the email arriving, and the only place to find an
+   application that came in before email was set up, or while Resend was
+   refusing it. The Email column reads job_applications.mail_status:
+   Sent (with Resend's id), Not sent (with the reason, or "email is not
+   set up"), or Not recorded (before 2026-11-11, or the result could not
+   be saved). Its data-mail attribute is what check:db-flows reads.
+
+   Each row has id="application-<id>": the email's link lands on it.
 
    SIGNED-IN EDITORS ONLY: anyone else gets the bodyless 404 the other
    studio pages give (see the note at the top of studio/gallery.astro).
@@ -19,7 +25,7 @@
    ============================================================ */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthed } from "../../lib/edit-auth";
-import { RETENTION_MONTHS, listApplications, purgeExpired } from "../../lib/applications";
+import { RETENTION_MONTHS, listApplications, purgeExpired, type MailState } from "../../lib/applications";
 import { careersInbox, mailConfigured } from "../../lib/mailer";
 
 export const prerender = false;
@@ -44,6 +50,16 @@ const when = (d: Date) =>
     minute: "2-digit",
   });
 const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(b / 1024)} KB`);
+const mailNote = (m: MailState): string =>
+  m.status === "sent"
+    ? m.detail
+      ? `Resend id ${m.detail}`
+      : ""
+    : m.status === "skipped"
+      ? m.detail === "dry run"
+        ? "Dry run, printed to the log"
+        : "Email is not set up"
+      : m.detail;
 ---
 
 <BaseLayout title="Applications | K.D. Constructions" description="Job applications sent from the careers page." noindex skip={false}>
@@ -65,14 +81,15 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
       {
         mailOn ? (
           <p>
-            Every application sent from the careers page is emailed to <strong>{careersInbox()}</strong> with the
-            resume attached, and also kept here. If one shows <strong>Not emailed</strong>, the email failed, but the
-            application and resume are still here.
+            Every application sent from the careers page is kept here and emailed to{" "}
+            <strong>{careersInbox()}</strong> with the resume attached. The Email column says whether it went. If
+            one shows <strong>Not sent</strong>, the reason is under it, and the application and resume are still
+            here.
           </p>
         ) : (
           <p>
             <strong>Email is not set up yet</strong>, so applications are only kept here and are not being sent
-            to {careersInbox()}. Once the SMTP settings are added to the server, new applications are emailed too.
+            to {careersInbox()}. Once the Resend key is added to the server, new applications are emailed too.
           </p>
         )
       }
@@ -111,7 +128,7 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
             </thead>
             <tbody>
               {apps.map((a) => (
-                <tr>
+                <tr id={`application-${a.id}`}>
                   <td class="ja-nowrap">{when(a.at)}</td>
                   <td>
                     <strong>{a.name}</strong>
@@ -127,7 +144,15 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
                     <br />
                     <span class="ja-dim">{a.file.split(".").pop()!.toUpperCase()} · {size(a.bytes)}</span>
                   </td>
-                  <td class="ja-nowrap">{a.emailed ? "Sent" : <strong>Not emailed</strong>}</td>
+                  <td class="ja-mail" data-mail={a.mail.status}>
+                    {a.mail.status === "sent" ? "Sent" : a.mail.status === "none" ? "Not recorded" : <strong>Not sent</strong>}
+                    {mailNote(a.mail) && (
+                      <>
+                        <br />
+                        <span class="ja-dim ja-note">{mailNote(a.mail)}</span>
+                      </>
+                    )}
+                  </td>
                   <td>
                     <button type="button" class="ja-del" data-delete={a.id}>Delete</button>
                   </td>
@@ -182,6 +207,10 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
 
 <style>
   .ja-wrap {
+    /* relative: the containing block of the header's sr-only "Delete",
+       which otherwise escaped this scroller and made the whole page
+       852px wide on a phone */
+    position: relative;
     overflow-x: auto;
     padding: 0 var(--kd-gap-24) var(--kd-gap-56);
     max-width: var(--kd-container);
@@ -215,8 +244,26 @@ const size = (b: number) => (b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)}
     white-space: nowrap;
   }
   .ja-msg {
+    /* the table scrolls sideways on a phone; without the floor the
+       message was squeezed to ~100px and every row grew 230px tall */
+    min-width: 14rem;
     max-width: 360px;
     white-space: pre-wrap;
+  }
+  .ja tbody tr {
+    scroll-margin-top: 160px;
+  }
+  .ja tbody tr:target {
+    background-color: var(--kd-mist);
+  }
+  .ja-mail {
+    min-width: 7rem;
+    max-width: 14rem;
+  }
+  .ja-note {
+    font-size: var(--text-meta-sm);
+    line-height: var(--text-meta-sm--line-height);
+    overflow-wrap: anywhere;
   }
   .ja-del {
     font: inherit;

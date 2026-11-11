@@ -6,8 +6,9 @@
 -- up to date.
 --
 -- THE SITE NEVER CHANGES THE SCHEMA ITSELF. Its database user, kd_app,
--- may only SELECT and INSERT (plus DELETE on job_applications — see the
--- grants at the foot of this file). So this script is run by a database
+-- may only SELECT and INSERT (plus DELETE on job_applications, and
+-- UPDATE of its one column mail_status — see the grants at the foot of
+-- this file). So this script is run by a database
 -- ADMINISTRATOR, and it is run BEFORE the app is (re)started, on every
 -- deploy:
 --
@@ -236,10 +237,21 @@ CREATE TABLE IF NOT EXISTS project_text_events (
 -- (src/pages/api/apply.ts, src/lib/applications.ts). One row per
 -- application; the resume itself is on disk under
 -- MEDIA_DIR/applications/ (not served by /media — editors download it
--- from /studio/applications). `emailed` records whether the copy to HR
--- was accepted by the mail server. NOT append-only, unlike the tables
+-- from /studio/applications). NOT append-only, unlike the tables
 -- above: the privacy policy (/privacy) promises deletion on request and
 -- after 24 months, so the app DELETEs rows (src/lib/applications.ts).
+--
+-- What happened to HR's copy by email:
+--   mail_status (2026-11-11)  written by the app AFTER the row is saved,
+--                             when Resend has answered
+--                             (src/lib/application-mail.ts):
+--                             'sent: <Resend id>', 'failed: <reason>',
+--                             'skipped' (no RESEND_API_KEY) or
+--                             'skipped: dry run'. NULL = not recorded.
+--                             The one column kd_app may UPDATE.
+--   emailed                   the SMTP mailer's flag, before 2026-11-11:
+--                             1 if the mail server took it. New rows
+--                             leave it at 0; kept for the rows before.
 CREATE TABLE IF NOT EXISTS job_applications (
   id             INT AUTO_INCREMENT PRIMARY KEY,
   name           VARCHAR(120)  NOT NULL,
@@ -251,6 +263,7 @@ CREATE TABLE IF NOT EXISTS job_applications (
   original_name  VARCHAR(255)  NULL,
   bytes          INT           NOT NULL,
   emailed        TINYINT(1)    NOT NULL DEFAULT 0,
+  mail_status    VARCHAR(255)  NULL,
   client_ip      VARCHAR(45)   NULL,
   user_agent     VARCHAR(255)  NULL,
   created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -326,6 +339,25 @@ PREPARE kd_step FROM @kd_step;
 EXECUTE kd_step;
 DEALLOCATE PREPARE kd_step;
 
+-- job_applications.mail_status (2026-11-11): what happened to HR's email
+-- for each application, sent through Resend once the row is saved. Added
+-- as NULL on every row already there ("not recorded"); nothing else
+-- changes. kd_app needs `GRANT UPDATE (mail_status)` on it, at the foot
+-- of this file, which can only be given once this column exists.
+SET @kd_mail_status := (
+  SELECT COUNT(*) = 0
+    FROM information_schema.columns
+   WHERE table_schema = DATABASE()
+     AND table_name = 'job_applications'
+     AND column_name = 'mail_status'
+);
+SET @kd_step := IF(@kd_mail_status,
+  'ALTER TABLE job_applications ADD COLUMN mail_status VARCHAR(255) NULL AFTER emailed',
+  'DO 0');
+PREPARE kd_step FROM @kd_step;
+EXECUTE kd_step;
+DEALLOCATE PREPARE kd_step;
+
 -- ------------------------------------------------------------
 -- 3. What this run did.
 -- ------------------------------------------------------------
@@ -346,7 +378,10 @@ SELECT 'job_posting_events.open_days' AS `column`,
        IF(@kd_open_days, 'added', 'already right') AS result
 UNION ALL
 SELECT 'gallery_events.action (with ''add'')',
-       IF(@kd_gallery_add, 'widened', 'already right');
+       IF(@kd_gallery_add, 'widened', 'already right')
+UNION ALL
+SELECT 'job_applications.mail_status',
+       IF(@kd_mail_status, 'added', 'already right');
 
 SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.') AS done;
 
@@ -357,8 +392,11 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 -- exactly these rights and no others. SELECT and INSERT are all the app
 -- uses on every table but one, as they are append-only (a revert or an
 -- undo INSERTs a new row); job_applications also needs DELETE, for the
--- deletion /privacy promises. No CREATE and no ALTER: schema changes
--- come from this file, run by an administrator.
+-- deletion /privacy promises, and UPDATE of mail_status alone, so the
+-- result of HR's email can be written into a row that is already saved
+-- (2026-11-11). A column grant: kd_app can change no other column of
+-- any table. No CREATE and no ALTER: schema changes come from this
+-- file, run by an administrator.
 --
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
@@ -366,9 +404,14 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 --   GRANT SELECT, INSERT ON kd_construction.gallery_uploads TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.project_text_events TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT, DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';
+--   GRANT UPDATE (mail_status) ON kd_construction.job_applications TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.site_settings TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.site_settings_events TO 'kd_app'@'localhost';
 --
 -- A table added to this file later needs its own GRANT line here, and
--- run on every server, or the app cannot read it.
+-- run on every server, or the app cannot read it. A column grant (the
+-- mail_status line) needs its column to exist first: run this file,
+-- then the GRANT. Without it the application is still saved and emailed,
+-- the log line says "mail_status not saved: UPDATE command denied", and
+-- the studio shows "Not recorded".
 -- ============================================================

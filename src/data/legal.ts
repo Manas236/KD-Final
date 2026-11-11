@@ -17,7 +17,8 @@
    the code changes, change the sentence:
      · fields collected   src/pages/careers.astro, src/lib/applications.ts
      · IP + browser kept  src/pages/api/apply.ts (client_ip, user_agent)
-     · emailed to HR      src/lib/mailer.ts (Google Workspace SMTP)
+     · emailed to HR      src/lib/mailer.ts (sent through Resend to the
+                          Google Workspace mailbox, since 2026-11-11)
      · 24-month limit     RETENTION_MONTHS in src/lib/applications.ts
      · delete on request  /studio/applications → /api/applications/delete
      · cookies            kd_edit / kd_edit_ui, editors only (src/lib/edit-auth.ts)
@@ -68,7 +69,7 @@ export const privacy: LegalPageCopy = {
       "This website collects very little about you. This page explains exactly what, why, and how " +
       "to have it removed.",
   },
-  updated: "Last updated: 9 October 2026",
+  updated: "Last updated: 11 November 2026",
   sections: [
     {
       heading: "Who we are",
@@ -113,9 +114,9 @@ export const privacy: LegalPageCopy = {
       heading: "Who can see it",
       body: [
         "Your application is sent by email to our HR team and also stored on our web server, where " +
-          "only authorised K.D. Constructions staff can see it. Our email is provided by Google " +
-          "Workspace and our website is hosted on servers in India; these providers process the " +
-          "information only on our behalf.",
+          "only authorised K.D. Constructions staff can see it. The email is delivered by Resend, an " +
+          "email delivery service, to our mailboxes at Google Workspace, and our website is hosted on " +
+          "servers in India. These providers process the information only on our behalf.",
         "We may disclose information if the law requires us to, for example in response to a " +
           "lawful request from a government authority.",
       ],

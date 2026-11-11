@@ -23,24 +23,27 @@
    fill the disk or HR's inbox.
 
    Order: rate, size, honeypot, fields, resume bytes, then store the
-   file, email HR (src/lib/mailer.ts), and INSERT the row with whether
-   the email went (src/lib/applications.ts). The applicant is told it
-   worked once the row is saved, email or not — HR can still see it in
+   file and INSERT the row (src/lib/applications.ts). If either fails the
+   applicant is told so and nothing is emailed. Only once both are saved
+   is HR emailed through Resend (src/lib/application-mail.ts), which
+   records the result in the row's mail_status. The email never changes
+   the answer: it gives up after 10 s, it never throws, and the applicant
+   is told it worked whether it went, failed or was skipped. HR can see
+   every application, and what happened to its email, in
    /studio/applications.
    ============================================================ */
 import type { APIRoute } from "astro";
+import type { ResultSetHeader } from "mysql2";
 import pool from "../../lib/db";
 import { clientIpFrom, userAgentFrom } from "../../lib/editable";
 import {
   MAX_RESUME_BYTES,
-  RESUME_TYPES,
-  attachmentName,
   purgeExpired,
   sniffResume,
   storeResume,
   validateApplicant,
 } from "../../lib/applications";
-import { sendToCareers } from "../../lib/mailer";
+import { mailApplication } from "../../lib/application-mail";
 
 export const prerender = false;
 
@@ -74,10 +77,6 @@ function rateLimited(key: string): boolean {
   // Keep the map from growing without bound on a busy day.
   if (recent.size > 5000) for (const [k, v] of recent) if (!v.length) recent.delete(k);
   return false;
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 export const POST: APIRoute = async (context) => {
@@ -138,47 +137,26 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { name, email, phone, role, message } = check;
-  const lines = [
-    ["Role", role],
-    ["Name", name],
-    ["Email", email],
-    ["Phone", phone],
-  ];
-  const text =
-    `New job application from the website.\n\n` +
-    lines.map(([k, v]) => `${k}: ${v}`).join("\n") +
-    (message ? `\n\nMessage:\n${message}` : "") +
-    `\n\nThe resume is attached. Reply to this email to answer ${name} directly.`;
-  const html =
-    `<p>New job application from the website.</p><table cellpadding="4">` +
-    lines
-      .map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${escapeHtml(v)}</td></tr>`)
-      .join("") +
-    `</table>` +
-    (message ? `<p><strong>Message</strong><br>${escapeHtml(message).replace(/\n/g, "<br>")}</p>` : "") +
-    `<p>The resume is attached. Reply to this email to answer ${escapeHtml(name)} directly.</p>`;
-
-  const emailed = await sendToCareers({
-    subject: `Job application: ${role} | ${name}`,
-    text,
-    html,
-    replyTo: `"${name.replace(/["\\]/g, "")}" <${email}>`,
-    attachment: { filename: attachmentName(name, kind), content: buf, contentType: RESUME_TYPES[kind] },
-  });
-
+  const at = new Date();
+  let id: number;
   try {
-    await pool.execute(
+    const [saved] = await pool.execute<ResultSetHeader>(
       `INSERT INTO job_applications
-         (name, email, phone, role, message, resume_file, original_name, bytes, emailed, client_ip, user_agent)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, email, phone, role, message || null, file, originalName, buf.length, emailed ? 1 : 0, ip, ua]
+         (name, email, phone, role, message, resume_file, original_name, bytes, client_ip, user_agent)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, email, phone, role, message || null, file, originalName, buf.length, ip, ua]
     );
+    id = saved.insertId;
   } catch (err) {
     console.error("Failed to record a job application:", err);
-    // The email is the record HR works from; if it went, this still succeeded.
-    if (!emailed)
-      return json({ error: "Something went wrong on our side. Please try again, or email your CV." }, 500);
+    return json({ error: "Something went wrong on our side. Please try again, or email your CV." }, 500);
   }
+
+  // Saved: now HR's email. Bounded at 10 s and never throws; the catch
+  // is only a second guard, so the answer below is the same either way.
+  await mailApplication({ id, at, name, email, phone, role, message, resume: buf, kind, originalName }).catch(
+    () => undefined
+  );
 
   // The 24-month limit /privacy promises; runs in the background.
   void purgeExpired();
