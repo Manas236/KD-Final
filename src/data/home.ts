@@ -120,9 +120,10 @@ export const home = {
      approved fragments rather than written fresh. */
   meta: {
     /* The tab title is the company name and nothing else, set by the
-       client 2026-10-14. A shared link keeps the longer line. */
+       client 2026-10-14. A shared link keeps the longer line, without
+       the town since 2026-11-11 (the director). */
     title: "K.D. Constructions",
-    ogTitle: "K.D. Constructions | EPC Infrastructure · Vashi, Navi Mumbai",
+    ogTitle: "K.D. Constructions | EPC Infrastructure",
     description: META_DESCRIPTION,
     /* og:image:alt (22 Oct 2026). The share picture is not the hero's:
        it is the Nhava Sheva aerial (src/pages/index.astro), so it gets its
