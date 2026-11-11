@@ -11,7 +11,8 @@
      · a placeholder card, tile or row: the whole item, its label and
        title with it, so no "Year completed" tile and no empty row;
      · a section whose every card is a placeholder, its kicker and
-       heading with it (About's CSR "Content Pending" section);
+       heading with it (none on the site since About's CSR "Content
+       Pending" section went with the director's text, 11 Nov 2026);
      · the gallery block of a page whose only content there is the
        "Photograph to be added" card, its kicker with it;
      · a /projects tile that is itself a placeholder (the work is not

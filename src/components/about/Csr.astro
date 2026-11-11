@@ -1,0 +1,125 @@
+---
+/* ============================================================
+   CSR, the body of /about's last merged section (11 Nov 2026)
+   ------------------------------------------------------------
+   The director's own text (OPEN-QUESTIONS.md #76), drawn after
+   PageSection's ink header (kicker, heading, the two-sentence sub) in
+   two bands, so the section still runs ink, white, mist and About's own
+   CTA closes the page on ink:
+
+     white  the intro, then the two pillars as cards, side by side from
+            `md`, stacked below it. Each card opens with its kicker (the
+            left variant, light tone), then its heading as an h3 in `d6`,
+            its paragraphs in card body, and its Key highlights under a
+            hairline, pushed to the card's foot so the two lists line up.
+     mist   the closing heading (`d4`, as every band heading on the
+            page), its paragraph, and the director's signature under a
+            32px mint rule: the name in Fraunces, the role as a meta line
+            in slate-2, the band's body colour (slate, the table's meta
+            colour, is 2.34:1 on mist; check:a11y listed it).
+
+   The card is InfoSections' own (2px mint top, 1px frame, p-32, gap-24,
+   `data-card="light framed"` for the hover rule). The highlights take the
+   footer's Core Disciplines marker (`.kd-dash`, global.css), hung so a
+   second line starts under the text, not under the marker; the copy
+   holds no dash or bullet. Each item sits tight against its tags, as in
+   the footer, so no word space is drawn after the marker twice.
+
+   The closing band has no kicker: the director's text gives none, and
+   none is invented for it.
+
+   KEYS are named (src/data/pages.ts, CsrCopy): `csr.intro`,
+   `csr.pillars.<i>.kicker | title | body.<p> | highlights.label |
+   highlights.items.<n>`, `csr.closing.heading | body |
+   signature.name | signature.role`. No image, and nothing pending.
+   ============================================================ */
+import Kicker from "../Kicker.astro";
+import type { CsrCopy } from "../../data/pages";
+
+interface Props {
+  /** First segment of every slot key: `csr`. */
+  page: string;
+  copy: CsrCopy;
+}
+
+const { page, copy } = Astro.props;
+const { intro, pillars, closing } = copy;
+---
+
+<section class="bg-white py-96">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <p class="text-body text-kd-ink max-w-720" data-edit={`${page}.intro`}>
+      {intro}
+    </p>
+
+    <div class="grid gap-24 mt-48 md:grid-cols-2">
+      {
+        pillars.map((pillar, i) => (
+          <article
+            class="flex flex-col border border-kd-card-border-light border-t-2 border-t-kd-mint-2 p-32"
+            data-card="light framed"
+          >
+            <Kicker label={pillar.kicker} editKey={`${page}.pillars.${i}.kicker`} tone="light" />
+            <h3
+              class="font-display text-d6 text-kd-ink mt-16"
+              data-edit={`${page}.pillars.${i}.title`}
+            >
+              {pillar.title}
+            </h3>
+            <div class="flex-1">
+              {pillar.body.map((paragraph, p) => (
+                <p
+                  class="text-body-sm text-kd-slate-2 mt-12"
+                  data-edit={`${page}.pillars.${i}.body.${p}`}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div class="mt-24 pt-24 border-t border-t-kd-divider-light">
+              <h4
+                class="text-kicker-sm uppercase text-kd-ink"
+                data-edit={`${page}.pillars.${i}.highlights.label`}
+              >
+                {pillar.highlights.label}
+              </h4>
+              <ul class="mt-16 flex flex-col gap-12">
+                {pillar.highlights.items.map((item, n) => (
+                  <li
+                    class="kd-dash kd-dash-hang text-body-sm text-kd-slate-2"
+                    data-edit={`${page}.pillars.${i}.highlights.items.${n}`}
+                  >{item}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="bg-kd-mist py-96">
+  <div class="max-w-kd mx-auto px-24 sm:px-48">
+    <div class="max-w-720">
+      <h2 class="font-display text-d4 text-kd-ink" data-edit={`${page}.closing.heading`}>
+        {closing.heading}
+      </h2>
+      <p class="text-body text-kd-slate-2 mt-20" data-edit={`${page}.closing.body`}>
+        {closing.body}
+      </p>
+      <div class="mt-40">
+        <span class="block w-32 h-1 bg-kd-mint-2" aria-hidden="true"></span>
+        <p
+          class="font-display text-d8 text-kd-ink mt-16"
+          data-edit={`${page}.closing.signature.name`}
+        >
+          {closing.signature.name}
+        </p>
+        <p class="text-meta text-kd-slate-2 mt-6" data-edit={`${page}.closing.signature.role`}>
+          {closing.signature.role}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

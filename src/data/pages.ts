@@ -13,7 +13,8 @@
    /csr are sections of /about (aboutSections, at the foot of this file)
    and their old addresses redirect there. Their exports stay as they
    were, keys and all; only /hse, /contact and /careers are still pages
-   of their own here.
+   of their own here. Since 11 Nov 2026 the CSR section is the director's
+   own text in its own shape (CsrCopy, about/Csr.astro), not cards.
 
    Sources: K.D.Website_Details.md (authoritative) and KD_INFO.md for
    the contact details and fleet categories. Fleet categories are
@@ -104,6 +105,30 @@ export interface InfoPageCopy {
     readonly retired?: boolean;
   };
   readonly footer: typeof home.footer;
+}
+
+/** One of the two pillars of /about's CSR section (11 Nov 2026,
+    about/Csr.astro). `body` is one string per paragraph
+    (`csr.pillars.0.body.1`); the highlights are drawn after the footer's
+    Core Disciplines marker, so the copy holds no dash or bullet. */
+export interface CsrPillar {
+  readonly kicker: string;
+  readonly title: string;
+  readonly body: readonly string[];
+  readonly highlights: { readonly label: string; readonly items: readonly string[] };
+}
+
+/** The CSR section's copy since 11 Nov 2026: the merged pages' header,
+    nav, footer, meta and retired CTA, with the director's own body in
+    place of `sections`. */
+export interface CsrCopy extends Omit<InfoPageCopy, "sections"> {
+  readonly intro: string;
+  readonly pillars: readonly CsrPillar[];
+  readonly closing: {
+    readonly heading: string;
+    readonly body: string;
+    readonly signature: { readonly name: string; readonly role: string };
+  };
 }
 
 const chrome = { nav: home.nav, footer: home.footer };
@@ -920,103 +945,98 @@ export const hse: HseCopy = {
   },
 };
 
-/* /csr — K.D.Website_Details.md §CORPORATE SOCIAL RESPONSIBILITY.
-   The source section is the copywriter's own "starting skeleton, not
-   final copy": three real commitments and a literal "[To be added]"
-   bullet naming what the company still has to supply. The three are
-   rendered as the doc words them. The fourth is rendered too — as four
-   `pending` cards, one per missing item, so the page exists and the
-   gap is visible during review instead of the page being absent
-   (OPEN-QUESTIONS.md #32). Every pending card is removed or filled
-   before go-live: PRE-LAUNCH.md #1, and `npm run check:placeholders`
-   fails while any remains.
+/* /about#csr: the director's own CSR text, supplied 11 Nov 2026 and
+   set word for word (OPEN-QUESTIONS.md #76). It replaces the
+   copywriter's skeleton of 18 Sep (three commitments drawn from the HSE
+   worker-welfare pillar, and four `pending` cards for what K.D. had not
+   supplied, PRE-LAUNCH.md 1a-1d), so none of that is on the page now.
 
-   Community Impact is kept in the doc's own words. WEBSITE_INFO.md
-   rule 8 (paid contracts are not philanthropy) is a real concern with
-   it; the resolution is the client's, and PRE-LAUNCH.md asks. */
-export const csr: InfoPageCopy = {
+   The text has its own shape, not InfoSections' cards: an intro, two
+   pillars side by side (kicker, heading, paragraphs, a "Key highlights"
+   list) and a closing note the director signs, drawn by about/Csr.astro.
+   Its keys are named, not numbered by section: `csr.intro`,
+   `csr.pillars.0.body.1`, `csr.pillars.1.highlights.items.3`,
+   `csr.closing.signature.name`. The section's header (`csr.hero.*`) is
+   PageSection's, as for the other four, and keeps its three keys.
+
+   The old `sections` keys are gone, not retired: nothing renders under
+   that path any more, so no later index can move. A saved edit on one
+   stays in the database and stops showing (the deploy note in
+   PRE-LAUNCH.md, 2026-11-11, lists them). `meta` renders nowhere since
+   /csr became a redirect; it is kept true to the section all the same. */
+export const csr: CsrCopy = {
   meta: {
     title: "Corporate Social Responsibility | K.D. Constructions",
     description:
-      "K.D. Constructions extends its philosophy of care beyond the worksite: workforce " +
-      "health, community impact and environmental responsibility.",
+      "K.D. Constructions supports the education of deserving children, with a special " +
+      "focus on medical education, and champions art, culture and local crafts.",
   },
   ...chrome,
   hero: {
     kicker: "Corporate Social Responsibility",
-    title: "Care beyond the worksite.",
+    title: "Building More Than Infrastructure",
     sub:
-      "K.D. Constructions extends its philosophy of care beyond the worksite. Our commitment " +
-      "to social responsibility is rooted in the same discipline we bring to engineering.",
+      "We believe true progress is measured not only by what we build, but by the lives we " +
+      "help shape. Through our CSR initiatives, we invest in young minds and in the cultural " +
+      "heritage that makes our communities strong.",
   },
-  sections: [
+  intro:
+    "At K.D. Constructions, our work has always been about creating foundations that last. " +
+    "That same commitment guides our Corporate Social Responsibility. We support the " +
+    "education of deserving children, with a special focus on medical education, and we " +
+    "champion the art, culture, and local crafts that sustain livelihoods and keep our " +
+    "traditions alive.",
+  pillars: [
     {
-      kicker: "Our Commitments",
-      heading: "The same discipline, beyond the site.",
-      items: [
-        {
-          title: "Workforce health & safety",
-          body:
-            "Medical fitness screening, HIV/AIDS awareness programmes, and guaranteed clean " +
-            "water access for every worker on every site, not as compliance, but as culture.",
-        },
-        {
-          title: "Community impact",
-          body:
-            "Our infrastructure work directly serves the public, from the Matunga Z-Bridge " +
-            "restoring a daily commute for lakhs of residents, to station redevelopments " +
-            "serving 45,000+ commuters a day. We see every project as a community investment.",
-        },
-        {
-          title: "Environmental responsibility",
-          body:
-            "Structured waste management, noise control, and sustainable material practices " +
-            "on-site, with a broader commitment to low-carbon engineering as part of our " +
-            "Vision 2030 roadmap.",
-        },
+      kicker: "Education",
+      title: "Empowering Future Doctors",
+      body: [
+        "Talent should never be held back by financial hardship. We provide financial support " +
+          "to meritorious students from underprivileged backgrounds, helping them pursue " +
+          "education and build careers that serve society.",
+        "Our primary focus is medical education. By funding aspiring doctors, we help create " +
+          "healthcare professionals who will go on to care for thousands of people, especially " +
+          "in communities where quality healthcare is needed most.",
       ],
+      highlights: {
+        label: "Key highlights",
+        items: [
+          "Scholarships and financial aid for deserving students",
+          "Dedicated support for students pursuing medical education",
+          "Assistance with tuition fees, books, and learning resources",
+          "A long-term commitment to students throughout their academic journey",
+        ],
+      },
     },
     {
-      kicker: "Content Pending",
-      heading: "To be added before launch.",
-      intro:
-        "The four items below are named in K.D. Constructions' website brief as still to be " +
-        "supplied. Each card is a placeholder: it is filled with the company's own details, " +
-        "or removed, before the site goes live.",
-      items: [
-        {
-          pending: "To be added",
-          title: "Formal CSR programmes",
-          body:
-            "Any structured CSR activity the company runs or funds: what it is, where, since " +
-            "when, and the annual spend. If K.D. Constructions falls below the Companies Act " +
-            "§135 threshold, \"not applicable\" is a complete answer.",
-        },
-        {
-          pending: "To be added",
-          title: "Community partnerships",
-          body:
-            "Local initiatives near project sites and offices in Dhule, Navi Mumbai and Raigad, " +
-            "and the NGOs, trusts, schools or civic bodies the company works with.",
-        },
-        {
-          pending: "To be added",
-          title: "Education & skilling initiatives",
-          body:
-            "Apprenticeships, ITI or engineering-college tie-ups, worker upskilling, " +
-            "scholarships or site-school programmes, with numbers where they exist.",
-        },
-        {
-          pending: "To be added",
-          title: "CSR committee & governance",
-          body:
-            "Whether a CSR committee is constituted, who sits on it, and the policy it works " +
-            "to. A confirmed \"no formal committee\" closes this item and the page is " +
-            "trimmed to the three commitments above.",
-        },
+      kicker: "Art & Culture",
+      title: "Preserving Heritage, Empowering Local Talent",
+      body: [
+        "Our art and culture are a living legacy, and local artisans are its keepers. We " +
+          "support cultural initiatives, art forms, and traditional crafts that strengthen " +
+          "local industries and create sustainable livelihoods.",
+        "By backing artists, craftspeople, and cultural events, we help preserve our heritage " +
+          "while giving local talent the platform and recognition it deserves.",
       ],
+      highlights: {
+        label: "Key highlights",
+        items: [
+          "Support for traditional art forms and local crafts",
+          "Promotion of cultural events and festivals",
+          "Platforms that connect local artisans with wider markets",
+          "Initiatives that strengthen community-based industries",
+        ],
+      },
     },
   ],
+  closing: {
+    heading: "Laying Foundations for a Better Tomorrow",
+    body:
+      "Just as every strong structure begins with a solid foundation, every thriving community " +
+      "begins with opportunity. Through education and cultural empowerment, we are proud to " +
+      "help build a future where talent flourishes and heritage endures.",
+    signature: { name: "Shiv Gindodia", role: "Director, K.D. Constructions" },
+  },
   cta: {
     kicker: "Our Work",
     headline: "Every project is a community investment.",
@@ -1315,14 +1335,15 @@ export const clients: InfoPageCopy = {
    the key it was on /clients, and a stored edit moves with a copy of its
    row (db/migrations/2026-10-21-about-merge.sql), never a rename. Only the
    hero and the sections render on /about: each page's nav and footer are
-   /about's (`about.*`), and its CTA is retired (/about keeps its own). */
+   /about's (`about.*`), and its CTA is retired (/about keeps its own).
+   CSR's body is its own shape since 11 Nov 2026 (CsrCopy, above). */
 export const aboutSections = [
   { id: "company", page: "company", copy: company },
   { id: "capabilities", page: "capabilities", copy: capabilities },
   { id: "resources", page: "resources", copy: resources },
   { id: "clients", page: "clients", copy: clients },
   { id: "csr", page: "csr", copy: csr },
-] as const satisfies readonly { id: string; page: string; copy: InfoPageCopy }[];
+] as const satisfies readonly { id: string; page: string; copy: InfoPageCopy | CsrCopy }[];
 
 /* /contact's map band (Oct 2 2026) — a live Google Maps embed between
    the cards and the CTA, rendered by src/pages/contact.astro. `embed`

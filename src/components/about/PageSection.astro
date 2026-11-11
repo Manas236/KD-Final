@@ -23,21 +23,26 @@
 
    KEYS keep the old page's prefix (`page`): `clients.hero.title`,
    `clients.sections.1.items.0.title`, as on /clients.
+
+   CSR's body is not cards since 11 Nov 2026: the director's own text,
+   with its pillars and signed note, is drawn by Csr.astro after the same
+   header (OPEN-QUESTIONS.md #76).
    ============================================================ */
 import Kicker from "../Kicker.astro";
 import InfoSections from "../InfoSections.astro";
-import type { InfoPageCopy } from "../../data/pages";
+import Csr from "./Csr.astro";
+import type { CsrCopy, InfoPageCopy } from "../../data/pages";
 
 interface Props {
   /** The section's anchor, and its old address without the slash. */
   id: string;
   /** First segment of every slot key: the old page's own. */
   page: string;
-  copy: InfoPageCopy;
+  copy: InfoPageCopy | CsrCopy;
 }
 
 const { id, page, copy } = Astro.props;
-const { hero, sections } = copy;
+const { hero } = copy;
 ---
 
 <section
@@ -61,4 +66,4 @@ const { hero, sections } = copy;
   </div>
 </section>
 
-<InfoSections page={page} sections={sections} />
+{"pillars" in copy ? <Csr page={page} copy={copy} /> : <InfoSections page={page} sections={copy.sections} />}

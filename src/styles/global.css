@@ -70,6 +70,15 @@
   background-color: currentColor;
 }
 
+/* The same marker on items that can run to a second line (the CSR
+   pillars' Key highlights on /about, 11 Nov 2026): the item hangs by the
+   marker and its space, 1em + 0.28125em, so a second line starts under
+   the first line's text, not under the dash. */
+.kd-dash-hang {
+  padding-left: 1.28125em;
+  text-indent: -1.28125em;
+}
+
 /* Certificates are not printed (CertificateViewer.astro, 21 Oct 2026):
    neither the viewer, open or shut, nor the buttons that open it. A
    deterrent only; the watermark in the image is the protection. */
