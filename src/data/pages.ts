@@ -1541,11 +1541,16 @@ export const careers: CareersCopy = {
           body: "Every role we are hiring for, on our LinkedIn company page.",
           links: [{ label: "View jobs on LinkedIn", href: LINKEDIN_JOBS }],
         },
-        /* Sir, 2026-11-02: there is no Indeed page, so this card is to go
-           (OPEN-QUESTIONS.md #69). It is still here because a saved edit sits
-           on its badge on the test server: row #3 on
-           careers.sections.1.items.1.pending, the same words as below. */
+        /* RETIRED 11 Nov 2026, the day the site went live. Sir, 2026-11-02:
+           there is no Indeed page (OPEN-QUESTIONS.md #69). The slot is kept,
+           so no key moves, and careers.sections.1.items.1.pending, .title
+           and .body are never given to other text. Saved row #3 on the
+           server sits on its badge, the same words as below; it is not
+           touched and simply no longer shows, like the /hse and /clients
+           cards retired before it. The LinkedIn card, left on its own,
+           spans the row (InfoSections.astro, `lone`). */
         {
+          retired: true,
           pending: "To be added",
           title: "K.D. Constructions on Indeed",
           body:

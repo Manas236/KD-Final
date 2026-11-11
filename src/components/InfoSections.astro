@@ -23,7 +23,9 @@
 
    A `retired` card (the Indian Railways card on /clients, 21 Oct 2026)
    is not drawn, and every other card keeps its own index, so its keys do
-   not move. The grid's shape follows the cards that are drawn.
+   not move. The grid's shape follows the cards that are drawn: a card
+   left on its own where a retired one was (the LinkedIn card on
+   /careers, 11 Nov 2026) spans the row, as in launch mode below.
 
    A card with a `cert` whose image exists (/hse's Certifications) has a
    "View certificate" button, and the button's ::after is stretched over
@@ -74,7 +76,8 @@ const cut = sections.map((section, s) => {
 const tone = sections.map((_, s) => cut.slice(0, s).filter((c) => !c.section).length);
 /* The cards each section draws: a retired one keeps its slot only. */
 const shown = sections.map((section, s) => section.items.filter((item, i) => !item.retired && !cut[s].cards[i]));
-const lone = shown.map((items, s) => items.length === 1 && cut[s].cards.some(Boolean));
+/* One card drawn where the section has more: the rest retired or left out. */
+const lone = shown.map((items, s) => items.length === 1 && sections[s].items.length > 1);
 const withLogos = shown.map((items) => items.some((item) => item.logo));
 const withPortraits = shown.map((items) => items.some((item) => item.portrait));
 ---
