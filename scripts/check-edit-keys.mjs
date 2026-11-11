@@ -146,8 +146,12 @@ const copyLeaves = leaves(body).map((l) => ({ ...l, prefix: route.prefix }));
 if (route.merged) {
   const { aboutSections } = await import("../src/data/pages.ts");
   for (const { page: prefix, copy: section } of aboutSections) {
-    const { kicker, title, sub } = section.hero;
-    for (const l of leaves({ hero: { kicker, title, sub }, sections: section.sections })) {
+    /* Its header, then its body: `sections`, or since 11 Nov 2026 CSR's
+       own intro, pillars and closing (CsrCopy). Never its meta, nav,
+       footer or retired CTA. */
+    const { meta, nav, footer, cta, hero, ...body } = section;
+    const { kicker, title, sub } = hero;
+    for (const l of leaves({ hero: { kicker, title, sub }, ...body })) {
       copyLeaves.push({ ...l, prefix });
     }
   }
