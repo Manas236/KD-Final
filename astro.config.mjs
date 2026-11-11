@@ -68,6 +68,21 @@ export default defineConfig({
     port: PORT
   },
 
+  /* THE HOSTS THIS SITE ANSWERS AS (launch, 11 Nov 2026). nginx terminates
+     TLS and passes Host, X-Forwarded-Host and X-Forwarded-Proto. Astro only
+     believes those for a host listed here; with none listed it took every
+     request for http://localhost, so its origin check answered 403
+     ("Cross-site POST form submissions are forbidden") to every form POST
+     that came through nginx, the /careers application included. https
+     only. www is listed in case a request for it ever reaches the app;
+     nginx redirects it to the bare domain first. */
+  security: {
+    allowedDomains: [
+      { hostname: 'kdconstructions.net', protocol: 'https' },
+      { hostname: 'www.kdconstructions.net', protocol: 'https' }
+    ]
+  },
+
   /* PHOTO CREDIT (4 Nov 2026). Astro's sharp service, which also hands on
      the K.D. Constructions credit a source photograph carries in its file:
      src/lib/image-service.ts. Same pixels, sizes and URLs. */
