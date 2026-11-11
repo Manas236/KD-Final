@@ -5394,3 +5394,72 @@ Built copies of this commit and of `c95b4a4`, served side by side against the lo
 
 - `check-changed-defaults` against the test server: not run, because the server did not answer from the
   development PC on 11 Nov (port 80 timed out). The deploy runs it before the pull.
+
+## 77. Launch, 11 Nov 2026: live on kdconstructions.net, the server's origin fix, the Indeed card retired
+
+The site went live at https://kdconstructions.net on 11 Nov 2026. The KD Lightsail box (3.109.53.216),
+the test server until then, is production, and there is no separate test server: staging is the
+development PC plus a manual Lightsail snapshot before every deploy (CLAUDE.md, "Production";
+PRE-LAUNCH.md, "Deploy and migration order", step 0). The CSR text of #76 was live at launch. Three
+commits followed on the development PC; none is deployed yet (PRE-LAUNCH.md, the 2026-11-11 launch
+follow-up note).
+
+### The server's origin fix, `83b9c5e` on the server, `dc5f1ee` on GitHub
+
+During launch the server found Astro answering 403 ("Cross-site POST form submissions are forbidden")
+behind nginx and committed `security.allowedDomains` locally, which a server must never do (CLAUDE.md).
+The block is now in astro.config.mjs word for word, and the next deploy drops the local commit.
+
+Checked on the development PC with built copies of `bae799b` and `dc5f1ee` side by side, posting to
+`/api/apply` with the headers nginx sends (Host and X-Forwarded-Host `kdconstructions.net`,
+X-Forwarded-Proto `https`). Nothing posted could be stored.
+
+| Request | `bae799b` | `dc5f1ee` |
+| --- | --- | --- |
+| Form POST (multipart), Origin `https://kdconstructions.net` | 403 | passes the check |
+| The same for `www` | 403 | passes |
+| The same with Origin `https://evil.example` | 403 | 403 |
+| Local, Origin `http://localhost:<port>`, multipart and text/plain | passes | passes |
+| Local, Origin `https://evil.example` | 403 | 403 |
+| JSON POST through the nginx headers | passes | passes |
+
+Astro's check reads only POSTs sent as a form (multipart, urlencoded, text/plain). The `/careers`
+application and every studio write send JSON or a raw file, so in this reproduction they passed on both
+builds; the comment the server wrote, kept as it is, names the application too. The dev server
+(`astro dev`) and `check:db-flows` on a local build pass as before: all six flows on a scratch schema
+made from `db/migrate.sql`.
+
+### The Indeed card, retired (PRE-LAUNCH.md row 6)
+
+Sir said on 2 Nov there is no Indeed page (#69); the card stayed because saved row #3 on the server sits
+on its badge. It is now `retired` in `careers.sections.1`, its data kept, so these keys are never given
+to other text:
+
+- `careers.sections.1.items.1.pending` (saved row #3: untouched, it stops showing, like #20, #26, #27)
+- `careers.sections.1.items.1.title`
+- `careers.sections.1.items.1.body`
+
+The LinkedIn card is left alone in the section. InfoSections' `lone` now means "one card drawn where the
+section has more", retired or left out by launch mode, so it spans the row from 640px, as an odd last card
+does, instead of sitting in one third of it from 1024px. No other section on the site has a retired card
+beside a single drawn one, so nothing else changed.
+
+### Checks, 2026-11-11
+
+Built copies of `bae799b` and of this work, served side by side on a scratch schema holding the local
+saved edits, launch mode on and a copy of row #3 (production's state).
+
+| Check | Result |
+| --- | --- |
+| `npm run build` | Clean; the stylesheet's file name unchanged |
+| Routes | 36 sitemap URLs 200, the 404 404, robots.txt and sitemap.xml 200, the five merged pages and the Centre of Excellence 301 as before, `/studio/*` 200 signed in |
+| Served HTML, every route, switch off and on | Byte for byte the same as `bae799b` except `/careers`, where only the Indeed `<li>` is gone |
+| Layout against `bae799b`, `/` and `/careers` at 360, 390, 1280 | `/`: all 385 elements the same box and style. `/careers`: everything above "Where we hire" the same; below it the same, moved up by one offset (295px at 360, 244px at 390, 28px at 1280) because the section is that much shorter; inside it, the Indeed card gone and the LinkedIn card full width at 1280 |
+| CLS | `check:cls` 0.0000 on `/` and `/careers` at all three widths |
+| `check:served-html` | PASS, 37 pages; 3 em dashes, all inside a local saved edit on the Panvel–Karjat page |
+| `check:keys /careers` | PASS |
+| `check:served-edits /careers` | PASS; the copy of row #3 is listed as retired |
+| Edit mode | `probe-editor` on `/careers`: two slots edited, stored, served to a signed-out visitor, kept across reload |
+| Launch views | Launch preview, This is what was removed and Back to normal from the floating bar; Karanjade Health Care 4 to 0 to 4 placeholders; `/careers` in preview has the LinkedIn card and no Indeed card |
+| `check:a11y` | PASS, 37 pages at 1280 and 390 |
+| Placeholders | `check:placeholders` 24 (25 before). On the public site, `report:pending` against production's saved edits: 1 kept before, 0 after |

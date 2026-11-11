@@ -1,5 +1,13 @@
 # PRE-LAUNCH — placeholders that must be filled or removed before go-live
 
+**Live since 2026-11-11 at https://kdconstructions.net.** The KD Lightsail box
+(3.109.53.216), the test server until then, is production, and there is no
+separate test server: staging is the development PC plus a manual Lightsail
+snapshot before every deploy ("Deploy and migration order", step 0). Launch mode
+is on, so every open placeholder row below is off the public site, and with
+production's saved edits none is kept (row 6, the one that was, is retired). A
+note below that says "the test server" means this box before launch.
+
 **Launch rule (the user, 2026-10-27):** anything Sir has not answered by launch is
 **removed from the site**. Every open placeholder row below then takes its "If it
 does not exist" action, and every open sign-off loses the content it asks about,
@@ -43,9 +51,10 @@ them gone, and 5d leaves a page with a name, a place and its photographs.
 
 `npm run report:pending` (scripts/pending-report.mjs) lists, page by page,
 exactly what launch mode leaves out, with the total against the count on the
-"Last updated" line below. On 2026-11-11 it is **25 placeholders on 15 pages,
-the same as that count**, and nothing it cannot hide. With the test server's saved
-edits it keeps one of them, row 6's card, while saved row #3 is on it. Given the origin of a
+"Last updated" line below. On 2026-11-11 it is **24 placeholders on 14 pages,
+the same as that count**, and nothing it cannot hide. With production's saved
+edits it keeps none: the one it kept, row 6's card, under saved row #3, was
+retired at launch. Given the origin of a
 running build (`node scripts/pending-report.mjs http://127.0.0.1:<port>`) it
 reads the saved edits there and lists any placeholder Sir typed into as kept;
 `--served` added after the origin checks that a launch build serves exactly
@@ -57,7 +66,7 @@ K.D. confirms it does not exist — delete the item. Then run
 `npm run check:placeholders` and `npm run check:keys` for that page, and strike
 the row here.
 
-**Last updated:** 2026-11-11 · **25 placeholders on the site** — the number `npm run check:placeholders` prints, and the total of `npm run report:pending` (launch mode, above). It was 29 until 2026-11-11, when the director's own CSR text replaced About's CSR section whole, its four Content Pending cards with it (rows 1a–1d closed, −4; OPEN-QUESTIONS.md #76). It was 33 until 2026-11-05, when Sir ruled, in person, that the Kharghar Centre of Excellence is a smart city development and K.D.'s only work inside it is the football stadium, taking the centre's tile and its page's three placeholders off (rows 3b and 5h closed, −4; OPEN-QUESTIONS.md #75). It was 39 until 2026-11-02, when Sir's question sheet filled six: the Ulwe CIDCO School's client, scope and year (row 5c), the Ulwe Hospital's scope and year (row 5b, closed) and the Football Stadium's year tile, now its status (row 5g); OPEN-QUESTIONS.md #69. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 17 open rows below (21 until 2026-11-11, 23 until 2026-11-05, 24 until 2026-11-02, 25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 10 on the older "Beyond the railway" project pages, rows 5c–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 3 on the Karjat RMC plant's page, rows 4d–4f; 1 on `/careers`, row 6. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **24 sign-offs** (S1–S24; S3, S4, S12, S13 and S16 answered, S3 on 2026-11-11 with the CSR text; S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24; S24 for Sir, added 2026-11-02) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **8 go-live configuration rows, 7 still open** (G3 closed 2026-10-12) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
+**Last updated:** 2026-11-11 · **24 placeholders on the site**: the number `npm run check:placeholders` prints, and the total of `npm run report:pending` (launch mode, above). It was 25 until the launch on 2026-11-11, when the Indeed card on `/careers` was retired (row 6 closed, −1; OPEN-QUESTIONS.md #77). It was 29 until earlier on 2026-11-11, when the director's own CSR text replaced About's CSR section whole, its four Content Pending cards with it (rows 1a–1d closed, −4; OPEN-QUESTIONS.md #76). It was 33 until 2026-11-05, when Sir ruled, in person, that the Kharghar Centre of Excellence is a smart city development and K.D.'s only work inside it is the football stadium, taking the centre's tile and its page's three placeholders off (rows 3b and 5h closed, −4; OPEN-QUESTIONS.md #75). It was 39 until 2026-11-02, when Sir's question sheet filled six: the Ulwe CIDCO School's client, scope and year (row 5c), the Ulwe Hospital's scope and year (row 5b, closed) and the Football Stadium's year tile, now its status (row 5g); OPEN-QUESTIONS.md #69. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 16 open rows below (17 until the launch, 21 until the CSR text on 2026-11-11, 23 until 2026-11-05, 24 until 2026-11-02, 25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 10 on the older "Beyond the railway" project pages, rows 5c–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 3 on the Karjat RMC plant's page, rows 4d–4f. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **24 sign-offs** (S1–S24; S3, S4, S12, S13 and S16 answered, S3 on 2026-11-11 with the CSR text; S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24; S24 for Sir, added 2026-11-02) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **8 go-live configuration rows, 5 still open** (G3 closed 2026-10-12; G1 and G6 at launch, 2026-11-11) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
 
 ---
 
@@ -88,7 +97,7 @@ the row here.
 | 5f | `/projects/lush-meadows` · hero tiles 3, 4 + overview card | **Scope of works · Year completed** · To be added; **Figures from a property portal** · To be verified | Scope and year; **and** a check of MahaRERA A51800000454 on the MahaRERA site — the developer (Kailash Developers), 2 & 3 BHK and 711–852 sq ft are Square Yards portal data | Registration does not match: remove the developer and flat tiles and the second half of the paragraph. Checked and matches: delete the card |
 | 5g | `/projects/kharghar-football-stadium` · hero tile 3 | **Scope of works** · To be added. (The **Year completed** tile closed on 2026-11-02: Sir says the work is ongoing, so it reads **Ongoing · Status**, keys `projects.detail.facts.3.*`, OPEN-QUESTIONS.md #69. The **Photographs** card closed on 2026-10-15: the page header is now the representative image of row 3a, and the page has no gallery block until real photographs exist) | Scope (client **CIDCO** and the **40,000 planned capacity** are filled — S8). From 2026-10-19 to 2026-10-21 the page also carried the Centre of Excellence's facts; from 2026-10-21 the centre was its own page again (row 5h) and this page as it was before. **Sir, 5 Nov 2026, in person:** this page is K.D.'s contribution to the Centre of Excellence, a smart city development; the wider complex's paragraph is retired (`projects.detail.body.1`) and the scope placeholder stays as it is (OPEN-QUESTIONS.md #75). Real photographs of the stadium would still replace the representative image and give the page a gallery | Delete the tile |
 | ~~5h~~ | ~~`/projects/kharghar-centre-of-excellence` · the whole page~~ | ~~**K.D. Constructions' own work?** · To be confirmed; hero tile 3 **Scope of works** · To be added; **Photographs** · Photograph to be added~~ | ✅ **Closed. Sir, 5 Nov 2026, in person** (row 3b): the page's entry in `src/data/social-projects.ts` is gone, it left the sitemap and the studio gallery manager, and its address answers **301** to `/projects/kharghar-football-stadium` (OPEN-QUESTIONS.md #75) | — |
-| 6 | `/careers` · Where We Hire · card 2 | **K.D. Constructions on Indeed** · To be added | **2026-11-02, Sir: K.D. has no Indeed page, so this card is to go** (OPEN-QUESTIONS.md #69). It is still on the page because row #3 on the test server is a saved edit on its badge (`careers.sections.1.items.1.pending`, "To be added", the built-in words), and a key with a saved edit is not changed without a decision. **The user, 2026-11-02: keep it as it is for now.** Launch mode keeps the card too while that row exists. Every other mention of Indeed went the same day: the card has no link or button. (The individual job cards are **not** placeholders: an editor adds and removes them on the page itself in edit mode, "Add a job posting" card, "Remove posting" on each) | Mark the item `retired`: row #3 stays in the table, unwritten, and no longer shows. The LinkedIn card stands; InfoSections' `lone` must then count a retired neighbour too, or the card left sits in one third of the row from 1024px |
+| ~~6~~ | ~~`/careers` · Where We Hire · card 2~~ | ~~**K.D. Constructions on Indeed** · To be added~~ | ✅ **Retired 2026-11-11, at launch** (OPEN-QUESTIONS.md #77). Sir, 2026-11-02: K.D. has no Indeed page (#69). The item is `retired` in its slot, its data kept, so its keys `careers.sections.1.items.1.pending`, `.title` and `.body` are never given to other text. **Saved row #3 on the server, on its badge, is untouched and simply no longer shows**, like rows #20, #26 and #27. It was the one placeholder the public still saw, so that count went 1 to 0. The LinkedIn card stands alone and spans the row, because InfoSections' `lone` now counts a retired neighbour. (The individual job cards are **not** placeholders: an editor adds and removes them on the page itself in edit mode, "Add a job posting" card, "Remove posting" on each) |  |
 | 7a | `/projects/ghansoli-roads-and-services` · hero tile 4 | **Year completed** · To be added. (The **Image** card closed on 2026-10-15 with the representative image, row 3c; replaced 2026-10-16 with one without lettering, S15) | The year the work was handed over | Delete the tile |
 | 7b | `/projects/kamothe-peripheral-roads` · hero tile 4 | **Year completed** · To be added. (The **Image** card closed on 2026-10-15 with the representative image, row 3c) | The year | Delete the tile |
 | 7c | `/projects/vashi-station-approach-road` · hero tile 4 | **Year completed** · To be added. (The **Image** card closed on 2026-10-15 with the representative image, row 3c) | The year | Delete the tile |
@@ -268,10 +277,10 @@ in the code, and the rest states no value (OPEN-QUESTIONS.md #70).
 | 11.2% CAGR | Source: "Balance Sheet (Can't Display)" | `about.story.stats.2.*` unchanged (S25) |
 | Vindhane's 11,600+ MT | "The Rest of it was outsourced, but when showing ...", the rest not legible | Agrees with the 2026-11-02 changes. No further change (S29) |
 | Representative images | Solapur, Lower Parel: keep current images. Harbour Line Station Redevelopment: no tick | No change. S21 closed for the first two, open for the third |
-| Indeed | No link supplied | No change (row 6) |
+| Indeed | No link supplied | No change then; the card was retired at launch, 2026-11-11 (row 6) |
 
 **Saved text this touches, left as it is.** A saved edit is not changed without a
-decision. Three saved rows on `/` on the test server hold an em dash, the only ones
+decision. Three saved rows on `/` on the server (production since 2026-11-11) hold an em dash, the only ones
 in the served HTML: `home.hero.sub`, `home.capabilities.cards.0.body` and
 `home.capabilities.cards.3.body`. The last also says "fabricated at our own plant
 in Vindhane" (S29).
@@ -298,14 +307,14 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 
 | # | What | Why it blocks | Done when |
 | --- | --- | --- | --- |
-| G1 | **`PUBLIC_SITE_URL`** set in the production environment to the real https origin, **`https://kdconstructions.net`** (the bare domain: the launch decision of 2026-10-27, see "Launch domain" below) — no path, no trailing slash | Every canonical, `og:url`, `og:image`, sitemap `<loc>` and the JSON-LD are written against it. Unset, they all say `http://localhost:4322`, which tells the crawler the real domain is a copy of a page it cannot reach | `npm run check:site-url` passes; `npm run build:release` runs it first and refuses otherwise |
+| ~~G1~~ | ~~**`PUBLIC_SITE_URL`** set in the production environment to the real https origin, **`https://kdconstructions.net`** (the bare domain: the launch decision of 2026-10-27, see "Launch domain" below), no path, no trailing slash~~ | ~~Every canonical, `og:url`, `og:image`, sitemap `<loc>` and the JSON-LD are written against it. Unset, they all say `http://localhost:4322`, which tells the crawler the real domain is a copy of a page it cannot reach~~ | ✅ **Done at launch, 2026-11-11.** Canonicals and the robots.txt Sitemap line on the live site name `https://kdconstructions.net`. `npm run check:site-url` checks it |
 | G2 | Submit `https://<origin>/sitemap.xml` in **Google Search Console** (and Bing Webmaster Tools) after the first deploy | The sitemap is served from the site, so it is not "submitted" by building; someone has to hand the URL over once | Search Console shows the sitemap read, 36 URLs discovered (as of 2026-11-05: the Centre of Excellence page went for good; fewer if any row 5 or row 7 page is deleted) |
 | ~~G3~~ | ~~**Share card for the pages without a photograph**~~ | ~~They have no hero, so no `og:image`; a link to them on WhatsApp or LinkedIn shows text only~~ | ✅ **Done 2026-10-12.** `public/share-card.png` — 1200×630, the logo and the company name on ink — is the `og:image` and `twitter:image` of every page that passes no photograph, with `og:image:width`, `:height` and `:alt`; `twitter:card` is `summary_large_image` on every page. On 2026-10-27 that is fifteen pages: careers, contact, HSE, privacy, terms, the 404, and nine project pages, the two Kharghar pages (stadium, Centre of Excellence) and the seven civic works whose picture is a representative image, which never goes on a share card. (It was thirteen on 2026-10-12; five of those, capabilities, clients, company, CSR and resources, are sections of `/about` since 2026-10-21 and share its photograph.) Pages with a hero keep theirs. The URL is built on `PUBLIC_SITE_URL` (G1), so it is only right once G1 is. Redraw it with `npm run share-card:build` |
 | G4 | `founder` in the Organization JSON-LD (`src/data/organization.ts`) | Withheld until sign-off S1 settles the surname spelling — a wrong spelling in structured data outlives the page | Add the line after S1 |
-| G5 | **The tables, and the app user's grants**, on the production database: `db/migrate.sql` run by a database administrator (see "Deploy and migration order" below), then `kd_app` given exactly the grants listed at the foot of that file — SELECT and INSERT on every table, no CREATE, no ALTER | Every write the site makes goes to one of these tables: job cards on `/careers`, applications, text added to project pages, gallery changes, in-page edits. The app no longer creates or changes a table itself, so a table the migration has not made is simply missing | `npm run check:db-flows` passes on the server. **Test server: grants in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
-| G6 | **`SITE_NOINDEX` removed** from the production `.env` | The test server on a bare IP runs with `SITE_NOINDEX=1` (src/lib/staging.ts): every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything. Copied to the real domain, the site never enters the index | `npm run check:site-url` passes (it fails while the switch is on); `curl -I https://<origin>/` shows no `X-Robots-Tag` |
-| G7 | **Careers email** — `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` — nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | Send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
-| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (listed at the foot of `db/migrate.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged — the policy would be untrue | `npm run check:db-flows` passes: it sends a test application, finds it on `/studio/applications`, deletes it and checks it is gone. **Test server: in place, checked 2026-10-12** — see "G5 and G8 on the test server" below |
+| G5 | **The tables, and the app user's grants**, on the production database: `db/migrate.sql` run by a database administrator (see "Deploy and migration order" below), then `kd_app` given exactly the grants listed at the foot of that file: SELECT and INSERT on every table, no CREATE, no ALTER | Every write the site makes goes to one of these tables: job cards on `/careers`, applications, text added to project pages, gallery changes, in-page edits. The app no longer creates or changes a table itself, so a table the migration has not made is simply missing | `npm run check:db-flows -- https://kdconstructions.net` passes on production. **This box, production since 2026-11-11: grants in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
+| ~~G6~~ | ~~**`SITE_NOINDEX` removed** from the production `.env`~~ | ~~With `SITE_NOINDEX=1` (src/lib/staging.ts), as the test server ran before launch, every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything, and the site never enters the index~~ | ✅ **Done at launch, 2026-11-11.** noindex is off: `curl -I https://kdconstructions.net/` shows no `X-Robots-Tag`, and `/robots.txt` names the sitemap |
+| G7 | **Careers email**: `SMTP_USER` / `SMTP_PASS` (a Google Workspace App Password) in the production `.env`, `CAREERS_TO=hr@kdconstructions.net`; an **SPF** TXT record `v=spf1 include:_spf.google.com ~all` on kdconstructions.net and **DKIM** turned on in the Workspace Admin console (the domain had neither SPF as of 2026-10-08) | Without SMTP the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications`, and nobody at HR is told. Without SPF/DKIM the emails may land in hr@'s spam | **Not configured at launch, 2026-11-11:** production's `.env` has no SMTP, so an application only reaches `/studio/applications` until the App Password for hr@ arrives. Done when: send a test application on `/careers`; it arrives in hr@'s inbox (not spam) with the resume attached, and `/studio/applications` shows it as **Sent** |
+| G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (listed at the foot of `db/migrate.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged, and the policy would be untrue | `npm run check:db-flows` passes: it sends a test application, finds it on `/studio/applications`, deletes it and checks it is gone. **This box, production since 2026-11-11: in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
 
 ### Launch domain (decided 2026-10-27)
 
@@ -319,17 +328,31 @@ host; `PUBLIC_SITE_URL=https://kdconstructions.net` (G1). Every canonical,
 name the bare host, which is what `npm run check:site-url` checks. The
 certificate viewer's stamp already reads "Viewed on kdconstructions.net".
 
+**As live, 2026-11-11.** nginx on the box terminates TLS and passes Host,
+X-Forwarded-Host and X-Forwarded-Proto to the app. It answers 301, path and
+query kept, from `www.kdconstructions.net` to the bare domain, from http to
+https, and from the bare IP (3.109.53.216, http or https) to the domain. Two
+Let's Encrypt certificates: the domain's, for `kdconstructions.net` and `www`,
+and a short-lived one for the IP address, so that `https://3.109.53.216`
+redirects without a warning. Both renew through snap certbot's timer on the
+box. The app trusts the forwarded headers only for the hosts in
+`security.allowedDomains` (astro.config.mjs): with none listed, Astro's origin
+check refused every form POST that came through nginx (server commit
+`83b9c5e`, on GitHub as `dc5f1ee`). A new host name for the site goes in that
+list too.
+
 **robots.txt (2026-10-27; asked for as S2 in the launch audit):** on the real
 domain it reads `User-agent: *`, `Disallow: /studio`, `Disallow: /api`,
 `Allow: /api/content` and the Sitemap line on the bare host
 (src/pages/robots.txt.ts). `/api/content` stays open because the browser's
 fallback for saved edits fetches it, and a crawler that renders a page must be
-allowed the same fetch. On the test server (SITE_NOINDEX=1, G6) it still says
-`Disallow: /` and names no sitemap.
+allowed the same fetch. Until launch the test server ran with SITE_NOINDEX=1
+(G6) and it said `Disallow: /` with no sitemap; production reads as above.
 
-### G5 and G8 on the test server — in place, checked 2026-10-12
+### G5 and G8 on this box (production since 2026-11-11): in place, checked 2026-10-12
 
-Both permissions are already there on the test server. Checked read-only on
+Both permissions were there on the test server, which became production on
+2026-11-11. Checked read-only on
 2026-10-12 by the Claude Code session that runs on that server
 (`ip-172-26-8-71`), connected to `kd_construction` as the site's own database
 user, `kd_app@localhost`. Nothing was changed.
@@ -340,8 +363,8 @@ user, `kd_app@localhost`. Nothing was changed.
 | `kd_app` has SELECT and INSERT on `job_posting_events` (G5) | Yes |
 | `kd_app` has DELETE on `job_applications` (G8) | Yes |
 
-G5 and G8 stay in the table above because they are written for the
-**production** database, which has to be given the same grants at go-live.
+G5 and G8 stay open in the table above until
+`npm run check:db-flows -- https://kdconstructions.net` passes on production.
 
 **How this check is run.** By the Claude Code session on the server, not by a
 command handed to a person. Anything that has to run on a server is written
@@ -353,7 +376,9 @@ PC holds no SSH key for it.
 
 ## Deploy and migration order
 
-The same order on the test server now and on production at launch. The
+**Production since 2026-11-11**, on the box that was the test server. There
+is no separate test server: a change is proven on the development PC first,
+and step 0's snapshot is the way back from a deploy that goes wrong. The
 site's database user, `kd_app`, may only SELECT and INSERT (plus DELETE on
 `job_applications`), so the app cannot create or change a table: the schema
 has to be in place before the new code starts. Until 2026-10-12 the app ran
@@ -378,6 +403,11 @@ database and SMTP passwords, and a dump holds applicants' personal data.
 `kd-schema-*.sql` so a stray one never reaches a commit, but that is a
 safety net, not leave to keep them there.
 
+0. **Snapshot the box, every deploy.** A manual snapshot of the Lightsail
+   instance, taken in the Lightsail console before step 1. It is the
+   whole-box way back (code, `.env`, database, media, certificates); step 1's
+   build copy is the quick one. The server's session cannot take it: ask the
+   user to confirm it exists, and do not start without it.
 1. **Back up the build, then prune old backups.** As `kd`, copy `dist/` to
    `/srv/kd-backups/dist.bak-<date-time>`:
    `cp -a /srv/kd-site/dist /srv/kd-backups/dist.bak-$(date +%Y%m%d-%H%M)`.
@@ -413,13 +443,16 @@ safety net, not leave to keep them there.
    to be added. It runs **before** the build because a failed migration
    then leaves the running site untouched; the migrated schema works with
    the old code too, since the migration only adds.
-4. **Build.** `npm run build` on the test server; on the real domain
-   `npm run build:release`, which also refuses to build while a placeholder
-   is left or `PUBLIC_SITE_URL` is wrong (G1). If the build fails, copy
+4. **Build.** `npm run check:site-url`, then `npm run build`. Production
+   runs with launch mode on, which is what keeps the placeholders still in
+   the code off the public site, so `npm run build:release` would refuse
+   (its placeholder gate) until `check:placeholders` passes; from then it is
+   the build. If the build fails, copy
    step 1's backup back from `/srv/kd-backups/` as described there and
    stop: the old process is still running from it.
 
-   **At launch, in launch mode** (the launch rule, above), one of two ways.
+   **Launch mode** (the launch rule, above) **is on in production** since
+   2026-11-11. It is set one of two ways.
    *The switch, which can be undone in seconds:* `npm run check:site-url`
    and `npm run build`, then, once the site is up, turn it on at
    `/studio/launch`. `build:release` is not used here, because its placeholder
@@ -437,11 +470,12 @@ safety net, not leave to keep them there.
    is left but the kept ones, `/projects/kharghar-centre-of-excellence`
    answers 404 and is not in `/sitemap.xml`, and every sitemap page answers
    200. `node scripts/check-served-edits.mjs` must give the same anchoring
-   count as before the switch. The test server stays in review until then,
-   with the switch off.
-5. **Restart** the service (`kd-site` on the test server).
-6. **Check the six database flows.** `npm run check:db-flows`, run as the
-   user that can read `.env`, against the running site. It sends a test
+   count as before the switch. Run both after every deploy while it is on.
+5. **Restart** the service (`kd-site`).
+6. **Check the six database flows.**
+   `npm run check:db-flows -- https://kdconstructions.net`, run as the user
+   that can read `.env`, so the requests go through nginx as a visitor's do:
+   a proxy or origin-check fault shows there and not on `127.0.0.1`. It sends a test
    application, finds and deletes it, adds and removes a paragraph on a
    project page, adds and removes a job posting, and saves the launch mode
    switch at the value it already has — all six must PASS, and it cleans up
@@ -450,7 +484,8 @@ safety net, not leave to keep them there.
    never changes for the switch, and `/studio/launch`'s log gains one row.
    Where email is set up (G7) it skips the application steps unless given
    `--allow-email`, because the test application would then be emailed to
-   HR; on production, tell HR before using it.
+   HR; tell HR before using it. Not set up at launch (G7), so the
+   application steps run and nobody is emailed.
 7. **Read the service log since the restart.** No line may say
    "command denied".
 8. **Check the pages as they are served** (since 2026-10-27, read-only):
@@ -471,6 +506,12 @@ then write `.env` and start the site.
 (create if missing; alter only after an `information_schema` check), a new
 table gets its grant line at the foot of that file, and the next deploy runs
 it at step 3. The app itself never runs a schema statement (CLAUDE.md).
+
+**The notes below, up to the 2026-11-11 CSR text, were all live at launch**
+(the CSR text is on the live `/about`). They stay as the record: their "test
+server" is this box before launch, and their noindex checks (the 2026-10-27
+and 2026-10-28 notes) no longer apply, since production is indexed. The note
+still to run is the last one, the 2026-11-11 launch follow-up.
 
 ### At the next deploy: the 2026-10-21 pass (OPEN-QUESTIONS.md #58)
 
@@ -785,6 +826,27 @@ no migration of saved edits. All of it read-only:
   http://127.0.0.1:<port>` totals 25 (keeping 1 while saved row #3 is on the Indeed card);
   `node scripts/check-served-html.mjs http://127.0.0.1:<port>` passes; `npm run check:served-edits --
   http://127.0.0.1:<port>` lists any saved row on a gone `csr.sections.*` key as retired.
+
+### At the next deploy: the 2026-11-11 launch follow-up
+
+OPEN-QUESTIONS.md #77. Brings `dc5f1ee` (the allowed hosts, the server's own `83b9c5e` on GitHub),
+`dcf3b12` (the Indeed card retired) and the docs. **A plain build and restart:** no schema change, no
+grant, no `npm ci`, no migration of saved edits, no built-in text changed, no key moved; three keys
+retired (`careers.sections.1.items.1.pending`, `.title`, `.body`). In this order:
+
+1. **Step 0's snapshot, then step 1's build backup**, as on every deploy.
+2. **Instead of the pull, this once.** The server holds its local commit `83b9c5e`, so
+   `git pull --ff-only` cannot fast-forward. `git status` must show nothing modified; then `git fetch`,
+   and `git diff 83b9c5e origin/main -- astro.config.mjs` must print nothing (`dc5f1ee` is the same
+   block). Then `git reset --hard origin/main`. **If either check shows anything, STOP:** change
+   nothing and report it.
+3. **Steps 4 and 5:** build, restart.
+4. **Read-only, after:** `npm run check:db-flows -- https://kdconstructions.net` passes all six.
+   `node scripts/check-served-edits.mjs http://127.0.0.1:<port>` lists row #3 as retired, with #20,
+   #26 and #27, and anchors one row fewer than before. `node scripts/pending-report.mjs
+   http://127.0.0.1:<port> --served` totals 24, keeps 0, and passes. `/careers` shows the LinkedIn card
+   alone across the row and no Indeed card. `node scripts/check-served-html.mjs http://127.0.0.1:<port>`
+   passes.
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

@@ -8,9 +8,11 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
-## The KD test server: work there goes through its own Claude Code session
+## The KD server is production: work there goes through its own Claude Code session
 
-A Claude Code session runs on the KD test server (hostname `ip-172-26-8-71`, site at `/srv/kd-site`). The user relays between that session and the one on the development PC. Which half of this applies to you depends on where you are running — check `hostname` if unsure.
+The site is live at https://kdconstructions.net since 11 Nov 2026. It runs on the KD Lightsail box (public IP 3.109.53.216, hostname `ip-172-26-8-71`, site at `/srv/kd-site`), which was the test server until launch and is now **production**. There is no separate test server: staging is the development PC, plus a manual Lightsail snapshot of the box before every deploy (PRE-LAUNCH.md, "Deploy and migration order").
+
+A Claude Code session runs on that box. The user relays between that session and the one on the development PC. Which half of this applies to you depends on where you are running; check `hostname` if unsure.
 
 **If you are NOT on `ip-172-26-8-71`** (the development PC):
 
@@ -21,6 +23,18 @@ A Claude Code session runs on the KD test server (hostname `ip-172-26-8-71`, sit
 
 **If you ARE on `ip-172-26-8-71`:** prompts relayed by the user from the development-PC session are how work reaches you. Run the box check they open with, stay inside what the prompt allows, and report back in the form it asks for.
 
+**The server only pulls; it never commits.** Code reaches it through GitHub. On launch day it made one local commit, `83b9c5e` (the allowed hosts in astro.config.mjs); the same change is on GitHub as `dc5f1ee`, and the next deploy drops the local commit (PRE-LAUNCH.md, the 2026-11-11 launch follow-up note).
+
+## Production (live since 11 Nov 2026)
+
+- **nginx** terminates TLS and passes Host, X-Forwarded-Host and X-Forwarded-Proto to the app. It answers 301, path and query kept, from `www.kdconstructions.net` to the bare domain, from http to https, and from the bare IP to the domain.
+- **Certificates:** Let's Encrypt, one for `kdconstructions.net` and `www` (90 days) and a short-lived one for the IP address (about 6 days), so that `https://3.109.53.216` redirects without a warning. Both renew through snap certbot's timer on the box; nothing in this repo renews them.
+- **Allowed hosts:** `security.allowedDomains` in astro.config.mjs lists `kdconstructions.net` and `www.kdconstructions.net`, https only. Astro believes nginx's forwarded headers only for a host listed there; for any other it takes the request for `http://localhost`, and its origin check answers 403 to every POST sent as a form (multipart, urlencoded or text/plain, such as the studio's photo upload) that came through nginx. A new host name for the site goes in that list.
+- **Indexed:** `SITE_NOINDEX` is off: no `X-Robots-Tag`, and `/robots.txt` names the sitemap. The switch (src/lib/staging.ts) is only for a test copy.
+- **Launch mode is on** (`/studio/launch`), so every placeholder still in the code is off the public site.
+- **Careers email is not configured yet:** production's `.env` has no SMTP. An application on `/careers` is saved and listed in `/studio/applications`, and nobody is emailed, until the App Password for hr@ arrives (PRE-LAUNCH.md G7).
+- **Checks against production run on the live origin:** `npm run check:db-flows -- https://kdconstructions.net`, so the six write flows go through nginx as a visitor's do.
+
 ## The database schema comes from db/migrate.sql, never from the app
 
 The site's database user (`kd_app` on a server) has SELECT and INSERT on every table, plus DELETE on `job_applications`, and nothing else. App code must never run CREATE, ALTER, DROP or any other schema statement — MySQL refuses even `CREATE TABLE IF NOT EXISTS` on an existing table to a user without CREATE.
@@ -28,7 +42,7 @@ The site's database user (`kd_app` on a server) has SELECT and INSERT on every t
 - A new table or column goes into `db/migrate.sql`: idempotent, a table created only if missing, a column added only after an `information_schema` check.
 - A new table also gets its grant line at the foot of that file.
 - A new kind of write needs nothing beyond SELECT and INSERT (DELETE only on `job_applications`). If it does, stop and ask the user — do not widen `kd_app`'s grants.
-- PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the six write flows work with `kd_app`'s rights.
+- PRE-LAUNCH.md, "Deploy and migration order", runs the migration as a database administrator before the app restarts; `npm run check:db-flows` then proves the six write flows work with `kd_app`'s rights (on production, against `https://kdconstructions.net`).
 
 ## No em dashes in anything a visitor or a search engine can see
 
