@@ -122,6 +122,15 @@ The homepage order is:
 > section with their portraits. Every boundary changes surface. Each header
 > carries its anchor (`/about#clients`) with `scroll-margin-top` equal to
 > the nav's height, so a jump never hides its heading under the bar.
+>
+> **CSR's body is its own since 2026-11-11** (`about/Csr.astro`, `OPEN-QUESTIONS.md`
+> #76): after the same ink header, a white band with the intro and two pillar
+> cards (InfoSections' card; side by side from `md`), each with a kicker, a `d6`
+> h3, its paragraphs and a "Key highlights" list on the footer's Core
+> Disciplines marker (`.kd-dash`, hung by `.kd-dash-hang`), then a mist band
+> with the closing `d4` heading, its paragraph and the director's signature.
+> That closing band has **no kicker**, against §3: the director's text gives
+> none, and none was invented.
 
 `/projects` arrived after this was written, as its own export, and is:
 

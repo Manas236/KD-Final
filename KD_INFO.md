@@ -752,7 +752,14 @@ evidence the practice. See [ASSETS.md](ASSETS.md).
 
 ---
 
-## 9. CSR ⬜ — unchanged, still not publishable
+## 9. CSR ✅ — the director's own text, 11 Nov 2026
+
+**Superseded on 2026-11-11.** Shiv Gindodia, Director, supplied K.D.'s own CSR text, and it is on
+`/about#csr` word for word (OPEN-QUESTIONS.md #76): education for deserving children with a focus on
+medical education (scholarships, tuition, books, long-term support), and art, culture and local crafts
+(traditional art forms, cultural events and festivals, platforms for artisans, community-based
+industries), closing with a note he signs. The three bullets and the questions below are the history:
+none of them is on the site. A formal CSR spend or committee (§135) is still not stated anywhere.
 
 The approved doc carries a CSR section, but it is **explicitly a draft skeleton with an editorial note
 attached** — in its own words, *"please treat as a starting skeleton, not final copy"*, plus a literal

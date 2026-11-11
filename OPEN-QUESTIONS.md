@@ -5320,3 +5320,77 @@ test server's 28 saved edits (and one with none). No real database was written t
 - Two git-ignored local backups of 22 Oct, `src/data/pages.ts.bak.20261022-1520` and
   `src/data/project-detail.ts.bak.20261022-1520`, still hold the word, so a plain `grep -r` of `src` finds
   them, and `git grep` does not. They are never committed, built or served. Left for Manas to keep or delete.
+
+## 76. The director's CSR text on /about#csr, 11 Nov 2026
+
+Shiv Gindodia, Director, supplied K.D.'s own CSR text, relayed by Manas on 11 Nov 2026 with the
+instruction to use it word for word. It replaces the copywriter's skeleton of 18 Sep (#32): the three
+commitments taken from the HSE worker-welfare pillar, and the four "To be added" cards. Nothing deployed.
+PRE-LAUNCH.md rows 1a–1d and S3 are closed, and the count is 29 to 25.
+
+### What the section is now
+
+| Band | What it holds |
+| --- | --- |
+| Header (ink, `about/PageSection.astro`, markup unchanged) | Kicker "Corporate Social Responsibility" (kept), heading "Building More Than Infrastructure", the two-sentence subheading |
+| White (`about/Csr.astro`) | The intro paragraph (`text-body`, ink, 720 wide), then the two pillars as InfoSections' card (2px mint top, 1px frame, `p-32`, `gap-24`, `data-card="light framed"`), side by side from `md` and stacked below it. Each: its kicker (Education, Art & Culture), its heading as an h3 in `d6`, two paragraphs in card body, then under a hairline "Key highlights" (`text-kicker-sm`, the footer column heads' token) and four items on the footer's Core Disciplines marker, hung by the new `.kd-dash-hang` (global.css) so a second line starts under the text. The highlights sit at the card's foot, so the two lists line up at 1280 |
+| Mist | The closing heading (h2, `d4`), its paragraph, and the signature under a 32px mint-2 rule: "Shiv Gindodia" in Fraunces `d8`, "Director, K.D. Constructions" in `text-meta`, slate-2 |
+
+About's own CTA still closes the page on ink, so the section runs ink, white, mist, ink, as it did.
+No image was supplied: no image slot, no placeholder, no AI image.
+
+### Every edit key
+
+Named, not numbered by section (`CsrCopy` in `src/data/pages.ts`): `csr.intro`;
+`csr.pillars.<0|1>.kicker`, `.title`, `.body.<0|1>`, `.highlights.label`, `.highlights.items.<0-3>`;
+`csr.closing.heading`, `.body`, `.signature.name`, `.signature.role`. 23 new keys.
+
+The three header keys stay where they were: `csr.hero.kicker` with its text, `csr.hero.title` and
+`csr.hero.sub` with the director's. The 23 `csr.sections.*` keys (the commitments' kicker, heading and
+three cards; the Content Pending kicker, heading, intro and four cards) are **gone, not retired**:
+nothing renders under `sections` any more, so no later index can move. A saved edit on one stays in the
+database and stops showing. They were deliberately **not reused** for the pillars: a saved edit on
+"Workforce health & safety" would then show as the heading of "Empowering Future Doctors". The local
+database holds exactly such a row, #24, a test pair from 21 Oct.
+
+`docs/changed-defaults-2026-11-11.tsv` has the 25 keys with old and new text, under `/about` and again
+under `/csr`, for `scripts/check-changed-defaults.mjs` before the pull (PRE-LAUNCH.md, the 2026-11-11
+deploy note). `scripts/check-edit-keys.mjs` now reads a merged section's body as whatever follows its
+header, `sections` or CSR's own fields.
+
+### Calls made without asking
+
+- **The kicker "Corporate Social Responsibility" stays** over the heading. The text gives no kicker for
+  the section, every other section header on the page has one, and it is the label the About menu's
+  "CSR" opens on.
+- **The closing band has no kicker**, against DESIGN-SYSTEM §3, because the text gives none and one
+  would have to be invented. If Sir wants one, it is one string in `csr.closing`.
+- **The headings are as given**, with no full stop, although the other section headers end on one.
+- **The signature reads "Shiv Gindodia"**, as given. The Company section's board card has
+  "Shiv K. Gindodia".
+- **The role is slate-2, not the type table's slate:** slate on mist is 2.34:1, and `check:a11y` listed it.
+- **`meta`**, which renders nowhere since `/csr` became a 301, is rewritten from the director's intro, so
+  the module no longer carries the old claims.
+
+### Checks, 2026-11-11
+
+Built copies of this commit and of `c95b4a4`, served side by side against the local database.
+
+| Check | Result |
+| --- | --- |
+| `npm run build` | Clean, no warning |
+| Routes | 36 sitemap URLs, each 200; the 404 404; `/csr` 301 to `/about#csr` |
+| `check:served-html` | PASS, 37 pages. 0 em dashes on `/about`; 3 inside a local saved edit on the Panvel–Karjat page, allowed |
+| Layout against `c95b4a4`, `/about` and `/` at 360, 390 and 1280 | `/`: all 379 elements the same box and style. `/about`: all 738 elements outside CSR the same; those below it (About's CTA, the footer) the same relative to the CTA, which moves up 22px at 1280, 70 at 360 and 90 at 390 because the section is that much shorter. The only other difference is `<main>`'s height. No sideways scroll |
+| CLS | `check:cls` 0.0000 on `/about` and `/` at all three widths; loading `/about#csr` and scrolling through the section with motion on, 0.0000 at all three |
+| About menu "CSR" | From `/` and on `/about` at 1280, and from the phone drawer at 390 and 360: lands with the header 88px from the top, under the bar; on `/about` without a reload |
+| `check:keys` `/about` | 291 slots, all text covered, unique, leaves, accepted by `isValidKey()`, all 26 CSR strings verbatim. One failure, not from this pass: local saved row #14 on `about.story.heading`, the same on `c95b4a4` |
+| Edit mode | All 26 CSR slots editable. Saved, served to a signed-out visitor and typed back on `csr.pillars.0.kicker`, `csr.pillars.1.highlights.items.3` and `csr.closing.signature.role` (local test rows, in pairs) |
+| Launch preview | From the floating bar: the RMC plant 3 to 0 placeholders, Karanjade Health Care 4 to 0, `/about` all 26 CSR slots and nothing pending; Back to normal |
+| Placeholders | `check:placeholders` 25 (29 before), none on `/about`; `report:pending` 25 on 15 pages |
+| `check:a11y` | PASS, 37 pages at 1280 and 390; nothing listed in the CSR section |
+
+### Open
+
+- `check-changed-defaults` against the test server: not run, because the server did not answer from the
+  development PC on 11 Nov (port 80 timed out). The deploy runs it before the pull.

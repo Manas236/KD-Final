@@ -278,6 +278,11 @@ the company has to supply, so the gap shows in review where the content
 will sit, and PRE-LAUNCH.md + `npm run check:placeholders` stop it
 reaching go-live. OPEN-QUESTIONS.md #32. The copywriter's note is
 preserved below, unresolved.
+[2026-11-11] Superseded. The director, Shiv Gindodia, supplied K.D.'s own
+CSR text, and it replaces everything below on the site, word for word:
+`csr` in src/data/pages.ts, /about#csr, OPEN-QUESTIONS.md #76. The
+skeleton below, its three commitments and its "[To be added]" bullet
+are no longer on the site.
 -->
 
 *Note: Neither of your two decks contained a dedicated CSR section - the closest available content was the Worker Welfare pillar under HSE (medical screening, HIV/AIDS programmes, clean water access), which I've used as a foundation below. For a complete CSR page, I'd recommend sharing specifics on: any formal CSR spend/committee (mandatory under the Companies Act for qualifying companies), local community initiatives near project sites (Dhule, Navi Mumbai, Raigad), education or skilling programmes, and environmental initiatives beyond site-level compliance. Draft placeholder below - please treat as a starting skeleton, not final copy:*
