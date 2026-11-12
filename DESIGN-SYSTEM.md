@@ -205,6 +205,31 @@ rules below) is:
 > footer as a third, empty band. Its padding is still `pt-144 pb-80`. **Not
 > a precedent** for a content page, which has sections to fill the height.
 
+`/contact` (InfoPage; the map band 2026-10-02, the enquiry form 2026-11-12,
+`OPEN-QUESTIONS.md` #78 — no export; derived from the rules below) is:
+
+| # | Band | Surface | Utility |
+|---|---|---|---|
+| 1 | Nav | ink | `bg-kd-ink` |
+| 2 | Hero | ink | `bg-kd-ink` |
+| 3 | Get in Touch cards | white | `bg-white` |
+| 4 | Send an Enquiry (form) | ink | `bg-kd-ink` |
+| 5 | Find Us (map) | mist | `bg-kd-mist` |
+| 6 | Closing CTA | ink | `bg-kd-ink` |
+| 7 | Footer | ink-deep | `bg-kd-ink-deep` |
+
+> The form went between the cards (white) and the map (mist), so it is ink:
+> light, dark, light, dark, and neither neighbour changed its surface. It is
+> the careers "Apply here" band's layout (`lg:grid-cols-[5fr_7fr]`, kicker,
+> `d4` heading and intro on the left, the form on the right, one column
+> below 1024) moved onto ink: headings and labels mist, intro and hints fog,
+> the form framed by the stat tiles' hairline (`--kd-stat-border`) with a
+> 2px mint top, the careers form's white fields with ink text and teal
+> focus ring, a primary button with its arrow. A wrong field gets a 2px ink
+> outline drawn inside it, so nothing moves; its note under it, and the line
+> above the fields, are mist on a 2px mint rule. The form gives way to a
+> thank-you card in the same frame. Square everywhere.
+
 ### The rules a new page follows
 
 - **Never two adjacent bands of the same surface.** The band boundary is the

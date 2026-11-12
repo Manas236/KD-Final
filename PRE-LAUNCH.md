@@ -66,7 +66,7 @@ K.D. confirms it does not exist — delete the item. Then run
 `npm run check:placeholders` and `npm run check:keys` for that page, and strike
 the row here.
 
-**Last updated:** 2026-11-11 · **24 placeholders on the site**: the number `npm run check:placeholders` prints, and the total of `npm run report:pending` (launch mode, above). It was 25 until the launch on 2026-11-11, when the Indeed card on `/careers` was retired (row 6 closed, −1; OPEN-QUESTIONS.md #77). It was 29 until earlier on 2026-11-11, when the director's own CSR text replaced About's CSR section whole, its four Content Pending cards with it (rows 1a–1d closed, −4; OPEN-QUESTIONS.md #76). It was 33 until 2026-11-05, when Sir ruled, in person, that the Kharghar Centre of Excellence is a smart city development and K.D.'s only work inside it is the football stadium, taking the centre's tile and its page's three placeholders off (rows 3b and 5h closed, −4; OPEN-QUESTIONS.md #75). It was 39 until 2026-11-02, when Sir's question sheet filled six: the Ulwe CIDCO School's client, scope and year (row 5c), the Ulwe Hospital's scope and year (row 5b, closed) and the Football Stadium's year tile, now its status (row 5g); OPEN-QUESTIONS.md #69. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 16 open rows below (17 until the launch, 21 until the CSR text on 2026-11-11, 23 until 2026-11-05, 24 until 2026-11-02, 25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 10 on the older "Beyond the railway" project pages, rows 5c–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 3 on the Karjat RMC plant's page, rows 4d–4f. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **24 sign-offs** (S1–S24; S3, S4, S12, S13 and S16 answered, S3 on 2026-11-11 with the CSR text; S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24; S24 for Sir, added 2026-11-02) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **8 go-live configuration rows, 5 still open** (G3 closed 2026-10-12; G1 and G6 at launch, 2026-11-11) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
+**Last updated:** 2026-11-12 · **24 placeholders on the site**: the number `npm run check:placeholders` prints, and the total of `npm run report:pending` (launch mode, above). It was 25 until the launch on 2026-11-11, when the Indeed card on `/careers` was retired (row 6 closed, −1; OPEN-QUESTIONS.md #77). It was 29 until earlier on 2026-11-11, when the director's own CSR text replaced About's CSR section whole, its four Content Pending cards with it (rows 1a–1d closed, −4; OPEN-QUESTIONS.md #76). It was 33 until 2026-11-05, when Sir ruled, in person, that the Kharghar Centre of Excellence is a smart city development and K.D.'s only work inside it is the football stadium, taking the centre's tile and its page's three placeholders off (rows 3b and 5h closed, −4; OPEN-QUESTIONS.md #75). It was 39 until 2026-11-02, when Sir's question sheet filled six: the Ulwe CIDCO School's client, scope and year (row 5c), the Ulwe Hospital's scope and year (row 5b, closed) and the Football Stadium's year tile, now its status (row 5g); OPEN-QUESTIONS.md #69. It was 40 until 2026-10-26, when the fire drill's date on `/hse` was filled from the work-record stamp on the drill's own photograph (row 2b, OPEN-QUESTIONS.md #67). It was 43 until 2026-10-24, when the Vindhane plant in-charge's answers filled all three on `/resources/vindhane-plant`: capacity, covered area and start, and the team and covered areas (rows 4a–4c, −3; OPEN-QUESTIONS.md #65). It was 45 until the evening of 2026-10-21, when the Rabale Skywalk's photographs, filed with Bonkode's until then, gave it a real tile picture and a gallery (rows 3c and 7g, −2; OPEN-QUESTIONS.md #59). It was 42 until 2026-10-21, when Sir's change pass (OPEN-QUESTIONS.md #58) made the Kharghar Centre of Excellence its own project again, bringing back its tile and its page's three placeholders (rows 3b and 5h reopened, +4), and retired the `/hse` "Other certifications & certificate details" card (row 2, −1). `/company`, `/capabilities`, `/resources`, `/clients` and `/csr` are sections of `/about` since that day (`/about#csr` and so on); the rows below name them that way. It was 47 until 2026-10-19, when Sir's answers (OPEN-QUESTIONS.md #56) filled the Rabale Skywalk's client tile (row 7g) and folded the Kharghar Centre of Excellence into the football stadium, taking its tile and its page's three placeholders with it (rows 3b, 5h). The 16 open rows below (17 until the launch, 21 until the CSR text on 2026-11-11, 23 until 2026-11-05, 24 until 2026-11-02, 25 until 2026-10-26, 28 until 2026-10-24) cover them, several rows holding more than one: 10 on the older "Beyond the railway" project pages, rows 5c–5g; 11 on the eight works from K.D.'s own list of completed works, rows 7a–7h; 3 on the Karjat RMC plant's page, rows 4d–4f. Before that: 46 until 2026-10-16, when the fire drill's date became one (row 2b, OPEN-QUESTIONS.md #53); 62 until 2026-10-15, when representative images filled eight tiles and their pages (OPEN-QUESTIONS.md #48); 36 until 2026-10-13, when K.D.'s list of completed works added its eight works · **24 sign-offs** (S1–S24; S3, S4, S12, S13 and S16 answered, S3 on 2026-11-11 with the CSR text; S2, S14, S15, S17 and S21 in part; S18, added 2026-10-21 for the plant engineer, answered 2026-10-22; S19 and S20 for Sir, added 2026-10-21; S21 for Sir and S22 for the HSE executive, added 2026-10-22; S23 for the Vindhane plant in-charge, added 2026-10-24; S24 for Sir, added 2026-11-02) · **4 certificate rows** (C1 and C2 done on the evening of 2026-10-21, C3 and C4 files missing) · **9 go-live configuration rows, 6 still open** (G3 closed 2026-10-12; G1 and G6 at launch, 2026-11-11; G9, the enquiry email, added 2026-11-12) · **1 launch blocker** from Sir: a lawyer reviews `/privacy` and `/terms` first (S9)
 
 ---
 
@@ -314,6 +314,7 @@ things a search engine needs that only exist at deployment. OPEN-QUESTIONS.md
 | G5 | **The tables, and the app user's grants**, on the production database: `db/migrate.sql` run by a database administrator (see "Deploy and migration order" below), then `kd_app` given exactly the grants listed at the foot of that file: SELECT and INSERT on every table, no CREATE, no ALTER | Every write the site makes goes to one of these tables: job cards on `/careers`, applications, text added to project pages, gallery changes, in-page edits. The app no longer creates or changes a table itself, so a table the migration has not made is simply missing | `npm run check:db-flows -- https://kdconstructions.net` passes on production. **This box, production since 2026-11-11: grants in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
 | ~~G6~~ | ~~**`SITE_NOINDEX` removed** from the production `.env`~~ | ~~With `SITE_NOINDEX=1` (src/lib/staging.ts), as the test server ran before launch, every response says `X-Robots-Tag: noindex` and `/robots.txt` disallows everything, and the site never enters the index~~ | ✅ **Done at launch, 2026-11-11.** noindex is off: `curl -I https://kdconstructions.net/` shows no `X-Robots-Tag`, and `/robots.txt` names the sitemap |
 | G7 | **Careers email, through Resend** (since 2026-11-11; it replaces the SMTP plan, whose App Password never arrived): in the production `.env`, `RESEND_API_KEY` (the Resend API key), `CAREERS_MAIL_TO=hr@kdconstructions.net` and `CAREERS_MAIL_FROM="K.D. Constructions Careers <careers@updates.kdconstructions.net>"` (`.env.example` explains each); `db/migrate.sql` run and then `GRANT UPDATE (mail_status) ON kd_construction.job_applications TO 'kd_app'@'localhost';` ("At the next deploy: the 2026-11-11 careers email", below). The sending domain `updates.kdconstructions.net` is verified in Resend, which carries its own SPF and DKIM, so this no longer waits on the Workspace SPF/DKIM the SMTP plan needed | Without the key the "Apply here" form on `/careers` still accepts applications, but they are only kept in `/studio/applications` (Email: "Not sent, email is not set up"), and nobody at HR is told | **Code pushed 2026-11-11, not deployed; production has no key yet.** Done when: with HR told, send a test application on `/careers`; it arrives in hr@'s inbox (not spam) from "K.D. Constructions Careers" with the resume attached under its own file name, and Reply addresses the applicant; `/studio/applications` shows it as **Sent** with Resend's id; the service log has one `careers-mail: application <id> sent` line. Then delete the test application |
+| G9 | **Enquiry email, through Resend** (since 2026-11-12, OPEN-QUESTIONS.md #78): `db/migrate.sql` run and the two `enquiries` grant lines at its foot given, then in the production `.env` `ENQUIRY_MAIL_FROM="K.D. Constructions Website <enquiries@updates.kdconstructions.net>"` and, once K.D. has said who answers enquiries, `ENQUIRY_MAIL_TO` ("At the next deploy: the 2026-11-12 enquiry form", below). Same `RESEND_API_KEY` as G7 | Without the table and its grants the form on `/contact` tells every sender something went wrong and keeps nothing. Without `ENQUIRY_MAIL_TO` enquiries are kept in `/studio/enquiries` ("No recipients are set") and nobody is told | **Code pushed 2026-11-12, not deployed.** Done when: with the recipients told, one enquiry on `/contact` arrives from "K.D. Constructions Website" (not in spam), Reply addresses the sender, `/studio/enquiries` shows it **Sent** with Resend's id, and the log has `enquiry-mail: enquiry <id> sent`; an administrator then deletes the test row |
 | G8 | **`GRANT DELETE ON kd_construction.job_applications TO 'kd_app'@'localhost';`** on the production database (listed at the foot of `db/migrate.sql`) | `/privacy` promises applicants deletion on request and after 24 months. Both are done by the app (the Delete button on `/studio/applications`, and an automatic purge) and both need DELETE. Without it the button says "Could not delete" and old applications are never purged, and the policy would be untrue | `npm run check:db-flows` passes: it sends a test application, finds it on `/studio/applications`, deletes it and checks it is gone. **This box, production since 2026-11-11: in place, checked 2026-10-12**; see "G5 and G8 on this box" below |
 
 ### Launch domain (decided 2026-10-27)
@@ -473,7 +474,7 @@ safety net, not leave to keep them there.
    200. `node scripts/check-served-edits.mjs` must give the same anchoring
    count as before the switch. Run both after every deploy while it is on.
 5. **Restart** the service (`kd-site`).
-6. **Check the six database flows.**
+6. **Check the database flows** (six until 2026-11-12, ten since).
    `npm run check:db-flows -- https://kdconstructions.net`, run as the user
    that can read `.env`, so the requests go through nginx as a visitor's do:
    a proxy or origin-check fault shows there and not on `127.0.0.1`. It sends a test
@@ -489,6 +490,16 @@ safety net, not leave to keep them there.
    Without a key the application steps run, nobody is emailed, and step 2
    also proves the `mail_status` grant (it fails on a test application
    whose email result was not recorded).
+   Since 2026-11-12 there are four more: 7 an enquiry as `/contact`'s
+   script sends it, 8 the same as a plain form post (303 back to
+   `/contact?enquiry=sent`, which through nginx also proves Astro's origin
+   check lets the site's own form through), 9 three spam posts that must
+   be answered as a success and kept nowhere, 10 the per-address rate
+   limit (local origins only, unless `--rate-limit`). 7 and 8 leave two
+   test enquiries, because `kd_app` may not delete one: the report prints
+   the administrator's DELETE for them. 7 to 9 are skipped like the
+   application steps once `.env` has both `RESEND_API_KEY` and
+   `ENQUIRY_MAIL_TO`.
 7. **Read the service log since the restart.** No line may say
    "command denied".
 8. **Check the pages as they are served** (since 2026-10-27, read-only):
@@ -514,8 +525,8 @@ it at step 3. The app itself never runs a schema statement (CLAUDE.md).
 (the CSR text is on the live `/about`). They stay as the record: their "test
 server" is this box before launch, and their noindex checks (the 2026-10-27
 and 2026-10-28 notes) no longer apply, since production is indexed. The notes
-still to run are the last two, the 2026-11-11 launch follow-up and the
-2026-11-11 careers email.
+still to run are the last three, the 2026-11-11 launch follow-up, the
+2026-11-11 careers email and the 2026-11-12 enquiry form, in that order.
 
 ### At the next deploy: the 2026-10-21 pass (OPEN-QUESTIONS.md #58)
 
@@ -887,6 +898,52 @@ migration. One built-in text changed, on `/privacy`: `privacy.sections.3.body.0`
    the application is saved and listed either way. Delete the test application on
    `/studio/applications` afterwards.
 6. From then on `check:db-flows` skips its application steps unless given `--allow-email` (step 6).
+
+### At the next deploy: the 2026-11-12 enquiry form
+
+G9, OPEN-QUESTIONS.md #78. An enquiry form on `/contact`, saved first and then emailed through Resend
+(CLAUDE.md, "Enquiry form on /contact"). **A new table, two grant lines, env vars first, and the
+migration and grants before the restart:** no `npm ci` (no dependency added), no saved-edit migration, no
+`check-changed-defaults` list (no built-in text changed and no key moved; 27 new keys, `contact.enquiry.*`
+and `privacy.enquiries.heading` / `.body.0`). `privacy.updated` still reads 11 November 2026 (#78). Run on
+the server by its own Claude Code session, in this order:
+
+1. **Step 0's snapshot, step 1's build backup, step 2's pull**, as on every deploy, after the 2026-11-11
+   notes if they have not run yet.
+2. **The env vars, before anything restarts.** Copy `.env` to `/srv/kd-backups/.env.bak-<date-time>`, then
+   add `ENQUIRY_MAIL_FROM="K.D. Constructions Website <enquiries@updates.kdconstructions.net>"`, and
+   `ENQUIRY_RATE_PER_HOUR=<n>` only if 5 an hour from one address is not wanted. **Leave `ENQUIRY_MAIL_TO`
+   out** until step 6, so the check emails nobody, and never set `ENQUIRY_MAIL_DRY_RUN` (it writes senders'
+   details to the log). The key is the careers `RESEND_API_KEY`; nothing new.
+3. **Step 3, the migration, as an administrator, before the restart.** It prints `enquiries | created`
+   (`already there` on any later run). Then, also as an administrator and only after it (a grant needs its
+   table and column):
+   `GRANT SELECT, INSERT ON kd_construction.enquiries TO 'kd_app'@'localhost';`,
+   `GRANT UPDATE (mail_status) ON kd_construction.enquiries TO 'kd_app'@'localhost';` and
+   `FLUSH PRIVILEGES;`. `SHOW GRANTS FOR 'kd_app'@'localhost'` must list
+   ``SELECT, INSERT, UPDATE (`mail_status`)`` on `enquiries` and nothing new anywhere else. If the restart
+   came first, every enquiry would be refused ("Something went wrong on our side") until the grants.
+4. **Steps 4 and 5:** build, restart.
+5. **Step 6 and 7, read-only apart from the check's own rows.** `npm run check:db-flows --
+   https://kdconstructions.net`: every run flow PASS; 7 and 8 say `email skipped` with "No recipients are
+   set" (key set) or "Email is not set up" (no key), which proves the `mail_status` grant; 8 proves the plain
+   form post passes Astro's origin check through nginx; 9 passes; 10 SKIP (not a local origin). The log
+   since the restart: two `enquiry-mail: enquiry <id> skipped (ENQUIRY_MAIL_TO is empty)` lines (or
+   `RESEND_API_KEY is empty`), three `enquiry: not saved, it looked automated (...)` lines, and no "command
+   denied". Then, as an administrator, remove the two test enquiries:
+   `DELETE FROM kd_construction.enquiries WHERE email = 'deploy-check@example.com' AND name LIKE 'Deploy check %';`.
+   Also read-only: whether nginx passes `X-Forwarded-For` to the app (`proxy_set_header X-Forwarded-For` in
+   the site's nginx config). If it does not, every visitor reaches the app as 127.0.0.1 and the per-address
+   limit, for enquiries and applications alike, is one limit for the whole site. Report it; change nothing.
+6. **Then the recipients**, once K.D. has said who answers enquiries (#78): copy `.env` to
+   `/srv/kd-backups/` again, add `ENQUIRY_MAIL_TO=<address>[,<address>...]` and restart (no rebuild: read
+   at send time). From then `check:db-flows` skips 7 to 9 unless given `--allow-email`.
+7. **G9's test**, with the recipients told first: one enquiry on `/contact`, then G9's "Done when", then the
+   administrator's DELETE for the test row (the app cannot delete one).
+8. **Read-only, after:** `node scripts/check-served-html.mjs http://127.0.0.1:<port>` passes (no em dash on
+   `/contact` or `/privacy`); `node scripts/check-served-edits.mjs http://127.0.0.1:<port>` gives the same
+   anchoring count as before the pull. A before/after comparison of `/contact`'s served HTML masks the form's
+   time token (`name="t" value="..."`), which changes on every request.
 
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 

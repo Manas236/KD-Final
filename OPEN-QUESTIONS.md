@@ -5463,3 +5463,121 @@ saved edits, launch mode on and a copy of row #3 (production's state).
 | Launch views | Launch preview, This is what was removed and Back to normal from the floating bar; Karanjade Health Care 4 to 0 to 4 placeholders; `/careers` in preview has the LinkedIn card and no Indeed card |
 | `check:a11y` | PASS, 37 pages at 1280 and 390 |
 | Placeholders | `check:placeholders` 24 (25 before). On the public site, `report:pending` against production's saved edits: 1 kept before, 0 after |
+
+## 78. An enquiry form on /contact, 12 Nov 2026
+
+Visitors can now send an enquiry from `/contact`. It is saved first (new table `enquiries`), then emailed
+through Resend by the careers email's own call (`sendThroughResend()` in `src/lib/mailer.ts`, generalised
+from `sendToCareers()`, whose request is byte for byte what it was). Listed for editors on
+`/studio/enquiries`. Asked for by the user on 12 Nov 2026 with the field list, the spam measures, the
+table's columns, the grants and the env var names. Pushed, not deployed: PRE-LAUNCH.md G9 and "At the next
+deploy: the 2026-11-12 enquiry form". CLAUDE.md, "Enquiry form on /contact", has the rules.
+
+### What a visitor gets
+
+| Band | What it holds |
+| --- | --- |
+| Ink, `id="enquiry"`, between the cards (white) and the map (mist) | Left: kicker "Send an Enquiry", "Tell us about your project." (`d4`), an intro line. Right, in a frame of the stat tiles' hairline with a 2px mint top: Full name, Company (optional), Phone (with a hint), Email, Your enquiry (with "Between 20 and 2,000 characters."), the consent line linking to the Privacy Policy, "Send enquiry" with its arrow. One column below 1024, the two short pairs side by side from 640 |
+
+- **With JavaScript** (`src/scripts/enquiry-form.js`): a field is checked when it is left and again as it is
+  corrected, by the server's own rules (`src/lib/enquiry-rules.ts`); its note appears under it and the field
+  gets `aria-invalid` and a 2px ink outline inside it, so nothing moves. Send checks all of them, shows "Please
+  check the fields marked below." and moves focus to the first wrong one, or posts JSON and swaps the form for
+  the thank-you card, focused. Rate limit, server failure and no connection each have their own line.
+- **Without JavaScript**: the browser checks what it can (`required`, `type=email`, `minlength`, `maxlength`, a
+  `pattern` of phone characters), posts the form, and the route answers 303 to
+  `/contact?enquiry=sent|invalid|limited|error#enquiry`, which the page draws: the thank-you card, or the line
+  above the fields and the named fields' notes. A field refused only by the server (a phone with the right
+  characters and the wrong digit count) comes back empty, because no personal detail goes into the address.
+- **Phone numbers accepted**: an Indian mobile or landline in any usual writing (98765 43210, +91 98765 43210,
+  098765 43210, 919876543210, 0091 98765 43210, 022 2781 5380, (022) 2781-5380, +91 (0)22 2781 5380, 011-2345-6789,
+  1800 123 4567), and a foreign number after "+" (8 to 15 digits).
+- **Spam**: the honeypot `website`; a signed time token `t` written into the form on each request, refused
+  when missing, forged or under 3 s old; both get the success answer with nothing saved or sent. Then a
+  per-address limit, `ENQUIRY_RATE_PER_HOUR` (5 unset), invalid posts counted, and 200 a day in all; the
+  sender is told. Astro's origin check stays on.
+
+### Every edit key (27, all new; no existing key moved, no default changed)
+
+`contact.enquiry.kicker`, `.heading`, `.intro`; `.fields.name.label`, `.fields.name.error`,
+`.fields.company.label`, `.fields.company.optional`, `.fields.phone.label`, `.fields.phone.hint`,
+`.fields.phone.error`, `.fields.email.label`, `.fields.email.error`, `.fields.message.label`,
+`.fields.message.hint`, `.fields.message.error`; `.consent`, `.consentLink.label`, `.submit`, `.sending`;
+`.errors.invalid`, `.errors.limited`, `.errors.server`, `.errors.offline`; `.success.heading`,
+`.success.body` (25). `privacy.enquiries.heading`, `privacy.enquiries.body.0` (2).
+
+The ten shown only when they apply (four error lines, four field notes, "Sending…", the thank-you card) are
+drawn hidden. In edit mode the page's script shows all ten, so Sir can edit them in place (proved with
+`probe-editor` on `contact.enquiry.fields.phone.error`), and hides them again when the mode goes off.
+
+### Storage, grants, settings
+
+- `enquiries` (`db/migrate.sql`): `id, name, company, phone, email, message, ip_hash, user_agent, created_at,
+  mail_status`. `ip_hash` is an HMAC-SHA256 of the address under a key drawn from `EDIT_SECRET`, never the
+  address. Its grant lines at the foot: `GRANT SELECT, INSERT ON kd_construction.enquiries` and
+  `GRANT UPDATE (mail_status) ON kd_construction.enquiries`. No DELETE.
+- `.env`: `ENQUIRY_MAIL_TO` (no default), `ENQUIRY_MAIL_FROM` (default
+  `K.D. Constructions Website <enquiries@updates.kdconstructions.net>`), `ENQUIRY_MAIL_DRY_RUN`,
+  `ENQUIRY_RATE_PER_HOUR`; the key is the careers `RESEND_API_KEY`.
+- `mail_status`: `sent: <id>`, `failed: <reason>`, `skipped` (no key), `skipped: no recipients`,
+  `skipped: dry run`; shown in `/studio/enquiries`' Email column.
+- `/studio/enquiries` and `/studio/applications` link to each other in their headers; in edit mode `/contact`
+  has a "See enquiries" pill, as photo pages have "Manage photos". (The careers edit-mode link to
+  applications is in a bundled script on `/careers`; changing it would have changed `/careers`' HTML.)
+
+### Calls made without asking
+
+- **The form's band is ink.** Between white cards and the mist map, ink is the one surface that changes
+  neither neighbour (the map band kept its mist; the desktop is otherwise untouched).
+- **No default recipient.** Who answers enquiries is K.D.'s choice; until `ENQUIRY_MAIL_TO` is set,
+  enquiries are only listed. `.env.example` suggests `infra@kdconstructions.net`, the address the Business
+  enquiries card shows.
+- **The deploy sets `ENQUIRY_MAIL_TO` last**, after `check:db-flows`, so the check's two test enquiries email
+  nobody and still prove the grants (the careers note did the same with its key). Every other variable, the
+  migration and the grants come before the restart.
+- **The privacy paragraph has its own heading**, "When you send an enquiry", after "When you apply for a job",
+  added as a named section so no numbered section's keys moved. **`privacy.updated` was not changed** (still
+  "Last updated: 11 November 2026"): the rule for this pass was that no existing key's default changes. The
+  policy itself promises to update that date; Sir can type the new date in edit mode at deploy, or say and the
+  default is changed.
+- **"Kept until K.D. Constructions deletes it"**, as asked: there is no retention rule for enquiries and the
+  app cannot delete one.
+- **Time token, not a timer in the browser**: it is what makes the minimum fill time work without
+  JavaScript. The cost is that `/contact`'s HTML differs on every load in that one value (CLAUDE.md says how
+  to mask it). Its key, and the IP hash's, come from `EDIT_SECRET`, so no new secret is needed.
+- **The message keeps its line breaks** (careers folds them); single-line fields are cleaned the careers way.
+- **A wrong field is an inside outline, not careers' 2px border**, so the field does not grow by 2px.
+- **The rate limit counts by the address the app sees.** That is the first `X-Forwarded-For` entry, as for
+  careers. Whether nginx sends it is not known from here; the deploy note checks.
+
+### Checks, 2026-11-12
+
+Built copies of `d9d1dfb` and of this work, served side by side against the local database (migrated first:
+it lacked `site_settings` and `job_applications.mail_status`), and against a scratch schema made from
+`db/migrate.sql` with a user holding exactly the grants at its foot. Enquiry email in dry run.
+
+| Check | Result |
+| --- | --- |
+| `npm run build` | Clean; the stylesheet's file name unchanged (`BaseLayout.CCLIoggV.css`) |
+| Served HTML, 36 sitemap pages and the 404 | Byte for byte the same as `d9d1dfb` except `/contact` (the band, its inline style and script, and Astro's scope attribute on the map band's elements, which no rule matches) and `/privacy` (the new section only). `/contact` is the same on every load once `t` is masked |
+| Every edit key's default, before and after | 0 changed or removed, 27 added |
+| `check:served-html` | PASS, 37 pages; 0 em dashes on `/contact` and `/privacy`; 3 inside a local saved edit on the Panvel–Karjat page, as before |
+| `check:served-edits` | PASS, anchored 16 of 18, retired #7 and #24, as before |
+| `check:keys` | 27 pages PASS (111 slots on `/contact`, 93 on `/privacy`), 10 railway project pages not covered by the script, as before |
+| `check:db-flows` | 10 of 10 PASS on both servers, the scratch one with `kd_app`'s exact grants: 7 email "skipped: dry run", 8 a 303 to the thank-you card, 9 three spam posts answered ok and none saved, 10 a 429 on the fourth invalid post after 7 and 8 (limit 5) |
+| Mail states | No key: "skipped", studio "Email is not set up". Key, no recipients: "skipped: no recipients". Careers request body and headers byte for byte the same as `d9d1dfb`'s, with `fetch` stubbed; failure reasons keep the key and addresses out |
+| Layout against `d9d1dfb`, `/contact` and `/privacy` at 360, 390, 1280 | Every element above the new block the same box and style; every element below it the same, moved down by exactly the block's height; no style change anywhere; never wider than the screen |
+| CLS | 0.0000 on `/contact`, `/contact?enquiry=sent` and `/privacy` at all three widths |
+| Phone, 390 | Fields 292px wide, 52 tall, 16px text; focus after a failed Send lands 354px down, clear of the 88px bar; no console error |
+| Without JavaScript | Empty Send stopped by the browser; a refused phone comes back as `?enquiry=invalid&fields=phone` with its note; a good one as the thank-you card, `#enquiry` 88px from the top |
+| `/studio/enquiries` | 404 signed out; signed in, newest first, Email column, page width equal to the screen at 360, 390 and 1280 (the table scrolls in its box) |
+| Edit mode | `probe-editor` on `contact.enquiry.heading` and the hidden `contact.enquiry.fields.phone.error`: stored, served to a signed-out visitor, kept across reload |
+| `check:a11y` | PASS, 37 pages at 1280 and 390; nothing listed on `/contact` |
+| Placeholders, photo credit | `check:placeholders` 24 and `report:pending` 24 = PRE-LAUNCH.md, both as before; `check:photo-credit` PASS |
+
+### Open
+
+- **Who receives enquiries** (`ENQUIRY_MAIL_TO`): for K.D. to say. Nothing is emailed until it is set.
+- **The form's wording** (kicker, heading, intro, the messages) is a first draft in K.D.'s voice, for Sir.
+- **`/privacy`**: the new paragraph joins S9's legal review; its date line (above).
+- **The nginx `X-Forwarded-For` question** (the deploy note's step 5).
