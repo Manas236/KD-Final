@@ -13,6 +13,9 @@
 
    Each row has id="application-<id>": the email's link lands on it.
 
+   The header links to /studio/enquiries, the enquiries from /contact,
+   and that page links back here (12 Nov 2026).
+
    SIGNED-IN EDITORS ONLY: anyone else gets the bodyless 404 the other
    studio pages give (see the note at the top of studio/gallery.astro).
    Editor tooling, so its strings live here, not in a copy module, and
@@ -72,6 +75,7 @@ const mailNote = (m: MailState): string =>
           <h1>Job applications</h1>
         </div>
         <div class="gm-actions">
+          <a class="gm-btn" href="/studio/enquiries">Enquiries</a>
           <a class="gm-btn gm-btn-primary" href="/careers">View the careers page</a>
         </div>
       </div>

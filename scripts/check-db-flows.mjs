@@ -2,7 +2,7 @@
    Check — every flow that writes to the database, end to end
    ------------------------------------------------------------
    Drives the running site over HTTP the way an applicant and an editor
-   do, and says PASS or FAIL for each of six flows:
+   do, and says PASS or FAIL for each of ten flows (six until 12 Nov 2026):
 
      1. apply      an application with a resume, through /api/apply
      2. list       it appears on /studio/applications, with its email's
@@ -17,10 +17,29 @@
      6. launch     the launch mode switch is saved at the value it already
                    has, and that is in the log. The public site never
                    changes: it proves the rights without flipping anything
+     7. enquiry    an enquiry through /api/enquiry as the form's script
+                   sends it (JSON), listed on /studio/enquiries with its
+                   email's result recorded (enquiries.mail_status: "Not
+                   recorded" there means the column grant is missing)
+     8. form post  the same as a browser without JavaScript sends it, a
+                   plain form post with the site's Origin: 303 back to
+                   /contact?enquiry=sent, which shows the thank-you card,
+                   and the row listed. Through nginx this also proves
+                   Astro's origin check lets the site's own form through
+     9. spam       three that look automated (the honeypot filled, sent
+                   under 3 s after the page, no time token) each get the
+                   success answer, and none is listed
+    10. rate limit invalid enquiries from this address until /api/enquiry
+                   answers 429, within ENQUIRY_RATE_PER_HOUR (5 unset).
+                   Only on a local origin unless given --rate-limit: it
+                   uses up this address's hour, so a second run of steps
+                   7 and 8 within the hour would be refused (restart the
+                   site, or wait)
 
    Written for a deploy (PRE-LAUNCH.md, "Deploy and migration order"):
    it is the proof that the app works with its database user's own
-   rights — SELECT and INSERT, plus DELETE on job_applications — now that
+   rights — SELECT and INSERT, plus DELETE on job_applications and UPDATE
+   of mail_status on job_applications and enquiries — now that
    the schema comes from db/migrate.sql and never from the app. Most of
    these flows fail quietly when the database refuses them (a page shows
    no blocks, /careers shows no openings), so each one is checked by
@@ -33,17 +52,27 @@
    page. While it runs — a few seconds — the test posting is on
    /careers and the test paragraph is on one project page.
 
+   EXCEPT THE ENQUIRIES (steps 7 and 8). kd_app may not delete an
+   enquiry, so the two test enquiries stay in the table and on
+   /studio/enquiries, named "Deploy check <timestamp> ..." and from
+   deploy-check@example.com. The report lists their ids and the
+   statement an administrator can remove them with. The spam and rate
+   limit steps save nothing.
+
    EMAIL. If the server can send mail (RESEND_API_KEY is set), step 1
    would email the test application to HR. So steps 1-3 are skipped
    unless `--allow-email` is given. Without a key the application is
    saved and its email recorded as skipped, which still proves the
-   mail_status grant.
+   mail_status grant. Steps 7-9 are skipped the same way when this .env
+   has both RESEND_API_KEY and ENQUIRY_MAIL_TO (and no
+   ENQUIRY_MAIL_DRY_RUN): with no recipients an enquiry is recorded as
+   "skipped: no recipients", which proves its grant without emailing.
 
    Signs in with EDIT_PASSPHRASE from the project's .env, which it never
-   prints. Prints no personal data: the only application it reads back
-   is its own.
+   prints. Prints no personal data: the only application and enquiries
+   it reads back are its own.
 
-   Usage:  node scripts/check-db-flows.mjs [origin] [--allow-email]
+   Usage:  node scripts/check-db-flows.mjs [origin] [--allow-email] [--rate-limit]
            origin defaults to http://localhost:<PORT from .env>
    ============================================================ */
 import dotenv from "dotenv";
@@ -58,6 +87,8 @@ const ORIGIN = (args.find((a) => !a.startsWith("--")) || `http://localhost:${pro
   /\/+$/,
   ""
 );
+const LOCAL = /^https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(ORIGIN);
+const RATE_TEST = LOCAL || args.includes("--rate-limit");
 /* Any project page will do; this one is first on /projects. */
 const SLUG = "panvel-karjat-railway-line";
 
@@ -98,6 +129,19 @@ async function call(method, path, body) {
     json = null;
   }
   return { status: res.status, text, json };
+}
+
+/* A plain form post, as a browser without JavaScript sends one: Origin
+   set, the answer's redirect not followed. */
+async function postForm(path, fields) {
+  const res = await fetch(ORIGIN + path, {
+    method: "POST",
+    headers: { origin: ORIGIN, "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(fields).toString(),
+    redirect: "manual",
+  });
+  await res.text();
+  return { status: res.status, location: res.headers.get("location") ?? "" };
 }
 
 const said = (r) => (r.json?.error ? `HTTP ${r.status}: ${r.json.error}` : `HTTP ${r.status}`);
@@ -252,6 +296,136 @@ async function launchSwitchFlow() {
   else record("6 launch", "PASS", `still ${before.json.on ? "on" : "off"}, log row #${after.json.lastEvent}`);
 }
 
+/* ---------- The enquiry form on /contact (12 Nov 2026) ---------- */
+const MIN_FILL_MS = 3000; // src/lib/enquiries.ts
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+/* Enquiries this run saved: kd_app cannot delete them (see the top). */
+const enquiriesLeft = [];
+
+/** The signed time token /contact writes into the form. */
+async function formToken() {
+  const page = await call("GET", "/contact");
+  return page.text.match(/name="t" value="(\d{13}\.[A-Za-z0-9_-]{22})"/)?.[1] ?? null;
+}
+
+function enquiry(name, t, extra = {}) {
+  return {
+    name,
+    company: "Automated deploy check",
+    phone: "+91 90000 00000",
+    email: "deploy-check@example.com",
+    message: "Automated deploy check of the enquiry form. kd_app cannot delete it; an administrator can.",
+    website: "",
+    t,
+    ...extra,
+  };
+}
+
+/** Where /studio/enquiries lists a name: the row's id and its email's result. */
+function findEnquiry(listText, name) {
+  const at = listText.indexOf(`>${name}</strong>`);
+  if (at < 0) return null;
+  const start = listText.lastIndexOf("<tr ", at);
+  const end = listText.indexOf("</tr>", at);
+  const row = listText.slice(start, end);
+  return {
+    id: Number(row.match(/id="enquiry-(\d+)"/)?.[1]) || null,
+    mail: row.match(/data-mail="(\w+)"/)?.[1] ?? null,
+    note: row.match(/class="[^"]*eq-note[^"]*"[^>]*>([^<]*)</)?.[1]?.trim() ?? "",
+  };
+}
+
+const rateHint = (r) =>
+  r.status === 429 ? "; this address has used its hour of enquiries, by an earlier run? Restart the site or wait" : "";
+
+async function enquiryFlows() {
+  const live = process.env.RESEND_API_KEY?.trim() && process.env.ENQUIRY_MAIL_TO?.trim();
+  const dry = /^(1|true|yes)$/i.test((process.env.ENQUIRY_MAIL_DRY_RUN ?? "").trim());
+  if (live && !dry && !ALLOW_EMAIL) {
+    const why = "this server emails enquiries to ENQUIRY_MAIL_TO; rerun with --allow-email to include it";
+    for (const step of ["7 enquiry", "8 form post", "9 spam"]) record(step, "SKIP", why);
+  } else {
+    const t = await formToken();
+    if (!t) {
+      for (const step of ["7 enquiry", "8 form post", "9 spam"]) record(step, "FAIL", "/contact has no time token in its form");
+    } else {
+      await wait(MIN_FILL_MS + 300);
+
+      // 7. As the form's script sends it.
+      const name7 = `${MARK} enquiry`;
+      const sent = await call("POST", "/api/enquiry", enquiry(name7, t));
+      if (!(sent.status === 200 && sent.json?.ok)) {
+        record("7 enquiry", "FAIL", said(sent) + rateHint(sent));
+      } else {
+        const list = await call("GET", "/studio/enquiries");
+        const row = findEnquiry(list.text, name7);
+        if (row?.id) enquiriesLeft.push(row.id);
+        if (list.status !== 200) record("7 enquiry", "FAIL", `/studio/enquiries: HTTP ${list.status}`);
+        else if (list.text.includes("Could not read the enquiries")) record("7 enquiry", "FAIL", "the studio page could not read the enquiries");
+        else if (!row) record("7 enquiry", "FAIL", "saved, but not listed on /studio/enquiries");
+        else if (!row.mail || row.mail === "none")
+          record("7 enquiry", "FAIL", `enquiry #${row.id} is listed, but its email result was not recorded: is GRANT UPDATE (mail_status) ON enquiries missing?`);
+        else record("7 enquiry", "PASS", `enquiry #${row.id}, email ${row.mail}${row.note ? `: ${row.note}` : ""}`);
+      }
+
+      // 8. As a browser without JavaScript sends it.
+      const name8 = `${MARK} form post`;
+      const posted = await postForm("/api/enquiry", enquiry(name8, t));
+      if (posted.status !== 303 || !posted.location.startsWith("/contact?enquiry=sent")) {
+        record("8 form post", "FAIL", `HTTP ${posted.status}${posted.location ? ` to ${posted.location}` : ""}${rateHint(posted)}`);
+      } else {
+        const result = await call("GET", posted.location.split("#")[0]);
+        const doneShown = /<div data-enquiry-done(?![^>]*\bhidden\b)[^>]*>/.test(result.text);
+        const formHidden = /<form data-enquiry-form[^>]*\bhidden\b/.test(result.text);
+        const list = await call("GET", "/studio/enquiries");
+        const row = findEnquiry(list.text, name8);
+        if (row?.id) enquiriesLeft.push(row.id);
+        if (!doneShown || !formHidden) record("8 form post", "FAIL", `${posted.location} does not show the thank-you card in place of the form`);
+        else if (!row) record("8 form post", "FAIL", "303 to the thank-you card, but the enquiry is not listed");
+        else if (!row.mail || row.mail === "none") record("8 form post", "FAIL", `enquiry #${row.id}: its email result was not recorded`);
+        else record("8 form post", "PASS", `303 to ${posted.location}, enquiry #${row.id}, email ${row.mail}`);
+      }
+
+      // 9. Three that look automated: each answered as a success, none kept.
+      const spam = [
+        [`${MARK} honeypot`, () => call("POST", "/api/enquiry", enquiry(`${MARK} honeypot`, t, { website: "https://spam.example" }))],
+        [`${MARK} too fast`, async () => call("POST", "/api/enquiry", enquiry(`${MARK} too fast`, await formToken()))],
+        [`${MARK} no token`, () => call("POST", "/api/enquiry", enquiry(`${MARK} no token`, ""))],
+      ];
+      const answers = [];
+      for (const [, send] of spam) answers.push(await send());
+      const list = await call("GET", "/studio/enquiries");
+      const kept = spam.map(([name]) => name).filter((name) => findEnquiry(list.text, name));
+      const refused = answers.filter((r) => !(r.status === 200 && r.json?.ok));
+      if (refused.length) record("9 spam", "FAIL", `answered ${refused.map(said).join(", ")}, not as a success`);
+      else if (kept.length) record("9 spam", "FAIL", `saved anyway: ${kept.join(", ")}`);
+      else record("9 spam", "PASS", "honeypot, too fast and no token: each answered ok, none saved");
+    }
+  }
+
+  // 10. The rate limit: invalid enquiries (never saved) until a 429.
+  if (!RATE_TEST) {
+    record("10 rate limit", "SKIP", "not a local origin: it would use up this address's hour; rerun with --rate-limit to include it");
+    return;
+  }
+  const limit = Number.parseInt(process.env.ENQUIRY_RATE_PER_HOUR ?? "", 10) || 5;
+  const t = await formToken();
+  await wait(MIN_FILL_MS + 300);
+  let tripped = 0;
+  const seen = [];
+  for (let i = 1; i <= limit + 1; i++) {
+    const r = await call("POST", "/api/enquiry", enquiry(`${MARK} rate ${i}`, t, { message: "too short" }));
+    seen.push(r.status);
+    if (r.status === 429) {
+      tripped = i;
+      break;
+    }
+    if (r.status !== 400) break;
+  }
+  if (tripped) record("10 rate limit", "PASS", `429 on post ${tripped} of this run's invalid ones (${seen.join(" ")}), limit ${limit} an hour`);
+  else record("10 rate limit", "FAIL", `no 429 after ${seen.length} posts (${seen.join(" ")}), limit ${limit} an hour`);
+}
+
 /* ---------- Run ---------- */
 console.log(`Database flows on ${ORIGIN}, marker "${MARK}"\n`);
 
@@ -271,6 +445,7 @@ try {
     await textBlockFlow();
     await jobPostingFlow();
     await launchSwitchFlow();
+    await enquiryFlows();
   }
 } catch (err) {
   record("run", "FAIL", `could not reach ${ORIGIN}: ${err.cause?.code || err.message}`);
@@ -292,6 +467,11 @@ LEFT ON THE SITE — an application named "${MARK}" was saved but not found in t
     );
   if (leftOver.length)
     console.log(`\nLEFT ON THE SITE — remove by hand: ${leftOver.map(([k, v]) => `${k} #${v}`).join(", ")}`);
+  if (enquiriesLeft.length)
+    console.log(
+      `\nNOTE  the test enquiries #${enquiriesLeft.join(", #")} stay on /studio/enquiries: kd_app may not delete ` +
+        `an enquiry. An administrator can remove them:\n      DELETE FROM enquiries WHERE email = 'deploy-check@example.com' AND name LIKE 'Deploy check %';`
+    );
 }
 
 const failed = results.filter((r) => r.outcome === "FAIL").length;

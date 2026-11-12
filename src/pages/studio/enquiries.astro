@@ -1,0 +1,245 @@
+---
+/* ============================================================
+   GET /studio/enquiries — every enquiry sent from /contact (12 Nov 2026)
+   ------------------------------------------------------------
+   /studio/applications' twin. Each enquiry is also emailed to
+   ENQUIRY_MAIL_TO through Resend once it is saved
+   (src/lib/enquiry-mail.ts); this page is the copy that does not depend
+   on the email arriving. Newest first. The Email column reads
+   enquiries.mail_status: Sent (with Resend's id), Not sent (with the
+   reason: email is not set up, no recipients, a dry run, or Resend's
+   refusal), or Not recorded (the result could not be saved: the
+   mail_status grant is missing). Its data-mail attribute is what
+   check:db-flows reads.
+
+   Each row has id="enquiry-<id>": the email's link lands on it.
+
+   SIGNED-IN EDITORS ONLY: anyone else gets the bodyless 404 the other
+   studio pages give (see the note at the top of studio/gallery.astro).
+   Editor tooling, so its strings live here, not in a copy module, and
+   it reuses the gallery manager's header styles.
+
+   NO DELETE BUTTON: the site's database user may not delete an enquiry
+   (the grants at the foot of db/migrate.sql). One is removed by a
+   database administrator; the help text says so.
+
+   On a phone the table scrolls sideways inside its own box and the page
+   stays the width of the screen.
+   ============================================================ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isAuthed } from "../../lib/edit-auth";
+import { listEnquiries } from "../../lib/enquiries";
+import { enquiryDryRun, enquiryInbox } from "../../lib/enquiry-mail";
+import { mailConfigured } from "../../lib/mailer";
+import type { MailState } from "../../lib/applications";
+
+export const prerender = false;
+
+if (!isAuthed(Astro.request)) {
+  return new Response(null, { status: 404, headers: { "X-Astro-Error": "true" } });
+}
+
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Cache-Control", "no-store");
+
+const rows = await listEnquiries();
+const inbox = enquiryInbox();
+const keySet = mailConfigured();
+const dry = enquiryDryRun();
+const when = (d: Date) =>
+  d.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+const mailNote = (m: MailState): string =>
+  m.status === "sent"
+    ? m.detail
+      ? `Resend id ${m.detail}`
+      : ""
+    : m.status === "skipped"
+      ? m.detail === "dry run"
+        ? "Dry run, printed to the log"
+        : m.detail === "no recipients"
+          ? "No recipients are set"
+          : "Email is not set up"
+      : m.detail;
+---
+
+<BaseLayout title="Enquiries | K.D. Constructions" description="Enquiries sent from the contact page." noindex skip={false}>
+  <link rel="stylesheet" href="/gallery-manager.css" />
+  <main class="gm">
+    <header class="gm-top">
+      <div class="gm-top-inner">
+        <div class="gm-title">
+          <span class="gm-kicker">K.D. Constructions · Studio</span>
+          <h1>Enquiries</h1>
+        </div>
+        <div class="gm-actions">
+          <a class="gm-btn" href="/studio/applications">Job applications</a>
+          <a class="gm-btn gm-btn-primary" href="/contact">View the contact page</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="gm-help">
+      {
+        keySet && inbox.length && !dry ? (
+          <p>
+            Every enquiry sent from the contact page is kept here and emailed to{" "}
+            <strong>{inbox.join(", ")}</strong>. The Email column says whether it went. If one shows{" "}
+            <strong>Not sent</strong>, the reason is under it, and the enquiry is still here.
+          </p>
+        ) : dry ? (
+          <p>
+            <strong>Email is in dry-run mode</strong> (ENQUIRY_MAIL_DRY_RUN), so enquiries are kept here and
+            printed to the server's log instead of being sent. That is for development only.
+          </p>
+        ) : !keySet ? (
+          <p>
+            <strong>Email is not set up yet</strong>, so enquiries are only kept here and nobody is emailed.
+            Once the Resend key is added to the server, new enquiries are emailed too.
+          </p>
+        ) : (
+          <p>
+            <strong>No recipients are set</strong> (ENQUIRY_MAIL_TO on the server), so enquiries are only kept
+            here and nobody is emailed.
+          </p>
+        )
+      }
+      <p>
+        Enquiries are kept until K.D. Constructions deletes them, as the <a href="/privacy">privacy policy</a>{" "}
+        says. This page cannot delete one: if a sender asks for theirs to be removed, ask the website's
+        administrator to delete it from the database, and delete the email copy from the mailbox.
+      </p>
+    </section>
+
+    {rows === null && <div class="gm-banner" role="alert">Could not read the enquiries from the database.</div>}
+
+    {
+      rows && rows.length === 0 && (
+        <section class="gm-help">
+          <p>No enquiries yet.</p>
+        </section>
+      )
+    }
+
+    {
+      rows && rows.length > 0 && (
+        <div class="eq-wrap">
+          <table class="eq">
+            <thead>
+              <tr>
+                <th>Received</th>
+                <th>From</th>
+                <th>Enquiry</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((e) => (
+                <tr id={`enquiry-${e.id}`}>
+                  <td class="eq-nowrap">{when(e.at)}</td>
+                  <td class="eq-from">
+                    <strong>{e.name}</strong>
+                    {e.company && (
+                      <>
+                        <br />
+                        <span>{e.company}</span>
+                      </>
+                    )}
+                    <br />
+                    <a href={`mailto:${e.email}`}>{e.email}</a>
+                    <br />
+                    <a href={`tel:${e.phone.replace(/[^+\d]/g, "")}`}>{e.phone}</a>
+                  </td>
+                  <td class="eq-msg">{e.message}</td>
+                  <td class="eq-mail" data-mail={e.mail.status}>
+                    {e.mail.status === "sent" ? "Sent" : e.mail.status === "none" ? "Not recorded" : <strong>Not sent</strong>}
+                    {mailNote(e.mail) && (
+                      <>
+                        <br />
+                        <span class="eq-dim eq-note">{mailNote(e.mail)}</span>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<style>
+  /* /studio/applications' table (applications.astro), with one column less. */
+  .eq-wrap {
+    position: relative;
+    overflow-x: auto;
+    padding: 0 var(--kd-gap-24) var(--kd-gap-56);
+    max-width: var(--kd-container);
+    margin: 0 auto;
+  }
+  .eq {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    color: var(--kd-ink);
+    background-color: white;
+  }
+  .eq th,
+  .eq td {
+    text-align: left;
+    vertical-align: top;
+    padding: var(--kd-gap-12) var(--kd-gap-16);
+    border-bottom: var(--kd-hairline) solid var(--kd-card-border-light);
+  }
+  .eq th {
+    font-size: var(--text-kicker);
+    letter-spacing: var(--text-kicker--letter-spacing);
+    text-transform: uppercase;
+    color: var(--kd-slate-2);
+  }
+  .eq a {
+    color: var(--kd-mint-2);
+  }
+  .eq-nowrap {
+    white-space: nowrap;
+  }
+  .eq-from {
+    min-width: 12rem;
+    overflow-wrap: anywhere;
+  }
+  .eq-msg {
+    /* the floor keeps a long message from being squeezed into a tall
+       narrow column on a phone; the table scrolls sideways instead */
+    min-width: 16rem;
+    max-width: 480px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .eq tbody tr {
+    scroll-margin-top: 160px;
+  }
+  .eq tbody tr:target {
+    background-color: var(--kd-mist);
+  }
+  .eq-mail {
+    min-width: 7rem;
+    max-width: 14rem;
+  }
+  .eq-note {
+    font-size: var(--text-meta-sm);
+    line-height: var(--text-meta-sm--line-height);
+    overflow-wrap: anywhere;
+  }
+  .eq-dim {
+    color: var(--kd-slate-2);
+  }
+</style>
