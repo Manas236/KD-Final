@@ -7,8 +7,9 @@
 --
 -- THE SITE NEVER CHANGES THE SCHEMA ITSELF. Its database user, kd_app,
 -- may only SELECT and INSERT (plus DELETE on job_applications, and
--- UPDATE of its one column mail_status — see the grants at the foot of
--- this file). So this script is run by a database
+-- UPDATE of the one column mail_status on job_applications and on
+-- enquiries — see the grants at the foot of this file). So this script
+-- is run by a database
 -- ADMINISTRATOR, and it is run BEFORE the app is (re)started, on every
 -- deploy:
 --
@@ -297,6 +298,36 @@ CREATE TABLE IF NOT EXISTS site_settings_events (
   INDEX idx_key (`key`, id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- enquiries — the enquiry form on /contact (2026-11-12;
+-- src/pages/api/enquiry.ts, src/lib/enquiries.ts). One row per enquiry,
+-- written before it is emailed, listed on /studio/enquiries.
+--
+--   company      NULL when the sender left it empty
+--   ip_hash      a keyed hash (HMAC-SHA256, hex) of the address it came
+--                from, never the address itself: enough to see that two
+--                enquiries came from one place. NULL if none was known
+--   mail_status  written by the app AFTER the row is saved, when Resend
+--                has answered (src/lib/enquiry-mail.ts): 'sent: <Resend
+--                id>', 'failed: <reason>', 'skipped' (no RESEND_API_KEY),
+--                'skipped: no recipients' (no ENQUIRY_MAIL_TO) or
+--                'skipped: dry run'. NULL = not recorded. The one column
+--                kd_app may UPDATE.
+--
+-- kd_app may not DELETE here: an enquiry stays until an administrator
+-- removes it (/privacy says it is kept until K.D. deletes it).
+CREATE TABLE IF NOT EXISTS enquiries (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(120)  NOT NULL,
+  company       VARCHAR(160)  NULL,
+  phone         VARCHAR(30)   NOT NULL,
+  email         VARCHAR(254)  NOT NULL,
+  message       TEXT          NOT NULL,
+  ip_hash       CHAR(64)      NULL,
+  user_agent    VARCHAR(255)  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  mail_status   VARCHAR(255)  NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ------------------------------------------------------------
 -- 2. Columns that tables created before a given date lack.
 --
@@ -372,6 +403,7 @@ SELECT name AS `table`,
     UNION ALL SELECT 'job_applications'
     UNION ALL SELECT 'site_settings'
     UNION ALL SELECT 'site_settings_events'
+    UNION ALL SELECT 'enquiries'
   ) AS wanted;
 
 SELECT 'job_posting_events.open_days' AS `column`,
@@ -390,13 +422,15 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 --
 -- kd_app is created once per server, by an administrator, and needs
 -- exactly these rights and no others. SELECT and INSERT are all the app
--- uses on every table but one, as they are append-only (a revert or an
+-- uses on every table but two, as they are append-only (a revert or an
 -- undo INSERTs a new row); job_applications also needs DELETE, for the
 -- deletion /privacy promises, and UPDATE of mail_status alone, so the
 -- result of HR's email can be written into a row that is already saved
--- (2026-11-11). A column grant: kd_app can change no other column of
--- any table. No CREATE and no ALTER: schema changes come from this
--- file, run by an administrator.
+-- (2026-11-11). enquiries (2026-11-12) needs INSERT, SELECT for
+-- /studio/enquiries, and UPDATE of its own mail_status alone, for the
+-- same reason; no DELETE. Column grants: kd_app can change no other
+-- column of any table. No CREATE and no ALTER: schema changes come from
+-- this file, run by an administrator.
 --
 --   GRANT SELECT, INSERT ON kd_construction.content_edits TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.job_posting_events TO 'kd_app'@'localhost';
@@ -407,11 +441,16 @@ SELECT CONCAT('Migration complete on ', DATABASE(), ' as ', CURRENT_USER(), '.')
 --   GRANT UPDATE (mail_status) ON kd_construction.job_applications TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.site_settings TO 'kd_app'@'localhost';
 --   GRANT SELECT, INSERT ON kd_construction.site_settings_events TO 'kd_app'@'localhost';
+--   GRANT SELECT, INSERT ON kd_construction.enquiries TO 'kd_app'@'localhost';
+--   GRANT UPDATE (mail_status) ON kd_construction.enquiries TO 'kd_app'@'localhost';
 --
 -- A table added to this file later needs its own GRANT line here, and
--- run on every server, or the app cannot read it. A column grant (the
--- mail_status line) needs its column to exist first: run this file,
--- then the GRANT. Without it the application is still saved and emailed,
--- the log line says "mail_status not saved: UPDATE command denied", and
--- the studio shows "Not recorded".
+-- run on every server, or the app cannot read it. A table grant and a
+-- column grant (the mail_status lines) need their table and column to
+-- exist first: run this file, then the GRANTs, then FLUSH PRIVILEGES.
+-- Without the mail_status grant the application or enquiry is still
+-- saved and emailed, the log line says "mail_status not saved: UPDATE
+-- command denied", and the studio shows "Not recorded". Without the
+-- enquiries table grant an enquiry is not saved at all: the sender is
+-- told something went wrong, and nothing is emailed.
 -- ============================================================

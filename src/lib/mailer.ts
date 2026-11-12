@@ -1,5 +1,5 @@
 /* ============================================================
-   Outgoing email: the /careers applications to HR, through Resend
+   Outgoing email, through Resend: the one mail path the site has
    ------------------------------------------------------------
    Since 2026-11-11 the site sends through Resend's HTTP API
    (POST https://api.resend.com/emails) with Node's global fetch: no SDK,
@@ -8,11 +8,18 @@
    signed for that subdomain and never claims to come from
    kdconstructions.net's own Google Workspace.
 
+   Two kinds of email go this way, each built by its own module and sent
+   by sendThroughResend() below:
+
+     /careers applications to HR    src/lib/application-mail.ts,
+                                    through sendToCareers()
+     /contact enquiries (12 Nov 2026)  src/lib/enquiry-mail.ts
+
    All of it is in .env (see .env.example), read at send time, so a
    change needs a restart and no rebuild:
 
-     RESEND_API_KEY        the API key. Empty: nothing is sent and the
-                           result is "skipped"
+     RESEND_API_KEY        the API key, shared by both. Empty: nothing is
+                           sent and the result is "skipped"
      CAREERS_MAIL_TO       where applications go
                            (default hr@kdconstructions.net)
      CAREERS_MAIL_FROM     the sender, on the verified domain (default
@@ -22,11 +29,13 @@
                            instead of sending it, the attachment as its
                            size. Development only: the log then holds the
                            applicant's details
+     ENQUIRY_MAIL_*        the enquiries' own three, the same way
+                           (src/lib/enquiry-mail.ts)
 
-   sendToCareers() NEVER THROWS and gives up after SEND_TIMEOUT_MS. The
-   application is saved before it is called (src/pages/api/apply.ts), so
-   an email that fails loses nothing; src/lib/application-mail.ts records
-   what happened in job_applications.mail_status.
+   sendThroughResend() NEVER THROWS and gives up after SEND_TIMEOUT_MS.
+   What it sends is saved before it is called (src/pages/api/apply.ts,
+   src/pages/api/enquiry.ts), so an email that fails loses nothing; the
+   module that built it records what happened in the row's mail_status.
 
    The key is never logged and never returned: a failure's reason is
    Resend's own message, cut short, with anything shaped like a key or an
@@ -46,13 +55,26 @@ function apiKey(): string {
   return (process.env.RESEND_API_KEY ?? "").trim();
 }
 
-/** True when RESEND_API_KEY is set, so applications are emailed. */
+/** True when RESEND_API_KEY is set, so mail can be sent at all. */
 export function mailConfigured(): boolean {
   return apiKey() !== "";
 }
 
+/** 1, true or yes, read from the environment at call time. */
+export function flagOn(name: string): boolean {
+  return /^(1|true|yes)$/i.test((process.env[name] ?? "").trim());
+}
+
 export function dryRun(): boolean {
-  return /^(1|true|yes)$/i.test((process.env.CAREERS_MAIL_DRY_RUN ?? "").trim());
+  return flagOn("CAREERS_MAIL_DRY_RUN");
+}
+
+/** A comma-separated list of addresses, as an array, blanks dropped. */
+export function addressList(value: string): string[] {
+  return value
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 /** Where applications go; CAREERS_MAIL_TO may list several, comma-separated. */
@@ -62,6 +84,24 @@ export function careersInbox(): string {
 
 export function careersSender(): string {
   return (process.env.CAREERS_MAIL_FROM ?? "").trim() || DEFAULT_FROM;
+}
+
+/** The time a row arrived, as the emails and the studio say it. */
+export function istTime(at: Date): string {
+  const s = at.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return `${s} IST`;
+}
+
+export function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 export interface Attachment {
@@ -85,14 +125,34 @@ export type MailResult =
   | { readonly status: "failed"; readonly reason: string }
   | { readonly status: "skipped"; readonly reason: string };
 
-/** The JSON body POSTed to Resend (field names are Resend's). */
+/** One email, ready to go: sender and recipients included. */
+export interface OutgoingMail extends CareersMail {
+  readonly from: string;
+  readonly to: readonly string[];
+}
+
+/** What goes in a row's mail_status (see application-mail.ts):
+    `sent: <Resend id>`, `failed: <reason>`, `skipped`, `skipped: dry run`. */
+export function mailStatus(r: MailResult): string {
+  if (r.status === "sent") return `sent: ${r.id}`;
+  if (r.status === "failed") return `failed: ${r.reason}`;
+  return r.reason === "dry run" ? "skipped: dry run" : "skipped";
+}
+
+/** The JSON body POSTed to Resend for an application to HR. */
 export function resendPayload(mail: CareersMail): Record<string, unknown> {
-  return {
+  return resendBody({
+    ...mail,
     from: careersSender(),
-    to: careersInbox()
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean),
+    to: addressList(careersInbox()),
+  });
+}
+
+/** The JSON body POSTed to Resend (field names are Resend's). */
+export function resendBody(mail: OutgoingMail): Record<string, unknown> {
+  return {
+    from: mail.from,
+    to: [...mail.to],
     reply_to: mail.replyTo,
     subject: mail.subject,
     html: mail.html,
@@ -125,13 +185,17 @@ export function shortReason(s: string): string {
 
 /** The request as the dry run prints it: the attachment as its size. */
 export function describePayload(mail: CareersMail): string {
-  const body = resendPayload(mail);
-  if (mail.attachment)
+  return describeBody(resendPayload(mail), mail.attachment);
+}
+
+/** Any request as a dry run prints it: the attachment as its size. */
+export function describeBody(body: Record<string, unknown>, attachment?: Attachment): string {
+  if (attachment)
     body.attachments = [
       {
-        filename: mail.attachment.filename,
-        content: `<${mail.attachment.content.length} bytes, base64>`,
-        content_type: mail.attachment.contentType,
+        filename: attachment.filename,
+        content: `<${attachment.content.length} bytes, base64>`,
+        content_type: attachment.contentType,
       },
     ];
   return JSON.stringify(body);
@@ -140,6 +204,12 @@ export function describePayload(mail: CareersMail): string {
 /** Sends one email to the careers inbox. Never throws. */
 export async function sendToCareers(mail: CareersMail): Promise<MailResult> {
   if (dryRun()) return { status: "skipped", reason: "dry run" };
+  return sendThroughResend(resendPayload(mail), "careers");
+}
+
+/** POSTs one email body (resendBody()) to Resend. Never throws.
+    `purpose` names the sender in the User-Agent: "careers", "enquiries". */
+export async function sendThroughResend(body: Record<string, unknown>, purpose: string): Promise<MailResult> {
   const key = apiKey();
   if (!key) return { status: "skipped", reason: "RESEND_API_KEY is empty" };
   try {
@@ -148,9 +218,9 @@ export async function sendToCareers(mail: CareersMail): Promise<MailResult> {
       headers: {
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
-        "User-Agent": "kdconstructions.net careers",
+        "User-Agent": `kdconstructions.net ${purpose}`,
       },
-      body: JSON.stringify(resendPayload(mail)),
+      body: JSON.stringify(body),
       signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
     });
     const raw = await res.text();

@@ -1351,7 +1351,14 @@ export const aboutSections = [
    check reads both as attributes, not copy. The pin is the company's own
    Maps listing ("K.D. Constructions", Real Tech Park) — the same place
    the Headquarters card's short link opens, 19.0661905, 72.9988837.
-   No API key: this is the classic output=embed URL. */
+   No API key: this is the classic output=embed URL.
+
+   `enquiry` (12 Nov 2026, OPEN-QUESTIONS.md #78) is the enquiry form's
+   band, between the cards and the map: saved, then emailed to K.D.
+   (src/pages/api/enquiry.ts). Every string is its own slot, keyed by its
+   path here (`contact.enquiry.fields.phone.error`), the ones shown only
+   on an error, while sending or after success included: the page draws
+   them all and shows each when it applies. */
 export interface ContactCopy extends InfoPageCopy {
   readonly map: {
     readonly kicker: string;
@@ -1359,6 +1366,32 @@ export interface ContactCopy extends InfoPageCopy {
     readonly embed: string;
     readonly embedTitle: string;
     readonly directions: NavLink;
+  };
+  readonly enquiry: {
+    readonly kicker: string;
+    readonly heading: string;
+    readonly intro: string;
+    readonly fields: {
+      readonly name: { readonly label: string; readonly error: string };
+      readonly company: { readonly label: string; readonly optional: string };
+      readonly phone: { readonly label: string; readonly hint: string; readonly error: string };
+      readonly email: { readonly label: string; readonly error: string };
+      readonly message: { readonly label: string; readonly hint: string; readonly error: string };
+    };
+    readonly consent: string;
+    /** Links the consent line to /privacy; rendered right after it. */
+    readonly consentLink: NavLink;
+    readonly submit: string;
+    readonly sending: string;
+    /** Above the fields, one at a time: a field is wrong, the sender has
+        sent too many this hour, the server failed, the browser is offline. */
+    readonly errors: {
+      readonly invalid: string;
+      readonly limited: string;
+      readonly server: string;
+      readonly offline: string;
+    };
+    readonly success: { readonly heading: string; readonly body: string };
   };
 }
 
@@ -1445,6 +1478,46 @@ export const contact: ContactCopy = {
     directions: {
       label: "Get directions",
       href: "https://www.google.com/maps/dir/?api=1&destination=19.0661905,72.9988837",
+    },
+  },
+  enquiry: {
+    kicker: "Send an Enquiry",
+    heading: "Tell us about your project.",
+    intro:
+      "For a tender, a partnership or a project, send us a few lines here. Your enquiry goes " +
+      "straight to our team, and we will get back to you by phone or email.",
+    fields: {
+      name: { label: "Full name", error: "Please enter your name." },
+      company: { label: "Company", optional: "optional" },
+      phone: {
+        label: "Phone",
+        hint: "A mobile number, or a landline with its area code.",
+        error: "Please enter a phone number we can call, such as 98765 43210 or 022 1234 5678.",
+      },
+      email: { label: "Email", error: "Please enter a valid email address." },
+      message: {
+        label: "Your enquiry",
+        hint: "Between 20 and 2,000 characters.",
+        error: "Please write between 20 and 2,000 characters.",
+      },
+    },
+    consent: "We use these details only to answer your enquiry, as described in our",
+    consentLink: { label: "Privacy Policy", href: "/privacy" },
+    submit: "Send enquiry",
+    sending: "Sending…",
+    errors: {
+      invalid: "Please check the fields marked below.",
+      limited:
+        "We have received several enquiries from you already. Please try again later, or call us " +
+        "on the numbers above.",
+      server:
+        "Something went wrong on our side. Please try again, or email us at " +
+        "infra@kdconstructions.net.",
+      offline: "No connection. Please check your internet and try again.",
+    },
+    success: {
+      heading: "Thank you. Your enquiry has been sent.",
+      body: "Our team has received your enquiry and will be in touch.",
     },
   },
   cta: {

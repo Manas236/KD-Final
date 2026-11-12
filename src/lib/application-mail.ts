@@ -44,7 +44,19 @@
    ============================================================ */
 import pool from "./db";
 import { RESUME_TYPES, attachmentName, type Applicant, type ResumeKind } from "./applications";
-import { describePayload, sendToCareers, type Attachment, type CareersMail, type MailResult } from "./mailer";
+import {
+  describePayload,
+  escapeHtml,
+  istTime,
+  mailStatus,
+  sendToCareers,
+  type Attachment,
+  type CareersMail,
+  type MailResult,
+} from "./mailer";
+
+/* Shared with the enquiry email since 2026-11-12; they live in mailer.ts. */
+export { istTime, mailStatus };
 
 /** Resend takes 40 MB a message; HR's mailbox is happier with less. */
 export const MAX_ATTACH_BYTES = 10 * 1024 * 1024;
@@ -61,19 +73,6 @@ export interface SavedApplication extends Applicant {
 /** The studio row the email links to; the page gives each row this id. */
 export function studioLink(id: number): string {
   return new URL(`/studio/applications#application-${id}`, import.meta.env.SITE).href;
-}
-
-export function istTime(at: Date): string {
-  const s = at.toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-  return `${s} IST`;
 }
 
 const EXT: Record<string, true> = { pdf: true, doc: true, docx: true };
@@ -96,10 +95,6 @@ export function resumeFilename(original: string | null, applicant: string, kind:
 
 function size(bytes: number): string {
   return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(bytes / 1024)} KB`;
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 export function applicationEmail(app: SavedApplication): CareersMail {
@@ -153,12 +148,6 @@ export function applicationEmail(app: SavedApplication): CareersMail {
     replyTo: app.email,
     attachment,
   };
-}
-
-export function mailStatus(r: MailResult): string {
-  if (r.status === "sent") return `sent: ${r.id}`;
-  if (r.status === "failed") return `failed: ${r.reason}`;
-  return r.reason === "dry run" ? "skipped: dry run" : "skipped";
 }
 
 /** Email HR about a saved application and record the result. Never throws. */

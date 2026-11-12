@@ -45,6 +45,27 @@
    none of them is on the site. It sits in the body because this page
    reaches BaseLayout through InfoPage; a JSON-LD block is read wherever
    it is, and the key check skips scripts.
+
+   THE ENQUIRY FORM (12 Nov 2026, OPEN-QUESTIONS.md #78), its own band
+   between the cards and the map. The cards are on white and the map on
+   mist, so the form's band is ink: white, ink, mist, ink (the CTA), and
+   no band beside it changed its surface (DESIGN-SYSTEM §2). It is the
+   careers "Apply here" band's layout (heading left, form right from
+   1024px), on ink: the fields are white with the ink text and teal focus
+   ring of the careers form, the form's frame the stat tiles' hairline
+   with a 2px mint top.
+
+   It posts to /api/enquiry, which saves the enquiry, then emails it.
+   With JavaScript (src/scripts/enquiry-form.js) it checks each field as
+   it is left and stays on the page. Without, the browser checks what it
+   can and posts the form; the route answers 303 back here with
+   ?enquiry=sent|invalid|limited|error (and &fields= after invalid), and
+   this page draws that result: the thank-you card instead of the form,
+   or the form with the line above it and each named field's note shown.
+
+   `t` is a signed time token (src/lib/enquiries.ts) written in on each
+   request, so this page's HTML differs on every load in that one value.
+   A comparison of served HTML has to mask `name="t" value="..."`.
    ============================================================ */
 import { getImage } from "astro:assets";
 import InfoPage from "../components/InfoPage.astro";
@@ -52,11 +73,26 @@ import Kicker from "../components/Kicker.astro";
 import Arrow from "../components/Arrow.astro";
 import { contact } from "../data/pages";
 import { e164, organization } from "../data/organization";
+import { formToken } from "../lib/enquiries";
+import { ENQUIRY_FIELDS, ENQUIRY_LIMITS, PHONE_PATTERN, type EnquiryField } from "../lib/enquiry-rules";
 import logo from "../assets/kd-logo-mint.jpg";
 
 export const prerender = false;
 
-const { map } = contact;
+const { map, enquiry } = contact;
+const { fields } = enquiry;
+
+/* The result of a post without JavaScript (src/pages/api/enquiry.ts). */
+const result = Astro.url.searchParams.get("enquiry");
+const state = result === "sent" || result === "invalid" || result === "limited" || result === "error" ? result : null;
+const wrong = new Set<EnquiryField>(
+  state === "invalid"
+    ? ENQUIRY_FIELDS.filter((f) => (Astro.url.searchParams.get("fields") ?? "").split(",").includes(f))
+    : []
+);
+const alertFor = state === "error" ? "server" : state === "sent" ? null : state;
+const invalidAttr = (f: EnquiryField) => (wrong.has(f) ? "true" : undefined);
+const token = formToken();
 
 /* "tel:02227815380" -> "+912227815380": the card writes the landline
    the way it is dialled in India; schema wants the international form,
@@ -90,6 +126,179 @@ const officeLd = {
 <InfoPage page="contact" copy={contact}>
   <script type="application/ld+json" set:html={JSON.stringify(officeLd).replace(/<\//g, "<\\/")} />
 
+  <section id="enquiry" class="bg-kd-ink py-96 scroll-mt-[var(--kd-nav-h)]">
+    <div class="max-w-kd mx-auto px-24 sm:px-48 grid gap-48 lg:grid-cols-[5fr_7fr]">
+      <div>
+        <Kicker label={enquiry.kicker} editKey="contact.enquiry.kicker" />
+        <h2 class="font-display text-d4 text-kd-mist mt-16" data-edit="contact.enquiry.heading">
+          {enquiry.heading}
+        </h2>
+        <p class="text-body text-kd-fog mt-20" data-edit="contact.enquiry.intro">{enquiry.intro}</p>
+      </div>
+
+      <div>
+        <form
+          data-enquiry-form
+          action="/api/enquiry"
+          method="post"
+          hidden={state === "sent"}
+          class="enquiry-form grid gap-24 sm:grid-cols-2 p-24 sm:p-32"
+        >
+          {/* One line at most, above the fields. A hidden one is no grid item,
+              so with none shown the fields start at the top. */}
+          {(["invalid", "limited", "server", "offline"] as const).map((code) => (
+            <p
+              class="enquiry-note sm:col-span-2"
+              role="alert"
+              data-enquiry-alert={code}
+              hidden={alertFor !== code}
+              data-edit={`contact.enquiry.errors.${code}`}
+            >
+              {enquiry.errors[code]}
+            </p>
+          ))}
+
+          <div class="flex flex-col gap-8">
+            <label for="enquiry-name" class="text-ui text-kd-mist" data-edit="contact.enquiry.fields.name.label">
+              {fields.name.label}
+            </label>
+            <input
+              id="enquiry-name"
+              name="name"
+              required
+              maxlength={ENQUIRY_LIMITS.name}
+              autocomplete="name"
+              aria-describedby="enquiry-name-error"
+              aria-invalid={invalidAttr("name")}
+              class="enquiry-input"
+            />
+            <p id="enquiry-name-error" class="enquiry-note" hidden={!wrong.has("name")} data-edit="contact.enquiry.fields.name.error">
+              {fields.name.error}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-8">
+            <label for="enquiry-company" class="text-ui text-kd-mist">
+              <span data-edit="contact.enquiry.fields.company.label">{fields.company.label}</span>
+              <span class="text-kd-fog font-normal" data-edit="contact.enquiry.fields.company.optional">
+                {fields.company.optional}
+              </span>
+            </label>
+            <input
+              id="enquiry-company"
+              name="company"
+              maxlength={ENQUIRY_LIMITS.company}
+              autocomplete="organization"
+              aria-invalid={invalidAttr("company")}
+              class="enquiry-input"
+            />
+          </div>
+
+          <div class="flex flex-col gap-8">
+            <label for="enquiry-phone" class="text-ui text-kd-mist" data-edit="contact.enquiry.fields.phone.label">
+              {fields.phone.label}
+            </label>
+            <input
+              id="enquiry-phone"
+              name="phone"
+              type="tel"
+              required
+              maxlength={ENQUIRY_LIMITS.phone}
+              pattern={PHONE_PATTERN}
+              inputmode="tel"
+              autocomplete="tel"
+              aria-describedby="enquiry-phone-hint enquiry-phone-error"
+              aria-invalid={invalidAttr("phone")}
+              class="enquiry-input"
+            />
+            <p id="enquiry-phone-hint" class="text-meta-sm text-kd-fog" data-edit="contact.enquiry.fields.phone.hint">
+              {fields.phone.hint}
+            </p>
+            <p id="enquiry-phone-error" class="enquiry-note" hidden={!wrong.has("phone")} data-edit="contact.enquiry.fields.phone.error">
+              {fields.phone.error}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-8">
+            <label for="enquiry-email" class="text-ui text-kd-mist" data-edit="contact.enquiry.fields.email.label">
+              {fields.email.label}
+            </label>
+            <input
+              id="enquiry-email"
+              name="email"
+              type="email"
+              required
+              maxlength={ENQUIRY_LIMITS.email}
+              autocomplete="email"
+              spellcheck="false"
+              aria-describedby="enquiry-email-error"
+              aria-invalid={invalidAttr("email")}
+              class="enquiry-input"
+            />
+            <p id="enquiry-email-error" class="enquiry-note" hidden={!wrong.has("email")} data-edit="contact.enquiry.fields.email.error">
+              {fields.email.error}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-8 sm:col-span-2">
+            <label for="enquiry-message" class="text-ui text-kd-mist" data-edit="contact.enquiry.fields.message.label">
+              {fields.message.label}
+            </label>
+            <textarea
+              id="enquiry-message"
+              name="message"
+              rows="6"
+              required
+              minlength={ENQUIRY_LIMITS.messageMin}
+              maxlength={ENQUIRY_LIMITS.messageMax}
+              aria-describedby="enquiry-message-hint enquiry-message-error"
+              aria-invalid={invalidAttr("message")}
+              class="enquiry-input"></textarea>
+            <p id="enquiry-message-hint" class="text-meta-sm text-kd-fog" data-edit="contact.enquiry.fields.message.hint">
+              {fields.message.hint}
+            </p>
+            <p id="enquiry-message-error" class="enquiry-note" hidden={!wrong.has("message")} data-edit="contact.enquiry.fields.message.error">
+              {fields.message.error}
+            </p>
+          </div>
+
+          {/* Honeypot: off-screen and out of the tab order. A person never fills it. */}
+          <label class="enquiry-trap" aria-hidden="true">
+            <span data-no-edit>Website</span>
+            <input name="website" tabindex="-1" autocomplete="off" />
+          </label>
+          <input type="hidden" name="t" value={token} />
+
+          <p class="text-meta-sm text-kd-fog sm:col-span-2">
+            <span data-edit="contact.enquiry.consent">{enquiry.consent}</span>{" "}
+            <a href={enquiry.consentLink.href} class="text-kd-mint underline"
+              ><span data-edit="contact.enquiry.consentLink.label">{enquiry.consentLink.label}</span></a
+            ><span data-no-edit>.</span>
+          </p>
+          <div class="sm:col-span-2">
+            <button
+              type="submit"
+              class="inline-flex items-center gap-8 text-ui bg-kd-mint text-kd-ink-deep px-24 py-12 disabled:opacity-60"
+            >
+              <span data-enquiry-idle data-edit="contact.enquiry.submit">{enquiry.submit}</span>
+              <span data-enquiry-busy hidden data-edit="contact.enquiry.sending">{enquiry.sending}</span>
+              <Arrow />
+            </button>
+          </div>
+        </form>
+
+        <div data-enquiry-done class="enquiry-form p-32" tabindex="-1" hidden={state !== "sent"}>
+          <h3 class="font-display text-d7 text-kd-mist" data-edit="contact.enquiry.success.heading">
+            {enquiry.success.heading}
+          </h3>
+          <p class="text-body-sm text-kd-fog mt-12" data-edit="contact.enquiry.success.body">
+            {enquiry.success.body}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="bg-kd-mist py-96">
     <div class="max-w-kd mx-auto px-24 sm:px-48">
       <Kicker label={map.kicker} editKey="contact.map.kicker" tone="light" />
@@ -122,3 +331,56 @@ const officeLd = {
     </div>
   </section>
 </InfoPage>
+
+<script>
+  import "../scripts/enquiry-form.js";
+</script>
+
+<style>
+  /* The form's frame, and the thank-you card's: the stat tiles' hairline
+     on ink, with a 2px mint top (the careers form's mint-2 top, on ink). */
+  .enquiry-form {
+    border: var(--kd-hairline) solid var(--kd-stat-border);
+    border-top: 2px solid var(--kd-mint);
+  }
+  /* The careers form's fields (careers.astro), here on ink. A wrong field
+     is marked with an outline drawn inside it, so nothing moves. */
+  .enquiry-input {
+    font: inherit;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--kd-ink);
+    background-color: white;
+    border: var(--kd-hairline) solid var(--kd-divider-light);
+    padding: var(--kd-gap-12) var(--kd-gap-16);
+    width: 100%;
+  }
+  .enquiry-input[aria-invalid="true"] {
+    outline: 2px solid var(--kd-ink);
+    outline-offset: -2px;
+  }
+  .enquiry-input:focus {
+    outline: 2px solid var(--kd-teal);
+    outline-offset: 0;
+    border-color: var(--kd-teal);
+  }
+  textarea.enquiry-input {
+    resize: vertical;
+  }
+  /* What went wrong, above the fields or under one: careers' error line,
+     on ink, so mist on a 2px mint rule. */
+  .enquiry-note {
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    color: var(--kd-mist);
+    border-left: 2px solid var(--kd-mint);
+    padding-left: var(--kd-gap-12);
+  }
+  .enquiry-trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
