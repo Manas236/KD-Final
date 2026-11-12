@@ -13,6 +13,10 @@
    path under the page prefix: `privacy.sections.3.body.0`,
    `terms.sections.3.items.2`. Every paragraph and list item is its own
    text leaf, so each one is editable in place.
+
+   A section added later goes in as a named one (`copy.enquiries`,
+   12 Nov 2026), keyed `privacy.enquiries.*` and drawn after the section
+   it names, so every numbered section keeps its index and its keys.
    ============================================================ */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "./Nav.astro";
@@ -27,7 +31,13 @@ interface Props {
 }
 
 const { page, copy } = Astro.props;
-const { hero, updated, sections } = copy;
+const { hero, updated, sections, enquiries } = copy;
+
+/* Each section with the key prefix its slots are written under. */
+const blocks = sections.flatMap((section, s) => [
+  { section, key: `${page}.sections.${s}` },
+  ...(enquiries && enquiries.afterSection === s ? [{ section: enquiries, key: `${page}.enquiries` }] : []),
+]);
 ---
 
 <BaseLayout title={copy.meta.title} description={copy.meta.description}>
@@ -55,27 +65,27 @@ const { hero, updated, sections } = copy;
       <div class="max-w-kd mx-auto px-24 sm:px-48">
         <div class="max-w-720 flex flex-col gap-56">
           {
-            sections.map((section, s) => (
+            blocks.map(({ section, key }) => (
               <div>
-                <h2 class="font-display text-d6 text-kd-ink" data-edit={`${page}.sections.${s}.heading`}>
+                <h2 class="font-display text-d6 text-kd-ink" data-edit={`${key}.heading`}>
                   {section.heading}
                 </h2>
                 {section.body.map((para, p) => (
-                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${page}.sections.${s}.body.${p}`}>
+                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${key}.body.${p}`}>
                     {para}
                   </p>
                 ))}
                 {section.items && (
                   <ul class="mt-16 flex flex-col gap-8 pl-24 list-disc marker:text-kd-mint-2">
                     {section.items.map((item, i) => (
-                      <li class="text-body text-kd-slate-2" data-edit={`${page}.sections.${s}.items.${i}`}>
+                      <li class="text-body text-kd-slate-2" data-edit={`${key}.items.${i}`}>
                         {item}
                       </li>
                     ))}
                   </ul>
                 )}
                 {section.after?.map((para, p) => (
-                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${page}.sections.${s}.after.${p}`}>
+                  <p class="text-body text-kd-slate-2 mt-16" data-edit={`${key}.after.${p}`}>
                     {para}
                   </p>
                 ))}

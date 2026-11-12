@@ -25,6 +25,12 @@
      · browser storage    the page-text cache in src/layouts/BaseLayout.astro
      · Google Maps        the embedded map on /contact
      · no analytics       there is no analytics or advertising script
+     · enquiries          `privacy.enquiries` (12 Nov 2026): the fields in
+                          src/lib/enquiry-rules.ts; ip_hash and user_agent
+                          in src/lib/enquiries.ts (the address only as a
+                          keyed hash); emailed through Resend by
+                          src/lib/enquiry-mail.ts; no retention rule and no
+                          delete in the app, so kept until K.D. deletes one
 
    In-page editable like every other page (keys `privacy.*`, `terms.*`),
    so K.D. can apply the reviewed wording without a developer. Each
@@ -50,6 +56,11 @@ export interface LegalPageCopy {
   readonly hero: { readonly kicker: string; readonly title: string; readonly sub: string };
   readonly updated: string;
   readonly sections: readonly LegalSection[];
+  /** A section keyed by its own name, `<page>.enquiries.*`, drawn right
+      after `sections[afterSection]` (12 Nov 2026). Added this way so that
+      no section after it is renumbered: a section's keys are its index,
+      and a saved edit is filed under its key. */
+  readonly enquiries?: LegalSection & { readonly afterSection: number };
 }
 
 const chrome = { nav: home.nav, footer: home.footer };
@@ -180,6 +191,19 @@ export const privacy: LegalPageCopy = {
       ],
     },
   ],
+  enquiries: {
+    afterSection: 2,
+    heading: "When you send an enquiry",
+    body: [
+      "If you use the enquiry form on our Contact page, we collect your name, phone number, email " +
+        "address and message, your company if you give it, the browser you sent it from, and a " +
+        "one-way code made from your IP address (not the address itself), which we use only to " +
+        "protect the form from spam. We use these details only to answer your enquiry. They are " +
+        "stored on our web server, where only authorised K.D. Constructions staff can see them, and " +
+        "sent by email to the staff who handle enquiries, delivered by Resend, an email delivery " +
+        "service. We keep an enquiry until K.D. Constructions deletes it.",
+    ],
+  },
 };
 
 export const terms: LegalPageCopy = {
