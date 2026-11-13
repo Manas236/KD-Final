@@ -945,6 +945,29 @@ the server by its own Claude Code session, in this order:
    anchoring count as before the pull. A before/after comparison of `/contact`'s served HTML masks the form's
    time token (`name="t" value="..."`), which changes on every request.
 
+### At the next deploy: the 2026-11-13 visitor address
+
+`clientIp(context)` (src/lib/client-ip.ts, CLAUDE.md "The visitor's address"): the write routes take the
+**last** X-Forwarded-For entry, nginx's own, and only from a loopback connection; until now they took the
+first, which the visitor writes. **Pull, build, restart:** no `npm ci` (no dependency), no migration, no
+grant, no `.env` change, no built-in text changed. Every file under `dist/client` and every served page is
+byte for byte as before (`/contact` with its time token masked). After the 2026-11-12 notes if those have
+not run yet.
+
+1. **Step 0's snapshot, step 1's build backup, step 2's pull**, steps 4 and 5 (build, restart), as on
+   every deploy.
+2. **Read-only, before or after:** the site's `proxy_set_header` lines for X-Forwarded-For and X-Real-IP,
+   word for word (from the nginx config, or `/srv/kd-backups/deploy-2026-11-12.md`), for CLAUDE.md. The
+   code expects `X-Forwarded-For $proxy_add_x_forwarded_for` (or `$remote_addr`). If X-Forwarded-For is
+   not set at all, report it and change nothing: the order in client-ip.ts then has to flip. Also
+   `ss -ltnp` for the app's port: it must listen on 127.0.0.1 or ::1 only, and `HOST` must not be in
+   `.env` or the service file.
+3. **`npm run check:db-flows -- https://kdconstructions.net`**: every run flow PASS, as on 12 Nov.
+   Then, as an administrator, read-only: the newest `site_settings_events` row (step 6's) has in
+   `client_ip` the address nginx saw for the box's own request (its public or its private address), not
+   `127.0.0.1` and not NULL. `127.0.0.1` there means nginx sends no forwarding header; NULL means it
+   sends one that does not parse.
+
 ## Closed on 2026-10-12 — phone layout, share card, descriptions, structured data
 
 None of these was a placeholder or a sign-off; they were faults found by
