@@ -35,7 +35,8 @@
 import type { APIRoute } from "astro";
 import type { ResultSetHeader } from "mysql2";
 import pool from "../../lib/db";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import {
   MAX_RESUME_BYTES,
   purgeExpired,
@@ -81,13 +82,7 @@ function rateLimited(key: string): boolean {
 
 export const POST: APIRoute = async (context) => {
   const { request } = context;
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-  const ip = clientIpFrom(request, socket);
+  const ip = clientIp(context);
   const ua = userAgentFrom(request);
 
   const declared = Number(request.headers.get("content-length") ?? 0);

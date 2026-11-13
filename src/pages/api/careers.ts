@@ -14,7 +14,8 @@ import type { APIRoute } from "astro";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import { OPEN_WHERE, validatePosting } from "../../lib/job-postings";
 
 export const prerender = false;
@@ -54,13 +55,6 @@ export const POST: APIRoute = async (context) => {
   if (!isAuthed(request))
     return json({ error: "Your editing session has ended." }, 401);
 
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > MAX_BODY) return json({ error: "That is too much text." }, 413);
 
@@ -73,7 +67,7 @@ export const POST: APIRoute = async (context) => {
   if (!body || typeof body !== "object")
     return json({ error: "Could not read the change." }, 400);
 
-  const ip = clientIpFrom(request, socket);
+  const ip = clientIp(context);
   const ua = userAgentFrom(request);
 
   try {

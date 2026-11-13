@@ -14,7 +14,8 @@ import type { APIRoute } from "astro";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import {
   isProjectSlug,
   replayBlocks,
@@ -53,13 +54,6 @@ export const POST: APIRoute = async (context) => {
   if (!isAuthed(request))
     return json({ error: "Your editing session has ended." }, 401);
 
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > MAX_BODY) return json({ error: "That is too much text." }, 413);
 
@@ -75,7 +69,7 @@ export const POST: APIRoute = async (context) => {
   const slug = body.slug;
   if (!isProjectSlug(slug)) return json({ error: "That page cannot be edited." }, 400);
 
-  const ip = clientIpFrom(request, socket);
+  const ip = clientIp(context);
   const ua = userAgentFrom(request);
 
   try {

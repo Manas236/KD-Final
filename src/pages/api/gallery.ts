@@ -25,7 +25,8 @@ import type { APIRoute } from "astro";
 import type { RowDataPacket } from "mysql2";
 import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import {
   baseCaptionOf,
   checkCaption,
@@ -115,14 +116,6 @@ export const POST: APIRoute = async (context) => {
   const { request } = context;
   if (!isAuthed(request)) return json({ error: "Not signed in." }, 401);
 
-  // clientAddress throws where the adapter cannot supply one.
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > MAX_BODY) return json({ error: "That request is too large." }, 413);
 
@@ -154,7 +147,7 @@ export const POST: APIRoute = async (context) => {
       change.position,
       change.caption,
       change.ref,
-      clientIpFrom(request, socket),
+      clientIp(context),
       userAgentFrom(request),
     ]);
   } catch (err) {

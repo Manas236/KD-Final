@@ -251,13 +251,9 @@ export function isValidKey(raw: unknown): raw is string {
    address is worse than none, so anything that does not parse is
    stored as NULL rather than as the raw string or a placeholder.
 
-   The address arrives in X-Forwarded-For, which nginx sets. That header
-   is a list: nginx appends the connecting address to whatever the client
-   already sent, so a client can put anything it likes in front of it.
-   The first entry is the closest thing to the real origin, and it is
-   entirely attacker-controlled, which is why it is parsed rather than
-   trusted. If it is not an address, we fall back to the socket address,
-   which cannot be forged.
+   Which address a request is filed under, and when nginx's forwarding
+   headers are believed, is decided in src/lib/client-ip.ts (server-only,
+   13 Nov 2026). What stays here is the parsing both use.
 
    These run server-side only, but they live here because this module is
    the one both halves share; nothing in them touches node:*, so the
@@ -335,22 +331,6 @@ export function validIp(raw: unknown): string | null {
   const mapped = /^::ffff:(.+)$/i.exec(s);
   if (mapped && RE_IPV4.test(mapped[1])) return mapped[1];
   return s.toLowerCase();
-}
-
-/**
- * The address to file an edit under: the first entry of X-Forwarded-For
- * if it parses, otherwise the socket address, otherwise nothing.
- */
-export function clientIpFrom(
-  request: Request,
-  clientAddress?: string | null
-): string | null {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = validIp(forwarded.split(",")[0]);
-    if (first) return first;
-  }
-  return validIp(clientAddress);
 }
 
 /** The User-Agent, trimmed to what the column holds, or null. */

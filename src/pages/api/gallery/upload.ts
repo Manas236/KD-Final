@@ -42,7 +42,8 @@ import type { APIRoute } from "astro";
 import type { RowDataPacket } from "mysql2";
 import pool from "../../../lib/db";
 import { isAuthed } from "../../../lib/edit-auth";
-import { clientIpFrom, userAgentFrom } from "../../../lib/editable";
+import { userAgentFrom } from "../../../lib/editable";
+import { clientIp } from "../../../lib/client-ip";
 import { checkCaption, isGroup, readEvents, replay } from "../../../lib/gallery-live";
 import { MAX_UPLOAD_BYTES, inspect, store } from "../../../lib/gallery-media";
 import { NEAR_DUPLICATE_BITS, distance } from "../../../lib/dhash";
@@ -84,13 +85,7 @@ export const POST: APIRoute = async (context) => {
   const { request } = context;
   if (!isAuthed(request)) return json({ error: "Your editing session has ended. Sign in again." }, 401);
 
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-  const ip = clientIpFrom(request, socket);
+  const ip = clientIp(context);
 
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > MAX_UPLOAD_BYTES + 1024 * 1024) {

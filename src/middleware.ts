@@ -45,6 +45,10 @@ import { isNoindexDeployment } from "./lib/staging";
 import { normalizePath } from "./lib/editable";
 import { editorView, forEditor } from "./lib/launch-editor";
 import { editsForPage, serverEditsEnabled, withSavedEdits } from "./lib/server-edits";
+/* Loaded here, on the first request after a restart, for its side effect:
+   it starts listening for each connection's own address, which the write
+   routes need to tell nginx from anyone else (src/lib/client-ip.ts). */
+import "./lib/client-ip";
 
 const UNTOUCHED = /^\/(?:studio|api|_astro|_image|media|video)(?:\/|$)/;
 const FILE = /\.[a-z0-9]+\/*$/i;

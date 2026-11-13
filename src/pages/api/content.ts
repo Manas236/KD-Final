@@ -35,11 +35,11 @@ import pool from "../../lib/db";
 import { isAuthed } from "../../lib/edit-auth";
 import {
   cleanText,
-  clientIpFrom,
   normalizePath,
   userAgentFrom,
   validateEdit,
 } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import { forgetEdits, readLatest } from "../../lib/server-edits";
 
 export const prerender = false;
@@ -149,16 +149,6 @@ export const POST: APIRoute = async (context) => {
   if (!isAuthed(request))
     return json({ error: "Your editing session has ended." }, 401);
 
-  // The socket address, used only if X-Forwarded-For does not parse.
-  // Astro throws here rather than returning undefined when the adapter
-  // cannot report it, and a save must not 500 over an audit column.
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > MAX_BODY) return json({ error: "That is too much text." }, 413);
 
@@ -229,7 +219,7 @@ export const POST: APIRoute = async (context) => {
       check.key,
       anchor,
       check.text,
-      clientIpFrom(request, socket),
+      clientIp(context),
       userAgentFrom(request),
     ]);
     // The page's server-side copy of its edits is stale now (src/lib/server-edits.ts).

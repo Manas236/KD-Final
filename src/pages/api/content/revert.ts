@@ -22,11 +22,11 @@ import { isAuthed } from "../../../lib/edit-auth";
 import {
   MAX_TEXT,
   cleanText,
-  clientIpFrom,
   isValidKey,
   normalizePath,
   userAgentFrom,
 } from "../../../lib/editable";
+import { clientIp } from "../../../lib/client-ip";
 import { forgetEdits } from "../../../lib/server-edits";
 
 export const prerender = false;
@@ -62,14 +62,6 @@ export const POST: APIRoute = async (context) => {
      other edit — first thing, before the body is read. */
   if (!isAuthed(request))
     return json({ error: "Your editing session has ended." }, 401);
-
-  // See the note in api/content.ts: only a fallback, and it must not throw.
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
 
   let body: any;
   try {
@@ -145,7 +137,7 @@ export const POST: APIRoute = async (context) => {
       body.key,
       anchor,
       target,
-      clientIpFrom(request, socket),
+      clientIp(context),
       userAgentFrom(request),
     ]);
     // The page's server-side copy of its edits is stale now (src/lib/server-edits.ts).

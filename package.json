@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test": "node --test \"tests/*.test.mjs\"",
     "astro": "astro",
     "start": "node dist/server/entry.mjs",
     "build:release": "npm run check:site-url && npm run check:placeholders && astro build",

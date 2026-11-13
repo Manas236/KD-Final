@@ -34,7 +34,8 @@
    without a preflight this route does not answer.
    ============================================================ */
 import type { APIRoute } from "astro";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import { receiveEnquiry, type Outcome } from "../../lib/enquiries";
 import { ENQUIRY_FIELDS } from "../../lib/enquiry-rules";
 
@@ -96,13 +97,7 @@ function asRedirect(o: Outcome): Response {
 
 export const POST: APIRoute = async (context) => {
   const { request } = context;
-  let socket: string | null = null;
-  try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-  const ip = clientIpFrom(request, socket);
+  const ip = clientIp(context);
   const ua = userAgentFrom(request);
 
   const type = (request.headers.get("content-type") ?? "").toLowerCase();

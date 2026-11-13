@@ -14,7 +14,8 @@
    ============================================================ */
 import type { APIRoute } from "astro";
 import { isAuthed } from "../../lib/edit-auth";
-import { clientIpFrom, userAgentFrom } from "../../lib/editable";
+import { userAgentFrom } from "../../lib/editable";
+import { clientIp } from "../../lib/client-ip";
 import { HIDE_PENDING } from "../../lib/launch";
 import { isViewFlag, viewCookieLine } from "../../lib/launch-editor";
 import { launchSwitchOn, setLaunchSwitch, switchEvents } from "../../lib/launch-switch";
@@ -66,14 +67,8 @@ export const POST: APIRoute = async (context) => {
     return json({ error: "This build has HIDE_PENDING=1, which forces launch mode on. Take it out and rebuild first." }, 409);
   }
 
-  let socket: string | null = null;
   try {
-    socket = context.clientAddress;
-  } catch {
-    socket = null;
-  }
-  try {
-    await setLaunchSwitch(body.on, clientIpFrom(request, socket), userAgentFrom(request));
+    await setLaunchSwitch(body.on, clientIp(context), userAgentFrom(request));
   } catch (err) {
     console.error("Failed to flip launch mode:", err);
     return json({ error: "The database refused the change, so nothing changed. Has db/migrate.sql been run, with its grants?" }, 503);
